@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SortDialog</class>
+ <widget class="QDialog" name="SortDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>177</width>
+    <height>221</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Sort...</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>158</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Sort Pairs By</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="pairsComboBox">
+      <item>
+       <property name="text">
+        <string>ID Number</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Popularity (Solutions)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Popularity (Structures)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Compatibilities</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Compatible Donors</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Compatible Recipients</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>PRA</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="pairsDecreasingCheckBox">
+      <property name="text">
+       <string>Decreasing</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>13</width>
+        <height>28</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_2">
+      <property name="text">
+       <string>Sort Matches By</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QComboBox" name="matchesComboBox">
+      <item>
+       <property name="text">
+        <string>Popularity (Solutions)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Popularity (Structures)</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Donor ID Number</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Candidate ID Number</string>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item>
+     <widget class="QCheckBox" name="matchesDecreasingCheckBox">
+      <property name="text">
+       <string>Decreasing</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="verticalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QDialogButtonBox" name="buttonBox">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>SortDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>201</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>SortDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>166</x>
+     <y>207</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>176</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
