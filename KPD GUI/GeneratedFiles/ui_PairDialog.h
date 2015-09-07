@@ -739,6 +739,8 @@ public:
         morePairInfo->setTabText(morePairInfo->indexOf(commentTab), QApplication::translate("PairDialog", "Comments", 0));
         donorGroupBox->setTitle(QApplication::translate("PairDialog", "Donor Information", 0));
         donorNameLabel->setText(QApplication::translate("PairDialog", "Name", 0));
+        donorNameLineEdit->setText(QApplication::translate("PairDialog", "Donor Name", 0));
+        donorNameLineEdit->setPlaceholderText(QString());
         donorAgeLabel->setText(QApplication::translate("PairDialog", "Age", 0));
         donorBTLabel->setText(QApplication::translate("PairDialog", "Blood Type", 0));
         donorBTComboBox->clear();
@@ -750,6 +752,8 @@ public:
         );
         recipGroupBox->setTitle(QApplication::translate("PairDialog", "Recipient Information", 0));
         recipNameLabel->setText(QApplication::translate("PairDialog", "Name", 0));
+        recipNameLineEdit->setText(QApplication::translate("PairDialog", "Recipient Name", 0));
+        recipNameLineEdit->setPlaceholderText(QString());
         recipAgeLabel->setText(QApplication::translate("PairDialog", "Age", 0));
         recipBTLabel->setText(QApplication::translate("PairDialog", "Blood Type", 0));
         recipBTComboBox->clear();

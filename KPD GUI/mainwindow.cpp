@@ -7,7 +7,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
+	
 	//Parameters
 	maxZ = 0;
 	seqNumber = 0;
@@ -390,6 +390,7 @@ void MainWindow::loadPairs()
 void MainWindow::deleteNode(int i)
 {
 	KPDGUINode * nodeToDelete = kpdguiRecord->getNode(i);
+	int id = nodeToDelete->getInternalID();
 	nodeToDelete->setSelected(false);
 	
 	QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -478,6 +479,8 @@ void MainWindow::deleteNode(int i)
 		ui->consoleWidget->addConsoleInfo("> Deleted Pair: " + nodeToDelete->getDonorName() + ", " + nodeToDelete->getRecipName() + " (" + QString::number(nodeToDelete->getInternalID()) + ")");
 	}
 	ui->consoleWidget->deletePairInfo(nodeToDelete->getInternalID());
+
+	kpdguiRecord->deleteNodeFromRecord(id);
 
 	delete nodeToDelete;
 
@@ -1353,14 +1356,7 @@ void MainWindow::clearScreen(){
 }
 
 void MainWindow::addNode(KPDGUINode * newNode, bool fromSavedFile){
-
-	kpdguiRecord->insert(newNode, fromSavedFile);
-
-	newNode->setText(QString::number(newNode->getInternalID()));
-
-	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
-	listWidget->addTopLevelItem(wrapper);
-
+	
 	if (!fromSavedFile){
 		int h_offset = rand() % 50 - 25;
 		int v_offset = rand() % 50 - 25;
@@ -1369,6 +1365,12 @@ void MainWindow::addNode(KPDGUINode * newNode, bool fromSavedFile){
 
 	scene->addItem(newNode);
 	++seqNumber;
+
+	kpdguiRecord->insert(newNode, fromSavedFile);
+	newNode->setText(QString::number(newNode->getInternalID()));
+
+	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
+	listWidget->addTopLevelItem(wrapper);
 
 	foreach(KPDGUINode *node, kpdguiRecord->getPairs()){
 		if (node->getType() == 0){

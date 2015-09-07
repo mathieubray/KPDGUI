@@ -2,12 +2,8 @@
 
 KPDGUIRecord::KPDGUIRecord()
 {
-	
-
 	//Parameters
-	id_code = 1;
-
-		
+	id_code = 1;		
 
 	loadDictionary();
 }
@@ -416,6 +412,10 @@ bool KPDGUIRecord::isMatch(Donor * donor, Candidate * candidate, bool reserveOto
 
 bool KPDGUIRecord::isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkDP)
 {
+	if (donor == candidate){
+		return false;
+	}
+
 	return isMatch(donor->getDonorPtr(), candidate->getCandidatePtr(), reserveOtoO, checkDP);
 }
 
