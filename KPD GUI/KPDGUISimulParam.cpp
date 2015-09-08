@@ -92,16 +92,16 @@ void KPDGUISimulParam::processParams(ParamInfoStruct paramInfo){
 
 	muc = false; meuc = false; meus = false; scc = false;
 
-	if (paramInfo.optScheme == "MUC"){
+	if (paramInfo.optScheme == "Utility"){
 		muc = true;
 	}
-	else if (paramInfo.optScheme == "MEUC"){
+	else if (paramInfo.optScheme == "Expected Utility"){
 		meuc = true;
 	}
-	else if (paramInfo.optScheme == "MEUS"){
+	else if (paramInfo.optScheme == "Fallbacks"){
 		meus = true;
 	}
-	else if (paramInfo.optScheme == "SCC"){
+	else if (paramInfo.optScheme == "Extended Fallbacks"){
 		scc = true;
 	}
 

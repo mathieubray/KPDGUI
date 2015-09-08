@@ -52,8 +52,15 @@ int KPDGUIConsolePairWidget::visibleElements(){
 
 void KPDGUIConsolePairWidget::clearPairs(){
 	visibleIndices.clear();
+	
 	for (int i = 0; i < stack->count(); i++){
+		qDebug() << "Number to remove " << stack->count();
+		QTextBrowser *textBrowser = dynamic_cast<QTextBrowser *>(stack->widget(0));
+		if (textBrowser){
+			qDebug() << textBrowser->toPlainText();
+		}
 		stack->removeWidget(stack->widget(0));
+		qDebug() << "SUCCESS";
 	}
 }
 

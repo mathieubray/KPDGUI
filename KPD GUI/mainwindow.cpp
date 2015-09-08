@@ -1353,15 +1353,20 @@ void MainWindow::clearScreen(){
 	solutionTreeWidget->clear();
 	ui->consoleWidget->removeAllPairInfo();
 	clearTable();
+	
 }
 
 void MainWindow::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	
+	//qDebug() << "A";
+
 	if (!fromSavedFile){
 		int h_offset = rand() % 50 - 25;
 		int v_offset = rand() % 50 - 25;
 		newNode->setPos(QPoint(140 + (120 * (seqNumber % 7)) + h_offset, 160 + (80 * ((seqNumber / 7) % 9)) + v_offset));
 	}
+
+	//qDebug() << "B";
 
 	scene->addItem(newNode);
 	++seqNumber;
@@ -1369,8 +1374,12 @@ void MainWindow::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	kpdguiRecord->insert(newNode, fromSavedFile);
 	newNode->setText(QString::number(newNode->getInternalID()));
 
+	//qDebug() << "C";
+
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
 	listWidget->addTopLevelItem(wrapper);
+
+	//qDebug() << "D";
 
 	foreach(KPDGUINode *node, kpdguiRecord->getPairs()){
 		if (node->getType() == 0){
@@ -1385,8 +1394,15 @@ void MainWindow::addNode(KPDGUINode * newNode, bool fromSavedFile){
 		}
 	}
 
+	//qDebug() << "E";
+	//if (fromSavedFile){
+		//qDebug() << "HERE";
+	//}
 	connect(this, SIGNAL(visibilityChanged(DisplaySettingsStruct *)), newNode, SLOT(updateVisibility(DisplaySettingsStruct *)));
-
+	//if (fromSavedFile){
+		//qDebug() << "Failed";
+	//}
+	//qDebug() << "F";
 }
 
 void MainWindow::addArrow(KPDGUINode * fromNode, KPDGUINode * toNode){

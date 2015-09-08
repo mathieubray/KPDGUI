@@ -126,22 +126,22 @@
       <widget class="QComboBox" name="optComboBox">
        <item>
         <property name="text">
-         <string>MUC</string>
+         <string>Utility</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>MEUC</string>
+         <string>Expected Utility</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>MEUS</string>
+         <string>Fallbacks</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>SCC</string>
+         <string>Extended Fallbacks</string>
         </property>
        </item>
       </widget>

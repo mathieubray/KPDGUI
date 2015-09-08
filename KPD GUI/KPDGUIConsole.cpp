@@ -194,8 +194,8 @@ void KPDGUIConsole::focusOnSolutionScreen(){
 void KPDGUIConsole::removeAllPairInfo(){
 	pairInfo->clearPairs();
 
-	qDebug() << "A";
-	qDebug() << ids.size();
+	//qDebug() << "A";
+	//qDebug() << ids.size();
 
 	ids.clear();
 }

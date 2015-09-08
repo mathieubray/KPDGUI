@@ -237,10 +237,10 @@ public:
         optLabel->setText(QApplication::translate("SimParamDialog", "Optimization Scheme", 0));
         optComboBox->clear();
         optComboBox->insertItems(0, QStringList()
-         << QApplication::translate("SimParamDialog", "MUC", 0)
-         << QApplication::translate("SimParamDialog", "MEUC", 0)
-         << QApplication::translate("SimParamDialog", "MEUS", 0)
-         << QApplication::translate("SimParamDialog", "SCC", 0)
+         << QApplication::translate("SimParamDialog", "Utility", 0)
+         << QApplication::translate("SimParamDialog", "Expected Utility", 0)
+         << QApplication::translate("SimParamDialog", "Fallbacks", 0)
+         << QApplication::translate("SimParamDialog", "Extended Fallbacks", 0)
         );
         praBox->setText(QApplication::translate("SimParamDialog", "Add Advantage to High PRA Recipients", 0));
         reserveOtoOBox->setText(QApplication::translate("SimParamDialog", "Reserve O Donors for O Recipients", 0));

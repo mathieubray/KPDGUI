@@ -30,11 +30,25 @@ KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString times
 	solutionSet = solution;
 	mySolutionNumber = solutionNumber;
 
+	QString textOptScheme = "";
+	if (myOptScheme == "MUC"){
+		textOptScheme = "Utility";
+	}
+	else if (myOptScheme == "MEUC"){
+		textOptScheme = "Expected Utility";
+	}
+	else if (myOptScheme == "MEUS"){
+		textOptScheme = "Fallbacks";
+	}
+	else if (myOptScheme == "SCC"){
+		textOptScheme = "Extended Fallbacks";
+	}
+
 	if (solutionSet){
-		setText(0, myOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
+		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
 	}
 	else{
-		setText(0, myOptScheme + " (" + myTimeStamp + ")");
+		setText(0, textOptScheme + " (" + myTimeStamp + ")");
 	}
 	
 	setUpWidgets();
@@ -95,11 +109,25 @@ void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp
 	solutionSet = solution;
 	mySolutionNumber = solutionNumber;
 
+	QString textOptScheme = "";
+	if (myOptScheme == "MUC"){
+		textOptScheme = "Utility";
+	}
+	else if (myOptScheme == "MEUC"){
+		textOptScheme = "Expected Utility";
+	}
+	else if (myOptScheme == "MEUS"){
+		textOptScheme = "Fallbacks";
+	}
+	else if (myOptScheme == "SCC"){
+		textOptScheme = "Extended Fallbacks";
+	}
+
 	if (solutionSet){
-		setText(0, myOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
+		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
 	}
 	else{
-		setText(0, myOptScheme + " (" + myTimeStamp + ")");
+		setText(0, textOptScheme + " (" + myTimeStamp + ")");
 	}
 
 	setUpWidgets();
@@ -322,6 +350,20 @@ QString KPDGUIStructureSet::getConsoleString(){
 		//QTextStream receipt;//(&file);
 		QString receipt = "";
 
+		QString textOptScheme = "";
+		if (myOptScheme == "MUC"){
+			textOptScheme = "Utility";
+		}
+		else if (myOptScheme == "MEUC"){
+			textOptScheme = "Expected Utility";
+		}
+		else if (myOptScheme == "MEUS"){
+			textOptScheme = "Fallbacks";
+		}
+		else if (myOptScheme == "SCC"){
+			textOptScheme = "Extended Fallbacks";
+		}
+
 		if (solutionSet){
 			receipt = receipt + "Solution For Match Run Performed On " + myTimeStamp + "\n\n";
 		}
@@ -364,7 +406,7 @@ QString KPDGUIStructureSet::getConsoleString(){
 		else{
 			receipt = receipt + "Components: "  + QString::number(size())  + "\n";
 		}
-		receipt = receipt + "Optimization Scheme: " + myOptScheme + "\n";
+		receipt = receipt + "Optimization Scheme: " + textOptScheme + "\n";
 		receipt = receipt + "Maximum Chain Length: " + QString::number(myParameters.maxChainLength) + "\n";
 		receipt = receipt + "Utility Scheme: " + myParameters.utilScheme + "\n";
 		if (!myParameters.praAdvantage){

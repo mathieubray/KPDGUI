@@ -39,9 +39,27 @@ SimParamDialog::SimParamDialog(ParamInfoStruct paramInfo, QWidget *parent) : QDi
 	}
 
 	//Optimization Scheme
-	int optIndex = optComboBox->findText(paramInfo.optScheme);
-	if (optIndex >= 0)
-		optComboBox->setCurrentIndex(optIndex);
+	if (paramInfo.optScheme == "MUC"){
+		int utilIndex = utilComboBox->findText("Utility");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == "MEUC"){
+		int utilIndex = utilComboBox->findText("Expected Utility");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == "MEUS"){
+		int utilIndex = utilComboBox->findText("Fallbacks");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == "SCC"){
+		int utilIndex = utilComboBox->findText("Extended Fallbacks");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	
 
 	//Additional Checks
 	praBox->setChecked(paramInfo.praAdvantage);
