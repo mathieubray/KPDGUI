@@ -75,29 +75,7 @@ void KPDGUIConsolePairWidget::left(){
 		iterator--;
 	}
 
-	stack->setCurrentIndex(visibleIndices[iterator]);
-
-	/*int newIndex;
-	if (currentIndex - 1 < 0){
-		//stack->setCurrentIndex(size - 1);
-		newIndex = size - 1;
-	}
-	else {
-		//stack->setCurrentIndex(currentIndex - 1);
-		newIndex = currentIndex - 1;
-	}
-
-	while (!stack->widget(newIndex)->isVisible()){
-		currentIndex = newIndex;
-		if (currentIndex - 1 < 0){
-			newIndex = size - 1;
-		}
-		else {
-			newIndex = currentIndex - 1;
-		}
-	}
-
-	stack->setCurrentIndex(newIndex);*/
+	stack->setCurrentIndex(visibleIndices[iterator]);	
 }
 
 void KPDGUIConsolePairWidget::right(){
@@ -113,34 +91,4 @@ void KPDGUIConsolePairWidget::right(){
 
 	stack->setCurrentIndex(visibleIndices[iterator]);
 
-	/*int size = stack->count();
-	int currentIndex = stack->currentIndex();
-	
-	int newIndex;
-	if (currentIndex + 1 == size){
-		//stack->setCurrentIndex(size - 1);
-		newIndex = 0;
-	}
-	else {
-		//stack->setCurrentIndex(currentIndex - 1);
-		newIndex = currentIndex + 1;
-	}
-
-	while (!stack->widget(newIndex)->isVisible()){
-		currentIndex = newIndex;
-		if (currentIndex + 1 == size){
-			newIndex = size - 1;
-		}
-		else {
-			newIndex = currentIndex - 1;
-		}
-	}
-
-	stack->setCurrentIndex(newIndex);
-	//if (currentIndex + 1 == size){
-	//	stack->setCurrentIndex(0);
-	//}
-	//else {
-	//	stack->setCurrentIndex(currentIndex + 1);
-	}*/
 }

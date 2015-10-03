@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\KPDGUIGraph.cpp" />
     <ClCompile Include="DialogSort.cpp" />
     <ClCompile Include="KPDGUIConsolePairWidget.cpp" />
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIArrowWrapper.cpp" />

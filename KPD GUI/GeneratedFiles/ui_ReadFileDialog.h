@@ -76,6 +76,7 @@ public:
         QObject::connect(buttonBox, SIGNAL(accepted()), ReadFileDialog, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), ReadFileDialog, SLOT(reject()));
         QObject::connect(toolButton, SIGNAL(clicked()), ReadFileDialog, SLOT(browse()));
+        QObject::connect(pairFileLineEdit, SIGNAL(textChanged(QString)), ReadFileDialog, SLOT(checkValidFile(QString)));
 
         QMetaObject::connectSlotsByName(ReadFileDialog);
     } // setupUi

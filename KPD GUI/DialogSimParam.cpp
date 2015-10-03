@@ -13,61 +13,101 @@ SimParamDialog::SimParamDialog(ParamInfoStruct paramInfo, QWidget *parent) : QDi
 {
 	setupUi(this);
 
-	//Max Chain Length
-	chainLengthSpinBox->setValue(paramInfo.maxChainLength);
-	
+	//Optimization Scheme
+	if (paramInfo.optScheme == KPDOptimizationScheme::MUC){
+		int utilIndex = utilComboBox->findText("Utility");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == KPDOptimizationScheme::MEUC){
+		int utilIndex = utilComboBox->findText("Expected Utility");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == KPDOptimizationScheme::MEUS){
+		int utilIndex = utilComboBox->findText("Fallbacks");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+	else if (paramInfo.optScheme == KPDOptimizationScheme::SCC){
+		int utilIndex = utilComboBox->findText("Extended Fallbacks");
+		if (utilIndex >= 0)
+			utilComboBox->setCurrentIndex(utilIndex);
+	}
+
 	//Utility Scheme
-	if (paramInfo.utilScheme == "TRANSPLANTS"){
+	if (paramInfo.utilityScheme == KPDUtilityScheme::TRANSPLANTS){
 		int utilIndex = utilComboBox->findText("Transplants");
 		if (utilIndex >= 0)
 			utilComboBox->setCurrentIndex(utilIndex);
 	}
-	else if (paramInfo.utilScheme == "SURVIVAL5YEAR"){
+	else if (paramInfo.utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
 		int utilIndex = utilComboBox->findText("5 Year Survival");
 		if (utilIndex >= 0)
 			utilComboBox->setCurrentIndex(utilIndex);
 	}
-	else if (paramInfo.utilScheme == "SURVIVAL10YEAR"){
+	else if (paramInfo.utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
 		int utilIndex = utilComboBox->findText("10 Year Survival");
 		if (utilIndex >= 0)
 			utilComboBox->setCurrentIndex(utilIndex);
 	}
-	else if (paramInfo.utilScheme == "SCORE"){
+	else if (paramInfo.utilityScheme == KPDUtilityScheme::SCORE){
 		int utilIndex = utilComboBox->findText("Score");
 		if (utilIndex >= 0)
 			utilComboBox->setCurrentIndex(utilIndex);
 	}
 
-	//Optimization Scheme
-	if (paramInfo.optScheme == "MUC"){
-		int utilIndex = utilComboBox->findText("Utility");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo.optScheme == "MEUC"){
-		int utilIndex = utilComboBox->findText("Expected Utility");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo.optScheme == "MEUS"){
-		int utilIndex = utilComboBox->findText("Fallbacks");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo.optScheme == "SCC"){
-		int utilIndex = utilComboBox->findText("Extended Fallbacks");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	
+	//Max Chain Length
+	chainLengthSpinBox->setValue(paramInfo.maxChainLength);
 
-	//Additional Checks
-	praBox->setChecked(paramInfo.praAdvantage);
-	reserveOtoOBox->setChecked(paramInfo.reserveOtoO);
+	//Numerical Parameters
+	pairFailureRateSpinBox->setValue(paramInfo.pairFailureRate);
+	adFailureRateSpinBox->setValue(paramInfo.adFailureRate);
+	exogenousFailureRateSpinBox->setValue(paramInfo.exogenousFailureRate);
+
+	praBox->setChecked(paramInfo.addAdvantageToHighPRACandidates);
+	if (paramInfo.addAdvantageToHighPRACandidates){
+		praCutoffSpinBox->setValue(paramInfo.praAdvantageCutoff);
+		praAdvantageSpinBox->setValue(paramInfo.praAdvantageValue);
+	}
+	else {
+		praCutoffSpinBox->setValue(100);
+		praAdvantageSpinBox->setValue(0);
+	}
+
+	solutionsSpinBox->setValue(paramInfo.numberOfSolutions);
+
+	//Additional Options
+	
+	if (paramInfo.chainStorage == "NONE"){
+		int chainStorageIndex = chainStorageComboBox->findText("As They Are Found");
+		if (chainStorageIndex >= 0)
+			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
+	}
+	else if (paramInfo.chainStorage == "FIRST"){
+		int chainStorageIndex = chainStorageComboBox->findText("First");
+		if (chainStorageIndex >= 0)
+			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
+	}
+	else if (paramInfo.chainStorage == "LAST"){
+		int chainStorageIndex = chainStorageComboBox->findText("Last");
+		if (chainStorageIndex >= 0)
+			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
+	}
+
+	reserveOtoOBox->setChecked(paramInfo.reserveODonorsForOCandidates);
 	checkDPBox->setChecked(paramInfo.checkDP);
 	compatibleBox->setChecked(paramInfo.includeCompatiblePairs);
-	allowABBox->setChecked(paramInfo.includeABBridgeDonors);
+	excludeABDonorsBox->setChecked(paramInfo.excludeABDonorsFromSimulation);
+	allowABBridgeBox->setChecked(paramInfo.allowABBridgeDonors);
 	
-	//Number of Solutions
-	tiebreakBox->setValue(paramInfo.numberOfSolutions);
+}
+
+void SimParamDialog::enablePRAOptions(bool enabled){
+	praCutoffSpinBox->setEnabled(enabled);
+	praAdvantageSpinBox->setEnabled(enabled);
+}
+
+void SimParamDialog::enableBridgeDonorOptions(bool enabled){
+	allowABBridgeBox->setEnabled(!enabled);
 }

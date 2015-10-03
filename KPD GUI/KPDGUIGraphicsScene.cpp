@@ -15,6 +15,13 @@ KPDGUIGraphicsScene::~KPDGUIGraphicsScene()
 
 }
 
+void KPDGUIGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+{
+	QGraphicsScene::mouseReleaseEvent(event);
+
+	emit mouseReleased();
+}
+
 void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
 	QMenu menu(event->widget());
@@ -63,7 +70,7 @@ void KPDGUIGraphicsScene::editNode(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			if (node->getType() == 1){
+			if (node->getType() == AD){
 				int id = node->getInternalID();
 				Donor * donor = node->getDonorPtr();
 				QString comment = node->getComment();
@@ -75,66 +82,66 @@ void KPDGUIGraphicsScene::editNode(){
 						majorChange = true;
 					}
 					if (donor->donorA.size() > 0){
-						if (donor->donorA[0] != adDialog.donorA1LineEdit->text()){ //qDebug() << "E"; 
+						if (donor->donorA[0] != adDialog.donorA1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorA.size() > 1){
-							if (donor->donorA[1] != adDialog.donorA2LineEdit->text()){ //qDebug() << "F"; 
+							if (donor->donorA[1] != adDialog.donorA2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorB.size() > 0){
-						if (donor->donorB[0] != adDialog.donorB1lineEdit->text()){ //qDebug() << "G"; 
+						if (donor->donorB[0] != adDialog.donorB1lineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorB.size() > 1){
-							if (donor->donorB[1] != adDialog.donorB2LineEdit->text()){ //qDebug() << "H"; 
+							if (donor->donorB[1] != adDialog.donorB2LineEdit->text()){ 
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorCW.size() > 0){
-						if (donor->donorCW[0] != adDialog.donorCW1LineEdit->text()){ //qDebug() << "I"; 
+						if (donor->donorCW[0] != adDialog.donorCW1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorCW.size() > 1){
-							if (donor->donorCW[1] != adDialog.donorCW2LineEdit->text()){ //qDebug() << "J"; 
+							if (donor->donorCW[1] != adDialog.donorCW2LineEdit->text()){ 
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorDP.size() > 0){
-						if (donor->donorDP[0] != adDialog.donorDP1LineEdit->text()){ //qDebug() << "K"; 
+						if (donor->donorDP[0] != adDialog.donorDP1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorDP.size() > 1){
-							if (donor->donorDP[1] != adDialog.donorDP2LineEdit->text()){ //qDebug() << "L"; 
+							if (donor->donorDP[1] != adDialog.donorDP2LineEdit->text()){ 
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorDQ.size() > 0){
-						if (donor->donorDQ[0] != adDialog.donorDQ1LineEdit->text()){ //qDebug() << "M"; 
+						if (donor->donorDQ[0] != adDialog.donorDQ1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorDQ.size() > 1){
-							if (donor->donorDQ[1] != adDialog.donorDQ2LineEdit->text()){ //qDebug() << "N"; 
+							if (donor->donorDQ[1] != adDialog.donorDQ2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorDR.size() > 0){
-						if (donor->donorDR[0] != adDialog.donorDR1LineEdit->text()){ //qDebug() << "O"; 
+						if (donor->donorDR[0] != adDialog.donorDR1LineEdit->text()){
 							majorChange = true; 
 						}
 						if (donor->donorDR.size() > 1){
-							if (donor->donorDR[1] != adDialog.donorDR2LineEdit->text()){ //qDebug() << "P"; 
+							if (donor->donorDR[1] != adDialog.donorDR2LineEdit->text()){  
 								majorChange = true; 
 							}
 						}
@@ -142,23 +149,18 @@ void KPDGUIGraphicsScene::editNode(){
 
 					if (donor->donorBW4 != adDialog.donorBW4CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "Q";
 					}
 					if (donor->donorBW6 != adDialog.donorBW6CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "R";
 					}
 					if (donor->donorDR51 != adDialog.donorDR51CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "S";
 					}
 					if (donor->donorDR52 != adDialog.donorDR52CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "T";
 					}
 					if (donor->donorDR53 != adDialog.donorDR53CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "U";
 					}
 
 					if (majorChange){
@@ -180,8 +182,8 @@ void KPDGUIGraphicsScene::editNode(){
 							if (donorGender == "Male"){ d.genderMale = true; }
 							else { d.genderMale = false; }
 
-							d.id = -1;
-							d.donorid = -1;
+							//d.id = -1;
+							//d.donorid = -1;
 
 							d.donorA.push_back(adDialog.donorA1LineEdit->text());
 							d.donorA.push_back(adDialog.donorA2LineEdit->text());
@@ -200,7 +202,7 @@ void KPDGUIGraphicsScene::editNode(){
 							d.donorDR51 = adDialog.donorDR51CheckBox->isChecked();
 							d.donorDR52 = adDialog.donorDR52CheckBox->isChecked();
 							d.donorDR53 = adDialog.donorDR53CheckBox->isChecked();
-							d.type = 0;
+							d.type = KPDPairType::AD;
 
 							QString comment = adDialog.commentTextEdit->toPlainText();
 						}
@@ -237,88 +239,81 @@ void KPDGUIGraphicsScene::editNode(){
 					bool majorChange = false;
 
 					if (donor->BT != pairDialog.donorBTComboBox->currentText()){
-						//qDebug() << "A";
 						majorChange = true;
 					}
 					if (candidate->BT != pairDialog.recipBTComboBox->currentText()){						
-						//qDebug() << "B"; 
 						majorChange = true;
 					}
 					if (candidate->pra != pairDialog.recipPRASpinBox->value()){
-						//qDebug() << "C"; 
 						majorChange = true;
 					}
-					if (candidate->sensitized != pairDialog.recipSensitizedCheckBox->isChecked()){
-						//qDebug() << "CD"; 
-						majorChange = true;
-					}
+					
 					QString antibodies = pairDialog.recipHLALineEdit->text();
 					if (node->getRecipHLAString() != antibodies){
-						//qDebug() << "D"; 
 						majorChange = true;
 					}					
 
 					if (donor->donorA.size() > 0){
-						if (donor->donorA[0] != pairDialog.donorA1LineEdit->text()){ //qDebug() << "E"; 
+						if (donor->donorA[0] != pairDialog.donorA1LineEdit->text()){
 							majorChange = true; 
 						}
 						if (donor->donorA.size() > 1){
-							if (donor->donorA[1] != pairDialog.donorA2LineEdit->text()){ //qDebug() << "F"; 
+							if (donor->donorA[1] != pairDialog.donorA2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
 					}					
 					
 					if (donor->donorB.size() > 0){
-						if (donor->donorB[0] != pairDialog.donorB1lineEdit->text()){ //qDebug() << "G"; 
+						if (donor->donorB[0] != pairDialog.donorB1lineEdit->text()){
 							majorChange = true; 
 						}
 						if (donor->donorB.size() > 1){
-							if (donor->donorB[1] != pairDialog.donorB2LineEdit->text()){ //qDebug() << "H"; 
+							if (donor->donorB[1] != pairDialog.donorB2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorCW.size() > 0){
-						if (donor->donorCW[0] != pairDialog.donorCW1LineEdit->text()){ //qDebug() << "I"; 
+						if (donor->donorCW[0] != pairDialog.donorCW1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorCW.size() > 1){
-							if (donor->donorCW[1] != pairDialog.donorCW2LineEdit->text()){ //qDebug() << "J"; 
+							if (donor->donorCW[1] != pairDialog.donorCW2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
 					}
 
 					if (donor->donorDP.size() > 0){
-						if (donor->donorDP[0] != pairDialog.donorDP1LineEdit->text()){ //qDebug() << "K"; 
+						if (donor->donorDP[0] != pairDialog.donorDP1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorDP.size() > 1){
-							if (donor->donorDP[1] != pairDialog.donorDP2LineEdit->text()){ //qDebug() << "L"; 
+							if (donor->donorDP[1] != pairDialog.donorDP2LineEdit->text()){ 
 								majorChange = true; 
 							}
 						}
 					}
 					
 					if (donor->donorDQ.size() > 0){
-						if (donor->donorDQ[0] != pairDialog.donorDQ1LineEdit->text()){ //qDebug() << "M"; 
+						if (donor->donorDQ[0] != pairDialog.donorDQ1LineEdit->text()){
 							majorChange = true; 
 						}
 						if (donor->donorDQ.size() > 1){
-							if (donor->donorDQ[1] != pairDialog.donorDQ2LineEdit->text()){ //qDebug() << "N"; 
+							if (donor->donorDQ[1] != pairDialog.donorDQ2LineEdit->text()){ 
 								majorChange = true; 
 							}
 						}
 					}
 					
 					if (donor->donorDR.size() > 0){
-						if (donor->donorDR[0] != pairDialog.donorDR1LineEdit->text()){ //qDebug() << "O"; 
+						if (donor->donorDR[0] != pairDialog.donorDR1LineEdit->text()){ 
 							majorChange = true; 
 						}
 						if (donor->donorDR.size() > 1){
-							if (donor->donorDR[1] != pairDialog.donorDR2LineEdit->text()){ //qDebug() << "P"; 
+							if (donor->donorDR[1] != pairDialog.donorDR2LineEdit->text()){
 								majorChange = true; 
 							}
 						}
@@ -326,23 +321,18 @@ void KPDGUIGraphicsScene::editNode(){
 
 					if (donor->donorBW4 != pairDialog.donorBW4CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "Q";
 					}
 					if (donor->donorBW6 != pairDialog.donorBW6CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "R";
 					}
 					if (donor->donorDR51 != pairDialog.donorDR51CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "S";
 					}
 					if (donor->donorDR52 != pairDialog.donorDR52CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "T";
 					}
 					if (donor->donorDR53 != pairDialog.donorDR53CheckBox->isChecked()){
 						majorChange = true;
-						//qDebug() << "U";
 					}
 
 					if (majorChange){
@@ -360,8 +350,7 @@ void KPDGUIGraphicsScene::editNode(){
 							d.BT = pairDialog.donorBTComboBox->currentText();
 							c.BT = pairDialog.recipBTComboBox->currentText();
 							c.pra = pairDialog.recipPRASpinBox->value();
-							c.sensitized = pairDialog.recipSensitizedCheckBox->isChecked();
-
+							
 							double recipHeight = pairDialog.recipHeightSpinBox->value();
 							double recipWeight = pairDialog.recipWeightSpinBox->value();
 							c.BMI =  recipWeight / recipHeight / recipHeight;
@@ -383,10 +372,10 @@ void KPDGUIGraphicsScene::editNode(){
 							if (donorGender == "Male"){ d.genderMale = true; }
 							else { d.genderMale = false; }
 
-							d.id = -1;
-							d.donorid = -1;
-							c.id = -1;
-							c.recipid = -1;
+							//d.id = -1;
+							//d.donorid = -1;
+							//c.id = -1;
+							//c.recipid = -1;
 
 							QString antibodies = pairDialog.recipHLALineEdit->text();
 							QStringList antibodyList = antibodies.split(";");
@@ -412,7 +401,7 @@ void KPDGUIGraphicsScene::editNode(){
 							d.donorDR51 = pairDialog.donorDR51CheckBox->isChecked();
 							d.donorDR52 = pairDialog.donorDR52CheckBox->isChecked();
 							d.donorDR53 = pairDialog.donorDR53CheckBox->isChecked();
-							d.type = 0;
+							d.type = KPDPairType::PAIR;
 
 							QString comment = pairDialog.commentTextEdit->toPlainText();							
 						}						
@@ -422,7 +411,6 @@ void KPDGUIGraphicsScene::editNode(){
 						node->setRecipName(pairDialog.recipNameLineEdit->text());
 						node->setDonorAge(pairDialog.donorAgeSpinBox->value());
 						node->setRecipAge(pairDialog.recipAgeSpinBox->value());
-						node->setRecipSensitized(pairDialog.recipSensitizedCheckBox->isChecked());
 						double recipHeight = pairDialog.recipHeightSpinBox->value();
 						double recipWeight = pairDialog.recipWeightSpinBox->value();
 						node->setRecipBMI( recipWeight / recipHeight / recipHeight);

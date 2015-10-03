@@ -3,7 +3,7 @@
 const qreal Pi = 3.14159265;
 const qreal Tol = 3;
 
-KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, QString optScheme, double utility, int id){
+KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimizationScheme optScheme, double utility, int id){
 	myPairList = pairList;
 	myOptScheme = optScheme;
 	myUtility = utility;
@@ -17,14 +17,14 @@ KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, QString optSche
 			myPairList.removeFirst();
 			myPairList.push_back(node);
 
-			if (myPairList.first()->getType() != 0){
+			if (myPairList.first()->getType() != PAIR){
 				chain = true;
 			}
 		}
 	}
 
 	//Find corresponding arrows
-	if (optScheme == "MUC" || optScheme == "MEUC"){
+	if (optScheme == KPDOptimizationScheme::MUC || optScheme == KPDOptimizationScheme::MEUC){
 		for (int j = 0; j < myPairList.size() - 1; j++){
 			KPDGUINode * firstPair = myPairList.at(j);
 			KPDGUINode * secondPair = myPairList.at(j + 1);
@@ -80,13 +80,11 @@ qreal KPDGUIStructure::centerX(){
 	qreal avgx = 0;
 
 	foreach(KPDGUINode * node, myPairList){
-		////qDebug() << "x: " << node->x();
 		avgx += node->x();		
 	}
 
 	avgx = avgx / myPairList.size();
 
-	////qDebug() << "AVG X: " << avgx;
 	return avgx;
 }
 
@@ -94,13 +92,11 @@ qreal KPDGUIStructure::centerY(){
 	qreal avgy = 0;
 
 	foreach(KPDGUINode * node, myPairList){
-		////qDebug() << "y: " << node->y();
 		avgy += node->y();
 	}
 
 	avgy = avgy / myPairList.size();
 
-	////qDebug() << "AVG Y: " << avgy;
 	return avgy;
 }
 
@@ -115,10 +111,6 @@ void KPDGUIStructure::cluster(){
 
 	foreach(KPDGUINode * node, myPairList){
 		node->setVisible(false);
-		////qDebug() << "Center X:" << centerX << ", Center Y:" << centerY;
-		////qDebug() << "Angle X:" << cos(nodeAngle) << ", Angle Y:" << sin(nodeAngle);
-		////qDebug() << "Scale X:" << dist*cos(nodeAngle) << ", Scale Y:" << dist*sin(nodeAngle);
-		////qDebug() << "(" << centerX + dist*cos(nodeAngle) << "," << centerY + dist*sin(nodeAngle) << ")";
 		if (!(abs((node->x()) - (centerX + dist*cos(nodeAngle))) < Tol && abs((node->y()) - (centerY + dist*sin(nodeAngle)) < Tol))){
 			node->setPos(QPoint(centerX + dist*cos(nodeAngle), centerY + dist*sin(nodeAngle)));
 		}		
@@ -136,7 +128,6 @@ void KPDGUIStructure::cluster(qreal x, qreal y){
 
 	foreach(KPDGUINode * node, myPairList){
 		node->setVisible(false);
-		////qDebug() << "(" << x + dist*cos(nodeAngle) << "," << y + dist*sin(nodeAngle) << ")";
 		if (!(abs((node->x()) - (x + dist*cos(nodeAngle))) < Tol && abs((node->y()) - (y + dist*sin(nodeAngle)) < Tol))){
 			node->setPos(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
 		}
@@ -245,7 +236,7 @@ void KPDGUIStructure::resetPopularityInSolutions(){
 QString KPDGUIStructure::toString(){
 	QString structureString = "";
 
-	if (myOptScheme == "SCC"){
+	if (myOptScheme == KPDOptimizationScheme::SCC){
 		structureString += "Component #" + QString::number(myID) + " (";
 	}
 	else {
@@ -265,7 +256,7 @@ QString KPDGUIStructure::toString(){
 	structureString.chop(2);
 	structureString += "): ";
 
-	if (myOptScheme == "MUC" || myOptScheme == "MEUC"){
+	if (myOptScheme == KPDOptimizationScheme::MUC || myOptScheme == KPDOptimizationScheme::MEUC){
 		QString nodeString = "";
 		for (int j = 0; j < myPairList.size() - 1; j++){
 			KPDGUINode * firstPair = myPairList.at(j);

@@ -311,16 +311,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="recipSensitizedCheckBox">
-        <property name="layoutDirection">
-         <enum>Qt::LeftToRight</enum>
-        </property>
-        <property name="text">
-         <string>Can Be Desensitized</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QCheckBox" name="recipPrevTransCheckBox">
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
@@ -880,7 +870,6 @@
   <tabstop>recipHeightSpinBox</tabstop>
   <tabstop>recipHepCCheckBox</tabstop>
   <tabstop>recipDiabetesCheckBox</tabstop>
-  <tabstop>recipSensitizedCheckBox</tabstop>
   <tabstop>recipPrevTransCheckBox</tabstop>
   <tabstop>recipHLALineEdit</tabstop>
   <tabstop>donorA1LineEdit</tabstop>

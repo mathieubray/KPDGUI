@@ -13,6 +13,10 @@ class SimParamDialog : public QDialog, public Ui_SimParamDialog
 public:
 	SimParamDialog(QWidget *parent = 0);
 	SimParamDialog(ParamInfoStruct paramInfo, QWidget *parent = 0);
+
+public slots:
+	void enablePRAOptions(bool enabled);
+	void enableBridgeDonorOptions(bool enabled);
 };
 
 #endif

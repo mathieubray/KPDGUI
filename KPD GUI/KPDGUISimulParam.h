@@ -5,8 +5,6 @@
 
 #include "Structs.h"
 
-using namespace std;
-
 class KPDGUISimulParam {
 
 private:
@@ -14,132 +12,62 @@ private:
 	bool parametersSet;
 
 	//Simulation Settings
-	string outputFolderName;
-	string allocScheme; //DPD, NEAD
-	string utilityScheme; // Score, Survival5Year, Survival10Year, Transplants
-	//string pairEntryScheme; //All, Subset, Fixed, Poisson
-	//string adEntryScheme; //All, Subset, Fixed, Chance
-	//string samplingScheme; // With, Without (replacement)
-	//int pairSelectionSeed;
-	//int simulationConditionsSeed;
-
-	//Numerical Parameters	
-	//int simulations;
-	//int months;
-	//double arrivals;
-	//double ads;
+	KPDOptimizationScheme optScheme; //MUC, MEUC, MEUS, SCC
+	KPDUtilityScheme utilityScheme; // TRANSPLANTS, SURVIVAL5YEAR, SURVIVAL10YEAR, SCORE
 	int maxChainLength;
-	//double attritionRate;
-	//double renegeRate;
-	//double pairFailureRate;
-	//double probReturnToPool;
-	//double exogenousFailureRate;
-	int tiebreakIterations;
+	
+	//Numerical Parameters
+	double pairFailureRate;
+	double adFailureRate;
+	double exogenousFailureRate;	
+		
+	bool addAdvantageToHighPRACandidates;
+	int praAdvantageCutoff;
+	double praAdvantageValue;
 
-	//Optimization Settings
-	bool muc;
-	bool meuc;
-	bool meus;
-	bool scc;
-	//bool fallbacks;
+	int numberOfSolutions;
 
-	//Data Configuration and Files
-	string data_configuration; // Ashlagi, APD Match Run, Michigan, Match Run, Combined
-	//string candidate_file;
-	//string donor_file;
-	//string pair_file;
-	//string info_file;
-	//string exInfo_file;
-	//string ndd_file;
-	//string samePatient_file;
-	//string comp_file;
-	//string weight_file;
-
-	//Output Suppression
-	bool outputEdgeInfo;
-	bool outputExchangeInfo;
-	bool outputCycleInfo;
-	bool outputSimInfo;
-	bool outputPopulationStats;
-
-	//Additional Flags
-	bool praAdvantage;
-	bool reserveOtoO;
-	bool randomPairFailure;
-	string chainstorage;
+	//Additional Options
+	QString chainStorage; // FIRST, LAST, NONE
+	bool reserveODonorsForOCandidates;	
 	bool checkDP;
 	bool includeCompatiblePairs;
-	bool includeABbridgeDonors;
+	bool excludeABDonorsFromSimulation;
+	bool allowABBridgeDonors;
+	
 
 public:
 	KPDGUISimulParam();
 	~KPDGUISimulParam();
 
 	void processParams(ParamInfoStruct paramInfo);
-	//void printSpecs();
 
 	bool getParametersSet();
 	void setParametersSet(bool flag);
 	
-	//stringstream specs;
-
 	//Simulation Settings
-	string getOutputFolderName();
-	string getAllocationScheme();
-	string getUtilityScheme();
-	//string getPairEntryScheme();
-	//string getADEntryScheme();
-	//string getSamplingScheme();
-	//int getPairSelectionSeed();
-	//int getSimulationConditionsSeed();
+	KPDOptimizationScheme getOptimizationScheme();
+	KPDUtilityScheme getUtilityScheme();	
+	int getMaxChainLength();
 
 	//Numerical Parameters
-	//int getSimulations();
-	//int getMonths();
-	//double getArrivals();
-	//double getADs();
-	int getMaxChainLength();
-	//double getAttritionRate();
-	//double getRenegeRate();
-	//double getPairFailureRate();
-	//double getProbReturnToPool();
-	//double getExogenousFailureRate();
-	int getTiebreakIterations();
+	double getPairFailureRate();
+	double getADFailureRate();
+	double getExogenousFailureRate();
 
-	//Optimization Settings
-	bool getMUC();
-	bool getMEUC();
-	bool getMEUS();
-	bool getSCC();
-	//bool getFallbacks();
+	bool getAddAdvantageToHighPRACandidates();
+	int getPRAAdvantageCutoff();
+	double getPRAAdvantageValue();
 
-	//Data Configuration and Files
-	string getDataConfiguration();
-	//string getCandidateFile();
-	//string getDonorFile();
-	//string getPairFile();
-	//string getInfoFile();
-	//string getExtraInfoFile();
-	//string getNDDFile();
-	//string getSamePatientFile();
-	//string getCompFile();
-	//string getWeightFile();
-
-	//Output Suppression
-	bool getOutputEdgeFlag();
-	bool getOutputExchangeFlag();
-	bool getOutputCycleFlag();
-	bool getOutputSimFlag();
-	bool getOutputPopStatsFlag();
-
-	//Additional Flags
-	bool getPRAadvantage();
-	bool getReserveOtoO();
-	bool getRandomPairFailure();
-	string getChainStorage();
+	int getNumberOfSolutions();
+	
+	//Additional Options
+	QString getChainStorage();
+	bool getReserveODonorsForOCandidates();
 	bool getCheckDP();
-	bool getIncludeCompatiblePairsFlag();
-	bool getIncludeABbridgeDonorsFlag();
+	bool getIncludeCompatiblePairs();
+	bool getExcludeABDonorsFromSimulation();
+	bool getAllowABbridgeDonors();	
 
 	QString toString();
 };

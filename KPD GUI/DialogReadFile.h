@@ -16,6 +16,7 @@ public:
 
 private slots :
 	void browse();
+	void checkValidFile(QString file);
 
 };
 

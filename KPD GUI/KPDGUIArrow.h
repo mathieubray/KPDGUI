@@ -49,7 +49,7 @@
 #include <math.h>
 
 #include "KPDGUINode.h"
-#include "Structs.h"
+//#include "Structs.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;

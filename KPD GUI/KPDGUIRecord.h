@@ -16,7 +16,6 @@
 #include "KPDGUIArrowWrapper.h"
 #include "KPDGUIGraphicsScene.h"
 
-#include "Structs.h"
 
 class KPDGUIRecord : public QObject
 {
@@ -27,15 +26,12 @@ public:
 	~KPDGUIRecord();
 	
 	//Pairs
-	//int loadPairs(QString file);
-	//void addPair(KPDGUINode * node, bool fromSavedFile=false);
 	void insert(KPDGUINode * node, bool fromSavedFile = false);
 	void insertArrow(KPDGUIArrow * arrow);
 			
 	KPDGUINode * getNode(int id);
 	KPDGUINode * getNodeFromIndex(int i);
-	//KPDGUINode * connectNodePtr(int i);
-	int getIDfromIndex(int index);
+	
 	int size();
 	void clear();
 
@@ -45,7 +41,8 @@ public:
 	QList<KPDGUINode *> getPairs();
 
 	//Matrices
-	void generateMatrices(bool reserveOtoO, bool checkDP, bool includeCompatiblePairs);
+	void generateMatrices(ParamInfoStruct params);
+	
 	std::vector<std::vector<int> > viableTransplantMatrix;
 	std::vector<std::vector<double > > scoreMatrix;
 	std::vector<std::vector<double > > survival5yearMatrix;
@@ -53,21 +50,19 @@ public:
 	std::vector<std::vector<double > > probabilityMatrix;
 	std::vector<std::vector<int> > labCrossmatchMatrix;
 	std::vector<std::vector<bool> > incidenceMatrix;
-	std::vector<Pair> pairVector;
-	std::vector<int> inTimes;
-
+	std::vector<AdditionalPairInfo> pairInfoVector;
+	
 	//Other Settings
 	int getBaselineIDCode();
 	void setBaselineIDCode(int code);
+
+	int getNumberOfVertices();
 	
 signals:
 	
-	//void removeStructureHighlights();
 	void takeAdditionalDeleteNodeActions(KPDGUINode * node);
 
 public slots:
-	//void updateVisibility();
-	//void undoHighlights();
 	void deleteNodeFromRecord(int id);
 
 protected:
@@ -83,16 +78,9 @@ private:
 	//Stored Items
 	QMap<int, KPDGUINode*> pairs;
 	QSet<KPDGUIArrow *> arrows;
-	QVector<int> orderedPairs;
-	QMap<int, int> intToExt;
-
-
+	
 	//Parameters
-	//QString dataconfig;
 	int id_code;
-	
-
-	
 	
 };
 

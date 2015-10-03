@@ -12,7 +12,7 @@
 class KPDGUIStructure
 {
 public:
-	KPDGUIStructure(QVector<KPDGUINode *> pairList, QString optScheme, double utility, int id);
+	KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimizationScheme optScheme, double utility, int id);
 	~KPDGUIStructure();
 
 	void select();
@@ -44,7 +44,7 @@ public:
 private:
 	QVector<KPDGUINode *> myPairList;
 	QSet<KPDGUIArrow *> myArrows;
-	QString myOptScheme;
+	KPDOptimizationScheme myOptScheme;
 	double myUtility;
 	int myID;		
 	bool chain;

@@ -167,9 +167,6 @@ PairDialog::PairDialog(int id, Donor * donor, Candidate * candidate, QString com
 	//Recipient PRA
 	recipPRASpinBox->setValue(candidate->pra);
 	
-	//Recipient Sensitized
-	recipSensitizedCheckBox->setChecked(candidate->sensitized);
-	
 	//Recipient Diabetes
 	recipDiabetesCheckBox->setChecked(candidate->diabetes);
 	
@@ -217,9 +214,6 @@ PairDialog::PairDialog(int id, Donor * donor, Candidate * candidate, QString com
 	antibodyString.chop(1);
 	recipHLALineEdit->setText(antibodyString);
 
-	//Comment
-	commentTextEdit->setText(comment);
-
 	if (disableMajorEdits){
 		donorBTComboBox->setEnabled(false);
 
@@ -249,8 +243,10 @@ PairDialog::PairDialog(int id, Donor * donor, Candidate * candidate, QString com
 		recipPRASpinBox->setEnabled(false);
 		praSlider->setEnabled(false);
 
-		recipHLALineEdit->setEnabled(false);
-		recipSensitizedCheckBox->setEnabled(false);
+		recipHLALineEdit->setEnabled(false);		
 	}
+
+	//Comment
+	commentTextEdit->setText(comment);
 
 }

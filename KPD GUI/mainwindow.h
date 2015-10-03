@@ -136,7 +136,7 @@ private:
 
 	KPDGUIGraphicsScene * scene;
 	KPDGUIRecord * kpdguiRecord;
-	KPDGUISimulParam * simulParam;
+	KPDGUISimulParam * kpdguiParameters;
 
 	QTreeWidget * listWidget;
 	QTreeWidget * matchWidget;

@@ -21,11 +21,14 @@ public:
 
 protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 signals:
 	void deleteNode(int i);
 	void editNode(int i);
 	void screenChanged();
+	
+	void mouseReleased();
 
 private slots:
 	void editNode();

@@ -1,12 +1,12 @@
 #include "KPDGUINode.h"
 #include "KPDGUIArrow.h"
+#include "DialogPair.h"
+#include "DialogAD.h"
 
 KPDGUINode::KPDGUINode(){
 	Donor d;
-	d.type = -1;
-	d.id = -1;
-	d.donorid = -1;
-
+	d.type = KPDPairType::PAIR;
+	
 	d.name = "";
 	d.age = -1;
 	d.BT = "";
@@ -29,9 +29,6 @@ KPDGUINode::KPDGUINode(){
 	d.donorDR53 = false;
 	
 	Candidate c;
-	c.id = -1;
-	c.recipid = -1;
-
 	c.name = "";
 	c.age = -1;
 	c.BT = "";
@@ -45,9 +42,7 @@ KPDGUINode::KPDGUINode(){
 	c.prevTrans = false;
 	c.TOD = 0.0;
 	c.hepC = false;
-
-	c.sensitized = false;
-	
+		
 	c.antibodies.push_back("");
 
 	donor = d;
@@ -71,7 +66,6 @@ KPDGUINode::KPDGUINode(Donor d, Candidate c, QString commentString, bool hold)
 	candidate = c;
 	comment = commentString;
 	holdStatus = hold;
-	//pairListItem = new QTreeWidgetItem();
 
 	//Set Visual Properties
     myTextColor = Qt::white;
@@ -131,7 +125,7 @@ QColor KPDGUINode::outlineColor() const
 void KPDGUINode::setBackgroundColor()
 {
 	if (holdStatus){
-		if (donor.type == 0){
+		if (donor.type == PAIR){
 			myBackgroundColor = QColor(100, 100, 100);
 		}
 		else {
@@ -139,7 +133,7 @@ void KPDGUINode::setBackgroundColor()
 		}
 	}
 	else {
-		if (donor.type == 0){
+		if (donor.type == PAIR){
 			myBackgroundColor = QColor(255, candidate.pra * 1.5, candidate.pra * 1.5);
 		}
 		else {
@@ -324,9 +318,6 @@ void KPDGUINode::setDonor(Donor d){
 	
 	donor.type = d.type;
 
-	donor.id = d.id;
-	donor.donorid = d.donorid;
-
 	donor.name = d.name;
 	donor.age = d.age;
 	donor.BT = d.BT;
@@ -370,9 +361,6 @@ void KPDGUINode::setDonor(Donor d){
 void KPDGUINode::setCandidate(Candidate c){
 	candidate = c;
 
-	candidate.id = c.id;
-	candidate.recipid = c.recipid;
-
 	candidate.name = c.name;
 	candidate.age = c.age;
 	candidate.BT = c.BT;
@@ -387,27 +375,14 @@ void KPDGUINode::setCandidate(Candidate c){
 	candidate.TOD = c.TOD;
 	candidate.hepC = c.hepC;
 	
-	candidate.sensitized = c.sensitized;
 	candidate.antibodies.clear();
 	foreach(QString antibody, c.antibodies){
 		candidate.antibodies.push_back(antibody);
 	}
 }
 
-int KPDGUINode::getType() const{
+KPDPairType KPDGUINode::getType() const{
 	return donor.type;
-}
-
-int KPDGUINode::getExternalID() const {
-	return donor.id;
-}
-
-int KPDGUINode::getDonorID() const {
-	return donor.donorid;
-}
-
-int KPDGUINode::getRecipID() const {
-	return candidate.recipid;
 }
 
 QString KPDGUINode::getDonorName() const {
@@ -470,20 +445,16 @@ bool KPDGUINode::getRecipHepC() const{
 	return candidate.hepC;
 }
 
-bool KPDGUINode::getRecipSensitized() const{
-	return candidate.sensitized;
-}
-
 double KPDGUINode::getDonorBMI() const{
-	return candidate.BMI;
+	return donor.BMI;
 }
 
 bool KPDGUINode::getDonorGenderMale() const{
-	return candidate.genderMale;
+	return donor.genderMale;
 }
 
 double KPDGUINode::getDonorWeight() const{
-	return candidate.weight;
+	return donor.weight;
 }
 
 void KPDGUINode::setDonorName(QString name){
@@ -558,11 +529,6 @@ void KPDGUINode::setRecipTOD(double tod){
 
 void KPDGUINode::setRecipHepC(bool hepC){ 
 	candidate.hepC = hepC;
-	emit nodeEdited(internalID);
-}
-
-void KPDGUINode::setRecipSensitized(bool sensitized){ 
-	candidate.sensitized = sensitized;
 	emit nodeEdited(internalID);
 }
 
@@ -705,19 +671,6 @@ QString KPDGUINode::getRecipHLAString(){
 	return hlaString;
 }
 
-bool KPDGUINode::getSensitizedBool() const {
-	return candidate.sensitized;
-}
-
-QString KPDGUINode::getSensitized(){
-	if (candidate.sensitized == true){
-		return "True";
-	}
-	else {
-		return "False";
-	}
-}
-
 Candidate * KPDGUINode::getCandidatePtr(){
 	return &candidate;
 }
@@ -781,7 +734,7 @@ QString KPDGUINode::getCompatibleRecipientsString(){
 QString KPDGUINode::getConsoleString(){
 	QString consoleString = "";
 	
-	if (getType() == 0){
+	if (donor.type == PAIR){
 		consoleString += "Pair ";
 	}
 	else {
@@ -798,7 +751,7 @@ QString KPDGUINode::getConsoleString(){
 	consoleString += " (";
 	consoleString += getDonorBT();
 	consoleString += ")";
-	if (getType() == 0){
+	if (donor.type == PAIR){
 		consoleString += ", Candidate: ";
 		consoleString += getRecipName();
 		consoleString += " (";
@@ -816,7 +769,7 @@ QString KPDGUINode::getConsoleString(){
 		consoleString += "None";
 	}
 
-	if (getType() == 0){
+	if (donor.type == PAIR){
 		consoleString += "\nCandidate HLA: ";
 
 		QString recipHLAString = getRecipHLAString();
@@ -830,7 +783,7 @@ QString KPDGUINode::getConsoleString(){
 	}
 
 	consoleString += "\n";
-	if (getType() == 0){
+	if (donor.type == PAIR){
 		consoleString += "\n";
 		consoleString += getCompatibleDonorString();
 		consoleString += "\n";
@@ -871,103 +824,93 @@ void KPDGUINode::mousePressEvent(QGraphicsSceneMouseEvent *event){
 }
 
 void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
-	if (getType() == 1){
+	if (donor.type == AD){
 		AltruisticDonorDialog adDialog(getInternalID(), getDonorPtr(), getComment(), true, 0);
 		if (adDialog.exec()){
 			bool majorChange = false;
 			if (donor.BT != adDialog.donorBTComboBox->currentText()){
-				//qDebug() << "A";
 				majorChange = true;
 			}
 			if (donor.donorA.size() > 0){
-				//qDebug() << adDialog.donorA1LineEdit->text();
-				//qDebug() << donor.donorA[0];
-				if (donor.donorA[0] != adDialog.donorA1LineEdit->text()){ //qDebug() << "E"; 
+				if (donor.donorA[0] != adDialog.donorA1LineEdit->text()){  
 					majorChange = true; 
 				}
 				if (donor.donorA.size() > 1){
-					//qDebug() << adDialog.donorA2LineEdit->text();
-					//qDebug() << donor.donorA[1];
-					if (donor.donorA[1] != adDialog.donorA2LineEdit->text()){ //qDebug() << "F";
+					if (donor.donorA[1] != adDialog.donorA2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorB.size() > 0){
-				if (donor.donorB[0] != adDialog.donorB1lineEdit->text()){ //qDebug() << "G"; 
+				if (donor.donorB[0] != adDialog.donorB1lineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorB.size() > 1){
-					if (donor.donorB[1] != adDialog.donorB2LineEdit->text()){ //qDebug() << "H"; 
+					if (donor.donorB[1] != adDialog.donorB2LineEdit->text()){
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorCW.size() > 0){
-				if (donor.donorCW[0] != adDialog.donorCW1LineEdit->text()){ //qDebug() << "I"; 
+				if (donor.donorCW[0] != adDialog.donorCW1LineEdit->text()){
 					majorChange = true; 
 				}
 				if (donor.donorCW.size() > 1){
-					if (donor.donorCW[1] != adDialog.donorCW2LineEdit->text()){ //qDebug() << "J"; 
+					if (donor.donorCW[1] != adDialog.donorCW2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDP.size() > 0){
-				if (donor.donorDP[0] != adDialog.donorDP1LineEdit->text()){ //qDebug() << "K"; 
+				if (donor.donorDP[0] != adDialog.donorDP1LineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorDP.size() > 1){
-					if (donor.donorDP[1] != adDialog.donorDP2LineEdit->text()){ //qDebug() << "L"; 
+					if (donor.donorDP[1] != adDialog.donorDP2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDQ.size() > 0){
-				if (donor.donorDQ[0] != adDialog.donorDQ1LineEdit->text()){ //qDebug() << "M"; 
+				if (donor.donorDQ[0] != adDialog.donorDQ1LineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorDQ.size() > 1){
-					if (donor.donorDQ[1] != adDialog.donorDQ2LineEdit->text()){ //qDebug() << "N"; 
+					if (donor.donorDQ[1] != adDialog.donorDQ2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDR.size() > 0){
-				if (donor.donorDR[0] != adDialog.donorDR1LineEdit->text()){ //qDebug() << "O"; 
+				if (donor.donorDR[0] != adDialog.donorDR1LineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorDR.size() > 1){
-					if (donor.donorDR[1] != adDialog.donorDR2LineEdit->text()){ //qDebug() << "P"; 
+					if (donor.donorDR[1] != adDialog.donorDR2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorBW4 != adDialog.donorBW4CheckBox->isChecked()){
-				majorChange = true;
-				//qDebug() << "Q";
+				majorChange = true;				
 			}
 			if (donor.donorBW6 != adDialog.donorBW6CheckBox->isChecked()){
 				majorChange = true;
-				//qDebug() << "R";
 			}
 			if (donor.donorDR51 != adDialog.donorDR51CheckBox->isChecked()){
 				majorChange = true;
-				//qDebug() << "S";
 			}
 			if (donor.donorDR52 != adDialog.donorDR52CheckBox->isChecked()){
 				majorChange = true;
-				//qDebug() << "T";
 			}
 			if (donor.donorDR53 != adDialog.donorDR53CheckBox->isChecked()){
 				majorChange = true;
-				//qDebug() << "U";
 			}
 
 			if (majorChange){
@@ -988,10 +931,7 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 					QString donorGender = adDialog.donorGenderComboBox->currentText();
 					if (donorGender == "Male"){ d.genderMale = true; }
 					else { d.genderMale = false; }
-
-					d.id = -1;
-					d.donorid = -1;
-
+					
 					d.donorA.push_back(adDialog.donorA1LineEdit->text());
 					d.donorA.push_back(adDialog.donorA2LineEdit->text());
 					d.donorB.push_back(adDialog.donorB1lineEdit->text());
@@ -1009,7 +949,8 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 					d.donorDR51 = adDialog.donorDR51CheckBox->isChecked();
 					d.donorDR52 = adDialog.donorDR52CheckBox->isChecked();
 					d.donorDR53 = adDialog.donorDR53CheckBox->isChecked();
-					d.type = 0;
+					
+					d.type = KPDPairType::AD;
 
 					QString comment = adDialog.commentTextEdit->toPlainText();
 				}
@@ -1039,93 +980,80 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 			bool majorChange = false;
 
 			if (donor.BT != pairDialog.donorBTComboBox->currentText()){
-				qDebug() << donor.BT << " " << pairDialog.donorBTComboBox->currentText();
-				qDebug() << "A";
 				majorChange = true;
 			}
 			if (candidate.BT != pairDialog.recipBTComboBox->currentText()){
-				qDebug() << "B"; 
 				majorChange = true;
 			}
 			if (candidate.pra != pairDialog.recipPRASpinBox->value()){
-				qDebug() << "C"; 
-				majorChange = true;
-			}
-			if (candidate.sensitized != pairDialog.recipSensitizedCheckBox->isChecked()){
-				qDebug() << "CD"; 
 				majorChange = true;
 			}
 			QString antibodies = pairDialog.recipHLALineEdit->text();
 			if (getRecipHLAString() != antibodies){
-				qDebug() << "D"; 
 				majorChange = true;
 			}
 
 			if (donor.donorA.size() > 0){
-				qDebug() << pairDialog.donorA1LineEdit->text();
-				qDebug() << donor.donorA[0];
-				if (donor.donorA[0] != pairDialog.donorA1LineEdit->text()){ qDebug() << "E"; 
+				if (donor.donorA[0] != pairDialog.donorA1LineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorA.size() > 1){
-					qDebug() << pairDialog.donorA2LineEdit->text();
-					qDebug() << donor.donorA[1];
-					if (donor.donorA[1] != pairDialog.donorA2LineEdit->text()){ qDebug() << "F"; 
+					if (donor.donorA[1] != pairDialog.donorA2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorB.size() > 0){
-				if (donor.donorB[0] != pairDialog.donorB1lineEdit->text()){ qDebug() << "G"; 
+				if (donor.donorB[0] != pairDialog.donorB1lineEdit->text()){ 
 					majorChange = true; 
 				}
 				if (donor.donorB.size() > 1){
-					if (donor.donorB[1] != pairDialog.donorB2LineEdit->text()){ qDebug() << "H"; 
+					if (donor.donorB[1] != pairDialog.donorB2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorCW.size() > 0){
-				if (donor.donorCW[0] != pairDialog.donorCW1LineEdit->text()){ qDebug() << "I"; 
+				if (donor.donorCW[0] != pairDialog.donorCW1LineEdit->text()){  
 					majorChange = true; 
 				}
 				if (donor.donorCW.size() > 1){
-					if (donor.donorCW[1] != pairDialog.donorCW2LineEdit->text()){ qDebug() << "J"; 
+					if (donor.donorCW[1] != pairDialog.donorCW2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDP.size() > 0){
-				if (donor.donorDP[0] != pairDialog.donorDP1LineEdit->text()){ qDebug() << "K"; 
+				if (donor.donorDP[0] != pairDialog.donorDP1LineEdit->text()){  
 					majorChange = true; 
 				}
 				if (donor.donorDP.size() > 1){
-					if (donor.donorDP[1] != pairDialog.donorDP2LineEdit->text()){ qDebug() << "L"; 
+					if (donor.donorDP[1] != pairDialog.donorDP2LineEdit->text()){  
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDQ.size() > 0){
-				if (donor.donorDQ[0] != pairDialog.donorDQ1LineEdit->text()){ qDebug() << "M"; 
+				if (donor.donorDQ[0] != pairDialog.donorDQ1LineEdit->text()){  
 					majorChange = true; 
 				}
 				if (donor.donorDQ.size() > 1){
-					if (donor.donorDQ[1] != pairDialog.donorDQ2LineEdit->text()){ qDebug() << "N"; 
+					if (donor.donorDQ[1] != pairDialog.donorDQ2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
 			}
 
 			if (donor.donorDR.size() > 0){
-				if (donor.donorDR[0] != pairDialog.donorDR1LineEdit->text()){ qDebug() << "O"; 
+				if (donor.donorDR[0] != pairDialog.donorDR1LineEdit->text()){  
 					majorChange = true; 
 				}
 				if (donor.donorDR.size() > 1){
-					if (donor.donorDR[1] != pairDialog.donorDR2LineEdit->text()){ qDebug() << "P"; 
+					if (donor.donorDR[1] != pairDialog.donorDR2LineEdit->text()){ 
 						majorChange = true; 
 					}
 				}
@@ -1133,23 +1061,18 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 
 			if (donor.donorBW4 != pairDialog.donorBW4CheckBox->isChecked()){
 				majorChange = true;
-				qDebug() << "Q";
 			}
 			if (donor.donorBW6 != pairDialog.donorBW6CheckBox->isChecked()){
 				majorChange = true;
-				qDebug() << "R";
 			}
 			if (donor.donorDR51 != pairDialog.donorDR51CheckBox->isChecked()){
 				majorChange = true;
-				qDebug() << "S";
 			}
 			if (donor.donorDR52 != pairDialog.donorDR52CheckBox->isChecked()){
 				majorChange = true;
-				qDebug() << "T";
 			}
 			if (donor.donorDR53 != pairDialog.donorDR53CheckBox->isChecked()){
 				majorChange = true;
-				qDebug() << "U";
 			}
 
 			if (majorChange){
@@ -1167,7 +1090,6 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 					d.BT = pairDialog.donorBTComboBox->currentText();
 					c.BT = pairDialog.recipBTComboBox->currentText();
 					c.pra = pairDialog.recipPRASpinBox->value();
-					c.sensitized = pairDialog.recipSensitizedCheckBox->isChecked();
 
 					double recipHeight = pairDialog.recipHeightSpinBox->value();
 					double recipWeight = pairDialog.recipWeightSpinBox->value();
@@ -1190,10 +1112,6 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 					if (donorGender == "Male"){ d.genderMale = true; }
 					else { d.genderMale = false; }
 
-					d.id = -1;
-					d.donorid = -1;
-					c.id = -1;
-					c.recipid = -1;
 
 					QString antibodies = pairDialog.recipHLALineEdit->text();
 					QStringList antibodyList = antibodies.split(";");
@@ -1219,7 +1137,8 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 					d.donorDR51 = pairDialog.donorDR51CheckBox->isChecked();
 					d.donorDR52 = pairDialog.donorDR52CheckBox->isChecked();
 					d.donorDR53 = pairDialog.donorDR53CheckBox->isChecked();
-					d.type = 0;
+					
+					d.type = KPDPairType::PAIR;
 
 					QString comment = pairDialog.commentTextEdit->toPlainText();
 				}
@@ -1229,7 +1148,6 @@ void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
 				setRecipName(pairDialog.recipNameLineEdit->text());
 				setDonorAge(pairDialog.donorAgeSpinBox->value());
 				setRecipAge(pairDialog.recipAgeSpinBox->value());
-				setRecipSensitized(pairDialog.recipSensitizedCheckBox->isChecked());
 				double recipHeight = pairDialog.recipHeightSpinBox->value();
 				double recipWeight = pairDialog.recipWeightSpinBox->value();
 				setRecipBMI( recipWeight / recipHeight / recipHeight);
@@ -1283,7 +1201,7 @@ QRectF KPDGUINode::outlineRect() const
 }
 
 bool KPDGUINode::checkWithinBounds(bool pairsOfMinPRA, int minPRA, bool pairsOfMaxPRA, int maxPRA){
-	if (donor.type == 1){
+	if (donor.type == AD){
 		return true;
 	}
 	else {
@@ -1345,18 +1263,20 @@ void KPDGUINode::updateVisibility(DisplaySettingsStruct * displaySettings){
 QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
 {
 	out << qint32(node.getInternalID());
-	out << qint32(node.getType());
-
-	out << qint32(node.getExternalID());
-	out << qint32(node.getDonorID());
+	out << KPDFunctions::toString(node.getType());
 
 	out << node.getDonorName();
 	out << qint32(node.getDonorAge());
 	out << node.getDonorBT();
 
+	//qDebug() << qreal(node.getDonorBMI());
+	//qDebug() << node.getDonorGenderMale();
+	//qDebug() << qreal(node.getDonorWeight());
+
 	out << node.getDonorBMI();
 	out << node.getDonorGenderMale();
 	out << node.getDonorWeight();
+
 
 	out << node.getDonorAVector();
 	out << node.getDonorBVector();
@@ -1370,10 +1290,7 @@ QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
 	out << node.getDonorDR52();
 	out << node.getDonorDR53();
 
-	if (node.getType() == 0){
-		out << qint32(node.getExternalID());
-		out << qint32(node.getRecipID());
-
+	if (node.getType() == PAIR){
 		out << node.getRecipName();
 		out << qint32(node.getRecipAge());
 		out << node.getRecipBT();
@@ -1388,7 +1305,6 @@ QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
 		out << node.getRecipTOD();
 		out << node.getRecipHepC();
 		
-		out << node.getSensitizedBool();
 		out << node.getRecipAntibodies();
 	}
 
@@ -1404,13 +1320,11 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 	in >> internalID;
 
 	Donor d;
-	int type;
+	QString type;
 	in >> type;
-	d.type = type;
-
-	in >> d.id;
-	in >> d.donorid;
-
+	KPDPairType pairType = KPDFunctions::stringToPairType(type);
+	d.type = pairType;
+	
 	in >> d.name;
 	in >> d.age;
 	in >> d.BT;
@@ -1418,6 +1332,10 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 	in >> d.BMI;
 	in >> d.genderMale;
 	in >> d.weight;
+
+	//qDebug() << d.BMI;
+	//qDebug() << d.genderMale;
+	//qDebug() << d.weight;
 
 	in >> d.donorA;
 	in >> d.donorB;
@@ -1433,10 +1351,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 	
 	Candidate c;
 	
-	if (type == 0){
-		in >> c.id;
-		in >> c.recipid;
-
+	if (pairType == PAIR){
+		
 		in >> c.name;
 		in >> c.age;
 		in >> c.BT;
@@ -1451,7 +1367,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 		in >> c.TOD;
 		in >> c.hepC;
 
-		in >> c.sensitized;
+		//in >> c.sensitized;
 		in >> c.antibodies;
 	}
 
@@ -1462,9 +1378,10 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 	in >> comment;
 	node.setInternalID(internalID);
 	node.setDonor(d);
-	if (type == 0){
+	if (pairType == PAIR){
 		node.setCandidate(c);
 	}
+	node.setComment(comment);
 	node.setHoldStatus(hold);
 
 	return in;

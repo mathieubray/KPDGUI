@@ -61,7 +61,7 @@ AltruisticDonorDialog::AltruisticDonorDialog(int id, Donor * donor, QString comm
 		}
 	}
 
-	//Donor Height
+	//Height
 	double donorHeight = sqrt(donor->weight / ( donor->BMI));
 	donorHeightSpinBox->setValue(donorHeight);
 
