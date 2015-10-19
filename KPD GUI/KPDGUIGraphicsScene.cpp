@@ -5,7 +5,8 @@ const qreal Tol = 3;
 
 KPDGUIGraphicsScene::KPDGUIGraphicsScene() : QGraphicsScene()
 {
-	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense5Pattern));
+	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense7Pattern));
+	//mode = 0;
 	
 	createNodeActions();
 }
@@ -64,7 +65,22 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 
 	menu.exec(event->screenPos());
 }
+/*
+void KPDGUIGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *event){
+	if (mode == 0){
+		QGraphicsScene::wheelEvent(event);
+	}
+	else {
+		if (event->delta() > 0){
+			emit zoomIn();
+		}
+		else {
+			emit zoomOut();
+		}
+	}
 
+}
+*/
 void KPDGUIGraphicsScene::editNode(){
 	QList<QGraphicsItem*> items = selectedItems();
 	if (items.size() == 1){
@@ -592,3 +608,8 @@ void KPDGUIGraphicsScene::createNodeActions(){
 	deleteMultipleNodesAction = new QAction(tr("&Delete Selected Pairs"), this);
 	connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));
 }
+/*
+void KPDGUIGraphicsScene::changeMode(int i){
+	mode = i;
+}
+*/

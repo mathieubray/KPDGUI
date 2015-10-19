@@ -97,7 +97,7 @@
        </size>
       </property>
       <property name="title">
-       <string>Display Settings</string>
+       <string>Pair Subset Settings</string>
       </property>
       <widget class="QCheckBox" name="showIncompatibleCheckBox">
        <property name="geometry">

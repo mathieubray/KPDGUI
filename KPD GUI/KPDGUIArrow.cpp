@@ -243,10 +243,11 @@ void KPDGUIArrow::updateVisibility(DisplaySettingsStruct * displaySettings){
 			highlightConnection();
 		}
 
-		if (displaySettings->arrowDisplayMode == 4){
+		if (displaySettings->arrowDisplayMode == ALL_COMPATIBILITIES){
 			setVisible(checkVisibility(displaySettings));
+			qDebug() << "Visibility updated :" << myStartItem->getInternalID() << "->" << myEndItem->getInternalID();
 		}
-		else if (displaySettings->arrowDisplayMode == 1){
+		else if (displaySettings->arrowDisplayMode == SELECTED_COMPATIBILITIES){
 			if (myStartItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
@@ -254,23 +255,22 @@ void KPDGUIArrow::updateVisibility(DisplaySettingsStruct * displaySettings){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 2){
+		else if (displaySettings->arrowDisplayMode == COMPATIBLE_DONORS){
 			if (myEndItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 3){
+		else if (displaySettings->arrowDisplayMode == COMPATIBLE_RECIPIENTS){
 			if (myStartItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 0){
+		else if (displaySettings->arrowDisplayMode == WITHIN_SELECTION){
 			if (myStartItem->isSelected() && myEndItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-	}
-
+	}	
 }
 
 void KPDGUIArrow::endDisplayAsPartOfSolution(){

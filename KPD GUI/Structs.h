@@ -8,6 +8,8 @@ enum KPDOptimizationScheme { MUC, MEUC, MEUS, SCC };
 enum KPDUtilityScheme { TRANSPLANTS, SURVIVAL5YEAR, SURVIVAL10YEAR, SCORE };
 enum KPDPairType { PAIR, AD };
 
+enum KPDArrowDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, COMPATIBLE_DONORS, COMPATIBLE_RECIPIENTS, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
+
 struct Candidate{
 	
 	//Compatibilities
@@ -109,10 +111,57 @@ struct DisplaySettingsStruct{
 	int minPRA;
 	int maxPRA;
 
-	int arrowDisplayMode;
+	KPDArrowDisplayMode arrowDisplayMode;
 };
 
 namespace KPDFunctions {
+
+	inline KPDArrowDisplayMode intToArrowDisplayMode(int i){
+		
+		KPDArrowDisplayMode mode = WITHIN_SELECTION;
+
+		if (i == 1){
+			
+		}
+		else if (i == 2){
+
+		}
+		else if (i == 3){
+
+		}
+		else if (i == 4){
+
+		}
+		else if (i == 5){
+
+		}
+		
+		return mode;
+
+	}
+
+	inline int arrowDisplayModeToInt(KPDArrowDisplayMode mode){
+		
+		int i = 0;
+
+		if (mode == SELECTED_COMPATIBILITIES){
+			
+		}
+		else if (mode == COMPATIBLE_DONORS){
+
+		}
+		else if (mode == COMPATIBLE_RECIPIENTS){
+
+		}
+		else if (mode == ALL_COMPATIBILITIES){
+
+		}
+		else if (mode == NO_COMPATIBILITIES){
+
+		}
+
+		return i;
+	}
 
 	inline KPDOptimizationScheme stringToOptScheme(QString optScheme){
 		KPDOptimizationScheme scheme = MUC;

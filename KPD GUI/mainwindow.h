@@ -38,121 +38,116 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-protected:
-	void closeEvent(QCloseEvent *event);
-
 public slots:
-	//Window Actions
+	
+	//Window-->File
     void newFile();
     void open();
 	bool save();
     bool saveAs();
-	void exitProgram();
-	void about();
-	
-	//Simulation Actions
-	void run();
-
-	//Pair Actions
 	void addNewPair();
 	void addNewAD();
 	void loadPairs();
-	void deleteNode(int);
-	
-	//Update Actions
-	void clickActions(int,bool);
-	void newPairListSelectionActions(QTreeWidgetItem *);
-	void newMatchListSelectionActions(QTreeWidgetItem *);
-	void newTreeSelectionActions(QTreeWidgetItem *);
+	void exitProgram();
 		
-	void checkSelections();
-	void updateStatusBar();	
-	void updateTable(int);
-	void updateVisibility();
-
-	//Visual Actions
-	void clusterStructure();
-	void clusterSolution();
-	void removeSolution();
+	//Window-->Match Run
+	void run();
+	bool setSimParameters();
 	void clearSolutions();
 
+	//Window-->Display
+	void changePairViewMode();
+	void changeArrowViewMode_Within();
+	void changeArrowViewMode_SelectedComps();
+	void changeArrowViewMode_Donors();
+	void changeArrowViewMode_Recips();
+	void changeArrowViewMode_All();
+	void changeArrowViewMode_None();
+
+	//Window-->Tools
 	void zoomIn();
 	void zoomOut();
 	void zoom(int);
-	void sort();
+	void changeToMouseMode();
+	void changeToHandMode();
+	void sortLists();
 
-	void changeFocus(int);
+	//Window-->About
+	void about();
 
-	//Display Modes
-	void setDisplaySettings(DisplaySettingsStruct * newDisplaySettings);
-
-	//Sort Modes
-	void resort();
-	void setPairSortMode(int mode, bool decreasing);
-	void setMatchSortMode(int mode, bool decreasing);
-
-	//Parameters
-	bool setSimParameters();	
-	void changeArrowViewMode(int);
-	void changePairViewMode(int);
+	//Selection Actions
+	void newPairListSelectionActions(QTreeWidgetItem *);
+	void newMatchListSelectionActions(QTreeWidgetItem *);
+	void newTreeSelectionActions(QTreeWidgetItem *);
 
 	//Custom Menus
-	void cycleTreeCustomMenu(QPoint);
+	void structureTreeCustomMenu(QPoint);
 	void solutionTreeCustomMenu(QPoint);
+
+	//Additional Actions
+	void deleteNode(int);
+	void clickActions(int, bool);
+
+	void clusterStructure();
+	void clusterSolution();
+	void removeSolution();
+	
+	//Updates
+	void checkSelections();
+	void updateTable(int);
+	void updateVisibility();	
+	void updateStatusBar();
 
 signals:
 	void visibilityChanged(DisplaySettingsStruct * displaySettings);
 
+protected:
+	void closeEvent(QCloseEvent *event);
+
 private:
     Ui::MainWindow *ui;
+	void initializeParameters();
+	void setUpGraphicsScene();
+	void setUpLists();
+	void setUpKPDObjects();
+	void setUpActions();
+	void setUpMenu();
+	void setUpToolbar();
 
-	//Read and Write (Necessary)
-    void readSettings();
-    void writeSettings();
+	//Saving and Loading
+	bool loadFile(const QString &fileName);
+	bool saveFile(const QString &fileName);
+	void setCurrentFile(const QString &fileName);
 
-	//Helper Functions
-    bool okToContinue();
-	void clearTable();
-	void runSimulation();
-	void clearScreen();
-
+	//Adding Pairs/ADs
 	void addNode(KPDGUINode * newNode, bool fromSavedFile);
 	void addArrow(KPDGUINode * fromNode, KPDGUINode * toNode);
 	void readPairsFromFile(QString fileName);
 
-	void bringToFront();
-	int maxZ;
+	//Display Modes
+	void setDisplaySettings(DisplaySettingsStruct * newDisplaySettings);
+	void setPairSortMode(int mode, bool decreasing);
+	void setMatchSortMode(int mode, bool decreasing);
 
-	//File Properties
-	QString curFile;
-    void setCurrentFile(const QString &fileName);
-    bool loadFile(const QString &fileName);
-    bool saveFile(const QString &fileName);
-    QString strippedName(const QString &fullFileName);
+	//Helper Functions
+    bool okToContinue();
+	void clearTable();
+	void changeFocus(int);
+	void sort();
+
+	//Simulation
+	void runSimulation();
+
+	//Read and Write (Necessary)
+	void readSettings();
+	void writeSettings();
 	
-	//Visual and Storage Properties
+	//Parameters
+	QString curFile;
+	int maxZ;
 	int seqNumber;
 	int prevSliderPos;
-
-	KPDGUIGraphicsScene * scene;
-	KPDGUIRecord * kpdguiRecord;
-	KPDGUISimulParam * kpdguiParameters;
-
-	QTreeWidget * listWidget;
-	QTreeWidget * matchWidget;
-	QTreeWidget * structureTreeWidget;
-	QTreeWidget * solutionTreeWidget;
-	
 	int mostRecentNodeID;
-	KPDGUIStructure * rightClickStructure;
-	KPDGUIStructureSet * rightClickStructureSet;
-	QVector<KPDGUIStructure *> selectedStructures;
-			
-	//Actions
-	void createAdditionalActions();
-	QAction * clusterStructureAction;
-	QAction * clusterSolutionAction;
-	QAction * removeSolutionAction;
 
 	//Display Modes
 	DisplaySettingsStruct displaySettings;
@@ -162,6 +157,33 @@ private:
 	bool pairSortDecreasing;
 	int matchSortMode;
 	bool matchSortDecreasing;
+
+	//KPDGUI Objects
+	KPDGUIGraphicsScene * kpdguiScene;
+	KPDGUISimulParam * kpdguiParameters;
+	KPDGUIRecord * kpdguiRecord;
+	
+	//Tab Widget Lists
+	QTreeWidget * pairListWidget;
+	QTreeWidget * matchListWidget;
+	QTreeWidget * structureTreeWidget;
+	QTreeWidget * solutionTreeWidget;
+		
+	//Actions
+	QAction * clusterStructureAction;
+	QAction * clusterSolutionAction;
+	QAction * removeSolutionAction;
+
+	//Menu Objects
+	QActionGroup * displayArrowsActionGroup;
+	
+	//Toolbar Objects
+	QSlider * zoomSlider;	
+
+	//Recent Structures
+	KPDGUIStructure * rightClickStructure;
+	KPDGUIStructureSet * rightClickStructureSet;
+	QVector<KPDGUIStructure *> selectedStructures;
 
 	static const int MagicNumber = 40930942;
 };
