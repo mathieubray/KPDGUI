@@ -7,15 +7,18 @@
 
 class KPDGUIStructureWrapper : public QTreeWidgetItem
 {	
+
 public:
 	KPDGUIStructureWrapper(KPDGUIStructure * structure);
 	~KPDGUIStructureWrapper();
 
 	KPDGUIStructure * getStructure();
-	//bool contains(KPDGUIStructure * structure);
+	void updateText();
 
 private:
 	KPDGUIStructure * myStructure;
+
+	bool operator<(const QTreeWidgetItem &other)const;
 
 };
 

@@ -5,45 +5,23 @@
 
 #include "KPDGUIArrow.h"
 
-class KPDGUIArrowWrapper : public QObject, public QTreeWidgetItem
+class KPDGUIArrowWrapper : public QTreeWidgetItem
 {
-	Q_OBJECT
+	//Q_OBJECT;
 
 public:
 	KPDGUIArrowWrapper(KPDGUIArrow * arrow);
 	~KPDGUIArrowWrapper();
 
 	KPDGUIArrow * getArrow();
-
-	void updateText(int mode);
-
-public slots:
-	void changeArrowSelection(bool);
-
-private:
-	KPDGUIArrow * myArrow;
-};
-
-//Sorting Classes
-
-class KPDGUIArrowLessThan
-{
-public:
-	KPDGUIArrowLessThan(int mode);
-	bool operator()(KPDGUIArrowWrapper *left, KPDGUIArrowWrapper *right) const;
+	void updateText();
 	
 private:
-	int myMode;
+	KPDGUIArrow * myArrow;
+
+	bool operator<(const QTreeWidgetItem &other)const;
+
 };
 
-class KPDGUIArrowGreaterThan
-{
-public:
-	KPDGUIArrowGreaterThan(int mode);
-	bool operator()(KPDGUIArrowWrapper *left, KPDGUIArrowWrapper *right) const;
-
-private:
-	int myMode;
-};
 
 #endif

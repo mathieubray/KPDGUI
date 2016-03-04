@@ -1,3 +1,5 @@
+#include <QtGui>
+
 #include "DialogReadFile.h"
 
 //Constructor
@@ -13,12 +15,12 @@ ReadFileDialog::ReadFileDialog(QWidget *parent) : QDialog(parent)
 void ReadFileDialog::browse(){
 	QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)");
 	pairFileLineEdit->setText(fileName);
-
-	//this->buttonBox->buttons().first()->setEnabled(true);
 }
 
 void ReadFileDialog::checkValidFile(QString file){
-	if (file.endsWith(".csv")){
+	QFileInfo fileInfo(file);
+
+	if (fileInfo.isFile() && file.endsWith(".csv")){
 		this->buttonBox->buttons().first()->setEnabled(true);
 	}
 	else {

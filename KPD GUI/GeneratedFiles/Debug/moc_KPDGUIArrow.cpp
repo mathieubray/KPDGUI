@@ -42,7 +42,7 @@ QT_MOC_LITERAL(9, 125, 26)
     },
     "KPDGUIArrow\0selectArrowInMatchList\0\0"
     "changeArrowSelection\0id\0selected\0"
-    "updateVisibility\0DisplaySettingsStruct*\0"
+    "updateVisibility\0KPDGUIDisplaySettings*\0"
     "displaySettings\0endDisplayAsPartOfSolution"
 };
 #undef QT_MOC_LITERAL
@@ -86,7 +86,7 @@ void KPDGUIArrow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         switch (_id) {
         case 0: _t->selectArrowInMatchList((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 1: _t->changeArrowSelection((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 2: _t->updateVisibility((*reinterpret_cast< DisplaySettingsStruct*(*)>(_a[1]))); break;
+        case 2: _t->updateVisibility((*reinterpret_cast< KPDGUIDisplaySettings*(*)>(_a[1]))); break;
         case 3: _t->endDisplayAsPartOfSolution(); break;
         default: ;
         }

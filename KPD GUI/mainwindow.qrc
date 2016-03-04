@@ -9,5 +9,6 @@
     <file>images/open.png</file>
     <file>images/run.png</file>
     <file>images/save.png</file>
+	<file>images/default.txt</file>
   </qresource>
 </RCC>

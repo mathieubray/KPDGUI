@@ -8,8 +8,9 @@
 #include <QMessageBox>
 
 #include "KPDGUINode.h"
-#include "DialogPair.h"
-#include "DialogAD.h"
+
+//#include "DialogPair.h"
+#include "DialogDonor.h"
 
 class KPDGUIGraphicsScene : public QGraphicsScene 
 {
@@ -20,13 +21,19 @@ public:
 	~KPDGUIGraphicsScene();	
 
 	//void changeMode(int i);
+	//void setHLAList(QStringList hla);
 
 protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+	//void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 	//void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 signals:
+	void addAssociatedDonor(int i);
+	void highlightRelevantStructures(int i);
+	void highlightRelevantSolutions(int i);
+	void selectAllVisibleNodes();
+	void clearAllHighlights();
 	void deleteNode(int i);
 	void editNode(int i);
 	void screenChanged();
@@ -36,6 +43,9 @@ signals:
 	void mouseReleased();
 
 private slots:
+	void addAssociatedDonor();
+	void highlightRelevantStructures();
+	void highlightRelevantSolutions();
 	void editNode();
 	void holdNode();
 	void unholdNode();
@@ -46,13 +56,18 @@ private slots:
 	void clusterMultipleNodes();
 	void deleteMultipleNodes();
 
+	void selectAll();
+	void clearHighlights();
+
 private:
 
 	//int mode;
 
 	void createNodeActions();
 	
-
+	/*QAction * addAssociatedDonorAction;
+	QAction * highlightStructuresAction;
+	QAction * highlightSolutionsAction;
 	QAction * editNodeAction;
 	QAction * holdNodeAction;
 	QAction * unholdNodeAction;
@@ -62,6 +77,11 @@ private:
 	QAction * unholdMultipleNodesAction;
 	QAction * clusterMultipleNodesAction;
 	QAction * deleteMultipleNodesAction;
+
+	QAction * selectAllAction;
+	QAction * clearHighlightsAction;*/
+
+	//QStringList hlaList;
 
 };
 

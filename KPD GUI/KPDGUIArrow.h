@@ -49,7 +49,8 @@
 #include <math.h>
 
 #include "KPDGUINode.h"
-//#include "Structs.h"
+#include "KPDGUIDisplaySettings.h"
+//#include "EnumsFunctions.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;
@@ -67,7 +68,7 @@ class KPDGUIArrow : public QObject, public QGraphicsLineItem
 public:
     enum { Type = UserType + 4 };
 
-	KPDGUIArrow(KPDGUINode *startItem, KPDGUINode *endItem);
+	KPDGUIArrow(KPDGUINode *startItem, KPDGUINode *endItem, bool arrow=true);
 	~KPDGUIArrow();
 
 	//Nodes
@@ -112,7 +113,7 @@ protected:
 private:
 
 	//Helper Functions
-	bool checkVisibility(DisplaySettingsStruct * displaySettings);
+	bool checkVisibility(KPDGUIDisplaySettings * displaySettings);
 
 	//Nodes
     KPDGUINode *myStartItem;
@@ -121,9 +122,11 @@ private:
 	//QTreeWidgetItem * arrowListItem;
     
 	//Visual Arrow Properties
+	bool isArrow;
 	QColor myColor;
 	QPolygonF arrowHead;
 	int myWidth;
+	qreal myOpacity;
 
 	//Popularity Properties
 	int myPopularityInStructures;
@@ -133,7 +136,7 @@ private:
 
 public slots:
 	void changeArrowSelection(int id, bool selected);
-	void updateVisibility(DisplaySettingsStruct * displaySettings);
+	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void endDisplayAsPartOfSolution();
 };
 

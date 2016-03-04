@@ -2,12 +2,20 @@
 
 KPDGUIGraphicsView::KPDGUIGraphicsView(QWidget *parent) : QGraphicsView(parent)
 {
+	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense7Pattern));
 	mode = 0;
 }
 
 KPDGUIGraphicsView::~KPDGUIGraphicsView()
 {
 
+}
+
+void KPDGUIGraphicsView::mouseReleaseEvent(QMouseEvent *event)
+{
+	QGraphicsView::mouseReleaseEvent(event);
+
+	emit mouseReleased();
 }
 
 void KPDGUIGraphicsView::wheelEvent(QWheelEvent *event){

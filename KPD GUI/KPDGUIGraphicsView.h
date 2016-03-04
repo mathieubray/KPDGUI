@@ -15,15 +15,14 @@ public:
 	void changeMode(int i);
 
 protected:
+	void mouseReleaseEvent(QMouseEvent *event);
 	void wheelEvent(QWheelEvent *event);
 
 signals:
+	void mouseReleased();
 	void zoomIn();
 	void zoomOut();
-
-private slots:
 	
-
 private:
 
 	int mode;

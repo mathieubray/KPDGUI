@@ -1,13 +1,14 @@
 #ifndef DIALOGREADFILE_H
 #define DIALOGREADFILE_H
 
-#include <QtGui>
 #include <QDialog>
 #include <QFileDialog>
+#include <QFileInfo>
 
-#include "ui_ReadFileDialog.h"
+#include "ui_DialogReadFile.h"
 
-class ReadFileDialog : public QDialog, public Ui_ReadFileDialog 
+
+class ReadFileDialog : public QDialog, public Ui_DialogReadFile 
 {
 	Q_OBJECT
 

@@ -1,30 +1,11 @@
 #include "KPDGUIStructureSet.h"
 
-const qreal Pi = 3.14159265;
-
 KPDGUIStructureSet::KPDGUIStructureSet(){
-	myParameters.optScheme = KPDOptimizationScheme::MUC;
-	myParameters.utilityScheme = KPDUtilityScheme::TRANSPLANTS;
-	myParameters.maxChainLength = 2;
 	
-	myParameters.pairFailureRate = 0;
-	myParameters.adFailureRate = 0;
-	myParameters.exogenousFailureRate = 0;
-
-	myParameters.addAdvantageToHighPRACandidates = false;
-	myParameters.praAdvantageCutoff = 100;
-	myParameters.praAdvantageValue = 0;
-
-	myParameters.numberOfSolutions = 1;
-	
-	myParameters.chainStorage = "NONE";
-	myParameters.reserveODonorsForOCandidates = false;
-	myParameters.checkDP = false;
-	myParameters.includeCompatiblePairs = false;
-	myParameters.excludeABDonorsFromSimulation = false;
-	myParameters.allowABBridgeDonors = false;
+	myParameters = new KPDGUISimParameters();
 
 	myTimeStamp = "";
+	myRecordLog = "";
 	mySimLog = "";
 	
 	solutionSet = true;
@@ -32,76 +13,10 @@ KPDGUIStructureSet::KPDGUIStructureSet(){
 	
 }
 
-KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString timestamp, QString simLog, bool solution, int solutionNumber){
-	/*myParameters.optScheme = parameters.optScheme;
-	myParameters.utilityScheme = parameters.utilityScheme;
-	myParameters.maxChainLength = parameters.maxChainLength;
-
-	myParameters.pairFailureRate = parameters.pairFailureRate;
-	myParameters.adFailureRate = parameters.adFailureRate;
-	myParameters.exogenousFailureRate = parameters.exogenousFailureRate;
-
-	myParameters.addAdvantageToHighPRACandidates = parameters.addAdvantageToHighPRACandidates;
-	myParameters.praAdvantageCutoff = parameters.praAdvantageCutoff;
-	myParameters.praAdvantageValue = parameters.praAdvantageValue;
-
-	myParameters.numberOfSolutions = parameters.numberOfSolutions;
-
-	myParameters.chainStorage = parameters.chainStorage;
-	myParameters.reserveODonorsForOCandidates = parameters.reserveODonorsForOCandidates;
-	myParameters.checkDP = parameters.checkDP;
-	myParameters.includeCompatiblePairs = parameters.includeCompatiblePairs;
-	myParameters.excludeABDonorsFromSimulation = parameters.excludeABDonorsFromSimulation;
-	myParameters.allowABBridgeDonors = parameters.allowABBridgeDonors;
-
-	myTimeStamp = timestamp;
-	mySimLog = simLog;
-
-	solutionSet = solution;
-	mySolutionNumber = solutionNumber;
-
-	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
-
-	QString textOptScheme = KPDFunctions::toString(myOptScheme);
-
-	if (solutionSet){
-		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
-	}
-	else{
-		setText(0, textOptScheme + " (" + myTimeStamp + ")");
-	}
+KPDGUIStructureSet::KPDGUIStructureSet(KPDGUISimParameters * parameters, QString timestamp, QString recordLog, QString simLog, bool solution, int solutionNumber){
 	
-	setUpWidgets();
-
-	if (myOptScheme != KPDOptimizationScheme::SCC){
-		addChild(cycleSizeTwo);
-		addChild(cycleSizeThree);
-
-		addChild(chainSizeOne);
-		addChild(chainSizeTwo);
-		if (parameters.maxChainLength >= 3){
-			addChild(chainSizeThree);
-		}
-		if (parameters.maxChainLength >= 4){
-			addChild(chainSizeFour);
-		}
-		if (parameters.maxChainLength >= 5){
-			addChild(chainSizeFive);
-		}
-		if (parameters.maxChainLength >= 6){
-			addChild(chainSizeSix);
-		}
-	}
-
-	else {
-		addChild(componentSizeTwo);
-		addChild(componentSizeThree);
-		if (parameters.maxChainLength >= 3){
-			addChild(componentSizeFour);
-		}
-	}*/
-
-	construct(parameters, timestamp, simLog, solution, solutionNumber);
+	construct(parameters, timestamp, recordLog, simLog, true, solutionNumber);
+	
 }
 
 KPDGUIStructureSet::~KPDGUIStructureSet(){
@@ -112,36 +27,18 @@ KPDGUIStructureSet::~KPDGUIStructureSet(){
 	}
 }
 
-void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp, QString simLog, bool solution, int solutionNumber){
+void KPDGUIStructureSet::construct(KPDGUISimParameters * parameters, QString timestamp, QString recordLog, QString simLog, bool solution, int solutionNumber){
 	
-	myParameters.optScheme = parameters.optScheme;
-	myParameters.utilityScheme = parameters.utilityScheme;
-	myParameters.maxChainLength = parameters.maxChainLength;
-
-	myParameters.pairFailureRate = parameters.pairFailureRate;
-	myParameters.adFailureRate = parameters.adFailureRate;
-	myParameters.exogenousFailureRate = parameters.exogenousFailureRate;
-
-	myParameters.addAdvantageToHighPRACandidates = parameters.addAdvantageToHighPRACandidates;
-	myParameters.praAdvantageCutoff = parameters.praAdvantageCutoff;
-	myParameters.praAdvantageValue = parameters.praAdvantageValue;
-
-	myParameters.numberOfSolutions = parameters.numberOfSolutions;
-
-	myParameters.chainStorage = parameters.chainStorage;
-	myParameters.reserveODonorsForOCandidates = parameters.reserveODonorsForOCandidates;
-	myParameters.checkDP = parameters.checkDP;
-	myParameters.includeCompatiblePairs = parameters.includeCompatiblePairs;
-	myParameters.excludeABDonorsFromSimulation = parameters.excludeABDonorsFromSimulation;
-	myParameters.allowABBridgeDonors = parameters.allowABBridgeDonors;
+	myParameters->copyParameters(parameters);
 
 	myTimeStamp = timestamp;
-	mySimLog = simLog;	
+	myRecordLog = recordLog;
+	mySimLog = simLog;
 
 	solutionSet = solution;
 	mySolutionNumber = solutionNumber;
 
-	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
+	KPDOptimizationScheme myOptScheme = myParameters->getOptimizationScheme();
 
 	QString textOptScheme = KPDFunctions::toString(myOptScheme);
 
@@ -160,34 +57,44 @@ void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp
 
 		addChild(chainSizeOne);
 		addChild(chainSizeTwo);
-		if (parameters.maxChainLength >= 3){
+		if (parameters->getMaxSize() >= 3){
 			addChild(chainSizeThree);
 		}
-		if (parameters.maxChainLength >= 4){
+		if (parameters->getMaxSize() >= 4){
 			addChild(chainSizeFour);
 		}
-		if (parameters.maxChainLength >= 5){
+		if (parameters->getMaxSize() >= 5){
 			addChild(chainSizeFive);
 		}
-		if (parameters.maxChainLength >= 6){
+		if (parameters->getMaxSize() >= 6){
 			addChild(chainSizeSix);
 		}
 	}
 
 	else {
 		addChild(componentSizeTwo);
-		addChild(componentSizeThree);
-		if (parameters.maxChainLength >= 3){
+
+		if (parameters->getMaxSize() >= 3){
+			addChild(componentSizeThree);
+		}
+		if (parameters->getMaxSize() >= 4){
 			addChild(componentSizeFour);
 		}
+		if (parameters->getMaxSize() >= 5){
+			addChild(componentSizeFive);
+		}
+		if (parameters->getMaxSize() == 6){
+			addChild(componentSizeSix);
+		}
 	}
+	
 }
 
 void KPDGUIStructureSet::push_back(KPDGUIStructure * structure){
 	myStructureList.push_back(structure);
 	KPDGUIStructureWrapper * wrapper = new KPDGUIStructureWrapper(structure);
 	
-	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
+	KPDOptimizationScheme myOptScheme = myParameters->getOptimizationScheme();
 
 	if (myOptScheme != KPDOptimizationScheme::SCC){
 		if (structure->size() == 2){
@@ -226,10 +133,18 @@ void KPDGUIStructureSet::push_back(KPDGUIStructure * structure){
 		else if (structure->size() == 3){
 			componentSizeThree->addChild(wrapper);
 		}
-		else if (structure->size() >= 4){
+		else if (structure->size() == 4){
 			componentSizeFour->addChild(wrapper);
 		}
+		else if (structure->size() == 5){
+			componentSizeFive->addChild(wrapper);
+		}
+		else if (structure->size() >= 6){
+			componentSizeSix->addChild(wrapper);
+		}
 	}
+
+	updateText();
 }
 
 void KPDGUIStructureSet::removeStructure(KPDGUIStructure * structure){
@@ -294,8 +209,8 @@ void KPDGUIStructureSet::cluster(){
 	qreal centerX = this->centerX();
 	qreal centerY = this->centerY();
 
-	qreal angle = (2 * Pi) / myStructureList.size();
-	qreal nodeAngle = Pi;
+	qreal angle = (2 * PI) / myStructureList.size();
+	qreal nodeAngle = PI;
 	
 	foreach(KPDGUIStructure * structure, myStructureList){
 		structure->cluster(centerX + dist*cos(nodeAngle), centerY + dist*sin(nodeAngle));
@@ -367,11 +282,13 @@ QString KPDGUIStructureSet::getConsoleString(){
 		receipt = receipt + "Cycle List For Match Run performed On " + myTimeStamp + "\n\n";
 	}
 
+	receipt = receipt + myRecordLog + "\n";
+
 	if (solutionSet){
 		receipt = receipt + "Solution " + QString::number(mySolutionNumber) + " / Objective: " + QString::number(utility()) + "\n\n";
 	}
 	else {
-		if (myParameters.optScheme != KPDOptimizationScheme::SCC){
+		if (myParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
 			receipt = receipt + "List of Cycles:\n";
 		}
 		else{
@@ -396,155 +313,83 @@ QString KPDGUIStructureSet::getConsoleString(){
 		receipt = receipt + mySimLog + "\n";
 	}
 
-	if (myParameters.optScheme != KPDOptimizationScheme::SCC){
+	if (myParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else{
 		receipt = receipt + "Components: " + QString::number(size()) + "\n";
 	}
-	receipt = receipt + "Optimization Scheme: " + KPDFunctions::toString(myParameters.optScheme) + "\n";
-	receipt = receipt + "Utility Scheme: " + KPDFunctions::toString(myParameters.utilityScheme) + "\n";
-	receipt = receipt + "Maximum Chain Length: " + QString::number(myParameters.maxChainLength) + "\n\n";
 
-	receipt = receipt + "Pair Failure Rate: " + QString::number(myParameters.pairFailureRate) + "\n";
-	receipt = receipt + "AD Failure Rate: " + QString::number(myParameters.adFailureRate) + "\n";
-	receipt = receipt + "Exogenous Failure Rate: " + QString::number(myParameters.exogenousFailureRate) + "\n";
-	
-	if (myParameters.addAdvantageToHighPRACandidates){
-		receipt = receipt + "Add " + QString::number(myParameters.praAdvantageValue) + " to Candidates with PRA Over " + QString::number(myParameters.praAdvantageCutoff) + "\n";
-	}
-	else {
-		receipt = receipt + "Do Not Add Additional Advantage to High PRA Candidates\n";
-	}
-	receipt = receipt + "\n";	
-
-	receipt = receipt + "Number of Solutions Produced: " + QString::number(myParameters.numberOfSolutions) + "\n\n";
-
-	if (myParameters.chainStorage == "FIRST"){
-		receipt = receipt + "Chains Are Stored First During Optimization";
-	}
-	else if (myParameters.chainStorage == "LAST"){
-		receipt = receipt + "Chains Are Stored Last During Optimization";
-	}
-	else {
-		receipt = receipt + "Chains Are Stored As They Are Found During Optimization";
-	}
-	receipt = receipt + "\n";
-
-	if (!myParameters.reserveODonorsForOCandidates){
-		receipt = receipt + "Do Not ";
-	}
-	receipt = receipt + "Reserve O Donors for O Recipients\n";
-	if (!myParameters.checkDP){
-		receipt = receipt + "Do Not ";
-	}
-	receipt = receipt + "Check Additional DP Mismatches\n";
-	if (!myParameters.includeCompatiblePairs){
-		receipt = receipt + "Do Not ";
-	}
-	receipt = receipt + "Include Compatible Pairs\n";
-
-	if (myParameters.excludeABDonorsFromSimulation){
-		receipt = receipt + "AB Donors are Excluded From Simulation\n";
-	}
-	else {
-		if (!myParameters.allowABBridgeDonors){
-			receipt = receipt + "Do Not ";
-		}
-		receipt = receipt + "Allow AB Bridge Donors\n";
-	}		
+	receipt = receipt + myParameters->toString();
 
 	return receipt;
 }
 
 void KPDGUIStructureSet::setUpWidgets(){
 	cycleSizeTwo = new QTreeWidgetItem();
-	cycleSizeTwo->setText(0, "Two-Way Exchange");
-
 	cycleSizeThree = new QTreeWidgetItem();
-	cycleSizeThree->setText(0, "Three-Way Exchange");
-
 	chainSizeOne = new QTreeWidgetItem();
-	chainSizeOne->setText(0, "Chains of Length 1");
-
 	chainSizeTwo = new QTreeWidgetItem();
-	chainSizeTwo->setText(0, "Chains of Length 2");
-
 	chainSizeThree = new QTreeWidgetItem();
-	chainSizeThree->setText(0, "Chains of Length 3");
-
 	chainSizeFour = new QTreeWidgetItem();
-	chainSizeFour->setText(0, "Chains of Length 4");
-
 	chainSizeFive = new QTreeWidgetItem();
-	chainSizeFive->setText(0, "Chains of Length 5");
-
 	chainSizeSix = new QTreeWidgetItem();
-	chainSizeSix->setText(0, "Chains of Length 6+");
-
 	componentSizeTwo = new QTreeWidgetItem();
-	componentSizeTwo->setText(0, "Component of Size 2");
-
 	componentSizeThree = new QTreeWidgetItem();
-	componentSizeThree->setText(0, "Component of Size 3");
-
 	componentSizeFour = new QTreeWidgetItem();
-	componentSizeFour->setText(0, "Component of Size 4");
+	componentSizeFive = new QTreeWidgetItem();
+	componentSizeSix = new QTreeWidgetItem();
+
+	updateText();
+}
+
+void KPDGUIStructureSet::updateText(){
+	cycleSizeTwo->setText(0, "Two-Way Exchange (" + QString::number(cycleSizeTwo->childCount()) + ")");
+	cycleSizeThree->setText(0, "Three-Way Exchange (" + QString::number(cycleSizeThree->childCount()) + ")");
+	chainSizeOne->setText(0, "Chains of Length 1 (" + QString::number(chainSizeOne->childCount()) + ")");
+	chainSizeTwo->setText(0, "Chains of Length 2 (" + QString::number(chainSizeTwo->childCount()) + ")");
+	chainSizeThree->setText(0, "Chains of Length 3 (" + QString::number(chainSizeThree->childCount()) + ")");
+	chainSizeFour->setText(0, "Chains of Length 4 (" + QString::number(chainSizeFour->childCount()) + ")");
+	chainSizeFive->setText(0, "Chains of Length 5 (" + QString::number(chainSizeFive->childCount()) + ")");
+	chainSizeSix->setText(0, "Chains of Length 6+ (" + QString::number(chainSizeSix->childCount()) + ")");
+	componentSizeTwo->setText(0, "Components of Size 2 (" + QString::number(componentSizeTwo->childCount()) + ")");
+	componentSizeThree->setText(0, "Components of Size 3 (" + QString::number(componentSizeThree->childCount()) + ")");
+	componentSizeFour->setText(0, "Components of Size 4 (" + QString::number(componentSizeFour->childCount()) + ")");
+	componentSizeFive->setText(0, "Components of Size 5 (" + QString::number(componentSizeFive->childCount()) + ")");
+	componentSizeSix->setText(0, "Components of Size 6 (" + QString::number(componentSizeSix->childCount()) + ")");
+}
+
+void KPDGUIStructureSet::sort(){
+	
+	for (int i = 0; i < childCount(); i++){
+		
+		QTreeWidgetItem * item = child(i);
+
+		QList<KPDGUIStructureWrapper*> newStructureList;
+		int itemCount = item->childCount();
+
+		for (int i = 0; i < itemCount; i++){
+			QTreeWidgetItem * structure = item->child(0);
+			KPDGUIStructureWrapper * temp = dynamic_cast<KPDGUIStructureWrapper *>(structure);
+			if (temp){
+				newStructureList.push_back(temp);
+				item->removeChild(structure);
+			}
+		}
+		//qSort(newStructureList.begin(), newStructureList.end(), KPDGUIStructureGreaterThan(0));
+		
+
+		foreach(KPDGUIStructureWrapper * structure, newStructureList){
+			item->addChild(structure);
+		}
+	}
 }
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIStructureSet & structureSet)
 {
-	ParamInfoStruct paramInfo = structureSet.getParameters();
-	
-	//qDebug() << "--Saved Solution--";
-	//qDebug() << KPDFunctions::toString(paramInfo.optScheme);
-	//qDebug() << KPDFunctions::toString(paramInfo.utilityScheme);
-	//qDebug() << qint32(paramInfo.maxChainLength);
-
-	//qDebug() << qreal(paramInfo.pairFailureRate);
-	//qDebug() << qreal(paramInfo.adFailureRate);
-	//qDebug() << qreal(paramInfo.exogenousFailureRate);
-
-	//qDebug() << paramInfo.addAdvantageToHighPRACandidates;
-	//qDebug() << qint32(paramInfo.praAdvantageCutoff);
-	//qDebug() << qreal(paramInfo.praAdvantageValue);
-
-	//qDebug() << qint32(paramInfo.numberOfSolutions);
-
-	//qDebug() << paramInfo.chainStorage;
-	//qDebug() << paramInfo.reserveODonorsForOCandidates;
-	//qDebug() << paramInfo.checkDP;
-	//qDebug() << paramInfo.includeCompatiblePairs;
-	//qDebug() << paramInfo.excludeABDonorsFromSimulation;
-	//qDebug() << paramInfo.allowABBridgeDonors;
-
-	//qDebug() << structureSet.getTimeStamp();
-	//qDebug() << structureSet.getSimLog();
-	//qDebug() << qint32(structureSet.getSolutionNumber());
-	//qDebug() << "-------";
-
-	out << KPDFunctions::toString(paramInfo.optScheme);
-	out << KPDFunctions::toString(paramInfo.utilityScheme);
-	out << qint32(paramInfo.maxChainLength);
-	
-	out << qreal(paramInfo.pairFailureRate);
-	out << qreal(paramInfo.adFailureRate);
-	out << qreal(paramInfo.exogenousFailureRate);
-
-	out << paramInfo.addAdvantageToHighPRACandidates;
-	out << qint32(paramInfo.praAdvantageCutoff);
-	out << qreal(paramInfo.praAdvantageValue);
-
-	out << qint32(paramInfo.numberOfSolutions);
-
-	out << paramInfo.chainStorage;
-	out << paramInfo.reserveODonorsForOCandidates;
-	out << paramInfo.checkDP;
-	out << paramInfo.includeCompatiblePairs;
-	out << paramInfo.excludeABDonorsFromSimulation;
-	out << paramInfo.allowABBridgeDonors;	
-	
+	out << *structureSet.getParameters();
 	out << structureSet.getTimeStamp();
+	out << structureSet.getRecordLog();
 	out << structureSet.getSimLog();
 	out << qint32(structureSet.getSolutionNumber());
 
@@ -554,64 +399,16 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIStructureSet & structureSe
 //void KPDGUINode::extractFromDataStream(QDataStream& dataStream)
 QDataStream &operator>>(QDataStream &in, KPDGUIStructureSet & structureSet)
 {
-	ParamInfoStruct paramInfo;
 	
-	QString opt;
-	in >> opt;
-	paramInfo.optScheme = KPDFunctions::dialogToOptScheme(opt);
-
-	QString util;
-	in >> util;
-	paramInfo.utilityScheme = KPDFunctions::dialogToUtilityScheme(util);
-	
-	in >> paramInfo.maxChainLength;
-
-	in >> paramInfo.pairFailureRate;
-	in >> paramInfo.adFailureRate;
-	in >> paramInfo.exogenousFailureRate;
-
-	in >> paramInfo.numberOfSolutions;
-
-	in >> paramInfo.addAdvantageToHighPRACandidates;
-	in >> paramInfo.praAdvantageCutoff;
-	in >> paramInfo.praAdvantageValue;
-
-	in >> paramInfo.chainStorage;
-	in >> paramInfo.reserveODonorsForOCandidates;
-	in >> paramInfo.checkDP;
-	in >> paramInfo.includeCompatiblePairs;
-	in >> paramInfo.excludeABDonorsFromSimulation;
-	in >> paramInfo.allowABBridgeDonors;
-
-	//qDebug() << "---Loaded Solution---";
-	//qDebug() << opt;
-	//qDebug()<< util;
-
-	//qDebug()<< paramInfo.maxChainLength;
-
-	//qDebug()<< paramInfo.pairFailureRate;
-	//qDebug()<< paramInfo.adFailureRate;
-	//qDebug()<< paramInfo.exogenousFailureRate;
-
-	//qDebug()<< paramInfo.numberOfSolutions;
-
-	//qDebug()<< paramInfo.chainStorage;
-	//qDebug()<< paramInfo.reserveODonorsForOCandidates;
-	//qDebug()<< paramInfo.checkDP;
-	//qDebug()<< paramInfo.includeCompatiblePairs;
-	//qDebug()<< paramInfo.excludeABDonorsFromSimulation;
-	//qDebug()<< paramInfo.allowABBridgeDonors;
-	
+	KPDGUISimParameters * paramInfo = new KPDGUISimParameters();
 	QString timeStamp;
+	QString recordLog;
 	QString simLog;
 	qint32 solutionNumber;
 
-	in >> timeStamp >> simLog >> solutionNumber;
-	//qDebug() << timeStamp;
-	//qDebug() << simLog;
-	//qDebug() << solutionNumber;
-	//qDebug() << "-------";
-	structureSet.construct(paramInfo, timeStamp, simLog, true, solutionNumber);
+	in >> *paramInfo >> timeStamp >> recordLog >> simLog >> solutionNumber;
+	
+	structureSet.construct(paramInfo, timeStamp, recordLog, simLog, true, solutionNumber);
 	
 	return in;
 }

@@ -4,33 +4,38 @@
 #include <QtGui>
 #include <QtWidgets>
 
-#include "Structs.h"
+#include "KPDGUIDisplaySettings.h"
+#include "KPDGUIPairModelItem.h"
+
+#include "EnumsFunctions.h"
+#include "Donor.h"
+#include "Candidate.h"
 
 class KPDGUIArrow;
-class PairDialog;
-class ADDialog;
+class DialogDonor;
+class DialogCandidate;
 
-class KPDGUINode : public QGraphicsObject
+class KPDGUINode : public QObject, public QGraphicsItemGroup
 {
 	Q_OBJECT
 
 public:
 	KPDGUINode();
-	KPDGUINode(Donor d, Candidate c, QString commentString, bool hold = false);
+	KPDGUINode(Donor d, bool hold = false);
+	KPDGUINode(Donor d, Candidate c, bool hold = false);
 	~KPDGUINode();
 
 	//Visual Node Properties
     void setText(const QString &text);
     QString text() const;
-    void setTextColor(const QColor &color);
-    QColor textColor() const;
-    void setOutlineColor(const QColor &color);
-    QColor outlineColor() const;
-    void setBackgroundColor();
-    QColor backgroundColor() const;
-	QRectF boundingRect() const;
-    QPainterPath shape() const;
+    void setBackgroundColors();
+    QColor donorBackgroundColor() const;
+	QColor recipBackgroundColor() const;
+	//QRectF boundingRect() const;
+    //QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+
+	//QVariant data(int column) const;
 
 	//Arrow Properties
 	void addInArrow(KPDGUIArrow *link);
@@ -38,14 +43,13 @@ public:
 	void addOutArrow(KPDGUIArrow *link);
 	void removeOutArrow(KPDGUIArrow *link);
 	KPDGUIArrow * findOutArrow(KPDGUINode * toNode);
-	void setEnhancedHighlight(int secondID);
 	    
 	//Compatibilities
 	bool hasNoCompatibilities();
-	bool hasNoAvailableCompatibilities();
 	int getNumberOfCompatibilities();
 	int getNumberOfCompatibleDonors();
 	int getNumberOfCompatibleRecipients();
+	int getNumberOfAssociatedDonors();
 
 	//Popularity
 	int getPopularityInStructures();
@@ -60,81 +64,37 @@ public:
 	//Hold Status
 	bool getHoldStatus() const;
 	void setHoldStatus(bool hold);
-	bool isOnHold();
 
-	//Node Properties
+	//Node Properties	
+
 	int getInternalID() const;
+	Donor getDonor() const;
+	Candidate getCandidate() const;
+	KPDPairType getType() const;
+
+	QString getDonorName() const;
+	int	getDonorAge() const;
+	KPDBloodType getDonorBT() const;
+	QString	getCandidateName() const;
+	int	getCandidateAge() const;
+	KPDBloodType getCandidateBT() const;
+	int	getCandidatePRA() const;		
+
 	void setInternalID(int id);
 	void setDonor(Donor d);
 	void setCandidate(Candidate c);
-	KPDPairType getType() const;
+	void setType(KPDPairType type);
 	
-	QString getDonorName() const;
-	QString getRecipName() const;
-	int getDonorAge() const;
-	int getRecipAge() const;
-	QString getDonorBT() const;
-	QString getRecipBT() const;
-	int getRecipPRA() const;
+	void editNode();
 
-	double getRecipBMI() const;
-	bool getRecipDiabetes() const;
-	bool getRecipGenderMale() const;
-	double getRecipWeight() const;
-	QString getRecipRace() const;
-	bool getRecipPrevTrans() const;
-	double getRecipTOD() const;
-	bool getRecipHepC() const;
-		
-	double getDonorBMI() const;
-	bool getDonorGenderMale() const;
-	double getDonorWeight() const;
+	QGraphicsEllipseItem * getDonorItem();
+	QGraphicsEllipseItem * getRecipItem();
 
-	void setDonorName(QString name);
-	void setRecipName(QString name);
-	void setDonorAge(int age);
-	void setRecipAge(int age);
-	void setDonorBT(QString bt);
-	void setRecipBT(QString bt);
-	void setRecipPRA(int age);
+	QPointF getDonorCenter();
+	QPointF getRecipCenter();
 
-	void setRecipBMI(double bmi);
-	void setRecipDiabetes(bool diabetes);
-	void setRecipGenderMale(bool genderMale);
-	void setRecipWeight(double weight);
-	void setRecipRace(QString race);
-	void setRecipPrevTrans(bool prevTrans);
-	void setRecipTOD(double tod);
-	void setRecipHepC(bool hepC);
-	
-	void setDonorBMI(double bmi);
-	void setDonorGenderMale(bool genderMale);
-	void setDonorWeight(double weight );
-
-	QVector<QString> getDonorAVector() const;
-	QVector<QString> getDonorBVector() const;
-	QVector<QString> getDonorCWVector() const;
-	QVector<QString> getDonorDPVector() const;
-	QVector<QString> getDonorDQVector() const;
-	QVector<QString> getDonorDRVector() const;
-	bool getDonorBW4() const;
-	bool getDonorBW6() const;
-	bool getDonorDR51() const;
-	bool getDonorDR52() const;
-	bool getDonorDR53() const;
-
-	QVector<QString> getRecipAntibodies() const;
-
-	QString getDonorHLAString();
-	QString getRecipHLAString();
-		
-	Candidate * getCandidatePtr();
-	Donor * getDonorPtr();
-
-	QString getComment() const;
-	void setComment(QString commentString);
-
-	//Console Text
+	//Text
+	QString getNameString();
 	QString getCompatibleDonorString();
 	QString getCompatibleRecipientsString();
 	QString getConsoleString();
@@ -144,22 +104,27 @@ signals:
 	void nodeSelectionChanged(int i, bool selected);
 	void nodeHoldStatusChanged(int i, bool held);
 	void nodeEdited(int i);
+	void nodeEntered(int i);
+	void nodeLeft(int i);
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+	void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
+	void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 	void mousePressEvent(QGraphicsSceneMouseEvent * event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
 private:
+	void setAdditionalProperties();
+
 	//Helper Functions
-    QRectF outlineRect() const;
+   // QRectF outlineRect() const;
 	bool checkWithinBounds(bool pairsWithMinPRA, int minPRA, bool pairsWithMaxPRA, int maxPRA);
 
 	//Node Visual Properties
     QString myText;
-    QColor myTextColor;
-	QColor myOutlineColor;
-    QColor myBackgroundColor;
+    QColor myDonorBackgroundColor;
+	QColor myRecipBackgroundColor;
 	
 	//Arrows
 	QSet<KPDGUIArrow *> myOutArrows;
@@ -176,11 +141,15 @@ private:
 	int internalID;	
 	Donor donor;
 	Candidate candidate;
-	QString comment;
+	KPDPairType pairType;
+
+	QGraphicsEllipseItem * myRecip;
+	QGraphicsEllipseItem * myDonor;
 	
 
 public slots:
-	void updateVisibility(DisplaySettingsStruct * displaySettings);
+	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
+	void selectIfVisible();
 
 };
 

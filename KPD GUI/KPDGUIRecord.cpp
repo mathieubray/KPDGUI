@@ -25,7 +25,12 @@ void KPDGUIRecord::insertArrow(KPDGUIArrow * arrow){
 }
 
 KPDGUINode * KPDGUIRecord::getNode(int id){
-	return pairs[id];
+	if (pairs.keys().contains(id)){
+		return pairs[id];
+	}
+	else {
+		return NULL;
+	}
 }
 
 KPDGUINode * KPDGUIRecord::getNodeFromIndex(int i){
@@ -47,6 +52,16 @@ QList<KPDGUINode *> KPDGUIRecord::getPairs(){
 	return pairs.values();
 }
 
+/*QStringList KPDGUIRecord::getHLADictionaryInformation(){
+	QStringList hlaList;
+	
+	foreach(QString antigen, hla_dictionary.keys()){
+		hlaList.push_back(antigen);
+	}
+
+	return hlaList;
+}*/
+
 int KPDGUIRecord::getBaselineIDCode(){
 	return id_code;
 }
@@ -56,29 +71,33 @@ void KPDGUIRecord::setBaselineIDCode(int code){
 }
 
 // Generate master matrices for selected pairs
-void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
+void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress){
 
 	clearMatrices();
 
 	//Parameters
-	double pairFailureRate = params.pairFailureRate;
-	double adFailureRate = params.adFailureRate;
-	double exogenousFailureRate = params.exogenousFailureRate;
+	double pairFailureRate = params->getPairFailureRate();
+	double adFailureRate = params->getADFailureRate();
+	double exogenousFailureRate = params->getExogenousFailureRate();
 
-	bool reserveODonorsForOCandidates = params.reserveODonorsForOCandidates;
-	bool checkDP = params.checkDP;
+	bool reserveODonorsForOCandidates = params->getReserveODonorsForOCandidates();
+	bool checkAdditionalHLA = params->getCheckAdditionalHLA();
 	
 	
 	QVector<KPDGUINode *> availablePairs;
 	
 	foreach(KPDGUINode * node, pairs.values()){
-		if (!node->isOnHold()){
+		if (!node->getHoldStatus()){
 			availablePairs.push_back(node);
 		}
 	}
 
 	int nVertices = availablePairs.size();
 
+	progress->setRange(0, nVertices + nVertices*nVertices);
+	progress->setValue(0);
+	int progressBarValue = 0;
+	
 	viableTransplantMatrix.assign(1 + nVertices, std::vector<int>(1 + nVertices, 0));
 	scoreMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
 	survival5yearMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
@@ -106,12 +125,16 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 			pairInfoVector[i].uncertainty = 1-pairFailureRate;
 
 			//Recipient Blood Type and PRA
-			pairInfoVector[i].recipBT = availablePairs.at(i - 1)->getRecipBT();
-			pairInfoVector[i].recipPRA = availablePairs.at(i - 1)->getRecipPRA();
+			pairInfoVector[i].recipBT = availablePairs.at(i - 1)->getCandidateBT();
+			pairInfoVector[i].recipPRA = availablePairs.at(i - 1)->getCandidatePRA();
 		}
 
 		//Donor Blood Type
-		pairInfoVector[i].donorBT=availablePairs.at(i - 1)->getDonorBT();		
+		pairInfoVector[i].donorBT=availablePairs.at(i - 1)->getDonorBT();
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 
 	for (int i = 1; i <= nVertices; i++){
@@ -129,9 +152,9 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 				}
 				// Pair
 				else  {
-					if (isMatch(availablePairs.at(i - 1), availablePairs.at(j - 1), reserveODonorsForOCandidates, checkDP)){
+					if (isMatch(availablePairs.at(i - 1), availablePairs.at(j - 1), reserveODonorsForOCandidates, checkAdditionalHLA)){
 
-						double praVal = availablePairs.at(j - 1)->getRecipPRA();
+						double praVal = availablePairs.at(j - 1)->getCandidatePRA();
 						double probVal;
 
 						viableTransplantMatrix[i][j] = 1;
@@ -157,8 +180,30 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 					}
 				}
 			}
+
+			progressBarValue++;
+			progress->setValue(progressBarValue);
+			QApplication::processEvents();
 		}		
 	}
+
+	recordLog = "";
+	recordLog.append("Available Pairs for Match Run: ");
+
+	int nPairs = 0;
+	int nADs = 0;
+
+	foreach(KPDGUINode * node, availablePairs){
+		recordLog.append(QString::number(node->getInternalID()) + " ");
+
+		if (node->getType() == AD){
+			nADs++;
+		}
+		else {
+			nPairs++;
+		}
+	}
+	recordLog.append("(" + QString::number(nADs) + " ADs, " + QString::number(nPairs) + " Pairs)\n");
 }
 
 void KPDGUIRecord::deleteNodeFromRecord(int id){
@@ -236,48 +281,53 @@ void KPDGUIRecord::clearMatrices(){
 }
 
 //Checks for a match between donor and candidate
-bool KPDGUIRecord::isMatch(Donor * donor, Candidate * candidate, bool reserveOtoO, bool checkDP){
+bool KPDGUIRecord::isMatch(Donor donor, Candidate candidate, bool reserveOtoO, bool checkAdditionalHLA){
 
-	if (donor->BT != "AB" && donor->BT != "B" && donor->BT != "A" && donor->BT != "O"){
+	if (donor.getBT() != BT_AB && donor.getBT() != BT_B && donor.getBT() != BT_A && donor.getBT() != BT_O){
 		return false;
 	}
 
-	if (candidate->BT != "AB" && candidate->BT != "B" && candidate->BT != "A" && candidate->BT != "O"){
+	if (candidate.getBT() != BT_AB && candidate.getBT() != BT_B && candidate.getBT() != BT_A && candidate.getBT() != BT_O){
 		return false;
 	}
+
+	//Check Exclusion
+	//if (candidate.getExcludedDonors().contains(donorID)){
+		//return false;
+	//}
 
 	//Check BT match;
-	if (donor->BT == "AB"){
-		if (candidate->BT != "AB"){
+	if (donor.getBT() == BT_AB){
+		if (candidate.getBT() != BT_AB){
 			return false;
 		}
 	}
-	else if (donor->BT == "A"){
-		if (candidate->BT == "O" || candidate->BT == "B"){
+	else if (donor.getBT() == BT_A){
+		if (candidate.getBT() == BT_O || candidate.getBT() == BT_B){
 			return false;
 		}
 	}
-	else if (donor->BT == "B"){
-		if (candidate->BT == "O" || candidate->BT == "A"){
+	else if (donor.getBT() == BT_B){
+		if (candidate.getBT() == BT_O || candidate.getBT() == BT_A){
 			return false;
 		}
 	}
 
 	if (reserveOtoO == true){
-		if (donor->BT == "O"){
-			if (candidate->BT != "O"){
+		if (donor.getBT() == BT_O){
+			if (candidate.getBT() != BT_O){
 				return false;
 			}
 		}
 	}
 
-	foreach(QString antibody, candidate->antibodies)
+	foreach(QString antibody, candidate.getAntibodies())
 	{
 		if (hla_dictionary.contains(antibody)){
 
 			foreach(QString equivalentAntibody, hla_dictionary[antibody]){
 				if (antibody.mid(0, 1) == "A"){
-					foreach(QString antigen, donor->donorA){
+					foreach(QString antigen, donor.getA()){
 						if (antigen == equivalentAntibody){
 							return false;
 						}
@@ -288,19 +338,19 @@ bool KPDGUIRecord::isMatch(Donor * donor, Candidate * candidate, bool reserveOto
 
 					if (antibody.mid(0, 1) == "W"){
 						if (equivalentAntibody == "BW4"){
-							if (donor->donorBW4 == true){
+							if (donor.getBW4() == true){
 								return false;
 							}
 						}
 						if (equivalentAntibody == "BW6"){
-							if (donor->donorBW6 == true){
+							if (donor.getBW6() == true){
 								return false;
 							}
 						}
 					}
 
 					else {
-						foreach(QString antigen, donor->donorB){
+						foreach(QString antigen, donor.getB()){
 							if (antigen == equivalentAntibody){
 								return false;
 							}
@@ -309,7 +359,7 @@ bool KPDGUIRecord::isMatch(Donor * donor, Candidate * candidate, bool reserveOto
 				}
 
 				if (antibody.mid(0, 1) == "C"){
-					foreach(QString antigen, donor->donorCW){
+					foreach(QString antigen, donor.getCW()){
 						if (antigen == equivalentAntibody){
 							return false;
 						}
@@ -319,79 +369,77 @@ bool KPDGUIRecord::isMatch(Donor * donor, Candidate * candidate, bool reserveOto
 				if (antibody.mid(0, 1) == "D"){
 
 					if (equivalentAntibody == "DR51"){
-						if (donor->donorDR51 == true){
+						if (donor.getDR51() == true){
 							return false;
 						}
 					}
 					if (equivalentAntibody == "DR52"){
-						if (donor->donorDR52 == true){
+						if (donor.getDR52() == true){
 							return false;
 						}
 					}
 					if (equivalentAntibody == "DR53"){
-						if (donor->donorDR53 == true){
+						if (donor.getDR53() == true){
 							return false;
 						}
 					}
 
-					foreach(QString antigen, donor->donorDR){
+					foreach(QString antigen, donor.getDR()){
 						if (antigen == equivalentAntibody){
 							return false;
 						}
 					}
 
-					foreach(QString antigen, donor->donorDQ){
+					foreach(QString antigen, donor.getDQ()){
 						if (antigen == equivalentAntibody){
 							return false;
 						}
 					}
 
-					foreach(QString antigen, donor->donorDP){
+					/*foreach(QString antigen, donor.donorDP){
 						if (antigen == equivalentAntibody){
 							return false;
 						}
-					}
+					}*/
 				}
 			}
 		}
 
-		if (checkDP){
-			foreach(QString antigen, donor->donorDP){
+		/*if (checkAdditionalHLA){
+			foreach(QString antigen, donor.donorDP){
 				if (antigen == antibody){
 					return false;
 				}
 			}
-		}
+		}*/
 	}
 
 	return true;
 }
 
-bool KPDGUIRecord::isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkDP)
+bool KPDGUIRecord::isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkAdditionalHLA)
 {
+	//FIX THIS!!!
+
 	if (donor == candidate){
 		return false;
 	}
 
-	return isMatch(donor->getDonorPtr(), candidate->getCandidatePtr(), reserveOtoO, checkDP);
+	return isMatch(donor->getDonor(), candidate->getCandidate(), reserveOtoO, checkAdditionalHLA);
 }
 
 int KPDGUIRecord::getNumberOfVertices(){
 	return pairInfoVector.size() - 1;
 }
 
-
-double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
-
-	Donor * donor = d->getDonorPtr();
-	Candidate * candidate = c->getCandidatePtr();
+double KPDGUIRecord::survival(Donor d, Candidate c, int fiveyear){
 	double survival = 0.0;
 
 	//Age
 	double cAge5yr[4] = { -0.047, 0.042, 0.032, 0.013 }; // ={-0.04892, 0.04142, 0.03401, 0.01230 };
 	double cAge10yr[4] = { -0.045, 0.048, 0.031, 0.011 }; // ={-0.04697, 0.04719, 0.03313, 0.00918 };
 
-	int candidatesAge = candidate->age;
+	int candidatesAge = c.getAge();
 	survival += candidatesAge*(fiveyear*(cAge5yr[0]) + (1 - fiveyear)*(cAge10yr[0]));
 	candidatesAge = candidatesAge - 35;
 	if (candidatesAge>0){
@@ -408,7 +456,7 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 
 	double dAge5yr[2] = { 0.006, 0.015 }; // ={0.00618, 0.01525}
 	double dAge10yr[2] = { 0.007, 0.011 }; // ={0.00690, 0.01122}
-	int donorsAge = donor->age;
+	int donorsAge = d.getAge();
 	survival += donorsAge*(fiveyear*(dAge5yr[0]) + (1 - fiveyear)*(dAge10yr[0]));
 	donorsAge = donorsAge - 50;
 	if (donorsAge>50){
@@ -418,27 +466,27 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 	//Gender
 	double pGender5yr[3] = { -0.041, 0.032, -0.207 }; //={-0.04262, 0.00328, -0.18558}
 	double pGender10yr[3] = { -0.040, 0.026, -0.158 }; //={-0.03518, 0.00490, -0.13700}
-	if (candidate->genderMale == false && donor->genderMale == false){
+	if (c.getMale() == false && d.getMale() == false){
 		survival += fiveyear*(pGender5yr[0]) + (1 - fiveyear)*(pGender10yr[0]);
 	}
-	if (candidate->genderMale == false && donor->genderMale == true){
+	if (c.getMale() == false && d.getMale() == true){
 		survival = fiveyear*(pGender5yr[1]) + (1 - fiveyear)*(pGender10yr[1]);
 	}
-	if (candidate->genderMale == true && donor->genderMale == true){
+	if (c.getMale() == true && d.getMale() == true){
 		survival = fiveyear*(pGender5yr[2]) + (1 - fiveyear)*(pGender10yr[2]);
 	}
 
 	//Race
 	double cRace5yr[3] = { 0.244, -0.173, -0.285 }; // = {0.34488, -0.10756, -0.24230}
 	double cRace10yr[3] = { 0.191, -0.225, -0.305 }; // = {0.28837,-0.15943, -0.26188}
-	QString race = (candidate->race).at(0);
-	if (race == "B"){
+	KPDRace race = c.getRace();
+	if (race == RACE_BLACK){
 		survival += fiveyear*(cRace5yr[0]) + (1 - fiveyear)*(cRace10yr[0]);
 	}
-	else if (race == "H"){
+	else if (race == RACE_HISPANIC){
 		survival += fiveyear*(cRace5yr[1]) + (1 - fiveyear)*(cRace10yr[1]);
 	}
-	else if (race != "W"){
+	else if (race == RACE_OTHER){
 		survival += fiveyear*(cRace5yr[2]) + (1 - fiveyear)*(cRace10yr[2]);
 	}
 
@@ -450,25 +498,25 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 	//PRA
 	double cPRA5yr[2] = { 0.053, 0.291 }; // = {0.19014, 0.56558 };
 	double cPRA10yr[2] = { 0.077, 0.313 }; // = {0.20792, 0.56931};
-	if (candidate->pra >= 10 && candidate->pra <= 79){
+	if (c.getPRA() >= 10 && c.getPRA() <= 79){
 		survival += fiveyear*(cPRA5yr[0]) + (1 - fiveyear)*(cPRA10yr[0]);
 	}
-	else if (candidate->pra >= 80 && candidate->pra <= 100){
+	else if (c.getPRA() >= 80 && c.getPRA() <= 100){
 		survival += fiveyear*(cPRA5yr[1]) + (1 - fiveyear)*(cPRA10yr[1]);
 	}
 
 	//Recipient Diabetes Diagnosis
 	double cDiabetes5yr = 0.288; // = 0.30626;
 	double cDiabetes10yr = 0.393; // = 0.40779;
-	if (candidate->diabetes == true){
+	if (c.getDiabetes() == true){
 		survival += fiveyear*(cDiabetes5yr)+(1 - fiveyear)*(cDiabetes10yr);
 	}
 
 	//Previous Tranpslant
 	double cPrevTrans5yr = 0.415;
 	double cPrevTrans10yr = 0.404;
-	//cout << candidate->prevTrans << endl;
-	if (candidate->prevTrans == true){
+	//cout << c.prevTrans << endl;
+	if (c.getPrevTrans() == true){
 		survival += fiveyear*(cPrevTrans5yr)+(1 - fiveyear)*(cPrevTrans10yr);
 	}
 
@@ -477,34 +525,34 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 	double cBMI10yr = 0.141; // = 0.13398;
 	double dBMI5yr = 0.107; // = 0.10955;
 	double dBMI10yr = 0.108; // = 0.11391;
-	if (candidate->BMI>30){
+	if (c.getBMI()>30){
 		survival += fiveyear*(cBMI5yr)+(1 - fiveyear)*(cBMI10yr);
 	}
-	if (donor->BMI>30){
+	if (d.getBMI()>30){
 		survival += fiveyear*(dBMI5yr)+(1 - fiveyear)*(dBMI10yr);
 	}
 
 	//Time on Dialysis
 	double cTOD5yr[5] = { -0.443, -0.323, -0.186, -0.040, 0.127 };
 	double cTOD10yr[5] = { -0.396, -0.316, -0.179, -0.012, 0.151 };
-	if (candidate->TOD == 0){
+	if (c.getTOD() == 0){
 		survival += fiveyear*(cTOD5yr[0]) + (1 - fiveyear)*(cTOD10yr[0]);
 	}
-	else if (candidate->TOD>0 && candidate->TOD <= 0.5){
+	else if (c.getTOD()>0 && c.getTOD() <= 0.5){
 		survival += fiveyear*(cTOD5yr[1]) + (1 - fiveyear)*(cTOD10yr[1]);
 	}
-	else if (candidate->TOD>0.5 && candidate->TOD <= 1){
+	else if (c.getTOD()>0.5 && c.getTOD() <= 1){
 		survival += fiveyear*(cTOD5yr[2]) + (1 - fiveyear)*(cTOD10yr[2]);
 	}
-	else if (candidate->TOD>2 && candidate->TOD <= 3){
+	else if (c.getTOD()>2 && c.getTOD() <= 3){
 		survival += fiveyear*(cTOD5yr[3]) + (1 - fiveyear)*(cTOD10yr[3]);
 	}
-	else if (candidate->TOD>3){
+	else if (c.getTOD()>3){
 		survival += fiveyear*(cTOD5yr[4]) + (1 - fiveyear)*(cTOD10yr[4]);
 	}
 
 	//Weight Ratio
-	double weightRatio = (donor->weight) / (candidate->weight);
+	double weightRatio = (d.getWeight()) / (c.getWeight());
 	double pWR5yr[3] = { 0.133, 0.079, 0.038 }; // = { 0.11641, 0.07311, 0.05486};
 	double pWR10yr[3] = { 0.109, 0.094, 0.066 }; // = { 0.09756, 0.09150, 0.08041};
 
@@ -521,7 +569,7 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 	//Hep C Seriology
 	double cHepC5yr = 0.466;
 	double cHepC10yr = 0.427;
-	if (candidate->hepC == true){
+	if (c.getHepC() == true){
 		survival += fiveyear*(cHepC5yr)+(1 - fiveyear)*(cHepC10yr);
 	}
 
@@ -534,4 +582,18 @@ double KPDGUIRecord::survival(KPDGUINode * d, KPDGUINode * c, int fiveyear){
 	}
 
 	return survival;
+}
+
+double KPDGUIRecord::survival(KPDGUINode *  d, KPDGUINode * c, int fiveyear){
+
+	Donor donor = d->getDonor();
+	Candidate candidate = c->getCandidate();
+
+	return survival(donor, candidate, fiveyear);
+	
+}
+
+QString KPDGUIRecord::getRecordLog(){
+
+	return recordLog;
 }

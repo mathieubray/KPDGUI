@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIGraphicsScene_t {
-    QByteArrayData data[13];
-    char stringdata[170];
+    QByteArrayData data[20];
+    char stringdata[311];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,24 +30,35 @@ struct qt_meta_stringdata_KPDGUIGraphicsScene_t {
 static const qt_meta_stringdata_KPDGUIGraphicsScene_t qt_meta_stringdata_KPDGUIGraphicsScene = {
     {
 QT_MOC_LITERAL(0, 0, 19),
-QT_MOC_LITERAL(1, 20, 10),
-QT_MOC_LITERAL(2, 31, 0),
-QT_MOC_LITERAL(3, 32, 1),
-QT_MOC_LITERAL(4, 34, 8),
-QT_MOC_LITERAL(5, 43, 13),
-QT_MOC_LITERAL(6, 57, 13),
-QT_MOC_LITERAL(7, 71, 8),
-QT_MOC_LITERAL(8, 80, 10),
-QT_MOC_LITERAL(9, 91, 17),
-QT_MOC_LITERAL(10, 109, 19),
-QT_MOC_LITERAL(11, 129, 20),
-QT_MOC_LITERAL(12, 150, 19)
+QT_MOC_LITERAL(1, 20, 18),
+QT_MOC_LITERAL(2, 39, 0),
+QT_MOC_LITERAL(3, 40, 1),
+QT_MOC_LITERAL(4, 42, 27),
+QT_MOC_LITERAL(5, 70, 26),
+QT_MOC_LITERAL(6, 97, 21),
+QT_MOC_LITERAL(7, 119, 18),
+QT_MOC_LITERAL(8, 138, 10),
+QT_MOC_LITERAL(9, 149, 8),
+QT_MOC_LITERAL(10, 158, 13),
+QT_MOC_LITERAL(11, 172, 13),
+QT_MOC_LITERAL(12, 186, 8),
+QT_MOC_LITERAL(13, 195, 10),
+QT_MOC_LITERAL(14, 206, 17),
+QT_MOC_LITERAL(15, 224, 19),
+QT_MOC_LITERAL(16, 244, 20),
+QT_MOC_LITERAL(17, 265, 19),
+QT_MOC_LITERAL(18, 285, 9),
+QT_MOC_LITERAL(19, 295, 15)
     },
-    "KPDGUIGraphicsScene\0deleteNode\0\0i\0"
-    "editNode\0screenChanged\0mouseReleased\0"
-    "holdNode\0unholdNode\0holdMultipleNodes\0"
-    "unholdMultipleNodes\0clusterMultipleNodes\0"
-    "deleteMultipleNodes"
+    "KPDGUIGraphicsScene\0addAssociatedDonor\0"
+    "\0i\0highlightRelevantStructures\0"
+    "highlightRelevantSolutions\0"
+    "selectAllVisibleNodes\0clearAllHighlights\0"
+    "deleteNode\0editNode\0screenChanged\0"
+    "mouseReleased\0holdNode\0unholdNode\0"
+    "holdMultipleNodes\0unholdMultipleNodes\0"
+    "clusterMultipleNodes\0deleteMultipleNodes\0"
+    "selectAll\0clearHighlights"
 };
 #undef QT_MOC_LITERAL
 
@@ -57,36 +68,56 @@ static const uint qt_meta_data_KPDGUIGraphicsScene[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      22,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       9,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    1,   74,    2, 0x06 /* Public */,
-       4,    1,   77,    2, 0x06 /* Public */,
-       5,    0,   80,    2, 0x06 /* Public */,
-       6,    0,   81,    2, 0x06 /* Public */,
+       1,    1,  124,    2, 0x06 /* Public */,
+       4,    1,  127,    2, 0x06 /* Public */,
+       5,    1,  130,    2, 0x06 /* Public */,
+       6,    0,  133,    2, 0x06 /* Public */,
+       7,    0,  134,    2, 0x06 /* Public */,
+       8,    1,  135,    2, 0x06 /* Public */,
+       9,    1,  138,    2, 0x06 /* Public */,
+      10,    0,  141,    2, 0x06 /* Public */,
+      11,    0,  142,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    0,   82,    2, 0x08 /* Private */,
-       7,    0,   83,    2, 0x08 /* Private */,
-       8,    0,   84,    2, 0x08 /* Private */,
-       1,    0,   85,    2, 0x08 /* Private */,
-       9,    0,   86,    2, 0x08 /* Private */,
-      10,    0,   87,    2, 0x08 /* Private */,
-      11,    0,   88,    2, 0x08 /* Private */,
-      12,    0,   89,    2, 0x08 /* Private */,
+       1,    0,  143,    2, 0x08 /* Private */,
+       4,    0,  144,    2, 0x08 /* Private */,
+       5,    0,  145,    2, 0x08 /* Private */,
+       9,    0,  146,    2, 0x08 /* Private */,
+      12,    0,  147,    2, 0x08 /* Private */,
+      13,    0,  148,    2, 0x08 /* Private */,
+       8,    0,  149,    2, 0x08 /* Private */,
+      14,    0,  150,    2, 0x08 /* Private */,
+      15,    0,  151,    2, 0x08 /* Private */,
+      16,    0,  152,    2, 0x08 /* Private */,
+      17,    0,  153,    2, 0x08 /* Private */,
+      18,    0,  154,    2, 0x08 /* Private */,
+      19,    0,  155,    2, 0x08 /* Private */,
 
  // signals: parameters
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void, QMetaType::Int,    3,
     QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -104,18 +135,28 @@ void KPDGUIGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUIGraphicsScene *_t = static_cast<KPDGUIGraphicsScene *>(_o);
         switch (_id) {
-        case 0: _t->deleteNode((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 1: _t->editNode((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 2: _t->screenChanged(); break;
-        case 3: _t->mouseReleased(); break;
-        case 4: _t->editNode(); break;
-        case 5: _t->holdNode(); break;
-        case 6: _t->unholdNode(); break;
-        case 7: _t->deleteNode(); break;
-        case 8: _t->holdMultipleNodes(); break;
-        case 9: _t->unholdMultipleNodes(); break;
-        case 10: _t->clusterMultipleNodes(); break;
-        case 11: _t->deleteMultipleNodes(); break;
+        case 0: _t->addAssociatedDonor((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 1: _t->highlightRelevantStructures((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 2: _t->highlightRelevantSolutions((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 3: _t->selectAllVisibleNodes(); break;
+        case 4: _t->clearAllHighlights(); break;
+        case 5: _t->deleteNode((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->editNode((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 7: _t->screenChanged(); break;
+        case 8: _t->mouseReleased(); break;
+        case 9: _t->addAssociatedDonor(); break;
+        case 10: _t->highlightRelevantStructures(); break;
+        case 11: _t->highlightRelevantSolutions(); break;
+        case 12: _t->editNode(); break;
+        case 13: _t->holdNode(); break;
+        case 14: _t->unholdNode(); break;
+        case 15: _t->deleteNode(); break;
+        case 16: _t->holdMultipleNodes(); break;
+        case 17: _t->unholdMultipleNodes(); break;
+        case 18: _t->clusterMultipleNodes(); break;
+        case 19: _t->deleteMultipleNodes(); break;
+        case 20: _t->selectAll(); break;
+        case 21: _t->clearHighlights(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -123,26 +164,56 @@ void KPDGUIGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         void **func = reinterpret_cast<void **>(_a[1]);
         {
             typedef void (KPDGUIGraphicsScene::*_t)(int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::deleteNode)) {
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::addAssociatedDonor)) {
                 *result = 0;
             }
         }
         {
             typedef void (KPDGUIGraphicsScene::*_t)(int );
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::editNode)) {
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::highlightRelevantStructures)) {
                 *result = 1;
             }
         }
         {
-            typedef void (KPDGUIGraphicsScene::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::screenChanged)) {
+            typedef void (KPDGUIGraphicsScene::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::highlightRelevantSolutions)) {
                 *result = 2;
             }
         }
         {
             typedef void (KPDGUIGraphicsScene::*_t)();
-            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::mouseReleased)) {
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::selectAllVisibleNodes)) {
                 *result = 3;
+            }
+        }
+        {
+            typedef void (KPDGUIGraphicsScene::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::clearAllHighlights)) {
+                *result = 4;
+            }
+        }
+        {
+            typedef void (KPDGUIGraphicsScene::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::deleteNode)) {
+                *result = 5;
+            }
+        }
+        {
+            typedef void (KPDGUIGraphicsScene::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::editNode)) {
+                *result = 6;
+            }
+        }
+        {
+            typedef void (KPDGUIGraphicsScene::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::screenChanged)) {
+                *result = 7;
+            }
+        }
+        {
+            typedef void (KPDGUIGraphicsScene::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::mouseReleased)) {
+                *result = 8;
             }
         }
     }
@@ -173,40 +244,73 @@ int KPDGUIGraphicsScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 22)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 22;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 22)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 22;
     }
     return _id;
 }
 
 // SIGNAL 0
-void KPDGUIGraphicsScene::deleteNode(int _t1)
+void KPDGUIGraphicsScene::addAssociatedDonor(int _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 
 // SIGNAL 1
-void KPDGUIGraphicsScene::editNode(int _t1)
+void KPDGUIGraphicsScene::highlightRelevantStructures(int _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 1, _a);
 }
 
 // SIGNAL 2
-void KPDGUIGraphicsScene::screenChanged()
+void KPDGUIGraphicsScene::highlightRelevantSolutions(int _t1)
 {
-    QMetaObject::activate(this, &staticMetaObject, 2, 0);
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 
 // SIGNAL 3
-void KPDGUIGraphicsScene::mouseReleased()
+void KPDGUIGraphicsScene::selectAllVisibleNodes()
 {
     QMetaObject::activate(this, &staticMetaObject, 3, 0);
+}
+
+// SIGNAL 4
+void KPDGUIGraphicsScene::clearAllHighlights()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, 0);
+}
+
+// SIGNAL 5
+void KPDGUIGraphicsScene::deleteNode(int _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
+}
+
+// SIGNAL 6
+void KPDGUIGraphicsScene::editNode(int _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 6, _a);
+}
+
+// SIGNAL 7
+void KPDGUIGraphicsScene::screenChanged()
+{
+    QMetaObject::activate(this, &staticMetaObject, 7, 0);
+}
+
+// SIGNAL 8
+void KPDGUIGraphicsScene::mouseReleased()
+{
+    QMetaObject::activate(this, &staticMetaObject, 8, 0);
 }
 QT_END_MOC_NAMESPACE

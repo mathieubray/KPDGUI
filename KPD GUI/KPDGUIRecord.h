@@ -15,6 +15,7 @@
 #include "KPDGUIArrow.h"
 #include "KPDGUIArrowWrapper.h"
 #include "KPDGUIGraphicsScene.h"
+#include "KPDGUISimParameters.h"
 
 
 class KPDGUIRecord : public QObject
@@ -35,13 +36,13 @@ public:
 	int size();
 	void clear();
 
-	bool isMatch(Donor * donor, Candidate * candidate, bool reserveOtoO, bool checkDP);
-	bool isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkDP);
+	bool isMatch(Donor donor, Candidate candidate, bool reserveOtoO, bool checkAdditionalHLA);
+	bool isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkAdditionalHLA);
 	
 	QList<KPDGUINode *> getPairs();
 
 	//Matrices
-	void generateMatrices(ParamInfoStruct params);
+	void generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress);
 	
 	std::vector<std::vector<int> > viableTransplantMatrix;
 	std::vector<std::vector<double > > scoreMatrix;
@@ -57,6 +58,8 @@ public:
 	void setBaselineIDCode(int code);
 
 	int getNumberOfVertices();
+
+	QString getRecordLog();
 	
 signals:
 	
@@ -69,7 +72,9 @@ protected:
 	void loadDictionary();	
 	void clearMatrices();
 	
+	double survival(Donor d, Candidate c, int fiveyear);
 	double survival(KPDGUINode * d, KPDGUINode * c, int fiveyear);
+	
 
 private:
 	//Input Vectors 
@@ -81,6 +86,8 @@ private:
 	
 	//Parameters
 	int id_code;
+
+	QString recordLog;
 	
 };
 

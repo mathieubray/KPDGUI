@@ -92,8 +92,8 @@ void *ReadFileDialog::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_ReadFileDialog.stringdata))
         return static_cast<void*>(const_cast< ReadFileDialog*>(this));
-    if (!strcmp(_clname, "Ui_ReadFileDialog"))
-        return static_cast< Ui_ReadFileDialog*>(const_cast< ReadFileDialog*>(this));
+    if (!strcmp(_clname, "Ui_DialogReadFile"))
+        return static_cast< Ui_DialogReadFile*>(const_cast< ReadFileDialog*>(this));
     return QDialog::qt_metacast(_clname);
 }
 

@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUINode_t {
-    QByteArrayData data[12];
-    char stringdata[153];
+    QByteArrayData data[15];
+    char stringdata[190];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -38,14 +38,18 @@ QT_MOC_LITERAL(5, 38, 20),
 QT_MOC_LITERAL(6, 59, 21),
 QT_MOC_LITERAL(7, 81, 4),
 QT_MOC_LITERAL(8, 86, 10),
-QT_MOC_LITERAL(9, 97, 16),
-QT_MOC_LITERAL(10, 114, 22),
-QT_MOC_LITERAL(11, 137, 15)
+QT_MOC_LITERAL(9, 97, 11),
+QT_MOC_LITERAL(10, 109, 8),
+QT_MOC_LITERAL(11, 118, 16),
+QT_MOC_LITERAL(12, 135, 22),
+QT_MOC_LITERAL(13, 158, 15),
+QT_MOC_LITERAL(14, 174, 15)
     },
     "KPDGUINode\0nodeWasClicked\0\0i\0selected\0"
     "nodeSelectionChanged\0nodeHoldStatusChanged\0"
-    "held\0nodeEdited\0updateVisibility\0"
-    "DisplaySettingsStruct*\0displaySettings"
+    "held\0nodeEdited\0nodeEntered\0nodeLeft\0"
+    "updateVisibility\0KPDGUIDisplaySettings*\0"
+    "displaySettings\0selectIfVisible"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,30 +59,36 @@ static const uint qt_meta_data_KPDGUINode[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   39,    2, 0x06 /* Public */,
-       5,    2,   44,    2, 0x06 /* Public */,
-       6,    2,   49,    2, 0x06 /* Public */,
-       8,    1,   54,    2, 0x06 /* Public */,
+       1,    2,   54,    2, 0x06 /* Public */,
+       5,    2,   59,    2, 0x06 /* Public */,
+       6,    2,   64,    2, 0x06 /* Public */,
+       8,    1,   69,    2, 0x06 /* Public */,
+       9,    1,   72,    2, 0x06 /* Public */,
+      10,    1,   75,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    1,   57,    2, 0x0a /* Public */,
+      11,    1,   78,    2, 0x0a /* Public */,
+      14,    0,   81,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::Bool,    3,    4,
     QMetaType::Void, QMetaType::Int, QMetaType::Bool,    3,    4,
     QMetaType::Void, QMetaType::Int, QMetaType::Bool,    3,    7,
     QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
+    QMetaType::Void, QMetaType::Int,    3,
 
  // slots: parameters
-    QMetaType::Void, 0x80000000 | 10,   11,
+    QMetaType::Void, 0x80000000 | 12,   13,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -92,7 +102,10 @@ void KPDGUINode::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->nodeSelectionChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 2: _t->nodeHoldStatusChanged((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 3: _t->nodeEdited((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 4: _t->updateVisibility((*reinterpret_cast< DisplaySettingsStruct*(*)>(_a[1]))); break;
+        case 4: _t->nodeEntered((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 5: _t->nodeLeft((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 6: _t->updateVisibility((*reinterpret_cast< KPDGUIDisplaySettings*(*)>(_a[1]))); break;
+        case 7: _t->selectIfVisible(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -122,11 +135,23 @@ void KPDGUINode::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
                 *result = 3;
             }
         }
+        {
+            typedef void (KPDGUINode::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUINode::nodeEntered)) {
+                *result = 4;
+            }
+        }
+        {
+            typedef void (KPDGUINode::*_t)(int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUINode::nodeLeft)) {
+                *result = 5;
+            }
+        }
     }
 }
 
 const QMetaObject KPDGUINode::staticMetaObject = {
-    { &QGraphicsObject::staticMetaObject, qt_meta_stringdata_KPDGUINode.data,
+    { &QObject::staticMetaObject, qt_meta_stringdata_KPDGUINode.data,
       qt_meta_data_KPDGUINode,  qt_static_metacall, 0, 0}
 };
 
@@ -141,22 +166,24 @@ void *KPDGUINode::qt_metacast(const char *_clname)
     if (!_clname) return 0;
     if (!strcmp(_clname, qt_meta_stringdata_KPDGUINode.stringdata))
         return static_cast<void*>(const_cast< KPDGUINode*>(this));
-    return QGraphicsObject::qt_metacast(_clname);
+    if (!strcmp(_clname, "QGraphicsItemGroup"))
+        return static_cast< QGraphicsItemGroup*>(const_cast< KPDGUINode*>(this));
+    return QObject::qt_metacast(_clname);
 }
 
 int KPDGUINode::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
-    _id = QGraphicsObject::qt_metacall(_c, _id, _a);
+    _id = QObject::qt_metacall(_c, _id, _a);
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 8;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 8)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 8;
     }
     return _id;
 }
@@ -187,5 +214,19 @@ void KPDGUINode::nodeEdited(int _t1)
 {
     void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void KPDGUINode::nodeEntered(int _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 4, _a);
+}
+
+// SIGNAL 5
+void KPDGUINode::nodeLeft(int _t1)
+{
+    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    QMetaObject::activate(this, &staticMetaObject, 5, _a);
 }
 QT_END_MOC_NAMESPACE

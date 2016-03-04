@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUINodeWrapper_t {
     QByteArrayData data[4];
-    char stringdata[48];
+    char stringdata[47];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,10 +32,10 @@ static const qt_meta_stringdata_KPDGUINodeWrapper_t qt_meta_stringdata_KPDGUINod
 QT_MOC_LITERAL(0, 0, 17),
 QT_MOC_LITERAL(1, 18, 16),
 QT_MOC_LITERAL(2, 35, 0),
-QT_MOC_LITERAL(3, 36, 11)
+QT_MOC_LITERAL(3, 36, 10)
     },
-    "KPDGUINodeWrapper\0selectionActions\0\0"
-    "editActions"
+    "KPDGUINodeWrapper\0updateSelections\0\0"
+    "updateText"
 };
 #undef QT_MOC_LITERAL
 
@@ -53,12 +53,12 @@ static const uint qt_meta_data_KPDGUINodeWrapper[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    2,   24,    2, 0x0a /* Public */,
-       3,    1,   29,    2, 0x0a /* Public */,
+       1,    0,   24,    2, 0x0a /* Public */,
+       3,    0,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Int, QMetaType::Bool,    2,    2,
-    QMetaType::Void, QMetaType::Int,    2,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -68,11 +68,12 @@ void KPDGUINodeWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUINodeWrapper *_t = static_cast<KPDGUINodeWrapper *>(_o);
         switch (_id) {
-        case 0: _t->selectionActions((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
-        case 1: _t->editActions((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 0: _t->updateSelections(); break;
+        case 1: _t->updateText(); break;
         default: ;
         }
     }
+    Q_UNUSED(_a);
 }
 
 const QMetaObject KPDGUINodeWrapper::staticMetaObject = {

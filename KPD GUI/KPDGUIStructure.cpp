@@ -1,7 +1,7 @@
 #include "KPDGUIStructure.h"
 
-const qreal Pi = 3.14159265;
-const qreal Tol = 3;
+//const qreal PI = 3.14159265;
+//const qreal TOL = 3;
 
 KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimizationScheme optScheme, double utility, int id){
 	myPairList = pairList;
@@ -103,15 +103,15 @@ qreal KPDGUIStructure::centerY(){
 void KPDGUIStructure::cluster(){
 	qreal dist = 50 + 10*myPairList.size();
 
-	qreal angle = (2 * Pi) / myPairList.size();
-	qreal nodeAngle = Pi;
+	qreal angle = (2 * PI) / myPairList.size();
+	qreal nodeAngle = PI;
 
 	qreal centerX = this->centerX();
 	qreal centerY = this->centerY();
 
 	foreach(KPDGUINode * node, myPairList){
 		node->setVisible(false);
-		if (!(abs((node->x()) - (centerX + dist*cos(nodeAngle))) < Tol && abs((node->y()) - (centerY + dist*sin(nodeAngle)) < Tol))){
+		if (!(abs((node->x()) - (centerX + dist*cos(nodeAngle))) < TOL && abs((node->y()) - (centerY + dist*sin(nodeAngle)) < TOL))){
 			node->setPos(QPoint(centerX + dist*cos(nodeAngle), centerY + dist*sin(nodeAngle)));
 		}		
 		nodeAngle += angle;
@@ -123,12 +123,12 @@ void KPDGUIStructure::cluster(qreal x, qreal y){
 
 	qreal dist = 50 + 10 * myPairList.size();
 
-	qreal angle = (2 * Pi) / myPairList.size();
-	qreal nodeAngle = Pi;
+	qreal angle = (2 * PI) / myPairList.size();
+	qreal nodeAngle = PI;
 
 	foreach(KPDGUINode * node, myPairList){
 		node->setVisible(false);
-		if (!(abs((node->x()) - (x + dist*cos(nodeAngle))) < Tol && abs((node->y()) - (y + dist*sin(nodeAngle)) < Tol))){
+		if (!(abs((node->x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->y()) - (y + dist*sin(nodeAngle)) < TOL))){
 			node->setPos(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
 		}
 		nodeAngle += angle;
