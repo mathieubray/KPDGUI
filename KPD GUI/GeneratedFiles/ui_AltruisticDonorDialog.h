@@ -400,6 +400,7 @@ public:
         AltruisticDonorDialog->setWindowTitle(QApplication::translate("AltruisticDonorDialog", "Add New AD", 0));
         donorGroupBox->setTitle(QApplication::translate("AltruisticDonorDialog", "Donor Information", 0));
         donorNameLabel->setText(QApplication::translate("AltruisticDonorDialog", "Name", 0));
+        donorNameLineEdit->setText(QApplication::translate("AltruisticDonorDialog", "Donor Name", 0));
         donorAgeLabel->setText(QApplication::translate("AltruisticDonorDialog", "Age", 0));
         donorBTLabel->setText(QApplication::translate("AltruisticDonorDialog", "Blood Type", 0));
         donorBTComboBox->clear();
