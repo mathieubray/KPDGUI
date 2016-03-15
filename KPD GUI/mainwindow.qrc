@@ -1,14 +1,12 @@
 <RCC>
-  <qresource prefix="images">
+  <qresource prefix="/images">
+    <file>images/zoomin.png</file>
+    <file>images/zoomout.png</file>
+    <file>images/cursor.png</file>
+    <file>images/handtool.png</file>
     <file>images/logo.png</file>
-    <file>images/copy.png</file>
-    <file>images/cut.png</file>
-    <file>images/find.png</file>
-    <file>images/gotocell.png</file>
-    <file>images/icon.png</file>
     <file>images/new.png</file>
     <file>images/open.png</file>
-    <file>images/paste.png</file>
     <file>images/run.png</file>
     <file>images/save.png</file>
   </qresource>

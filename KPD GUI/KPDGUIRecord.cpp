@@ -2,9 +2,7 @@
 
 KPDGUIRecord::KPDGUIRecord()
 {
-	//Parameters
 	id_code = 1;		
-
 	loadDictionary();
 }
 
@@ -20,7 +18,6 @@ void KPDGUIRecord::insert(KPDGUINode * node, bool fromSavedFile){
 	}
 
 	pairs.insert(node->getInternalID(), node);
-	intToExt.insert(node->getInternalID(), node->getExternalID());
 }
 
 void KPDGUIRecord::insertArrow(KPDGUIArrow * arrow){
@@ -37,19 +34,13 @@ KPDGUINode * KPDGUIRecord::getNodeFromIndex(int i){
 	return pairs[id];
 }
 
-int KPDGUIRecord::getIDfromIndex(int index){
-	return orderedPairs[index];
-}
-
 int KPDGUIRecord::size(){
 	return pairs.size();
 }
 
 void KPDGUIRecord::clear(){
 	pairs.clear();
-	orderedPairs.clear();
 	arrows.clear();
-	intToExt.clear();
 }
 
 QList<KPDGUINode *> KPDGUIRecord::getPairs(){
@@ -65,38 +56,69 @@ void KPDGUIRecord::setBaselineIDCode(int code){
 }
 
 // Generate master matrices for selected pairs
-void KPDGUIRecord::generateMatrices(bool reserveOtoO, bool checkDP, bool includeCompatiblePairs){
+void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 
-	Pair p;
 	clearMatrices();
 
-	QVector<KPDGUINode *> availablePairs;
-	std::vector<int> donorsType;
+	//Parameters
+	double pairFailureRate = params.pairFailureRate;
+	double adFailureRate = params.adFailureRate;
+	double exogenousFailureRate = params.exogenousFailureRate;
 
+	bool reserveODonorsForOCandidates = params.reserveODonorsForOCandidates;
+	bool checkDP = params.checkDP;
+	
+	
+	QVector<KPDGUINode *> availablePairs;
+	
 	foreach(KPDGUINode * node, pairs.values()){
 		if (!node->isOnHold()){
 			availablePairs.push_back(node);
-			donorsType.push_back(node->getType());
-			inTimes.push_back(0);
 		}
 	}
 
-	int N = donorsType.size();
+	int nVertices = availablePairs.size();
 
-	viableTransplantMatrix.assign(1 + N, std::vector<int>(1 + N, 0));
-	scoreMatrix.assign(1 + N, std::vector<double>(1 + N, 0.0));
-	survival5yearMatrix.assign(1 + N, std::vector<double>(1 + N, 0.0));
-	survival10yearMatrix.assign(1 + N, std::vector<double>(1 + N, 0.0));
-	probabilityMatrix.assign(1 + N, std::vector<double>(1 + N, 0.0));
-	labCrossmatchMatrix.assign(1 + N, std::vector<int>(1 + N, 0));
-	incidenceMatrix.assign(1 + N, std::vector<bool>(1 + N, false));
-	pairVector.assign(1 + N, p);
+	viableTransplantMatrix.assign(1 + nVertices, std::vector<int>(1 + nVertices, 0));
+	scoreMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
+	survival5yearMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
+	survival10yearMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
+	probabilityMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
+	labCrossmatchMatrix.assign(1 + nVertices, std::vector<int>(1 + nVertices, 0));
+	incidenceMatrix.assign(1 + nVertices, std::vector<bool>(1 + nVertices, false));
 
-	for (int i = 1; i <= N; i++){
-		for (int j = 1; j <= N; j++){
+	AdditionalPairInfo p;
+	pairInfoVector.assign(1 + nVertices, p);
+	
+	for (int i = 1; i <= nVertices; i++){
+
+		//Pair ID
+		pairInfoVector[i].pairID = availablePairs.at(i - 1)->getInternalID();
+		
+		//For ADs
+		if (availablePairs.at(i-1)->getType() == AD){ 
+			pairInfoVector[i].pairType = KPDPairType::AD;
+			pairInfoVector[i].uncertainty = 1-adFailureRate; 
+		}
+		//For Pairs
+		else {
+			pairInfoVector[i].pairType = KPDPairType::PAIR;
+			pairInfoVector[i].uncertainty = 1-pairFailureRate;
+
+			//Recipient Blood Type and PRA
+			pairInfoVector[i].recipBT = availablePairs.at(i - 1)->getRecipBT();
+			pairInfoVector[i].recipPRA = availablePairs.at(i - 1)->getRecipPRA();
+		}
+
+		//Donor Blood Type
+		pairInfoVector[i].donorBT=availablePairs.at(i - 1)->getDonorBT();		
+	}
+
+	for (int i = 1; i <= nVertices; i++){
+		for (int j = 1; j <= nVertices; j++){
 			if (i != j) {
 				// AD
-				if (donorsType[j - 1] == 1){
+				if (availablePairs.at(j - 1)->getType() == AD){
 					viableTransplantMatrix[i][j] = 0;
 					scoreMatrix[i][j] = 0.0;
 					survival5yearMatrix[i][j] = 1.0;
@@ -107,18 +129,10 @@ void KPDGUIRecord::generateMatrices(bool reserveOtoO, bool checkDP, bool include
 				}
 				// Pair
 				else  {
-					/*int successful_donors = 0;
-
-					vector<Donor> * associated_donors = pair_donors[pair_recips[i - 1]->regid];
-					for (vector<Donor>::iterator it = associated_donors->begin(); it != associated_donors->end(); it++){
-					if (isMatch(pair_recips[j - 1], &(*it))){
-					successful_donors++;
-					}
-					}
-					if (successful_donors>0){*/
-					if (isMatch(availablePairs.at(i - 1), availablePairs.at(j - 1), reserveOtoO, checkDP)){
+					if (isMatch(availablePairs.at(i - 1), availablePairs.at(j - 1), reserveODonorsForOCandidates, checkDP)){
 
 						double praVal = availablePairs.at(j - 1)->getRecipPRA();
+						double probVal;
 
 						viableTransplantMatrix[i][j] = 1;
 						scoreMatrix[i][j] = praVal / 10;
@@ -126,86 +140,29 @@ void KPDGUIRecord::generateMatrices(bool reserveOtoO, bool checkDP, bool include
 						survival10yearMatrix[i][j] = survival(availablePairs.at(i - 1), availablePairs.at(j - 1), 0);
 
 						if (praVal < 25){
-							probabilityMatrix[i][j] = 0.95;
+							probVal = 0.95;
 						}
 						else if (praVal >= 25 && praVal < 50){
-							probabilityMatrix[i][j] = 0.8;
+							probVal = 0.8;
 						}
 						else if (praVal >= 50 && praVal < 75){
-							probabilityMatrix[i][j] = 0.65;
+							probVal = 0.65;
 						}
 						else {
-							probabilityMatrix[i][j] = 0.5;
+							probVal = 0.5;
 						}
+						probabilityMatrix[i][j] = std::max(probVal - exogenousFailureRate, 0.01);
 
 						incidenceMatrix[i][j] = true;
 					}
 				}
 			}
-		}
-
-		double uncertainty = 0.9;
-
-		if (donorsType[i - 1] == 1){ pairVector[i].uncertainty = 1.0; }
-		else {
-			//if (randomPairFailureRate == true){ uncertainty = rng.runif(1 - pairFailureRate, 1); }
-			//else { uncertainty = 1 - pairFailureRate; }	
-
-			pairVector[i].recipID = availablePairs.at(i - 1)->getRecipID();
-			std::string recipBT;
-			QString recipBTString = availablePairs.at(i - 1)->getRecipBT();
-			if (recipBTString == "O"){ recipBT = "O";	}
-			else if (recipBTString == "A"){ recipBT = "A"; }
-			else if (recipBTString == "B"){ recipBT = "B"; }
-			else { recipBT = "AB"; }
-			pairVector[i].recipBT = recipBT;
-			pairVector[i].recipPRA = availablePairs.at(i - 1)->getRecipPRA();
-			pairVector[i].recipAge = availablePairs.at(i - 1)->getRecipAge();
-			pairVector[i].recipBMI = availablePairs.at(i-1)->getRecipBMI();
-			pairVector[i].recipDiabetes = availablePairs.at(i-1)->getRecipDiabetes();
-			pairVector[i].recipMale = availablePairs.at(i-1)->getRecipGenderMale();
-			pairVector[i].recipWeight = availablePairs.at(i-1)->getRecipWeight();
-			std::string recipRace;
-			QString recipRaceString = availablePairs.at(i - 1)->getRecipRace();
-			if (recipRaceString.at(0) == "W"){ recipRace = "White"; }
-			else if (recipRaceString.at(0) == "B"){ recipRace = "Black"; }
-			else if (recipRaceString.at(0) == "H"){ recipRace = "Hispanic"; }
-			else { recipRace = "Other"; }
-			pairVector[i].recipRace = recipRace;
-			pairVector[i].recipPrevTrans = availablePairs.at(i-1)->getRecipPrevTrans();
-			pairVector[i].recipTOD = availablePairs.at(i-1)->getRecipTOD();
-			pairVector[i].recipHepC = availablePairs.at(i-1)->getRecipHepC();
-			pairVector[i].recipSensitized = availablePairs.at(i-1)->getRecipSensitized();
-		}
-
-		pairVector[i].uncertainty = uncertainty;
-		pairVector[i].pairLabel = availablePairs.at(i - 1)->getInternalID();
-		pairVector[i].donorID = availablePairs.at(i - 1)->getDonorID();
-		pairVector[i].donorType = donorsType[i - 1];
-		std::string donorBT;
-		QString donorBTString = availablePairs.at(i - 1)->getDonorBT();
-		if (donorBTString == "O"){ donorBT = "O"; }
-		else if (donorBTString == "A"){ donorBT = "A"; }
-		else if (donorBTString == "B"){ donorBT = "B"; }
-		else { donorBT = "AB"; }
-		pairVector[i].donorBT = donorBT;
-		pairVector[i].donorAge = availablePairs.at(i - 1)->getDonorAge();
-		pairVector[i].donorBMI = availablePairs.at(i - 1)->getDonorBMI();
-		pairVector[i].donorMale = availablePairs.at(i - 1)->getDonorGenderMale();
-		pairVector[i].donorWeight = availablePairs.at(i - 1)->getDonorWeight();
-
-		orderedPairs.push_back(availablePairs.at(i - 1)->getInternalID());
+		}		
 	}
 }
 
 void KPDGUIRecord::deleteNodeFromRecord(int id){
-	pairs.remove(id);
-	intToExt.remove(id);
-
-	int index = orderedPairs.indexOf(id, 0);
-	if (index >= 0){
-		orderedPairs.remove(index);
-	}
+	pairs.remove(id);	
 }
 
 void KPDGUIRecord::loadDictionary(){
@@ -274,8 +231,8 @@ void KPDGUIRecord::loadDictionary(){
 }
 
 void KPDGUIRecord::clearMatrices(){
-	inTimes.clear(); viableTransplantMatrix.clear(); probabilityMatrix.clear(); labCrossmatchMatrix.clear(); incidenceMatrix.clear();
-	survival5yearMatrix.clear(); survival10yearMatrix.clear(); scoreMatrix.clear(); pairVector.clear();	orderedPairs.clear();
+	viableTransplantMatrix.clear(); probabilityMatrix.clear(); labCrossmatchMatrix.clear(); incidenceMatrix.clear();
+	survival5yearMatrix.clear(); survival10yearMatrix.clear(); scoreMatrix.clear(); pairInfoVector.clear();
 }
 
 //Checks for a match between donor and candidate
@@ -417,6 +374,10 @@ bool KPDGUIRecord::isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool rese
 	}
 
 	return isMatch(donor->getDonorPtr(), candidate->getCandidatePtr(), reserveOtoO, checkDP);
+}
+
+int KPDGUIRecord::getNumberOfVertices(){
+	return pairInfoVector.size() - 1;
 }
 
 

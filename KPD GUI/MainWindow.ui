@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>829</width>
+    <width>843</width>
     <height>560</height>
    </rect>
   </property>
@@ -31,27 +31,30 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0" rowspan="3">
+    <item row="0" column="0" rowspan="2">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
        <widget class="QTableWidget" name="tableWidget">
         <property name="minimumSize">
          <size>
           <width>250</width>
-          <height>199</height>
+          <height>161</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>250</width>
-          <height>199</height>
+          <height>161</height>
          </size>
         </property>
         <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOn</enum>
+         <enum>Qt::ScrollBarAlwaysOff</enum>
         </property>
         <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOn</enum>
+         <enum>Qt::ScrollBarAsNeeded</enum>
+        </property>
+        <property name="sizeAdjustPolicy">
+         <enum>QAbstractScrollArea::AdjustToContents</enum>
         </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
@@ -72,7 +75,7 @@
          <bool>false</bool>
         </attribute>
         <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>130</number>
+         <number>150</number>
         </attribute>
         <attribute name="horizontalHeaderMinimumSectionSize">
          <number>27</number>
@@ -174,17 +177,6 @@
           </font>
          </property>
         </row>
-        <row>
-         <property name="text">
-          <string>Excluded Donors</string>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-           <pointsize>8</pointsize>
-          </font>
-         </property>
-        </row>
         <column>
          <property name="text">
           <string>Item</string>
@@ -278,17 +270,6 @@
           </font>
          </property>
         </item>
-        <item row="8" column="0">
-         <property name="text">
-          <string/>
-         </property>
-         <property name="font">
-          <font>
-           <family>Arial</family>
-           <pointsize>8</pointsize>
-          </font>
-         </property>
-        </item>
        </widget>
       </item>
       <item>
@@ -319,215 +300,22 @@
      </layout>
     </item>
     <item row="0" column="1">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QToolButton" name="zoomOutButton">
-        <property name="minimumSize">
-         <size>
-          <width>21</width>
-          <height>19</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>21</width>
-          <height>19</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>-</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="zoomSlider">
-        <property name="minimumSize">
-         <size>
-          <width>84</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>84</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="minimum">
-         <number>-2</number>
-        </property>
-        <property name="maximum">
-         <number>4</number>
-        </property>
-        <property name="value">
-         <number>0</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TicksBelow</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QToolButton" name="zoomInButton">
-        <property name="minimumSize">
-         <size>
-          <width>21</width>
-          <height>19</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>21</width>
-          <height>19</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>+</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="runButton">
-        <property name="minimumSize">
-         <size>
-          <width>51</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>51</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Run</string>
-        </property>
-        <property name="icon">
-         <iconset resource="mainwindow.qrc">
-          <normaloff>:/images/images/run.png</normaloff>:/images/images/run.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QComboBox" name="pairsComboBox">
-        <property name="minimumSize">
-         <size>
-          <width>170</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>170</width>
-          <height>20</height>
-         </size>
-        </property>
-        <item>
-         <property name="text">
-          <string>All Pairs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>All Pairs w/ Compatibilities</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Available Pairs</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Available Pairs w/ Compatibilities</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Custom...</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="arrowsComboBox">
-        <property name="minimumSize">
-         <size>
-          <width>160</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>160</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="currentIndex">
-         <number>0</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Within Selection</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Selected Compatibilities</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Selected Compatible Donors</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Selected Compatible Recipients</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>All Compatibilities</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>No Compatibilities</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="1" column="1">
-     <widget class="QGraphicsView" name="graphicsView">
+     <widget class="KPDGUIGraphicsView" name="graphicsView">
       <property name="minimumSize">
        <size>
         <width>480</width>
         <height>300</height>
        </size>
       </property>
+      <property name="dragMode">
+       <enum>QGraphicsView::RubberBandDrag</enum>
+      </property>
+      <property name="transformationAnchor">
+       <enum>QGraphicsView::AnchorViewCenter</enum>
+      </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="1" column="1">
      <widget class="KPDGUIConsole" name="consoleWidget">
       <property name="minimumSize">
        <size>
@@ -562,7 +350,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>829</width>
+     <width>843</width>
      <height>21</height>
     </rect>
    </property>
@@ -586,12 +374,18 @@
     <property name="title">
      <string>Tools</string>
     </property>
+    <addaction name="actionZoom_In"/>
+    <addaction name="actionZoom_Out"/>
+    <addaction name="separator"/>
+    <addaction name="actionMouse_Tool"/>
+    <addaction name="actionHand_Tool"/>
+    <addaction name="separator"/>
     <addaction name="actionView_PairInfo"/>
     <addaction name="actionSort"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>About</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
@@ -604,12 +398,66 @@
     <addaction name="separator"/>
     <addaction name="actionClear_Solutions"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionPair_AD_Settings"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplay_Compatibilities_Within_Selection"/>
+    <addaction name="actionDisplay_Selected_Compatibilities"/>
+    <addaction name="actionDisplay_Selected_Compatible_Donors"/>
+    <addaction name="actionDisplay_Selected_Compatible_Recipients"/>
+    <addaction name="actionDisplay_All_Compatibilities"/>
+    <addaction name="actionDisplay_No_Compatibilities"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMatch_Run"/>
+   <addaction name="menuDisplay"/>
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionRun"/>
+   <addaction name="separator"/>
+   <addaction name="actionZoom_Out"/>
+   <addaction name="actionZoom_In"/>
+   <addaction name="separator"/>
+   <addaction name="actionMouse_Tool"/>
+   <addaction name="actionHand_Tool"/>
+  </widget>
   <action name="actionNew">
    <property name="icon">
     <iconset resource="mainwindow.qrc">
@@ -771,6 +619,119 @@
     <string>Clear Solutions</string>
    </property>
   </action>
+  <action name="actionZoom_Out">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/zoomout.png</normaloff>:/images/images/zoomout.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionZoom_In">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/zoomin.png</normaloff>:/images/images/zoomin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionHand_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/handtool.png</normaloff>:/images/images/handtool.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hand Tool</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionMouse_Tool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/cursor.png</normaloff>:/images/images/cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mouse Tool</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionPair_AD_Settings">
+   <property name="text">
+    <string>Pair/AD Display Settings...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionDisplay_No_Compatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display No Compatibilities</string>
+   </property>
+  </action>
+  <action name="actionDisplay_All_Compatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display All Compatibilities</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Selected_Compatible_Recipients">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Selected Compatible Recipients</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Selected_Compatible_Donors">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Selected Compatible Donors</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Selected_Compatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Selected Compatibilities</string>
+   </property>
+  </action>
+  <action name="actionDisplay_Compatibilities_Within_Selection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Compatibilities Within Selection</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -779,14 +740,13 @@
    <header>KPDGUIConsole.h</header>
    <container>1</container>
   </customwidget>
+  <customwidget>
+   <class>KPDGUIGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>kpdguigraphicsview.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>zoomOutButton</tabstop>
-  <tabstop>zoomSlider</tabstop>
-  <tabstop>zoomInButton</tabstop>
-  <tabstop>runButton</tabstop>
-  <tabstop>pairsComboBox</tabstop>
-  <tabstop>arrowsComboBox</tabstop>
   <tabstop>graphicsView</tabstop>
  </tabstops>
  <resources>
@@ -986,78 +946,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>zoomInButton</sender>
-   <signal>clicked()</signal>
+   <sender>actionPair_AD_Settings</sender>
+   <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>zoomIn()</slot>
+   <slot>changePairViewMode()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>402</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>267</x>
-     <y>68</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zoomOutButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoomOut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>279</x>
-     <y>46</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>281</x>
-     <y>192</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>zoomSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>zoom(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>376</x>
-     <y>54</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>272</x>
-     <y>260</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>arrowsComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>changeArrowViewMode(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>688</x>
-     <y>34</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>577</x>
-     <y>28</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>pairsComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>changePairViewMode(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>506</x>
-     <y>44</y>
+     <x>666</x>
+     <y>80</y>
     </hint>
     <hint type="destinationlabel">
      <x>435</x>
@@ -1066,26 +962,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>runButton</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>run()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>449</x>
-     <y>43</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>481</x>
-     <y>45</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>actionSort</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>sort()</slot>
+   <slot>sortLists()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1129,6 +1009,166 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionZoom_In</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoom_Out</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHand_Tool</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeToHandMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMouse_Tool</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeToMouseMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_All_Compatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_All()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_Compatibilities_Within_Selection</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_Within()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_No_Compatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_None()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_Selected_Compatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_SelectedComps()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_Selected_Compatible_Donors</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_Donors()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplay_Selected_Compatible_Recipients</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeArrowViewMode_Recips()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>newFile()</slot>
@@ -1148,12 +1188,19 @@
   <slot>zoomIn()</slot>
   <slot>zoomOut()</slot>
   <slot>zoom(int)</slot>
-  <slot>changeArrowViewMode(int)</slot>
-  <slot>changePairViewMode(int)</slot>
+  <slot>changeArrowViewMode_All()</slot>
+  <slot>changePairViewMode()</slot>
   <slot>newPairListSelectionActions(QTreeWidgetItem*)</slot>
   <slot>solutionTreeCustomMenu(QPoint)</slot>
   <slot>cycleTreeCustomMenu(QPoint)</slot>
-  <slot>sort()</slot>
+  <slot>sortLists()</slot>
   <slot>clearSolutions()</slot>
+  <slot>changeToHandMode()</slot>
+  <slot>changeToMouseMode()</slot>
+  <slot>changeArrowViewMode_None()</slot>
+  <slot>changeArrowViewMode_Donors()</slot>
+  <slot>changeArrowViewMode_Recips()</slot>
+  <slot>changeArrowViewMode_Within()</slot>
+  <slot>changeArrowViewMode_SelectedComps()</slot>
  </slots>
 </ui>

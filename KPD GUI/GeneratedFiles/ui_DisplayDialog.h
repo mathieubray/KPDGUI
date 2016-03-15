@@ -195,7 +195,7 @@ public:
         showStructuresRadioButton->setText(QApplication::translate("DisplayDialog", "Display Only Pairs in Structures", 0));
         showSolutionsRadioButton->setText(QApplication::translate("DisplayDialog", "Display Only Pairs in Solutions", 0));
         pairSubsetButton->setText(QApplication::translate("DisplayDialog", "Display Pair Subset...", 0));
-        displaySettingsBox->setTitle(QApplication::translate("DisplayDialog", "Display Settings", 0));
+        displaySettingsBox->setTitle(QApplication::translate("DisplayDialog", "Pair Subset Settings", 0));
         showIncompatibleCheckBox->setText(QApplication::translate("DisplayDialog", "Show Pairs with No Compatibilities", 0));
         maxPRACheckBox->setText(QApplication::translate("DisplayDialog", "Maximum PRA to Display", 0));
         minPRACheckBox->setText(QApplication::translate("DisplayDialog", "Minimum PRA to Display", 0));

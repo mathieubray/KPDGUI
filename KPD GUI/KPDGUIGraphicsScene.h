@@ -19,13 +19,21 @@ public:
 	KPDGUIGraphicsScene();
 	~KPDGUIGraphicsScene();	
 
+	//void changeMode(int i);
+
 protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+	//void wheelEvent(QGraphicsSceneWheelEvent *event);
 
 signals:
 	void deleteNode(int i);
 	void editNode(int i);
 	void screenChanged();
+	
+	//void zoomIn();
+	//void zoomOut();
+	void mouseReleased();
 
 private slots:
 	void editNode();
@@ -39,7 +47,11 @@ private slots:
 	void deleteMultipleNodes();
 
 private:
+
+	//int mode;
+
 	void createNodeActions();
+	
 
 	QAction * editNodeAction;
 	QAction * holdNodeAction;

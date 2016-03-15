@@ -4,13 +4,11 @@
 #include <QtGui>
 #include <QtWidgets>
 
-#include "DialogPair.h"
-#include "DialogAD.h"
-
 #include "Structs.h"
 
 class KPDGUIArrow;
-class MainWindow;
+class PairDialog;
+class ADDialog;
 
 class KPDGUINode : public QGraphicsObject
 {
@@ -69,10 +67,8 @@ public:
 	void setInternalID(int id);
 	void setDonor(Donor d);
 	void setCandidate(Candidate c);
-	int getType() const;
-	int getExternalID() const;
-	int getDonorID() const;
-	int getRecipID() const;
+	KPDPairType getType() const;
+	
 	QString getDonorName() const;
 	QString getRecipName() const;
 	int getDonorAge() const;
@@ -89,8 +85,7 @@ public:
 	bool getRecipPrevTrans() const;
 	double getRecipTOD() const;
 	bool getRecipHepC() const;
-	bool getRecipSensitized() const;
-	
+		
 	double getDonorBMI() const;
 	bool getDonorGenderMale() const;
 	double getDonorWeight() const;
@@ -111,8 +106,7 @@ public:
 	void setRecipPrevTrans(bool prevTrans);
 	void setRecipTOD(double tod);
 	void setRecipHepC(bool hepC);
-	void setRecipSensitized(bool sensitized);
-
+	
 	void setDonorBMI(double bmi);
 	void setDonorGenderMale(bool genderMale);
 	void setDonorWeight(double weight );
@@ -133,9 +127,7 @@ public:
 
 	QString getDonorHLAString();
 	QString getRecipHLAString();
-	bool getSensitizedBool() const;
-	QString getSensitized();
-	
+		
 	Candidate * getCandidatePtr();
 	Donor * getDonorPtr();
 
@@ -152,7 +144,6 @@ signals:
 	void nodeSelectionChanged(int i, bool selected);
 	void nodeHoldStatusChanged(int i, bool held);
 	void nodeEdited(int i);
-	//void silentNodeSelectionChanged(int i, bool selected);
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -180,7 +171,6 @@ private:
 
 	//Hold Status
 	bool holdStatus;
-	//QTreeWidgetItem * pairListItem;
 
 	//Node Properties
 	int internalID;	
@@ -191,7 +181,7 @@ private:
 
 public slots:
 	void updateVisibility(DisplaySettingsStruct * displaySettings);
-	//void setSilentSelected(bool selected);
+
 };
 
 QDataStream &operator<<(QDataStream &out, const KPDGUINode & node);

@@ -4,16 +4,15 @@ KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node){
 	myNode = node;
 	prevMode = 0;
 
-	if (node->getType() == 0){
+	if (node->getType() == PAIR){
 		setText(0, QString::number(node->getInternalID()) + ": (" + node->getDonorName() + ", " + node->getRecipName() + ")");
 	}
 	else {
 		setText(0, QString::number(node->getInternalID()) + ": (" + node->getDonorName() + ")");
 	}
 
-	connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
+	//connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
 	connect(node, SIGNAL(nodeEdited(int)), this, SLOT(editActions(int)));
-	//connect(node, SIGNAL(silentNodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
 }
 
 KPDGUINodeWrapper::~KPDGUINodeWrapper(){
@@ -25,7 +24,7 @@ KPDGUINode * KPDGUINodeWrapper::getNode(){
 }
 
 void KPDGUINodeWrapper::updateText(int mode){
-	if (myNode->getType() == 0){
+	if (myNode->getType() == PAIR){
 		//Sorted by ID
 		if (mode == 0){
 			setText(0, QString::number(myNode->getInternalID()) + ": (" + myNode->getDonorName() + ", " + myNode->getRecipName() + ")");
@@ -187,13 +186,13 @@ bool KPDGUINodeLessThan::operator()(KPDGUINodeWrapper * left, KPDGUINodeWrapper 
 	else {
 		int leftType = left->getNode()->getType();
 		int rightType = right->getNode()->getType();
-		if (leftType != 1 && rightType != 1){
+		if (leftType != AD && rightType != AD){
 			toReturn = (left->getNode()->getRecipPRA() < right->getNode()->getRecipPRA());
 		}
-		else if (leftType == 1 && rightType == 1){
+		else if (leftType == AD && rightType == AD){
 			toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
 		}
-		else if (leftType == 1){
+		else if (leftType == AD){
 			toReturn = true;
 		}
 		else {
@@ -302,13 +301,13 @@ bool KPDGUINodeGreaterThan::operator()(KPDGUINodeWrapper * left, KPDGUINodeWrapp
 	else {
 		int leftType = left->getNode()->getType();
 		int rightType = right->getNode()->getType();
-		if (leftType != 1 && rightType != 1){
+		if (leftType != AD && rightType != AD){
 			toReturn = (left->getNode()->getRecipPRA() > right->getNode()->getRecipPRA());
 		}
-		else if (leftType == 1 && rightType == 1){
+		else if (leftType == AD && rightType == AD){
 			toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
 		}
-		else if (leftType == 1){
+		else if (leftType == AD){
 			toReturn = false;
 		}
 		else {

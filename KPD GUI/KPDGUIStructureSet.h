@@ -13,18 +13,18 @@ class KPDGUIStructureSet : public QTreeWidgetItem
 
 public:
 	KPDGUIStructureSet();
-	KPDGUIStructureSet(ParamInfoStruct parameters, QString timeStamp, QString optScheme, QString includedPairList, QString simLog, bool solution, int solutionNumber = 0);
+	KPDGUIStructureSet(ParamInfoStruct parameters, QString timeStamp, QString simLog, bool solution, int solutionNumber = 0);
 	~KPDGUIStructureSet();
 
-	void construct(ParamInfoStruct parameters, QString timeStamp, QString optScheme, QString includedPairList, QString simLog, bool solution, int solutionNumber = 0);
+	void construct(ParamInfoStruct parameters, QString timeStamp, QString simLog, bool solution, int solutionNumber = 0);
 		
 	void push_back(KPDGUIStructure * structure);
 	void removeStructure(KPDGUIStructure * structure);
 
 	ParamInfoStruct getParameters() const { return myParameters;  }
+	KPDOptimizationScheme getOptScheme() const { return myParameters.optScheme; }
+
 	QString getTimeStamp() const { return myTimeStamp; }
-	QString getOptScheme() const { return myOptScheme; }
-	QString getIncludedPairList() const { return myPairList; }
 	QString getSimLog() const { return mySimLog;  }
 	int getSolutionNumber() const { return mySolutionNumber;  }
 	QList<KPDGUIStructure *> getStructures();
@@ -48,8 +48,6 @@ public:
 
 public slots:
 	void updateTree();
-//protected:
-	//void contextMenuEvent(QContextMenuEvent *event);
 
 private:
 
@@ -72,9 +70,8 @@ private:
 	QTreeWidgetItem * componentSizeFour;
 
 	QString myTimeStamp;
-	QString myOptScheme;	
-	QString myPairList;
 	QString mySimLog;
+
 	bool solutionSet;
 	int mySolutionNumber;
 };

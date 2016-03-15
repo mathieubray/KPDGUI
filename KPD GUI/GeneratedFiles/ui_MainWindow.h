@@ -13,24 +13,19 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QComboBox>
-#include <QtWidgets/QGraphicsView>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSlider>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QToolButton>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "KPDGUIConsole.h"
+#include "kpdguigraphicsview.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -57,33 +52,38 @@ public:
     QAction *actionShow_All_Compatibilities;
     QAction *actionSort;
     QAction *actionClear_Solutions;
+    QAction *actionZoom_Out;
+    QAction *actionZoom_In;
+    QAction *actionHand_Tool;
+    QAction *actionMouse_Tool;
+    QAction *actionPair_AD_Settings;
+    QAction *actionDisplay_No_Compatibilities;
+    QAction *actionDisplay_All_Compatibilities;
+    QAction *actionDisplay_Selected_Compatible_Recipients;
+    QAction *actionDisplay_Selected_Compatible_Donors;
+    QAction *actionDisplay_Selected_Compatibilities;
+    QAction *actionDisplay_Compatibilities_Within_Selection;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
     QTabWidget *tabWidget;
-    QHBoxLayout *horizontalLayout;
-    QToolButton *zoomOutButton;
-    QSlider *zoomSlider;
-    QToolButton *zoomInButton;
-    QPushButton *runButton;
-    QSpacerItem *horizontalSpacer;
-    QComboBox *pairsComboBox;
-    QComboBox *arrowsComboBox;
-    QGraphicsView *graphicsView;
+    KPDGUIGraphicsView *graphicsView;
     KPDGUIConsole *consoleWidget;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuTools;
     QMenu *menuHelp;
     QMenu *menuMatch_Run;
+    QMenu *menuDisplay;
     QStatusBar *statusBar;
+    QToolBar *toolBar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(829, 560);
+        MainWindow->resize(843, 560);
         MainWindow->setMinimumSize(QSize(829, 560));
         MainWindow->setMaximumSize(QSize(16777215, 16777215));
         QIcon icon;
@@ -147,6 +147,49 @@ public:
         actionSort->setObjectName(QStringLiteral("actionSort"));
         actionClear_Solutions = new QAction(MainWindow);
         actionClear_Solutions->setObjectName(QStringLiteral("actionClear_Solutions"));
+        actionZoom_Out = new QAction(MainWindow);
+        actionZoom_Out->setObjectName(QStringLiteral("actionZoom_Out"));
+        QIcon icon5;
+        icon5.addFile(QStringLiteral(":/images/images/zoomout.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionZoom_Out->setIcon(icon5);
+        actionZoom_In = new QAction(MainWindow);
+        actionZoom_In->setObjectName(QStringLiteral("actionZoom_In"));
+        QIcon icon6;
+        icon6.addFile(QStringLiteral(":/images/images/zoomin.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionZoom_In->setIcon(icon6);
+        actionHand_Tool = new QAction(MainWindow);
+        actionHand_Tool->setObjectName(QStringLiteral("actionHand_Tool"));
+        actionHand_Tool->setCheckable(true);
+        QIcon icon7;
+        icon7.addFile(QStringLiteral(":/images/images/handtool.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionHand_Tool->setIcon(icon7);
+        actionMouse_Tool = new QAction(MainWindow);
+        actionMouse_Tool->setObjectName(QStringLiteral("actionMouse_Tool"));
+        actionMouse_Tool->setCheckable(true);
+        QIcon icon8;
+        icon8.addFile(QStringLiteral(":/images/images/cursor.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionMouse_Tool->setIcon(icon8);
+        actionPair_AD_Settings = new QAction(MainWindow);
+        actionPair_AD_Settings->setObjectName(QStringLiteral("actionPair_AD_Settings"));
+        actionDisplay_No_Compatibilities = new QAction(MainWindow);
+        actionDisplay_No_Compatibilities->setObjectName(QStringLiteral("actionDisplay_No_Compatibilities"));
+        actionDisplay_No_Compatibilities->setCheckable(true);
+        actionDisplay_All_Compatibilities = new QAction(MainWindow);
+        actionDisplay_All_Compatibilities->setObjectName(QStringLiteral("actionDisplay_All_Compatibilities"));
+        actionDisplay_All_Compatibilities->setCheckable(true);
+        actionDisplay_Selected_Compatible_Recipients = new QAction(MainWindow);
+        actionDisplay_Selected_Compatible_Recipients->setObjectName(QStringLiteral("actionDisplay_Selected_Compatible_Recipients"));
+        actionDisplay_Selected_Compatible_Recipients->setCheckable(true);
+        actionDisplay_Selected_Compatible_Donors = new QAction(MainWindow);
+        actionDisplay_Selected_Compatible_Donors->setObjectName(QStringLiteral("actionDisplay_Selected_Compatible_Donors"));
+        actionDisplay_Selected_Compatible_Donors->setCheckable(true);
+        actionDisplay_Selected_Compatibilities = new QAction(MainWindow);
+        actionDisplay_Selected_Compatibilities->setObjectName(QStringLiteral("actionDisplay_Selected_Compatibilities"));
+        actionDisplay_Selected_Compatibilities->setCheckable(true);
+        actionDisplay_Compatibilities_Within_Selection = new QAction(MainWindow);
+        actionDisplay_Compatibilities_Within_Selection->setObjectName(QStringLiteral("actionDisplay_Compatibilities_Within_Selection"));
+        actionDisplay_Compatibilities_Within_Selection->setCheckable(true);
+        actionDisplay_Compatibilities_Within_Selection->setChecked(true);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -158,8 +201,8 @@ public:
             tableWidget->setColumnCount(1);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        if (tableWidget->rowCount() < 9)
-            tableWidget->setRowCount(9);
+        if (tableWidget->rowCount() < 8)
+            tableWidget->setRowCount(8);
         QFont font;
         font.setFamily(QStringLiteral("Arial"));
         font.setPointSize(8);
@@ -189,46 +232,41 @@ public:
         tableWidget->setVerticalHeaderItem(7, __qtablewidgetitem8);
         QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
         __qtablewidgetitem9->setFont(font);
-        tableWidget->setVerticalHeaderItem(8, __qtablewidgetitem9);
+        tableWidget->setItem(0, 0, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         __qtablewidgetitem10->setFont(font);
-        tableWidget->setItem(0, 0, __qtablewidgetitem10);
+        tableWidget->setItem(1, 0, __qtablewidgetitem10);
         QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
         __qtablewidgetitem11->setFont(font);
-        tableWidget->setItem(1, 0, __qtablewidgetitem11);
+        tableWidget->setItem(2, 0, __qtablewidgetitem11);
         QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
         __qtablewidgetitem12->setFont(font);
-        tableWidget->setItem(2, 0, __qtablewidgetitem12);
+        tableWidget->setItem(3, 0, __qtablewidgetitem12);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
         __qtablewidgetitem13->setFont(font);
-        tableWidget->setItem(3, 0, __qtablewidgetitem13);
+        tableWidget->setItem(4, 0, __qtablewidgetitem13);
         QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
         __qtablewidgetitem14->setFont(font);
-        tableWidget->setItem(4, 0, __qtablewidgetitem14);
+        tableWidget->setItem(5, 0, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
         __qtablewidgetitem15->setFont(font);
-        tableWidget->setItem(5, 0, __qtablewidgetitem15);
+        tableWidget->setItem(6, 0, __qtablewidgetitem15);
         QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
         __qtablewidgetitem16->setFont(font);
-        tableWidget->setItem(6, 0, __qtablewidgetitem16);
-        QTableWidgetItem *__qtablewidgetitem17 = new QTableWidgetItem();
-        __qtablewidgetitem17->setFont(font);
-        tableWidget->setItem(7, 0, __qtablewidgetitem17);
-        QTableWidgetItem *__qtablewidgetitem18 = new QTableWidgetItem();
-        __qtablewidgetitem18->setFont(font);
-        tableWidget->setItem(8, 0, __qtablewidgetitem18);
+        tableWidget->setItem(7, 0, __qtablewidgetitem16);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setMinimumSize(QSize(250, 199));
-        tableWidget->setMaximumSize(QSize(250, 199));
-        tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        tableWidget->setMinimumSize(QSize(250, 161));
+        tableWidget->setMaximumSize(QSize(250, 161));
+        tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
         tableWidget->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
         tableWidget->setShowGrid(false);
         tableWidget->setCornerButtonEnabled(true);
         tableWidget->horizontalHeader()->setVisible(false);
-        tableWidget->horizontalHeader()->setDefaultSectionSize(130);
+        tableWidget->horizontalHeader()->setDefaultSectionSize(150);
         tableWidget->horizontalHeader()->setMinimumSectionSize(27);
         tableWidget->verticalHeader()->setDefaultSectionSize(20);
         tableWidget->verticalHeader()->setHighlightSections(false);
@@ -246,70 +284,15 @@ public:
         verticalLayout->addWidget(tabWidget);
 
 
-        gridLayout->addLayout(verticalLayout, 0, 0, 3, 1);
+        gridLayout->addLayout(verticalLayout, 0, 0, 2, 1);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        zoomOutButton = new QToolButton(centralwidget);
-        zoomOutButton->setObjectName(QStringLiteral("zoomOutButton"));
-        zoomOutButton->setMinimumSize(QSize(21, 19));
-        zoomOutButton->setMaximumSize(QSize(21, 19));
-
-        horizontalLayout->addWidget(zoomOutButton);
-
-        zoomSlider = new QSlider(centralwidget);
-        zoomSlider->setObjectName(QStringLiteral("zoomSlider"));
-        zoomSlider->setMinimumSize(QSize(84, 24));
-        zoomSlider->setMaximumSize(QSize(84, 24));
-        zoomSlider->setMinimum(-2);
-        zoomSlider->setMaximum(4);
-        zoomSlider->setValue(0);
-        zoomSlider->setOrientation(Qt::Horizontal);
-        zoomSlider->setTickPosition(QSlider::TicksBelow);
-
-        horizontalLayout->addWidget(zoomSlider);
-
-        zoomInButton = new QToolButton(centralwidget);
-        zoomInButton->setObjectName(QStringLiteral("zoomInButton"));
-        zoomInButton->setMinimumSize(QSize(21, 19));
-        zoomInButton->setMaximumSize(QSize(21, 19));
-
-        horizontalLayout->addWidget(zoomInButton);
-
-        runButton = new QPushButton(centralwidget);
-        runButton->setObjectName(QStringLiteral("runButton"));
-        runButton->setMinimumSize(QSize(51, 24));
-        runButton->setMaximumSize(QSize(51, 24));
-        runButton->setIcon(icon3);
-
-        horizontalLayout->addWidget(runButton);
-
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout->addItem(horizontalSpacer);
-
-        pairsComboBox = new QComboBox(centralwidget);
-        pairsComboBox->setObjectName(QStringLiteral("pairsComboBox"));
-        pairsComboBox->setMinimumSize(QSize(170, 20));
-        pairsComboBox->setMaximumSize(QSize(170, 20));
-
-        horizontalLayout->addWidget(pairsComboBox);
-
-        arrowsComboBox = new QComboBox(centralwidget);
-        arrowsComboBox->setObjectName(QStringLiteral("arrowsComboBox"));
-        arrowsComboBox->setMinimumSize(QSize(160, 20));
-        arrowsComboBox->setMaximumSize(QSize(160, 20));
-
-        horizontalLayout->addWidget(arrowsComboBox);
-
-
-        gridLayout->addLayout(horizontalLayout, 0, 1, 1, 1);
-
-        graphicsView = new QGraphicsView(centralwidget);
+        graphicsView = new KPDGUIGraphicsView(centralwidget);
         graphicsView->setObjectName(QStringLiteral("graphicsView"));
         graphicsView->setMinimumSize(QSize(480, 300));
+        graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+        graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
 
-        gridLayout->addWidget(graphicsView, 1, 1, 1, 1);
+        gridLayout->addWidget(graphicsView, 0, 1, 1, 1);
 
         consoleWidget = new KPDGUIConsole(centralwidget);
         consoleWidget->setObjectName(QStringLiteral("consoleWidget"));
@@ -319,12 +302,12 @@ public:
         consoleWidget->setTabShape(QTabWidget::Rounded);
         consoleWidget->setElideMode(Qt::ElideNone);
 
-        gridLayout->addWidget(consoleWidget, 2, 1, 1, 1);
+        gridLayout->addWidget(consoleWidget, 1, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 829, 21));
+        menubar->setGeometry(QRect(0, 0, 843, 21));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTools = new QMenu(menubar);
@@ -333,19 +316,23 @@ public:
         menuHelp->setObjectName(QStringLiteral("menuHelp"));
         menuMatch_Run = new QMenu(menubar);
         menuMatch_Run->setObjectName(QStringLiteral("menuMatch_Run"));
+        menuDisplay = new QMenu(menubar);
+        menuDisplay->setObjectName(QStringLiteral("menuDisplay"));
         MainWindow->setMenuBar(menubar);
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
-        QWidget::setTabOrder(zoomOutButton, zoomSlider);
-        QWidget::setTabOrder(zoomSlider, zoomInButton);
-        QWidget::setTabOrder(zoomInButton, runButton);
-        QWidget::setTabOrder(runButton, pairsComboBox);
-        QWidget::setTabOrder(pairsComboBox, arrowsComboBox);
-        QWidget::setTabOrder(arrowsComboBox, graphicsView);
+        toolBar = new QToolBar(MainWindow);
+        toolBar->setObjectName(QStringLiteral("toolBar"));
+        toolBar->setMinimumSize(QSize(0, 30));
+        toolBar->setMaximumSize(QSize(16777215, 30));
+        toolBar->setMovable(false);
+        toolBar->setFloatable(false);
+        MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
         menubar->addAction(menuFile->menuAction());
         menubar->addAction(menuMatch_Run->menuAction());
+        menubar->addAction(menuDisplay->menuAction());
         menubar->addAction(menuTools->menuAction());
         menubar->addAction(menuHelp->menuAction());
         menuFile->addAction(actionNew);
@@ -359,6 +346,12 @@ public:
         menuFile->addAction(actionLoad_Pairs_from_File);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
+        menuTools->addAction(actionZoom_In);
+        menuTools->addAction(actionZoom_Out);
+        menuTools->addSeparator();
+        menuTools->addAction(actionMouse_Tool);
+        menuTools->addAction(actionHand_Tool);
+        menuTools->addSeparator();
         menuTools->addAction(actionView_PairInfo);
         menuTools->addAction(actionSort);
         menuHelp->addAction(actionAbout);
@@ -366,6 +359,25 @@ public:
         menuMatch_Run->addAction(actionParameters);
         menuMatch_Run->addSeparator();
         menuMatch_Run->addAction(actionClear_Solutions);
+        menuDisplay->addAction(actionPair_AD_Settings);
+        menuDisplay->addSeparator();
+        menuDisplay->addAction(actionDisplay_Compatibilities_Within_Selection);
+        menuDisplay->addAction(actionDisplay_Selected_Compatibilities);
+        menuDisplay->addAction(actionDisplay_Selected_Compatible_Donors);
+        menuDisplay->addAction(actionDisplay_Selected_Compatible_Recipients);
+        menuDisplay->addAction(actionDisplay_All_Compatibilities);
+        menuDisplay->addAction(actionDisplay_No_Compatibilities);
+        toolBar->addAction(actionNew);
+        toolBar->addAction(actionOpen);
+        toolBar->addAction(actionSave);
+        toolBar->addSeparator();
+        toolBar->addAction(actionRun);
+        toolBar->addSeparator();
+        toolBar->addAction(actionZoom_Out);
+        toolBar->addAction(actionZoom_In);
+        toolBar->addSeparator();
+        toolBar->addAction(actionMouse_Tool);
+        toolBar->addAction(actionHand_Tool);
 
         retranslateUi(MainWindow);
         QObject::connect(actionNew, SIGNAL(triggered()), MainWindow, SLOT(newFile()));
@@ -380,18 +392,22 @@ public:
         QObject::connect(actionLoad_Pairs_from_File, SIGNAL(triggered()), MainWindow, SLOT(loadPairs()));
         QObject::connect(actionAdd_AD, SIGNAL(triggered()), MainWindow, SLOT(addNewAD()));
         QObject::connect(actionRun, SIGNAL(triggered()), MainWindow, SLOT(run()));
-        QObject::connect(zoomInButton, SIGNAL(clicked()), MainWindow, SLOT(zoomIn()));
-        QObject::connect(zoomOutButton, SIGNAL(clicked()), MainWindow, SLOT(zoomOut()));
-        QObject::connect(zoomSlider, SIGNAL(valueChanged(int)), MainWindow, SLOT(zoom(int)));
-        QObject::connect(arrowsComboBox, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(changeArrowViewMode(int)));
-        QObject::connect(pairsComboBox, SIGNAL(currentIndexChanged(int)), MainWindow, SLOT(changePairViewMode(int)));
-        QObject::connect(runButton, SIGNAL(clicked()), MainWindow, SLOT(run()));
-        QObject::connect(actionSort, SIGNAL(triggered()), MainWindow, SLOT(sort()));
+        QObject::connect(actionPair_AD_Settings, SIGNAL(triggered()), MainWindow, SLOT(changePairViewMode()));
+        QObject::connect(actionSort, SIGNAL(triggered()), MainWindow, SLOT(sortLists()));
         QObject::connect(actionClear_Solutions, SIGNAL(triggered()), MainWindow, SLOT(clearSolutions()));
         QObject::connect(actionView_PairInfo, SIGNAL(toggled(bool)), tableWidget, SLOT(setVisible(bool)));
+        QObject::connect(actionZoom_In, SIGNAL(triggered()), MainWindow, SLOT(zoomIn()));
+        QObject::connect(actionZoom_Out, SIGNAL(triggered()), MainWindow, SLOT(zoomOut()));
+        QObject::connect(actionHand_Tool, SIGNAL(triggered()), MainWindow, SLOT(changeToHandMode()));
+        QObject::connect(actionMouse_Tool, SIGNAL(triggered()), MainWindow, SLOT(changeToMouseMode()));
+        QObject::connect(actionDisplay_All_Compatibilities, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_All()));
+        QObject::connect(actionDisplay_Compatibilities_Within_Selection, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_Within()));
+        QObject::connect(actionDisplay_No_Compatibilities, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_None()));
+        QObject::connect(actionDisplay_Selected_Compatibilities, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_SelectedComps()));
+        QObject::connect(actionDisplay_Selected_Compatible_Donors, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_Donors()));
+        QObject::connect(actionDisplay_Selected_Compatible_Recipients, SIGNAL(triggered()), MainWindow, SLOT(changeArrowViewMode_Recips()));
 
         tabWidget->setCurrentIndex(-1);
-        arrowsComboBox->setCurrentIndex(0);
         consoleWidget->setCurrentIndex(-1);
 
 
@@ -430,6 +446,22 @@ public:
         actionShow_All_Compatibilities->setText(QApplication::translate("MainWindow", "Show All Compatibilities", 0));
         actionSort->setText(QApplication::translate("MainWindow", "Sort...", 0));
         actionClear_Solutions->setText(QApplication::translate("MainWindow", "Clear Solutions", 0));
+        actionZoom_Out->setText(QApplication::translate("MainWindow", "Zoom Out", 0));
+        actionZoom_Out->setShortcut(QApplication::translate("MainWindow", "Ctrl+-", 0));
+        actionZoom_In->setText(QApplication::translate("MainWindow", "Zoom In", 0));
+        actionZoom_In->setShortcut(QApplication::translate("MainWindow", "Ctrl+=", 0));
+        actionHand_Tool->setText(QApplication::translate("MainWindow", "Hand Tool", 0));
+        actionHand_Tool->setShortcut(QApplication::translate("MainWindow", "Ctrl+H", 0));
+        actionMouse_Tool->setText(QApplication::translate("MainWindow", "Mouse Tool", 0));
+        actionMouse_Tool->setShortcut(QApplication::translate("MainWindow", "Ctrl+M", 0));
+        actionPair_AD_Settings->setText(QApplication::translate("MainWindow", "Pair/AD Display Settings...", 0));
+        actionPair_AD_Settings->setShortcut(QApplication::translate("MainWindow", "Ctrl+D", 0));
+        actionDisplay_No_Compatibilities->setText(QApplication::translate("MainWindow", "Display No Compatibilities", 0));
+        actionDisplay_All_Compatibilities->setText(QApplication::translate("MainWindow", "Display All Compatibilities", 0));
+        actionDisplay_Selected_Compatible_Recipients->setText(QApplication::translate("MainWindow", "Display Selected Compatible Recipients", 0));
+        actionDisplay_Selected_Compatible_Donors->setText(QApplication::translate("MainWindow", "Display Selected Compatible Donors", 0));
+        actionDisplay_Selected_Compatibilities->setText(QApplication::translate("MainWindow", "Display Selected Compatibilities", 0));
+        actionDisplay_Compatibilities_Within_Selection->setText(QApplication::translate("MainWindow", "Display Compatibilities Within Selection", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("MainWindow", "Item", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->verticalHeaderItem(0);
@@ -448,37 +480,17 @@ public:
         ___qtablewidgetitem7->setText(QApplication::translate("MainWindow", "Candidate BT", 0));
         QTableWidgetItem *___qtablewidgetitem8 = tableWidget->verticalHeaderItem(7);
         ___qtablewidgetitem8->setText(QApplication::translate("MainWindow", "Candidate PRA", 0));
-        QTableWidgetItem *___qtablewidgetitem9 = tableWidget->verticalHeaderItem(8);
-        ___qtablewidgetitem9->setText(QApplication::translate("MainWindow", "Excluded Donors", 0));
 
         const bool __sortingEnabled = tableWidget->isSortingEnabled();
         tableWidget->setSortingEnabled(false);
         tableWidget->setSortingEnabled(__sortingEnabled);
 
-        zoomOutButton->setText(QApplication::translate("MainWindow", "-", 0));
-        zoomInButton->setText(QApplication::translate("MainWindow", "+", 0));
-        runButton->setText(QApplication::translate("MainWindow", "Run", 0));
-        pairsComboBox->clear();
-        pairsComboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "All Pairs", 0)
-         << QApplication::translate("MainWindow", "All Pairs w/ Compatibilities", 0)
-         << QApplication::translate("MainWindow", "Available Pairs", 0)
-         << QApplication::translate("MainWindow", "Available Pairs w/ Compatibilities", 0)
-         << QApplication::translate("MainWindow", "Custom...", 0)
-        );
-        arrowsComboBox->clear();
-        arrowsComboBox->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow", "Within Selection", 0)
-         << QApplication::translate("MainWindow", "Selected Compatibilities", 0)
-         << QApplication::translate("MainWindow", "Selected Compatible Donors", 0)
-         << QApplication::translate("MainWindow", "Selected Compatible Recipients", 0)
-         << QApplication::translate("MainWindow", "All Compatibilities", 0)
-         << QApplication::translate("MainWindow", "No Compatibilities", 0)
-        );
         menuFile->setTitle(QApplication::translate("MainWindow", "&File", 0));
         menuTools->setTitle(QApplication::translate("MainWindow", "Tools", 0));
-        menuHelp->setTitle(QApplication::translate("MainWindow", "Help", 0));
+        menuHelp->setTitle(QApplication::translate("MainWindow", "About", 0));
         menuMatch_Run->setTitle(QApplication::translate("MainWindow", "Match Run", 0));
+        menuDisplay->setTitle(QApplication::translate("MainWindow", "Display", 0));
+        toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0));
     } // retranslateUi
 
 };

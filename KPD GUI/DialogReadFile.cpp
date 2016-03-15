@@ -13,19 +13,18 @@ ReadFileDialog::ReadFileDialog(QWidget *parent) : QDialog(parent)
 void ReadFileDialog::browse(){
 	QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)");
 	pairFileLineEdit->setText(fileName);
-	this->buttonBox->buttons().first()->setEnabled(true);
+
+	//this->buttonBox->buttons().first()->setEnabled(true);
 }
 
-//Changes selection status once a file and data layout are chosen
-/*void ReadFileDialog::changeSelectionStatus(int index){
-	if (index == 0){
-		//Disables OK button if no data layout is chosen
-		this->buttonBox->buttons().first()->setDisabled(true);
+void ReadFileDialog::checkValidFile(QString file){
+	if (file.endsWith(".csv")){
+		this->buttonBox->buttons().first()->setEnabled(true);
 	}
 	else {
-		//Enables OK button if a data layout is chosen
-		this->buttonBox->buttons().first()->setDisabled(false);
+		this->buttonBox->buttons().first()->setEnabled(false);
 	}
-}*/
+
+}
 
 

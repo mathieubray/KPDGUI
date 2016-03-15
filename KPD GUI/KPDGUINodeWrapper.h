@@ -20,7 +20,6 @@ public:
 public slots:
 	void selectionActions(int,bool);
 	void editActions(int);
-	//void silentSelectionActions(int, bool);
 
 private:
 	KPDGUINode * myNode;

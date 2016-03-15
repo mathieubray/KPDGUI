@@ -71,8 +71,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>90</y>
+     <x>250</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -87,8 +87,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>241</x>
-     <y>90</y>
+     <x>250</x>
+     <y>65</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -112,9 +112,26 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pairFileLineEdit</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>ReadFileDialog</receiver>
+   <slot>checkValidFile(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>130</x>
+     <y>18</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>browse()</slot>
   <slot>changeSelectionStatus(int)</slot>
+  <slot>checkValidFile(QString)</slot>
  </slots>
 </ui>

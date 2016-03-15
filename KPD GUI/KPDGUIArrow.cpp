@@ -53,9 +53,6 @@ KPDGUIArrow::KPDGUIArrow(KPDGUINode *startItem, KPDGUINode *endItem)
 	connect(myStartItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	connect(myEndItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	
-	//arrowListItem = new QTreeWidgetItem();
-	//arrowListItem->setText(0, QString::number(myStartItem->getInternalID()) + " -> " + QString::number(myEndItem->getInternalID()) + " (" + QString::number(myPopularitySolutions) + ")");
-
 	//Arrow Defaults
 	setZValue(-1);
 	myColor = Qt::black;
@@ -97,14 +94,6 @@ void KPDGUIArrow::updatePosition()
     QLineF line(mapFromItem(myStartItem, 0, 0), mapFromItem(myEndItem, 0, 0));
     setLine(line);
 }
-
-/*QTreeWidgetItem * KPDGUIArrow::getListItem(){
-	return arrowListItem;
-}
-
-QTreeWidgetItem * KPDGUIArrow::getListItemCopy(){
-	return arrowListItem->clone();
-}*/
 
 void KPDGUIArrow::clearHighlight(){
 	if (!displayAsPartOfSolution){
@@ -211,9 +200,7 @@ void KPDGUIArrow::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 
 bool KPDGUIArrow::checkVisibility(DisplaySettingsStruct * displaySettings){
 	
-	//qDebug() << "AA";
 	if (displaySettings->showPairSubset){
-		//qDebug() << "BB";
 		if (!displaySettings->showPairsOnHold && (myStartItem->isOnHold() || myEndItem->isOnHold())){
 			return false;
 		}
@@ -226,19 +213,16 @@ bool KPDGUIArrow::checkVisibility(DisplaySettingsStruct * displaySettings){
 	}
 	
 	else if (displaySettings->showPairsInSolutions){
-		//qDebug() << "CC";
 		if (myEndItem->getPopularityInSolutions() == 0 || myStartItem->getPopularityInSolutions() == 0){
 			return false;
 		}
 	}
 
 	else if (displaySettings->showPairsInStructures){
-		//qDebug() << "DD";
 		if (myEndItem->getPopularityInStructures() == 0 || myStartItem->getPopularityInSolutions() == 0){
 			return false;
 		}
 	}
-	//qDebug() << "EE";
 
 	return true;
 }
@@ -251,26 +235,19 @@ void KPDGUIArrow::changeArrowSelection(int id, bool selected){
 
 void KPDGUIArrow::updateVisibility(DisplaySettingsStruct * displaySettings){
 
-	//qDebug() << "A";
 	if (!displayAsPartOfSolution){
-		//qDebug() << "B";
 		setVisible(false);
 		clearHighlight();
 
-		////qDebug() << myStartItem->getInternalID() << " " << myStartItem->isSelected() << " " << myEndItem->getInternalID() << " " << myEndItem->isSelected();
-
 		if (myStartItem->isSelected() && myEndItem->isSelected()){
 			highlightConnection();
-			//qDebug() << "C";
 		}
 
-		if (displaySettings->arrowDisplayMode == 4){
-			//qDebug() << "D";
+		if (displaySettings->arrowDisplayMode == ALL_COMPATIBILITIES){
 			setVisible(checkVisibility(displaySettings));
+			qDebug() << "Visibility updated :" << myStartItem->getInternalID() << "->" << myEndItem->getInternalID();
 		}
-		else if (displaySettings->arrowDisplayMode == 1){
-			//qDebug() << "E";
-			//Display all in and out arrows if selected
+		else if (displaySettings->arrowDisplayMode == SELECTED_COMPATIBILITIES){
 			if (myStartItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
@@ -278,34 +255,25 @@ void KPDGUIArrow::updateVisibility(DisplaySettingsStruct * displaySettings){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 2){
-			//qDebug() << "F";
-			//Display all in arrows if selected
+		else if (displaySettings->arrowDisplayMode == COMPATIBLE_DONORS){
 			if (myEndItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 3){
-			//qDebug() << "G";
-			//Display all out arrows if selected
+		else if (displaySettings->arrowDisplayMode == COMPATIBLE_RECIPIENTS){
 			if (myStartItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->arrowDisplayMode == 0){
-			//qDebug() << "H";
-			//Display only arrows between selected nodes
+		else if (displaySettings->arrowDisplayMode == WITHIN_SELECTION){
 			if (myStartItem->isSelected() && myEndItem->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-	}
-
-	//qDebug() << myStartItem->getInternalID() << myEndItem->getInternalID() << isVisible();
+	}	
 }
 
 void KPDGUIArrow::endDisplayAsPartOfSolution(){
-	////qDebug() << displayAsPartOfSolution;
 	displayAsPartOfSolution = false;
 }
 

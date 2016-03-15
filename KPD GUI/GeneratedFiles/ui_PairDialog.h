@@ -68,7 +68,6 @@ public:
     QVBoxLayout *recipVerticalLayout;
     QCheckBox *recipHepCCheckBox;
     QCheckBox *recipDiabetesCheckBox;
-    QCheckBox *recipSensitizedCheckBox;
     QCheckBox *recipPrevTransCheckBox;
     QWidget *hlaInfoTab;
     QGroupBox *donorHLADRLayout;
@@ -293,12 +292,6 @@ public:
         recipDiabetesCheckBox->setLayoutDirection(Qt::LeftToRight);
 
         recipVerticalLayout->addWidget(recipDiabetesCheckBox);
-
-        recipSensitizedCheckBox = new QCheckBox(layoutWidget1);
-        recipSensitizedCheckBox->setObjectName(QStringLiteral("recipSensitizedCheckBox"));
-        recipSensitizedCheckBox->setLayoutDirection(Qt::LeftToRight);
-
-        recipVerticalLayout->addWidget(recipSensitizedCheckBox);
 
         recipPrevTransCheckBox = new QCheckBox(layoutWidget1);
         recipPrevTransCheckBox->setObjectName(QStringLiteral("recipPrevTransCheckBox"));
@@ -652,8 +645,7 @@ public:
         QWidget::setTabOrder(recipWeightSpinBox, recipHeightSpinBox);
         QWidget::setTabOrder(recipHeightSpinBox, recipHepCCheckBox);
         QWidget::setTabOrder(recipHepCCheckBox, recipDiabetesCheckBox);
-        QWidget::setTabOrder(recipDiabetesCheckBox, recipSensitizedCheckBox);
-        QWidget::setTabOrder(recipSensitizedCheckBox, recipPrevTransCheckBox);
+        QWidget::setTabOrder(recipDiabetesCheckBox, recipPrevTransCheckBox);
         QWidget::setTabOrder(recipPrevTransCheckBox, recipHLALineEdit);
         QWidget::setTabOrder(recipHLALineEdit, donorA1LineEdit);
         QWidget::setTabOrder(donorA1LineEdit, donorA2LineEdit);
@@ -717,7 +709,6 @@ public:
         recipTODLabel->setText(QApplication::translate("PairDialog", "Months On Dialysis", 0));
         recipHepCCheckBox->setText(QApplication::translate("PairDialog", "Hepatitis C", 0));
         recipDiabetesCheckBox->setText(QApplication::translate("PairDialog", "Diabetes", 0));
-        recipSensitizedCheckBox->setText(QApplication::translate("PairDialog", "Can Be Desensitized", 0));
         recipPrevTransCheckBox->setText(QApplication::translate("PairDialog", "Previous Transplant ", 0));
         morePairInfo->setTabText(morePairInfo->indexOf(recipCharacteristicsTab), QApplication::translate("PairDialog", "Recipient Characteristics", 0));
         donorHLADRLayout->setTitle(QApplication::translate("PairDialog", "Donor HLA DR", 0));

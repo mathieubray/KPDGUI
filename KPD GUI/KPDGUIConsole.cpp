@@ -51,7 +51,6 @@ void KPDGUIConsole::deletePairInfo(int id){
 	
 	int index = ids.indexOf(id);
 	pairInfo->removeWidget(index);
-	////qDebug() << id << "," << index;
 	ids.remove(index);
 }
 
@@ -193,9 +192,6 @@ void KPDGUIConsole::focusOnSolutionScreen(){
 
 void KPDGUIConsole::removeAllPairInfo(){
 	pairInfo->clearPairs();
-
-	//qDebug() << "A";
-	//qDebug() << ids.size();
 
 	ids.clear();
 }

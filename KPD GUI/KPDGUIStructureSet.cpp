@@ -3,46 +3,66 @@
 const qreal Pi = 3.14159265;
 
 KPDGUIStructureSet::KPDGUIStructureSet(){
-	myParameters.maxChainLength = 0;
-	myParameters.utilScheme = "NULL";
-	myParameters.optScheme = "NULL";
-	myParameters.praAdvantage = false;
-	myParameters.reserveOtoO = false;
+	myParameters.optScheme = KPDOptimizationScheme::MUC;
+	myParameters.utilityScheme = KPDUtilityScheme::TRANSPLANTS;
+	myParameters.maxChainLength = 2;
+	
+	myParameters.pairFailureRate = 0;
+	myParameters.adFailureRate = 0;
+	myParameters.exogenousFailureRate = 0;
+
+	myParameters.addAdvantageToHighPRACandidates = false;
+	myParameters.praAdvantageCutoff = 100;
+	myParameters.praAdvantageValue = 0;
+
+	myParameters.numberOfSolutions = 1;
+	
+	myParameters.chainStorage = "NONE";
+	myParameters.reserveODonorsForOCandidates = false;
 	myParameters.checkDP = false;
 	myParameters.includeCompatiblePairs = false;
-	myParameters.includeABBridgeDonors = false;
-	myParameters.numberOfSolutions = 0;
+	myParameters.excludeABDonorsFromSimulation = false;
+	myParameters.allowABBridgeDonors = false;
 
 	myTimeStamp = "";
-	myOptScheme = "";
-	myPairList = "";
 	mySimLog = "";
+	
 	solutionSet = true;
 	mySolutionNumber = -1;
+	
 }
 
-KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString timestamp, QString optScheme, QString includedPairList, QString simLog, bool solution, int solutionNumber){
+KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString timestamp, QString simLog, bool solution, int solutionNumber){
+	/*myParameters.optScheme = parameters.optScheme;
+	myParameters.utilityScheme = parameters.utilityScheme;
+	myParameters.maxChainLength = parameters.maxChainLength;
+
+	myParameters.pairFailureRate = parameters.pairFailureRate;
+	myParameters.adFailureRate = parameters.adFailureRate;
+	myParameters.exogenousFailureRate = parameters.exogenousFailureRate;
+
+	myParameters.addAdvantageToHighPRACandidates = parameters.addAdvantageToHighPRACandidates;
+	myParameters.praAdvantageCutoff = parameters.praAdvantageCutoff;
+	myParameters.praAdvantageValue = parameters.praAdvantageValue;
+
+	myParameters.numberOfSolutions = parameters.numberOfSolutions;
+
+	myParameters.chainStorage = parameters.chainStorage;
+	myParameters.reserveODonorsForOCandidates = parameters.reserveODonorsForOCandidates;
+	myParameters.checkDP = parameters.checkDP;
+	myParameters.includeCompatiblePairs = parameters.includeCompatiblePairs;
+	myParameters.excludeABDonorsFromSimulation = parameters.excludeABDonorsFromSimulation;
+	myParameters.allowABBridgeDonors = parameters.allowABBridgeDonors;
+
 	myTimeStamp = timestamp;
-	myOptScheme = optScheme;
-	myParameters = parameters;
-	myPairList = includedPairList;
 	mySimLog = simLog;
+
 	solutionSet = solution;
 	mySolutionNumber = solutionNumber;
 
-	QString textOptScheme = "";
-	if (myOptScheme == "MUC"){
-		textOptScheme = "Utility";
-	}
-	else if (myOptScheme == "MEUC"){
-		textOptScheme = "Expected Utility";
-	}
-	else if (myOptScheme == "MEUS"){
-		textOptScheme = "Fallbacks";
-	}
-	else if (myOptScheme == "SCC"){
-		textOptScheme = "Extended Fallbacks";
-	}
+	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
+
+	QString textOptScheme = KPDFunctions::toString(myOptScheme);
 
 	if (solutionSet){
 		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
@@ -53,7 +73,7 @@ KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString times
 	
 	setUpWidgets();
 
-	if (myOptScheme != "SCC"){
+	if (myOptScheme != KPDOptimizationScheme::SCC){
 		addChild(cycleSizeTwo);
 		addChild(cycleSizeThree);
 
@@ -79,7 +99,9 @@ KPDGUIStructureSet::KPDGUIStructureSet(ParamInfoStruct parameters, QString times
 		if (parameters.maxChainLength >= 3){
 			addChild(componentSizeFour);
 		}
-	}
+	}*/
+
+	construct(parameters, timestamp, simLog, solution, solutionNumber);
 }
 
 KPDGUIStructureSet::~KPDGUIStructureSet(){
@@ -90,38 +112,38 @@ KPDGUIStructureSet::~KPDGUIStructureSet(){
 	}
 }
 
-void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp, QString optScheme, QString includedPairList, QString simLog, bool solution, int solutionNumber){
-	////qDebug() << myParameters.maxChainLength;
+void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp, QString simLog, bool solution, int solutionNumber){
 	
-	myTimeStamp = timestamp;
-	myOptScheme = optScheme;
-	myParameters.maxChainLength = parameters.maxChainLength;
-	myParameters.utilScheme = parameters.utilScheme;
 	myParameters.optScheme = parameters.optScheme;
-	myParameters.praAdvantage = parameters.praAdvantage;
-	myParameters.reserveOtoO = parameters.reserveOtoO;
+	myParameters.utilityScheme = parameters.utilityScheme;
+	myParameters.maxChainLength = parameters.maxChainLength;
+
+	myParameters.pairFailureRate = parameters.pairFailureRate;
+	myParameters.adFailureRate = parameters.adFailureRate;
+	myParameters.exogenousFailureRate = parameters.exogenousFailureRate;
+
+	myParameters.addAdvantageToHighPRACandidates = parameters.addAdvantageToHighPRACandidates;
+	myParameters.praAdvantageCutoff = parameters.praAdvantageCutoff;
+	myParameters.praAdvantageValue = parameters.praAdvantageValue;
+
+	myParameters.numberOfSolutions = parameters.numberOfSolutions;
+
+	myParameters.chainStorage = parameters.chainStorage;
+	myParameters.reserveODonorsForOCandidates = parameters.reserveODonorsForOCandidates;
 	myParameters.checkDP = parameters.checkDP;
 	myParameters.includeCompatiblePairs = parameters.includeCompatiblePairs;
-	myParameters.includeABBridgeDonors = parameters.includeABBridgeDonors;
-	myParameters.numberOfSolutions = parameters.numberOfSolutions;
-	myPairList = includedPairList;
-	mySimLog = simLog;
+	myParameters.excludeABDonorsFromSimulation = parameters.excludeABDonorsFromSimulation;
+	myParameters.allowABBridgeDonors = parameters.allowABBridgeDonors;
+
+	myTimeStamp = timestamp;
+	mySimLog = simLog;	
+
 	solutionSet = solution;
 	mySolutionNumber = solutionNumber;
 
-	QString textOptScheme = "";
-	if (myOptScheme == "MUC"){
-		textOptScheme = "Utility";
-	}
-	else if (myOptScheme == "MEUC"){
-		textOptScheme = "Expected Utility";
-	}
-	else if (myOptScheme == "MEUS"){
-		textOptScheme = "Fallbacks";
-	}
-	else if (myOptScheme == "SCC"){
-		textOptScheme = "Extended Fallbacks";
-	}
+	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
+
+	QString textOptScheme = KPDFunctions::toString(myOptScheme);
 
 	if (solutionSet){
 		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
@@ -132,7 +154,7 @@ void KPDGUIStructureSet::construct(ParamInfoStruct parameters, QString timestamp
 
 	setUpWidgets();
 
-	if (myOptScheme != "SCC"){
+	if (myOptScheme != KPDOptimizationScheme::SCC){
 		addChild(cycleSizeTwo);
 		addChild(cycleSizeThree);
 
@@ -165,7 +187,9 @@ void KPDGUIStructureSet::push_back(KPDGUIStructure * structure){
 	myStructureList.push_back(structure);
 	KPDGUIStructureWrapper * wrapper = new KPDGUIStructureWrapper(structure);
 	
-	if (myOptScheme != "SCC"){
+	KPDOptimizationScheme myOptScheme = myParameters.optScheme;
+
+	if (myOptScheme != KPDOptimizationScheme::SCC){
 		if (structure->size() == 2){
 			if (structure->isChain()){
 				chainSizeOne->addChild(wrapper);
@@ -224,7 +248,6 @@ QList<KPDGUIStructure*> KPDGUIStructureSet::getStructures(){
 
 void KPDGUIStructureSet::selectStructures(){
 	foreach(KPDGUIStructure * structure, myStructureList){
-		////qDebug() << "A";
 		structure->select();
 	}
 }
@@ -335,104 +358,101 @@ void KPDGUIStructureSet::resetPopularity(){
 
 QString KPDGUIStructureSet::getConsoleString(){
 
-	/*QString filename = "";
+	QString receipt = "";
+
 	if (solutionSet){
-		filename += "C:\\Users\\Mathieu Bray\\Desktop\\Solution_";
+		receipt = receipt + "Solution For Match Run Performed On " + myTimeStamp + "\n\n";
 	}
 	else {
-		filename += "C:\\Users\\Mathieu Bray\\Desktop\\StructureList_";
+		receipt = receipt + "Cycle List For Match Run performed On " + myTimeStamp + "\n\n";
 	}
-	filename += myTimeStamp + ".txt";*/
 
-	//QFile file(filename);
-	//if (file.open(QIODevice::ReadWrite))
-	//{
-		//QTextStream receipt;//(&file);
-		QString receipt = "";
-
-		QString textOptScheme = "";
-		if (myOptScheme == "MUC"){
-			textOptScheme = "Utility";
-		}
-		else if (myOptScheme == "MEUC"){
-			textOptScheme = "Expected Utility";
-		}
-		else if (myOptScheme == "MEUS"){
-			textOptScheme = "Fallbacks";
-		}
-		else if (myOptScheme == "SCC"){
-			textOptScheme = "Extended Fallbacks";
-		}
-
-		if (solutionSet){
-			receipt = receipt + "Solution For Match Run Performed On " + myTimeStamp + "\n\n";
-		}
-		else {
-			receipt = receipt + "Cycle List For Match Run performed On " + myTimeStamp + "\n\n";
-		}		
-		
-		if (solutionSet){
-			receipt = receipt + "Solution " + QString::number(mySolutionNumber) + " / Objective: " + QString::number(utility()) + "\n\n";
-		}
-		else {
-			if (myOptScheme != "SCC"){
-				receipt = receipt + "List of Cycles:\n";
-			}
-			else{
-				receipt = receipt + "List of Components:\n";
-			}
-		}
-
-		int chains = 0;
-		int cycles = 0;
-
-		foreach(KPDGUIStructure * structure, myStructureList){
-			receipt = receipt + structure->toString() + "\n";
-			if (structure->isChain()){
-				chains++;
-			}
-			else {
-				cycles++;
-			}
-		}
-		receipt = receipt + "\n";
-		if (solutionSet){
-			receipt = receipt + mySimLog + "\n";
-		}
-
-		if (myOptScheme != "SCC"){
-			receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
+	if (solutionSet){
+		receipt = receipt + "Solution " + QString::number(mySolutionNumber) + " / Objective: " + QString::number(utility()) + "\n\n";
+	}
+	else {
+		if (myParameters.optScheme != KPDOptimizationScheme::SCC){
+			receipt = receipt + "List of Cycles:\n";
 		}
 		else{
-			receipt = receipt + "Components: "  + QString::number(size())  + "\n";
+			receipt = receipt + "List of Components:\n";
 		}
-		receipt = receipt + "Optimization Scheme: " + textOptScheme + "\n";
-		receipt = receipt + "Maximum Chain Length: " + QString::number(myParameters.maxChainLength) + "\n";
-		receipt = receipt + "Utility Scheme: " + myParameters.utilScheme + "\n";
-		if (!myParameters.praAdvantage){
-			receipt = receipt + "Do Not ";
+	}
+
+	int chains = 0;
+	int cycles = 0;
+
+	foreach(KPDGUIStructure * structure, myStructureList){
+		receipt = receipt + structure->toString() + "\n";
+		if (structure->isChain()){
+			chains++;
 		}
-		receipt = receipt + "Add Additional Advantage to High PRA Candidates\n";
-		if (!myParameters.reserveOtoO){
-			receipt = receipt + "Do Not ";
+		else {
+			cycles++;
 		}
-		receipt = receipt + "Reserve O Donors for O Recipients\n";
-		if (!myParameters.checkDP){
-			receipt = receipt + "Do Not ";
-		}
-		receipt = receipt + "Check Additional DP Mismatches\n";
-		if (!myParameters.includeCompatiblePairs){
-			receipt = receipt + "Do Not ";
-		}
-		receipt = receipt + "Include Compatible Pairs\n";
-		if (!myParameters.includeABBridgeDonors){
+	}
+	receipt = receipt + "\n";
+	if (solutionSet){
+		receipt = receipt + mySimLog + "\n";
+	}
+
+	if (myParameters.optScheme != KPDOptimizationScheme::SCC){
+		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
+	}
+	else{
+		receipt = receipt + "Components: " + QString::number(size()) + "\n";
+	}
+	receipt = receipt + "Optimization Scheme: " + KPDFunctions::toString(myParameters.optScheme) + "\n";
+	receipt = receipt + "Utility Scheme: " + KPDFunctions::toString(myParameters.utilityScheme) + "\n";
+	receipt = receipt + "Maximum Chain Length: " + QString::number(myParameters.maxChainLength) + "\n\n";
+
+	receipt = receipt + "Pair Failure Rate: " + QString::number(myParameters.pairFailureRate) + "\n";
+	receipt = receipt + "AD Failure Rate: " + QString::number(myParameters.adFailureRate) + "\n";
+	receipt = receipt + "Exogenous Failure Rate: " + QString::number(myParameters.exogenousFailureRate) + "\n";
+	
+	if (myParameters.addAdvantageToHighPRACandidates){
+		receipt = receipt + "Add " + QString::number(myParameters.praAdvantageValue) + " to Candidates with PRA Over " + QString::number(myParameters.praAdvantageCutoff) + "\n";
+	}
+	else {
+		receipt = receipt + "Do Not Add Additional Advantage to High PRA Candidates\n";
+	}
+	receipt = receipt + "\n";	
+
+	receipt = receipt + "Number of Solutions Produced: " + QString::number(myParameters.numberOfSolutions) + "\n\n";
+
+	if (myParameters.chainStorage == "FIRST"){
+		receipt = receipt + "Chains Are Stored First During Optimization";
+	}
+	else if (myParameters.chainStorage == "LAST"){
+		receipt = receipt + "Chains Are Stored Last During Optimization";
+	}
+	else {
+		receipt = receipt + "Chains Are Stored As They Are Found During Optimization";
+	}
+	receipt = receipt + "\n";
+
+	if (!myParameters.reserveODonorsForOCandidates){
+		receipt = receipt + "Do Not ";
+	}
+	receipt = receipt + "Reserve O Donors for O Recipients\n";
+	if (!myParameters.checkDP){
+		receipt = receipt + "Do Not ";
+	}
+	receipt = receipt + "Check Additional DP Mismatches\n";
+	if (!myParameters.includeCompatiblePairs){
+		receipt = receipt + "Do Not ";
+	}
+	receipt = receipt + "Include Compatible Pairs\n";
+
+	if (myParameters.excludeABDonorsFromSimulation){
+		receipt = receipt + "AB Donors are Excluded From Simulation\n";
+	}
+	else {
+		if (!myParameters.allowABBridgeDonors){
 			receipt = receipt + "Do Not ";
 		}
 		receipt = receipt + "Allow AB Bridge Donors\n";
-		receipt = receipt + "Number of Solutions Produced: " + QString::number(myParameters.numberOfSolutions) + "\n";
-		//receipt = receipt + "Included Pairs: " + myPairList + "\n\n";
-	//}
-		
+	}		
 
 	return receipt;
 }
@@ -474,35 +494,59 @@ void KPDGUIStructureSet::setUpWidgets(){
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIStructureSet & structureSet)
 {
-	////qDebug() << "Entered <<";
 	ParamInfoStruct paramInfo = structureSet.getParameters();
-	out << qint32(paramInfo.maxChainLength);
-	////qDebug() << "Max Chain Length: " << paramInfo.maxChainLength;
-	out << paramInfo.utilScheme;
-	////qDebug() << "Util Scheme: " << paramInfo.utilScheme;
-	out << paramInfo.optScheme;
-	////qDebug() << "Opt Scheme: " << paramInfo.optScheme;
-	out << paramInfo.praAdvantage;
-	////qDebug() << "PRA: " << paramInfo.praAdvantage;
-	out << paramInfo.reserveOtoO;
-	////qDebug() << "Reserve O to O: " << paramInfo.reserveOtoO;
-	out << paramInfo.checkDP;
-	////qDebug() << "Check DP: " << paramInfo.checkDP;
-	out << paramInfo.includeCompatiblePairs;
-	////qDebug() << "Include Compat: " << paramInfo.includeCompatiblePairs;
-	out << paramInfo.includeABBridgeDonors;
-	////qDebug() << "Include AB: " << paramInfo.includeABBridgeDonors;
-	out << qint32(paramInfo.numberOfSolutions);
-	////qDebug() << "Number of Solutions: " << paramInfo.numberOfSolutions;
+	
+	//qDebug() << "--Saved Solution--";
+	//qDebug() << KPDFunctions::toString(paramInfo.optScheme);
+	//qDebug() << KPDFunctions::toString(paramInfo.utilityScheme);
+	//qDebug() << qint32(paramInfo.maxChainLength);
 
+	//qDebug() << qreal(paramInfo.pairFailureRate);
+	//qDebug() << qreal(paramInfo.adFailureRate);
+	//qDebug() << qreal(paramInfo.exogenousFailureRate);
+
+	//qDebug() << paramInfo.addAdvantageToHighPRACandidates;
+	//qDebug() << qint32(paramInfo.praAdvantageCutoff);
+	//qDebug() << qreal(paramInfo.praAdvantageValue);
+
+	//qDebug() << qint32(paramInfo.numberOfSolutions);
+
+	//qDebug() << paramInfo.chainStorage;
+	//qDebug() << paramInfo.reserveODonorsForOCandidates;
+	//qDebug() << paramInfo.checkDP;
+	//qDebug() << paramInfo.includeCompatiblePairs;
+	//qDebug() << paramInfo.excludeABDonorsFromSimulation;
+	//qDebug() << paramInfo.allowABBridgeDonors;
+
+	//qDebug() << structureSet.getTimeStamp();
+	//qDebug() << structureSet.getSimLog();
+	//qDebug() << qint32(structureSet.getSolutionNumber());
+	//qDebug() << "-------";
+
+	out << KPDFunctions::toString(paramInfo.optScheme);
+	out << KPDFunctions::toString(paramInfo.utilityScheme);
+	out << qint32(paramInfo.maxChainLength);
+	
+	out << qreal(paramInfo.pairFailureRate);
+	out << qreal(paramInfo.adFailureRate);
+	out << qreal(paramInfo.exogenousFailureRate);
+
+	out << paramInfo.addAdvantageToHighPRACandidates;
+	out << qint32(paramInfo.praAdvantageCutoff);
+	out << qreal(paramInfo.praAdvantageValue);
+
+	out << qint32(paramInfo.numberOfSolutions);
+
+	out << paramInfo.chainStorage;
+	out << paramInfo.reserveODonorsForOCandidates;
+	out << paramInfo.checkDP;
+	out << paramInfo.includeCompatiblePairs;
+	out << paramInfo.excludeABDonorsFromSimulation;
+	out << paramInfo.allowABBridgeDonors;	
+	
 	out << structureSet.getTimeStamp();
-	////qDebug() << "Time Stamp: " << structureSet.getTimeStamp();
-	out << structureSet.getOptScheme();
-	////qDebug() << "Opt Scheme: " << structureSet.getOptScheme();
-	out << structureSet.getIncludedPairList();
 	out << structureSet.getSimLog();
 	out << qint32(structureSet.getSolutionNumber());
-	////qDebug() << "Solution Number: " << structureSet.getSolutionNumber();
 
 	return out;
 }
@@ -512,39 +556,62 @@ QDataStream &operator>>(QDataStream &in, KPDGUIStructureSet & structureSet)
 {
 	ParamInfoStruct paramInfo;
 	
+	QString opt;
+	in >> opt;
+	paramInfo.optScheme = KPDFunctions::dialogToOptScheme(opt);
+
+	QString util;
+	in >> util;
+	paramInfo.utilityScheme = KPDFunctions::dialogToUtilityScheme(util);
+	
 	in >> paramInfo.maxChainLength;
-	in >> paramInfo.utilScheme;
-	in >> paramInfo.optScheme;
-	in >> paramInfo.praAdvantage;
-	in >> paramInfo.reserveOtoO;
-	in >> paramInfo.checkDP;
-	in >> paramInfo.includeCompatiblePairs;
-	in >> paramInfo.includeABBridgeDonors;
+
+	in >> paramInfo.pairFailureRate;
+	in >> paramInfo.adFailureRate;
+	in >> paramInfo.exogenousFailureRate;
+
 	in >> paramInfo.numberOfSolutions;
 
-	////qDebug() << paramInfo.maxChainLength;
-	////qDebug() << paramInfo.utilScheme;
-	////qDebug() << paramInfo.optScheme;
-	////qDebug() << paramInfo.praAdvantage;
-	////qDebug() << paramInfo.reserveOtoO;
-	////qDebug() << paramInfo.checkDP;
-	////qDebug() << paramInfo.includeCompatiblePairs;
-	////qDebug() << paramInfo.includeABBridgeDonors;
-	////qDebug() << paramInfo.numberOfSolutions;
+	in >> paramInfo.addAdvantageToHighPRACandidates;
+	in >> paramInfo.praAdvantageCutoff;
+	in >> paramInfo.praAdvantageValue;
 
+	in >> paramInfo.chainStorage;
+	in >> paramInfo.reserveODonorsForOCandidates;
+	in >> paramInfo.checkDP;
+	in >> paramInfo.includeCompatiblePairs;
+	in >> paramInfo.excludeABDonorsFromSimulation;
+	in >> paramInfo.allowABBridgeDonors;
+
+	//qDebug() << "---Loaded Solution---";
+	//qDebug() << opt;
+	//qDebug()<< util;
+
+	//qDebug()<< paramInfo.maxChainLength;
+
+	//qDebug()<< paramInfo.pairFailureRate;
+	//qDebug()<< paramInfo.adFailureRate;
+	//qDebug()<< paramInfo.exogenousFailureRate;
+
+	//qDebug()<< paramInfo.numberOfSolutions;
+
+	//qDebug()<< paramInfo.chainStorage;
+	//qDebug()<< paramInfo.reserveODonorsForOCandidates;
+	//qDebug()<< paramInfo.checkDP;
+	//qDebug()<< paramInfo.includeCompatiblePairs;
+	//qDebug()<< paramInfo.excludeABDonorsFromSimulation;
+	//qDebug()<< paramInfo.allowABBridgeDonors;
+	
 	QString timeStamp;
-	QString optScheme;
-	QString includedPairList;
 	QString simLog;
 	qint32 solutionNumber;
 
-	in >> timeStamp >> optScheme >> includedPairList >> simLog >> solutionNumber;
-
-	////qDebug() << structureSet.getTimeStamp();
-	////qDebug() << structureSet.getOptScheme();
-	////qDebug() << structureSet.getSolutionNumber();
-
-	structureSet.construct(paramInfo, timeStamp, optScheme, includedPairList, simLog, true, solutionNumber);
+	in >> timeStamp >> simLog >> solutionNumber;
+	//qDebug() << timeStamp;
+	//qDebug() << simLog;
+	//qDebug() << solutionNumber;
+	//qDebug() << "-------";
+	structureSet.construct(paramInfo, timeStamp, simLog, true, solutionNumber);
 	
 	return in;
 }
