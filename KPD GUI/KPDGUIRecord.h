@@ -27,7 +27,7 @@ public:
 	~KPDGUIRecord();
 	
 	//Pairs
-	void insert(KPDGUINode * node, bool fromSavedFile = false);
+	void insertNode(KPDGUINode * node, bool fromSavedFile = false);
 	void insertArrow(KPDGUIArrow * arrow);
 			
 	KPDGUINode * getNode(int id);
@@ -39,7 +39,7 @@ public:
 	bool isMatch(Donor donor, Candidate candidate, bool reserveOtoO, bool checkAdditionalHLA);
 	bool isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkAdditionalHLA);
 	
-	QList<KPDGUINode *> getPairs();
+	QList<KPDGUINode *> getNodes();
 
 	//Matrices
 	void generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress);
@@ -57,7 +57,7 @@ public:
 	int getBaselineIDCode();
 	void setBaselineIDCode(int code);
 
-	int getNumberOfVertices();
+	int getNumberOfNodes();
 
 	QString getRecordLog();
 	

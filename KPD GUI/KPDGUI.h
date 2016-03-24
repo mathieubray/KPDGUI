@@ -5,6 +5,8 @@
 #include <QMainWindow>
 #include <QtWidgets>
 
+#include "q"
+
 #include "DialogDonor.h"
 #include "DialogCandidate.h"
 #include "DialogDisplaySettings.h"
@@ -73,6 +75,7 @@ public slots:
 	void zoomIn();
 	void zoomOut();
 	void zoom(int);
+
 	void changeToMouseMode();
 	void changeToHandMode();
 

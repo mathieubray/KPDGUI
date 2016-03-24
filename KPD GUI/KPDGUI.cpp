@@ -14,7 +14,7 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	setUpMenu();
 	setUpToolbar();
 
-	//testNewNodes();
+	testNewNodes();
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
 }

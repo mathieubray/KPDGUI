@@ -20,10 +20,7 @@ Candidate::Candidate(){
 }
 
 Candidate::Candidate(DialogCandidate * c){
-
-	qDebug() << "ENTERED Candidate::Candidate(DialogCandidate)";
-	qDebug() << "From Dialog: " << c->recipNameLineEdit->text();
-
+	
 	candidateName = c->recipNameLineEdit->text();
 	candidateAge = c->recipAgeSpinBox->value();
 	candidateBT = KPDFunctions::intToBloodType(c->recipBTComboBox->currentIndex());

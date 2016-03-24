@@ -7,6 +7,7 @@
 const qreal PI = 3.14159265;
 const qreal TOL = 3;
 const qreal STATUS_TIME = 3000;
+
 const int MINIMUM_SLIDER_POSITION = -4;
 const int MAXIMUM_SLIDER_POSITION = 3;
 

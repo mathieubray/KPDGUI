@@ -229,7 +229,6 @@ void KPDGUIArrow::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 
 		if (displaySettings->getArrowDisplayMode() == ALL_COMPATIBILITIES){
 			setVisible(checkVisibility(displaySettings));
-			qDebug() << "Visibility updated :" << myStartItem->getInternalID() << "->" << myEndItem->getInternalID();
 		}
 		else if (displaySettings->getArrowDisplayMode() == SELECTED_COMPATIBILITIES){
 			if (myStartItem->isSelected()){
