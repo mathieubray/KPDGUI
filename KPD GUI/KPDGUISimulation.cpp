@@ -55,7 +55,7 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 	vector<vector<int> > storedCyclesAndChains;
 
 	int start = 1;
-	int nVertices = kpdguiRecord->getNumberOfVertices();
+	int nVertices = kpdguiRecord->getNumberOfNodes();
 	vector<int> visitedVector(nVertices + 1, 0);
 	vector<int> stack_vec;
 
@@ -363,7 +363,7 @@ std::vector<std::vector<int > > & KPDGUISimulation::getCurrentMatchRunComponents
 	//std::vector<std::vector<bool> > subIncidenceMatrix;
 	//subIncidenceMatrix.assign(1 + currentMatchRunSize, std::vector<bool>(1 + currentMatchRunSize, false));
 
-	int nVertices = kpdguiRecord->getNumberOfVertices();
+	int nVertices = kpdguiRecord->getNumberOfNodes();
 	bool matchRunContainsADs = false;
 
 	progressBar->setLabelText("Discovering Locally Relevant Subgraphs...");
@@ -581,7 +581,7 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 		}
 		model.update();
 
-		int nVertices = kpdguiRecord->getNumberOfVertices();
+		int nVertices = kpdguiRecord->getNumberOfNodes();
 		//Restriction: Each vertex can only appear at most once in solution
 		for (int i = 1; i <= nVertices; i++){
 			GRBLinExpr expr = 0;
@@ -750,7 +750,7 @@ void KPDGUISimulation::getSCCPairsOnly(QProgressDialog * progressBar){
 
 	int maxSize = kpdguiParameters->getMaxSize();
 
-	int nVertices = kpdguiRecord->getNumberOfVertices();
+	int nVertices = kpdguiRecord->getNumberOfNodes();
 
 	vector<int> currentMatchRunPairs;
 	currentMatchRunPairs.push_back(0);
@@ -864,7 +864,7 @@ void KPDGUISimulation::getSCCWithADs(QProgressDialog * progressBar){
 	int numberOfPairs = 0;
 	int numberOfADs = 0;
 
-	int nVertices = kpdguiRecord->getNumberOfVertices();
+	int nVertices = kpdguiRecord->getNumberOfNodes();
 
 	for (int i = 1; i <= nVertices; i++){
 		if (kpdguiRecord->pairInfoVector[i].pairType == PAIR){

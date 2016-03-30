@@ -5,8 +5,6 @@
 #include <QMainWindow>
 #include <QtWidgets>
 
-#include "q"
-
 #include "DialogDonor.h"
 #include "DialogCandidate.h"
 #include "DialogDisplaySettings.h"

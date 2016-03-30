@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'KPDGUINodeWrapper.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'KPDGUINodeWrapper.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,19 +20,20 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUINodeWrapper_t {
     QByteArrayData data[4];
-    char stringdata[47];
+    char stringdata0[47];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_KPDGUINodeWrapper_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_KPDGUINodeWrapper_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_KPDGUINodeWrapper_t qt_meta_stringdata_KPDGUINodeWrapper = {
     {
-QT_MOC_LITERAL(0, 0, 17),
-QT_MOC_LITERAL(1, 18, 16),
-QT_MOC_LITERAL(2, 35, 0),
-QT_MOC_LITERAL(3, 36, 10)
+QT_MOC_LITERAL(0, 0, 17), // "KPDGUINodeWrapper"
+QT_MOC_LITERAL(1, 18, 16), // "updateSelections"
+QT_MOC_LITERAL(2, 35, 0), // ""
+QT_MOC_LITERAL(3, 36, 10) // "updateText"
+
     },
     "KPDGUINodeWrapper\0updateSelections\0\0"
     "updateText"
@@ -67,6 +68,7 @@ void KPDGUINodeWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUINodeWrapper *_t = static_cast<KPDGUINodeWrapper *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->updateSelections(); break;
         case 1: _t->updateText(); break;
@@ -78,7 +80,7 @@ void KPDGUINodeWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
 
 const QMetaObject KPDGUINodeWrapper::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_KPDGUINodeWrapper.data,
-      qt_meta_data_KPDGUINodeWrapper,  qt_static_metacall, 0, 0}
+      qt_meta_data_KPDGUINodeWrapper,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -89,8 +91,8 @@ const QMetaObject *KPDGUINodeWrapper::metaObject() const
 
 void *KPDGUINodeWrapper::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_KPDGUINodeWrapper.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_KPDGUINodeWrapper.stringdata0))
         return static_cast<void*>(const_cast< KPDGUINodeWrapper*>(this));
     if (!strcmp(_clname, "QTreeWidgetItem"))
         return static_cast< QTreeWidgetItem*>(const_cast< KPDGUINodeWrapper*>(this));

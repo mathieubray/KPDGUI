@@ -14,7 +14,7 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	setUpMenu();
 	setUpToolbar();
 
-	testNewNodes();
+	//testNewNodes();
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
 }
@@ -253,7 +253,7 @@ void KPDGUI::addNewPair()
 
 			KPDGUINode * newPair = new KPDGUINode(d, c);
 
-			if (kpdguiRecord->getNumberOfVertices() == 0){
+			if (kpdguiRecord->getNumberOfNodes() == 0){
 				newPair->setPos(QPointF(0, 0));
 			}
 			else {
@@ -1300,13 +1300,13 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	kpdguiScene->addItem(newNode);
 	++seqNumber;
 
-	kpdguiRecord->insert(newNode, fromSavedFile);
+	kpdguiRecord->insertNode(newNode, fromSavedFile);
 	newNode->setText(QString::number(newNode->getInternalID()));
 
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
 	ui->pairWidget->addTopLevelItem(wrapper);
 
-	foreach(KPDGUINode *node, kpdguiRecord->getPairs()){
+	foreach(KPDGUINode *node, kpdguiRecord->getNodes()){
 		if (node->getType() == PAIR){
 			if (kpdguiRecord->isMatch(newNode, node, false, false)){
 				addArrow(newNode, node);

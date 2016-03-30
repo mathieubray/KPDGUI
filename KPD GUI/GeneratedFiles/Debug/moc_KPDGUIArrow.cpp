@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'KPDGUIArrow.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'KPDGUIArrow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,25 +20,26 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIArrow_t {
     QByteArrayData data[10];
-    char stringdata[152];
+    char stringdata0[152];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIArrow_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIArrow_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_KPDGUIArrow_t qt_meta_stringdata_KPDGUIArrow = {
     {
-QT_MOC_LITERAL(0, 0, 11),
-QT_MOC_LITERAL(1, 12, 22),
-QT_MOC_LITERAL(2, 35, 0),
-QT_MOC_LITERAL(3, 36, 20),
-QT_MOC_LITERAL(4, 57, 2),
-QT_MOC_LITERAL(5, 60, 8),
-QT_MOC_LITERAL(6, 69, 16),
-QT_MOC_LITERAL(7, 86, 22),
-QT_MOC_LITERAL(8, 109, 15),
-QT_MOC_LITERAL(9, 125, 26)
+QT_MOC_LITERAL(0, 0, 11), // "KPDGUIArrow"
+QT_MOC_LITERAL(1, 12, 22), // "selectArrowInMatchList"
+QT_MOC_LITERAL(2, 35, 0), // ""
+QT_MOC_LITERAL(3, 36, 20), // "changeArrowSelection"
+QT_MOC_LITERAL(4, 57, 2), // "id"
+QT_MOC_LITERAL(5, 60, 8), // "selected"
+QT_MOC_LITERAL(6, 69, 16), // "updateVisibility"
+QT_MOC_LITERAL(7, 86, 22), // "KPDGUIDisplaySettings*"
+QT_MOC_LITERAL(8, 109, 15), // "displaySettings"
+QT_MOC_LITERAL(9, 125, 26) // "endDisplayAsPartOfSolution"
+
     },
     "KPDGUIArrow\0selectArrowInMatchList\0\0"
     "changeArrowSelection\0id\0selected\0"
@@ -83,6 +84,7 @@ void KPDGUIArrow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUIArrow *_t = static_cast<KPDGUIArrow *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->selectArrowInMatchList((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 1: _t->changeArrowSelection((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
@@ -97,6 +99,7 @@ void KPDGUIArrow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
             typedef void (KPDGUIArrow::*_t)(bool );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIArrow::selectArrowInMatchList)) {
                 *result = 0;
+                return;
             }
         }
     }
@@ -104,7 +107,7 @@ void KPDGUIArrow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
 
 const QMetaObject KPDGUIArrow::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_KPDGUIArrow.data,
-      qt_meta_data_KPDGUIArrow,  qt_static_metacall, 0, 0}
+      qt_meta_data_KPDGUIArrow,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -115,8 +118,8 @@ const QMetaObject *KPDGUIArrow::metaObject() const
 
 void *KPDGUIArrow::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIArrow.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIArrow.stringdata0))
         return static_cast<void*>(const_cast< KPDGUIArrow*>(this));
     if (!strcmp(_clname, "QGraphicsLineItem"))
         return static_cast< QGraphicsLineItem*>(const_cast< KPDGUIArrow*>(this));
@@ -143,7 +146,7 @@ int KPDGUIArrow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void KPDGUIArrow::selectArrowInMatchList(bool _t1)
 {
-    void *_a[] = { 0, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
 }
 QT_END_MOC_NAMESPACE

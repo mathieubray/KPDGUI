@@ -10,7 +10,7 @@ KPDGUIRecord::~KPDGUIRecord(){
 
 }
 
-void KPDGUIRecord::insert(KPDGUINode * node, bool fromSavedFile){
+void KPDGUIRecord::insertNode(KPDGUINode * node, bool fromSavedFile){
 
 	if (!fromSavedFile){
 		node->setInternalID(id_code);
@@ -48,7 +48,7 @@ void KPDGUIRecord::clear(){
 	arrows.clear();
 }
 
-QList<KPDGUINode *> KPDGUIRecord::getPairs(){
+QList<KPDGUINode *> KPDGUIRecord::getNodes(){
 	return pairs.values();
 }
 
@@ -428,8 +428,8 @@ bool KPDGUIRecord::isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool rese
 	return isMatch(donor->getDonor(), candidate->getCandidate(), reserveOtoO, checkAdditionalHLA);
 }
 
-int KPDGUIRecord::getNumberOfVertices(){
-	return pairInfoVector.size() - 1;
+int KPDGUIRecord::getNumberOfNodes(){
+	return pairs.size();
 }
 
 double KPDGUIRecord::survival(Donor d, Candidate c, int fiveyear){
