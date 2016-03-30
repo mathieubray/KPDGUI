@@ -59,7 +59,7 @@
       <x>10</x>
       <y>30</y>
       <width>161</width>
-      <height>74</height>
+      <height>82</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="donorGridLayout">
@@ -178,8 +178,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>124</width>
-       <height>74</height>
+       <width>148</width>
+       <height>82</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="donorCharacteristicsGridLayout">
@@ -250,8 +250,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>191</width>
-       <height>152</height>
+       <width>226</width>
+       <height>169</height>
       </rect>
      </property>
      <layout class="QGridLayout" name="donorHLAGridLayout">
@@ -341,7 +341,7 @@
        <x>10</x>
        <y>200</y>
        <width>277</width>
-       <height>22</height>
+       <height>24</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
@@ -362,7 +362,7 @@
       <rect>
        <x>210</x>
        <y>10</y>
-       <width>91</width>
+       <width>105</width>
        <height>181</height>
       </rect>
      </property>
@@ -377,8 +377,8 @@
           <rect>
            <x>20</x>
            <y>20</y>
-           <width>51</width>
-           <height>65</height>
+           <width>59</width>
+           <height>76</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="donorHLADRVerticalLayout">
@@ -417,8 +417,8 @@
           <rect>
            <x>20</x>
            <y>20</y>
-           <width>47</width>
-           <height>42</height>
+           <width>55</width>
+           <height>49</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="donorHLABWVerticalLayout">

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'KPDGUIConsole.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'KPDGUIConsole.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,21 +20,22 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIConsole_t {
     QByteArrayData data[6];
-    char stringdata[57];
+    char stringdata0[57];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIConsole_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIConsole_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_KPDGUIConsole_t qt_meta_stringdata_KPDGUIConsole = {
     {
-QT_MOC_LITERAL(0, 0, 13),
-QT_MOC_LITERAL(1, 14, 14),
-QT_MOC_LITERAL(2, 29, 0),
-QT_MOC_LITERAL(3, 30, 2),
-QT_MOC_LITERAL(4, 33, 8),
-QT_MOC_LITERAL(5, 42, 14)
+QT_MOC_LITERAL(0, 0, 13), // "KPDGUIConsole"
+QT_MOC_LITERAL(1, 14, 14), // "changePairInfo"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 2), // "id"
+QT_MOC_LITERAL(4, 33, 8), // "selected"
+QT_MOC_LITERAL(5, 42, 14) // "changePairText"
+
     },
     "KPDGUIConsole\0changePairInfo\0\0id\0"
     "selected\0changePairText"
@@ -69,6 +70,7 @@ void KPDGUIConsole::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUIConsole *_t = static_cast<KPDGUIConsole *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->changePairInfo((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< bool(*)>(_a[2]))); break;
         case 1: _t->changePairText((*reinterpret_cast< int(*)>(_a[1]))); break;
@@ -79,7 +81,7 @@ void KPDGUIConsole::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 
 const QMetaObject KPDGUIConsole::staticMetaObject = {
     { &QTabWidget::staticMetaObject, qt_meta_stringdata_KPDGUIConsole.data,
-      qt_meta_data_KPDGUIConsole,  qt_static_metacall, 0, 0}
+      qt_meta_data_KPDGUIConsole,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -90,8 +92,8 @@ const QMetaObject *KPDGUIConsole::metaObject() const
 
 void *KPDGUIConsole::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIConsole.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIConsole.stringdata0))
         return static_cast<void*>(const_cast< KPDGUIConsole*>(this));
     return QTabWidget::qt_metacast(_clname);
 }

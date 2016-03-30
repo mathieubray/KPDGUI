@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'KPDGUIConsolePairWidget.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'KPDGUIConsolePairWidget.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,19 +20,20 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIConsolePairWidget_t {
     QByteArrayData data[4];
-    char stringdata[36];
+    char stringdata0[36];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIConsolePairWidget_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIConsolePairWidget_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_KPDGUIConsolePairWidget_t qt_meta_stringdata_KPDGUIConsolePairWidget = {
     {
-QT_MOC_LITERAL(0, 0, 23),
-QT_MOC_LITERAL(1, 24, 4),
-QT_MOC_LITERAL(2, 29, 0),
-QT_MOC_LITERAL(3, 30, 5)
+QT_MOC_LITERAL(0, 0, 23), // "KPDGUIConsolePairWidget"
+QT_MOC_LITERAL(1, 24, 4), // "left"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 5) // "right"
+
     },
     "KPDGUIConsolePairWidget\0left\0\0right"
 };
@@ -66,6 +67,7 @@ void KPDGUIConsolePairWidget::qt_static_metacall(QObject *_o, QMetaObject::Call 
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUIConsolePairWidget *_t = static_cast<KPDGUIConsolePairWidget *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->left(); break;
         case 1: _t->right(); break;
@@ -77,7 +79,7 @@ void KPDGUIConsolePairWidget::qt_static_metacall(QObject *_o, QMetaObject::Call 
 
 const QMetaObject KPDGUIConsolePairWidget::staticMetaObject = {
     { &QWidget::staticMetaObject, qt_meta_stringdata_KPDGUIConsolePairWidget.data,
-      qt_meta_data_KPDGUIConsolePairWidget,  qt_static_metacall, 0, 0}
+      qt_meta_data_KPDGUIConsolePairWidget,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -88,8 +90,8 @@ const QMetaObject *KPDGUIConsolePairWidget::metaObject() const
 
 void *KPDGUIConsolePairWidget::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIConsolePairWidget.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIConsolePairWidget.stringdata0))
         return static_cast<void*>(const_cast< KPDGUIConsolePairWidget*>(this));
     if (!strcmp(_clname, "Ui_KPDGUIConsolePairWidget"))
         return static_cast< Ui_KPDGUIConsolePairWidget*>(const_cast< KPDGUIConsolePairWidget*>(this));

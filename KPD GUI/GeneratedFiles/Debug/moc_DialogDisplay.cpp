@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'DialogDisplay.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'DialogDisplay.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,16 +20,17 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_DisplayDialog_t {
     QByteArrayData data[1];
-    char stringdata[14];
+    char stringdata0[14];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_DisplayDialog_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_DisplayDialog_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_DisplayDialog_t qt_meta_stringdata_DisplayDialog = {
     {
-QT_MOC_LITERAL(0, 0, 13)
+QT_MOC_LITERAL(0, 0, 13) // "DisplayDialog"
+
     },
     "DisplayDialog"
 };
@@ -61,7 +62,7 @@ void DisplayDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
 
 const QMetaObject DisplayDialog::staticMetaObject = {
     { &QDialog::staticMetaObject, qt_meta_stringdata_DisplayDialog.data,
-      qt_meta_data_DisplayDialog,  qt_static_metacall, 0, 0}
+      qt_meta_data_DisplayDialog,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -72,8 +73,8 @@ const QMetaObject *DisplayDialog::metaObject() const
 
 void *DisplayDialog::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_DisplayDialog.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_DisplayDialog.stringdata0))
         return static_cast<void*>(const_cast< DisplayDialog*>(this));
     if (!strcmp(_clname, "Ui_DisplayDialog"))
         return static_cast< Ui_DisplayDialog*>(const_cast< DisplayDialog*>(this));

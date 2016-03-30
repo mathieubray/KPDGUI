@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'AltruisticDonorDialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.3.1
+** Created by: Qt User Interface Compiler version 5.6.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -116,7 +116,7 @@ public:
         donorGroupBox->setGeometry(QRect(10, 10, 192, 139));
         layoutWidget = new QWidget(donorGroupBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 161, 74));
+        layoutWidget->setGeometry(QRect(10, 30, 161, 82));
         donorGridLayout = new QGridLayout(layoutWidget);
         donorGridLayout->setObjectName(QStringLiteral("donorGridLayout"));
         donorGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -168,7 +168,7 @@ public:
         donorCharacteristicsTab->setObjectName(QStringLiteral("donorCharacteristicsTab"));
         layoutWidget_2 = new QWidget(donorCharacteristicsTab);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(10, 10, 124, 74));
+        layoutWidget_2->setGeometry(QRect(10, 10, 148, 82));
         donorCharacteristicsGridLayout = new QGridLayout(layoutWidget_2);
         donorCharacteristicsGridLayout->setObjectName(QStringLiteral("donorCharacteristicsGridLayout"));
         donorCharacteristicsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -211,7 +211,7 @@ public:
         hlaInfoTab->setObjectName(QStringLiteral("hlaInfoTab"));
         layoutWidget_7 = new QWidget(hlaInfoTab);
         layoutWidget_7->setObjectName(QStringLiteral("layoutWidget_7"));
-        layoutWidget_7->setGeometry(QRect(10, 10, 191, 152));
+        layoutWidget_7->setGeometry(QRect(10, 10, 226, 169));
         donorHLAGridLayout = new QGridLayout(layoutWidget_7);
         donorHLAGridLayout->setObjectName(QStringLiteral("donorHLAGridLayout"));
         donorHLAGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -307,7 +307,7 @@ public:
 
         layoutWidget_9 = new QWidget(hlaInfoTab);
         layoutWidget_9->setObjectName(QStringLiteral("layoutWidget_9"));
-        layoutWidget_9->setGeometry(QRect(10, 200, 277, 22));
+        layoutWidget_9->setGeometry(QRect(10, 200, 277, 24));
         horizontalLayout = new QHBoxLayout(layoutWidget_9);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -323,7 +323,7 @@ public:
 
         layoutWidget1 = new QWidget(hlaInfoTab);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(210, 10, 91, 181));
+        layoutWidget1->setGeometry(QRect(210, 10, 105, 181));
         verticalLayout = new QVBoxLayout(layoutWidget1);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -331,7 +331,7 @@ public:
         donorHLADRLayout->setObjectName(QStringLiteral("donorHLADRLayout"));
         layoutWidget_5 = new QWidget(donorHLADRLayout);
         layoutWidget_5->setObjectName(QStringLiteral("layoutWidget_5"));
-        layoutWidget_5->setGeometry(QRect(20, 20, 51, 65));
+        layoutWidget_5->setGeometry(QRect(20, 20, 59, 76));
         donorHLADRVerticalLayout = new QVBoxLayout(layoutWidget_5);
         donorHLADRVerticalLayout->setObjectName(QStringLiteral("donorHLADRVerticalLayout"));
         donorHLADRVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -357,7 +357,7 @@ public:
         donorHLABWLayout->setObjectName(QStringLiteral("donorHLABWLayout"));
         layoutWidget_6 = new QWidget(donorHLABWLayout);
         layoutWidget_6->setObjectName(QStringLiteral("layoutWidget_6"));
-        layoutWidget_6->setGeometry(QRect(20, 20, 47, 42));
+        layoutWidget_6->setGeometry(QRect(20, 20, 55, 49));
         donorHLABWVerticalLayout = new QVBoxLayout(layoutWidget_6);
         donorHLABWVerticalLayout->setObjectName(QStringLiteral("donorHLABWVerticalLayout"));
         donorHLABWVerticalLayout->setContentsMargins(0, 0, 0, 0);

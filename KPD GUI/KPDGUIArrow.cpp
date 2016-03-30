@@ -56,7 +56,8 @@ KPDGUIArrow::KPDGUIArrow(KPDGUINode *startItem, KPDGUINode *endItem)
 	//Arrow Defaults
 	setZValue(-1);
 	myColor = Qt::black;
-	myWidth = 1;	
+	myWidth = 1;
+	setOpacity(1);
     setPen(QPen(myColor, myWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
 	//Reset Popularity
@@ -99,6 +100,7 @@ void KPDGUIArrow::clearHighlight(){
 	if (!displayAsPartOfSolution){
 		setColor(Qt::black);
 		setWidth(1);
+		setOpacity(0.25);
 		setZValue(-1);
 	}
 }
@@ -106,8 +108,9 @@ void KPDGUIArrow::clearHighlight(){
 void KPDGUIArrow::highlightConnection(){
 	if (!displayAsPartOfSolution){
 		qreal z = myStartItem->zValue();
-		setColor(Qt::green);
+		setColor(Qt::black);
 		setWidth(2);
+		setOpacity(1);
 		setZValue(z - 1);
 	}
 }
@@ -117,6 +120,7 @@ void KPDGUIArrow::highlightCycle(){
 	setVisible(false);
 	setColor(Qt::magenta);
 	setWidth(4);
+	setOpacity(1);
 	setZValue(z-1);
 	setVisible(true);
 
@@ -245,7 +249,7 @@ void KPDGUIArrow::updateVisibility(DisplaySettingsStruct * displaySettings){
 
 		if (displaySettings->arrowDisplayMode == ALL_COMPATIBILITIES){
 			setVisible(checkVisibility(displaySettings));
-			qDebug() << "Visibility updated :" << myStartItem->getInternalID() << "->" << myEndItem->getInternalID();
+			//qDebug() << "Visibility updated :" << myStartItem->getInternalID() << "->" << myEndItem->getInternalID();
 		}
 		else if (displaySettings->arrowDisplayMode == SELECTED_COMPATIBILITIES){
 			if (myStartItem->isSelected()){

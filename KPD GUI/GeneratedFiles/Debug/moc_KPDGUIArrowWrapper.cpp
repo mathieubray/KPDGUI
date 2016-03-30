@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'KPDGUIArrowWrapper.h'
 **
-** Created by: The Qt Meta Object Compiler version 67 (Qt 5.3.1)
+** Created by: The Qt Meta Object Compiler version 67 (Qt 5.6.0)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -12,7 +12,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'KPDGUIArrowWrapper.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 67
-#error "This file was generated using the moc from 5.3.1. It"
+#error "This file was generated using the moc from 5.6.0. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -20,18 +20,19 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIArrowWrapper_t {
     QByteArrayData data[3];
-    char stringdata[41];
+    char stringdata0[41];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
-    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIArrowWrapper_t, stringdata) + ofs \
+    qptrdiff(offsetof(qt_meta_stringdata_KPDGUIArrowWrapper_t, stringdata0) + ofs \
         - idx * sizeof(QByteArrayData)) \
     )
 static const qt_meta_stringdata_KPDGUIArrowWrapper_t qt_meta_stringdata_KPDGUIArrowWrapper = {
     {
-QT_MOC_LITERAL(0, 0, 18),
-QT_MOC_LITERAL(1, 19, 20),
-QT_MOC_LITERAL(2, 40, 0)
+QT_MOC_LITERAL(0, 0, 18), // "KPDGUIArrowWrapper"
+QT_MOC_LITERAL(1, 19, 20), // "changeArrowSelection"
+QT_MOC_LITERAL(2, 40, 0) // ""
+
     },
     "KPDGUIArrowWrapper\0changeArrowSelection\0"
     ""
@@ -64,6 +65,7 @@ void KPDGUIArrowWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
 {
     if (_c == QMetaObject::InvokeMetaMethod) {
         KPDGUIArrowWrapper *_t = static_cast<KPDGUIArrowWrapper *>(_o);
+        Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->changeArrowSelection((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
@@ -73,7 +75,7 @@ void KPDGUIArrowWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, i
 
 const QMetaObject KPDGUIArrowWrapper::staticMetaObject = {
     { &QObject::staticMetaObject, qt_meta_stringdata_KPDGUIArrowWrapper.data,
-      qt_meta_data_KPDGUIArrowWrapper,  qt_static_metacall, 0, 0}
+      qt_meta_data_KPDGUIArrowWrapper,  qt_static_metacall, Q_NULLPTR, Q_NULLPTR}
 };
 
 
@@ -84,8 +86,8 @@ const QMetaObject *KPDGUIArrowWrapper::metaObject() const
 
 void *KPDGUIArrowWrapper::qt_metacast(const char *_clname)
 {
-    if (!_clname) return 0;
-    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIArrowWrapper.stringdata))
+    if (!_clname) return Q_NULLPTR;
+    if (!strcmp(_clname, qt_meta_stringdata_KPDGUIArrowWrapper.stringdata0))
         return static_cast<void*>(const_cast< KPDGUIArrowWrapper*>(this));
     if (!strcmp(_clname, "QTreeWidgetItem"))
         return static_cast< QTreeWidgetItem*>(const_cast< KPDGUIArrowWrapper*>(this));
