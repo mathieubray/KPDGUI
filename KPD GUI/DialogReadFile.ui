@@ -31,7 +31,7 @@
      <x>10</x>
      <y>10</y>
      <width>246</width>
-     <height>79</height>
+     <height>90</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="readFileVerticalLayout">
@@ -115,8 +115,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>250</x>
-     <y>65</y>
+     <x>251</x>
+     <y>98</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -131,8 +131,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>250</x>
-     <y>65</y>
+     <x>251</x>
+     <y>98</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -147,8 +147,8 @@
    <slot>browse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>272</x>
-     <y>29</y>
+     <x>253</x>
+     <y>31</y>
     </hint>
     <hint type="destinationlabel">
      <x>266</x>

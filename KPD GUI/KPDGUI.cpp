@@ -34,7 +34,7 @@ void KPDGUI::testNewNodes(){
 	group->setFlag(QGraphicsItem::ItemIsMovable);
 	kpdguiScene->addItem(group);*/
 
-	KPDGUICloud * group = new KPDGUICloud(1000,1);
+	/*KPDGUICloud * group = new KPDGUICloud(1000,1);
 	group->setPos(0, 0);
 
 	KPDGUICloud * group2 = new KPDGUICloud(1001,2);
@@ -45,7 +45,7 @@ void KPDGUI::testNewNodes(){
 
 	kpdguiScene->addItem(group);
 	kpdguiScene->addItem(group2);
-	kpdguiScene->addItem(group3);
+	kpdguiScene->addItem(group3); */
 }
 
 void KPDGUI::initializeParameters(){
@@ -243,15 +243,18 @@ void KPDGUI::addNewPair()
 
 	if (dialogCandidate->exec()) {
 
-		Candidate c(dialogCandidate);
+		KPDGUICandidateInfo c(dialogCandidate);
 		
 		DialogDonor * dialogDonor = new DialogDonor(this);
 
 		if (dialogDonor->exec()){
 			
-			Donor d(dialogDonor);			
+			KPDGUIDonorInfo d(dialogDonor);			
+			QVector<KPDGUIDonorInfo *> associatedDonors;
 
-			KPDGUINode * newPair = new KPDGUINode(d, c);
+			associatedDonors.push_back(&d);
+
+			KPDGUINode * newPair = new KPDGUINode(associatedDonors, &c);
 
 			if (kpdguiRecord->getNumberOfNodes() == 0){
 				newPair->setPos(QPointF(0, 0));
@@ -268,7 +271,7 @@ void KPDGUI::addNewPair()
 
 			addNode(newPair, false);
 
-			int pairID = newPair->getInternalID();
+			int pairID = newPair->getNodeID();
 
 			kpdguiScene->clearSelection();
 			newPair->setSelected(true);
@@ -289,13 +292,13 @@ void KPDGUI::addNewAD()
 
 	if (dialog->exec()) {
 
-		Donor ad(dialog);
+		KPDGUIDonorInfo ad(dialog);
 
-		KPDGUINode * newAD = new KPDGUINode(ad);
+		KPDGUINode * newAD = new KPDGUINode(&ad);
 
 		addNode(newAD, false);
 
-		int pairID = newAD->getInternalID();
+		int pairID = newAD->getNodeID();
 		
 		kpdguiScene->clearSelection();
 		newAD->setSelected(true);
@@ -324,10 +327,10 @@ void KPDGUI::addNewAD()
 
 		addNode(newDonor, false);
 
-		int pairID = newDonor->getInternalID();
+		int pairID = newDonor->getNodeID();
 		//ui->dashboard->addPairInfo(pairID);
 
-		//KPDGUIArrow * link = new KPDGUIArrow(newDonor, kpdguiRecord->getNode(i), false);
+		//KPDGUIMatch * link = new KPDGUIMatch(newDonor, kpdguiRecord->getNode(i), false);
 		//QVector<KPDGUINode *> nodes;
 		//nodes.push_back(newDonor);
 		//nodes.push_back(kpdguiRecord->getNode(i));
@@ -393,7 +396,7 @@ void KPDGUI::loadPairs()
 		setWindowModified(true);
 		emit visibilityChanged(kpdguiDisplaySettings);
 		emit poolChanged();
-		kpdguiParameters->setParametersSet(false);
+		kpdguiParameters->setParametersHaveBeenUpdated(false);
 
 	}
 }
@@ -407,7 +410,7 @@ void KPDGUI::run()
 {
 	bool proceed = true;
 
-	if (!kpdguiParameters->getParametersSet()) {
+	if (!kpdguiParameters->getParametersHaveBeenUpdated()) {
 		int r = QMessageBox::warning(this, tr("KPD"),
 			tr("The pool has been modified since the last time parameters were set.\n"
 			"Set parameters now?"),
@@ -436,7 +439,7 @@ bool KPDGUI::setSimParameters()
 	if (simParamDialog->exec()) {
 		
 		kpdguiParameters->changeParameters(simParamDialog);
-		kpdguiParameters->setParametersSet(true);
+		kpdguiParameters->setParametersHaveBeenUpdated(true);
 		updateStatus("Set New Parameters");		
 
 		return true;
@@ -477,37 +480,37 @@ void KPDGUI::changePairViewMode()
 
 void KPDGUI::changeArrowViewMode_Within()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(WITHIN_SELECTION);
+	kpdguiDisplaySettings->setMatchDisplayMode(WITHIN_SELECTION);
 	updateVisibility();
 }
 
 void KPDGUI::changeArrowViewMode_SelectedComps()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(SELECTED_COMPATIBILITIES);
+	kpdguiDisplaySettings->setMatchDisplayMode(SELECTED_COMPATIBILITIES);
 	updateVisibility();
 }
 
 void KPDGUI::changeArrowViewMode_Donors()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(COMPATIBLE_DONORS);
+	kpdguiDisplaySettings->setMatchDisplayMode(COMPATIBLE_DONORS);
 	updateVisibility();
 }
 
 void KPDGUI::changeArrowViewMode_Recips()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(COMPATIBLE_RECIPIENTS);
+	kpdguiDisplaySettings->setMatchDisplayMode(COMPATIBLE_RECIPIENTS);
 	updateVisibility();
 }
 
 void KPDGUI::changeArrowViewMode_All()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(ALL_COMPATIBILITIES);
+	kpdguiDisplaySettings->setMatchDisplayMode(ALL_COMPATIBILITIES);
 	updateVisibility();
 }
 
 void KPDGUI::changeArrowViewMode_None()
 {
-	kpdguiDisplaySettings->setArrowDisplayMode(NO_COMPATIBILITIES);
+	kpdguiDisplaySettings->setMatchDisplayMode(NO_COMPATIBILITIES);
 	updateVisibility();
 }
 
@@ -596,9 +599,9 @@ void KPDGUI::newPairListSelectionActions()
 
 /*void KPDGUI::newMatchListSelectionActions(QTreeWidgetItem* item)
 {
-	KPDGUIArrowWrapper * arrow = dynamic_cast<KPDGUIArrowWrapper *>(item);
+	KPDGUIMatchWrapper * arrow = dynamic_cast<KPDGUIMatchWrapper *>(item);
 	if (arrow){
-		KPDGUIArrow * link = arrow->getArrow();
+		KPDGUIMatch * link = arrow->getArrow();
 
 		bool selected = item->isSelected();
 		link->startItem()->setSelected(selected);
@@ -687,7 +690,7 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 
 				ui->graphicsView->centerOn(QPoint(node->x(), node->y()));
 
-				int i = node->getInternalID();
+				int i = node->getNodeID();
 				
 			}
 		}
@@ -729,7 +732,7 @@ void KPDGUI::newPairListDoubleClickActions(QTreeWidgetItem * item)
 {
 	KPDGUINodeWrapper * node = dynamic_cast<KPDGUINodeWrapper *>(item);
 	if (node){
-		qDebug() << "Double Click " << node->getNode()->getInternalID();
+		qDebug() << "Double Click " << node->getNode()->getNodeID();
 	}
 }
 
@@ -742,7 +745,7 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 		bool allHeld = true;
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-			if (!node->getHoldStatus()){
+			if (!node->getNodeStatus()){
 				allHeld = false;
 			}
 		}
@@ -765,11 +768,11 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 			//menu->addAction(highlightStructuresAction);
 			//menu->addAction(highlightSolutionsAction);
 			menu->addAction(editDonorAction);
-			if (node->getType() == PAIR){
+			if (node->getNodeType() == PAIR){
 				menu->addAction(editCandidateAction);
 			}
 			menu->addSeparator();
-			if (node->getHoldStatus()){
+			if (node->getNodeStatus()){
 				menu->addAction(unholdNodeAction);
 			}
 			else {
@@ -805,11 +808,11 @@ void KPDGUI::pairListCustomMenu(QPoint pos){
 		//menu->addAction(highlightStructuresAction);
 		//menu->addAction(highlightSolutionsAction);
 		menu->addAction(editDonorAction);
-		if (node->getType() == PAIR){
+		if (node->getNodeType() == PAIR){
 			menu->addAction(editCandidateAction);
 		}
 		menu->addSeparator();
-		if (node->getHoldStatus()){
+		if (node->getNodeStatus()){
 			menu->addAction(unholdNodeAction);
 		}
 		else {
@@ -872,33 +875,33 @@ void KPDGUI::deleteNode(int i)
 	qDebug() << "Delete " << i;
 
 	/*KPDGUINode * nodeToDelete = kpdguiRecord->getNode(i);
-	int id = nodeToDelete->getInternalID();
+	int id = nodeToDelete->getNodeID();
 	nodeToDelete->setSelected(false);
 	
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	QApplication::processEvents();
 
 	QSet<KPDGUINodeWrapper *> nodeWrappersToDelete;
-	QSet<KPDGUIArrowWrapper *> arrowWrappersToDelete;
+	QSet<KPDGUIMatchWrapper *> arrowWrappersToDelete;
 	QSet<KPDGUIStructureWrapper *> structureWrappersToDelete;
 	QSet<KPDGUIStructure *> structuresToDelete; */
 
 /*	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
 		KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->pairWidget->topLevelItem(i));
 		if (nodeWrapper){
-			if (nodeWrapper->getNode()->getInternalID() == id){
+			if (nodeWrapper->getNode()->getNodeID() == id){
 				nodeWrappersToDelete.insert(nodeWrapper);
 			}
 		}
 	} */
 
 	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
-		KPDGUIArrowWrapper * arrowWrapper = dynamic_cast<KPDGUIArrowWrapper *>(matchListWidget->topLevelItem(i));
+		KPDGUIMatchWrapper * arrowWrapper = dynamic_cast<KPDGUIMatchWrapper *>(matchListWidget->topLevelItem(i));
 		if (arrowWrapper){
-			if (arrowWrapper->getArrow()->startItem()->getInternalID() == id){
+			if (arrowWrapper->getArrow()->startItem()->getNodeID() == id){
 				arrowWrappersToDelete.insert(arrowWrapper);
 			}
-			else if (arrowWrapper->getArrow()->endItem()->getInternalID() == id){
+			else if (arrowWrapper->getArrow()->endItem()->getNodeID() == id){
 				arrowWrappersToDelete.insert(arrowWrapper);
 			}
 		}
@@ -942,7 +945,7 @@ void KPDGUI::deleteNode(int i)
 		delete nodeWrapper;
 	}
 
-	foreach(KPDGUIArrowWrapper * arrowWrapper, arrowWrappersToDelete){
+	foreach(KPDGUIMatchWrapper * arrowWrapper, arrowWrappersToDelete){
 		delete arrowWrapper;
 	}
 
@@ -954,7 +957,7 @@ void KPDGUI::deleteNode(int i)
 		delete structureToDelete;
 	}
 
-	if (nodeToDelete->getType() == KPDPairType::AD){
+	if (nodeToDelete->getNodeType() == KPDPairType::AD){
 		ui->dashboard->appendDashboardText("> Deleted AD: " + nodeToDelete->getDonorName() + " (" + QString::number(id) + ")");
 	}
 	else {
@@ -1062,18 +1065,23 @@ void KPDGUI::updateTable(int i)
 {
 	KPDGUINode * node = kpdguiRecord->getNode(i);
 
-	ui->tableWidget->item(0, 0)->setData(Qt::EditRole, QString::number(i));
-	ui->tableWidget->item(1, 0)->setData(Qt::EditRole, node->getDonorName());
-	ui->tableWidget->item(2, 0)->setData(Qt::EditRole, QString::number(node->getDonorAge()));
-	ui->tableWidget->item(3, 0)->setData(Qt::EditRole, KPDFunctions::toString(node->getDonorBT()));
+	// FIX
 
-	if (node->getType() == PAIR){
-		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, node->getCandidateName());
-		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, QString::number(node->getCandidateAge()));
-		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, KPDFunctions::toString(node->getCandidateBT()));
-		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, QString::number(node->getCandidatePRA()));
+	KPDGUIDonorInfo * donor = node->getDonor(0);
+	KPDGUICandidateInfo * candidate = node->getCandidate();
+
+	ui->tableWidget->item(0, 0)->setData(Qt::EditRole, QString::number(i));
+	ui->tableWidget->item(1, 0)->setData(Qt::EditRole, donor->getName());
+	ui->tableWidget->item(2, 0)->setData(Qt::EditRole, QString::number(donor->getAge()));
+	ui->tableWidget->item(3, 0)->setData(Qt::EditRole, KPDFunctions::toString(donor->getBT()));
+
+	if (node->getNodeType() == PAIR){
+		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, candidate->getName());
+		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, QString::number(candidate->getAge()));
+		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, KPDFunctions::toString(candidate->getBT()));
+		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, QString::number(candidate->getPRA()));
 	}
-	else if (node->getType() == AD){
+	else if (node->getNodeType() == AD){
 		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, " ");
 		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, " ");
 		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, " ");
@@ -1135,7 +1143,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 	QApplication::processEvents();
 
 	//Clear Screen
-	kpdguiRecord->clear();
+	kpdguiRecord->clearRecord();
 	kpdguiScene->clear();
 	//ui->pairWidget->clear();
 	//matchListWidget->clear();
@@ -1151,7 +1159,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 		in >> *node;
 		addNode(node, true);
 
-		int internalID = node->getInternalID();
+		int internalID = node->getNodeID();
 		nodeMap.insert(internalID, node);
 
 		qint32 x;
@@ -1188,7 +1196,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 				nodeList.push_back(nodeMap[id]);
 			}
 			KPDGUIStructure * structure = new KPDGUIStructure(nodeList, solution->getOptScheme(), utility, structureID);
-			solution->push_back(structure);
+			solution->addStructure(structure);
 		}
 		solution->updatePopularity();
 		solutionItems.push_back(solution);
@@ -1229,9 +1237,9 @@ bool KPDGUI::saveFile(const QString &fileName)
 	out << qint32(MagicNumber);
 
 	out << qint32(kpdguiRecord->getBaselineIDCode());
-	out << qint32(kpdguiRecord->size());
+	out << qint32(kpdguiRecord->getNumberOfNodes());
 
-	for (int i = 0; i < kpdguiRecord->size(); i++){
+	for (int i = 0; i < kpdguiRecord->getNumberOfNodes(); i++){
 		KPDGUINode const& node = *(kpdguiRecord->getNodeFromIndex(i));
 		out << node;
 
@@ -1266,7 +1274,7 @@ bool KPDGUI::saveFile(const QString &fileName)
 						for (int l = 0; l < structure->childCount(); l++){
 							KPDGUINodeWrapper* node = dynamic_cast<KPDGUINodeWrapper*>(structure->child(l));
 							if (node){
-								out << qint32(node->getNode()->getInternalID());
+								out << qint32(node->getNode()->getNodeID());
 							}
 						}
 					}
@@ -1301,19 +1309,19 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	++seqNumber;
 
 	kpdguiRecord->insertNode(newNode, fromSavedFile);
-	newNode->setText(QString::number(newNode->getInternalID()));
+	newNode->setText(QString::number(newNode->getNodeID()));
 
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
 	ui->pairWidget->addTopLevelItem(wrapper);
 
 	foreach(KPDGUINode *node, kpdguiRecord->getNodes()){
-		if (node->getType() == PAIR){
-			if (kpdguiRecord->isMatch(newNode, node, false, false)){
+		if (node->getNodeType() == PAIR){
+			if (kpdguiRecord->isMatch(newNode, node, 0, false, false)){
 				addArrow(newNode, node);
 			}
 		}
-		if (newNode->getType() == PAIR){
-			if (kpdguiRecord->isMatch(node, newNode, false, false)){
+		if (newNode->getNodeType() == PAIR){
+			if (kpdguiRecord->isMatch(node, newNode, 0, false, false)){
 				addArrow(node, newNode);
 			}
 		}
@@ -1330,11 +1338,11 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 }
 
 void KPDGUI::addArrow(KPDGUINode * fromNode, KPDGUINode * toNode){
-	KPDGUIArrow *link = new KPDGUIArrow(fromNode, toNode);
+	KPDGUIMatch *link = new KPDGUIMatch(fromNode, toNode);
 	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), link, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
-	//KPDGUIArrowWrapper * wrapper = new KPDGUIArrowWrapper(link);
+	//KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(link);
 	//matchListWidget->addTopLevelItem(wrapper);
-	kpdguiRecord->insertArrow(link);
+	kpdguiRecord->insertMatch(link);
 	link->setVisible(false);
 	kpdguiScene->addItem(link);
 }
@@ -1413,7 +1421,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 			hold = true;
 		}
 
-		Donor d;
+		KPDGUIDonorInfo d;
 		
 		d.setName(row.at(9).at(0));
 		d.setAge(row.at(11).at(0).toInt());
@@ -1460,7 +1468,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 		KPDGUINode * newNode;
 
 		if (row.at(2).at(0).toInt() == 0){
-			Candidate c;
+			KPDGUICandidateInfo c;
 			c.setName(row.at(5).at(0));
 			c.setAge(row.at(7).at(0).toInt());
 
@@ -1528,12 +1536,15 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 				}
 			}
 
-			c.setAntibodies(antibodies);
+			c.setHLA(antibodies);
+
+			QVector<KPDGUIDonorInfo *> donors;
+			donors << &d;
 			
-			newNode = new KPDGUINode(d, c, hold);
+			newNode = new KPDGUINode(donors, &c);
 		}
 		else {
-			newNode = new KPDGUINode(d, hold);
+			newNode = new KPDGUINode(&d);
 		}		
 
 		if (layout == "Circle"){
@@ -1613,7 +1624,7 @@ void KPDGUI::runSimulation(){
 
 	vector<vector<int> > allStructures;
 	if (optScheme == KPDOptimizationScheme::SCC){
-		allStructures = g->getCurrentMatchRunComponents(progress);
+		allStructures = g->getCurrentMatchRunComponentsNaive(progress);
 	}
 	else {
 		allStructures = g->getCurrentMatchRunCyclesAndChains(progress);
@@ -1627,7 +1638,7 @@ void KPDGUI::runSimulation(){
 	else if (optScheme == KPDOptimizationScheme::SCC){ utilValues = g->getExpectedUtilityForCurrentMatchRunComponents(progress); }
 
 	//Run Simulation
-	g->getOptimalSolution(progress);
+	g->getOptimalSolutionForCurrentMatchRun(progress);
 
 	//Collect Solution Set and Solution Objectives
 	vector<vector<int> > solutionSet = g->returnSolutionSet();
@@ -1672,10 +1683,10 @@ void KPDGUI::runSimulation(){
 		//Iterate Through Nodes in the Structure
 		for (int itNode = 0; itNode < allStructures[itStruct].size(); itNode++){
 			//Get Pair ID of Node
-			int id = kpdguiRecord->pairInfoVector[allStructures[itStruct][itNode]].pairID;
+			int id = kpdguiRecord->getNodeInfoVector()[allStructures[itStruct][itNode]].nodeID;
 			//Collect Node Object based on Pair ID
 			KPDGUINode * node = kpdguiRecord->getNode(id);
-			if (node->getType() == KPDPairType::AD){
+			if (node->getNodeType() == AD){
 				chain = true;
 			}
 			//Add to Node List
@@ -1701,13 +1712,13 @@ void KPDGUI::runSimulation(){
 
 		//Initialize New Structure Object using Node List, Utility; Push to Structure List
 		KPDGUIStructure * newStructure = new KPDGUIStructure(structureNodes, optScheme, utilValues[itStruct], idnum);
-		structureList->push_back(newStructure);
+		structureList->addStructure(newStructure);
 
 		//Iterate Through Solutions
 		for (int itSolution = 0; itSolution < solutionSet.size(); itSolution++){
 			//If Current Structure is Found in Current Solution
 			if (std::find(solutionSet[itSolution].begin(), solutionSet[itSolution].end(), itStruct) != solutionSet[itSolution].end()){
-				solutionLists[itSolution]->push_back(newStructure);
+				solutionLists[itSolution]->addStructure(newStructure);
 			}
 		}
 
@@ -1730,7 +1741,7 @@ void KPDGUI::runSimulation(){
 		QApplication::processEvents();
 	}*/
 	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
-		KPDGUIArrowWrapper * wrapper = dynamic_cast<KPDGUIArrowWrapper *>(ui->pairWidget->topLevelItem(i));
+		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(ui->pairWidget->topLevelItem(i));
 		if (wrapper){
 			wrapper->getArrow()->resetPopularityInStructures();
 		}
@@ -1763,7 +1774,7 @@ void KPDGUI::runSimulation(){
 	}
 
 	//Parameters Have Not Been Set For Next Simulation
-	kpdguiParameters->setParametersSet(false);
+	kpdguiParameters->setParametersHaveBeenUpdated(false);
 
 	//Switch Tab to "Solution" Tab
 	//ui->tabWidget->setCurrentIndex(3);
@@ -1795,10 +1806,10 @@ void KPDGUI::editDonor(){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
 
-			DialogDonor * dialogDonor = new DialogDonor(node->getDonor(), true, this);
+			DialogDonor * dialogDonor = new DialogDonor(*(node->getDonor(0)), true, this);
 
 			if (dialogDonor->exec()) {
-				qDebug() << "Edit Donor " << node->getInternalID();
+				qDebug() << "Edit Donor " << node->getNodeID();
 			}			
 		}
 	}
@@ -1810,10 +1821,10 @@ void KPDGUI::editCandidate(){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
 
-			DialogCandidate * dialogCandidate = new DialogCandidate(node->getCandidate(), true, this);
+			DialogCandidate * dialogCandidate = new DialogCandidate(*(node->getCandidate()), true, this);
 
 			if (dialogCandidate->exec()){
-				qDebug() << "Edit Candidate " << node->getInternalID();
+				qDebug() << "Edit Candidate " << node->getNodeID();
 			}
 		}
 	}
@@ -1823,7 +1834,7 @@ void KPDGUI::holdNode(){
 	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
 	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 	if (node){
-		node->setHoldStatus(true);
+		//node->setNodeStatus(true);
 		updateVisibility();
 	}
 }
@@ -1832,7 +1843,7 @@ void KPDGUI::unholdNode(){
 	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
 	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 	if (node){
-		node->setHoldStatus(false);
+		//node->setNodeStatus(false);
 		updateVisibility();
 	}
 }
@@ -1845,7 +1856,7 @@ void KPDGUI::deleteNode(){
 		QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			//emit deleteNode(node->getInternalID());
+			//emit deleteNode(node->getNodeID());
 		}
 	}
 }
@@ -1855,7 +1866,7 @@ void KPDGUI::holdMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setHoldStatus(true);
+			//node->setNodeStatus(true);
 			updateVisibility();
 		}
 	}
@@ -1866,7 +1877,7 @@ void KPDGUI::unholdMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setHoldStatus(false);
+			//node->setNodeStatus(false);
 			updateVisibility();
 		}
 	}
@@ -1932,7 +1943,7 @@ void KPDGUI::deleteMultipleNodes(){
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 			if (node){
-				//emit deleteNode(node->getInternalID());
+				//emit deleteNode(node->getNodeID());
 			}
 		}
 		QApplication::restoreOverrideCursor();

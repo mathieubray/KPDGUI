@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUINode_t {
-    QByteArrayData data[15];
-    char stringdata0[190];
+    QByteArrayData data[16];
+    char stringdata0[199];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -43,14 +43,16 @@ QT_MOC_LITERAL(10, 109, 8), // "nodeLeft"
 QT_MOC_LITERAL(11, 118, 16), // "updateVisibility"
 QT_MOC_LITERAL(12, 135, 22), // "KPDGUIDisplaySettings*"
 QT_MOC_LITERAL(13, 158, 15), // "displaySettings"
-QT_MOC_LITERAL(14, 174, 15) // "selectIfVisible"
+QT_MOC_LITERAL(14, 174, 15), // "selectIfVisible"
+QT_MOC_LITERAL(15, 190, 8) // "editNode"
 
     },
     "KPDGUINode\0nodeWasClicked\0\0i\0selected\0"
     "nodeSelectionChanged\0nodeHoldStatusChanged\0"
     "held\0nodeEdited\0nodeEntered\0nodeLeft\0"
     "updateVisibility\0KPDGUIDisplaySettings*\0"
-    "displaySettings\0selectIfVisible"
+    "displaySettings\0selectIfVisible\0"
+    "editNode"
 };
 #undef QT_MOC_LITERAL
 
@@ -60,7 +62,7 @@ static const uint qt_meta_data_KPDGUINode[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -68,16 +70,17 @@ static const uint qt_meta_data_KPDGUINode[] = {
        6,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   54,    2, 0x06 /* Public */,
-       5,    2,   59,    2, 0x06 /* Public */,
-       6,    2,   64,    2, 0x06 /* Public */,
-       8,    1,   69,    2, 0x06 /* Public */,
-       9,    1,   72,    2, 0x06 /* Public */,
-      10,    1,   75,    2, 0x06 /* Public */,
+       1,    2,   59,    2, 0x06 /* Public */,
+       5,    2,   64,    2, 0x06 /* Public */,
+       6,    2,   69,    2, 0x06 /* Public */,
+       8,    1,   74,    2, 0x06 /* Public */,
+       9,    1,   77,    2, 0x06 /* Public */,
+      10,    1,   80,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-      11,    1,   78,    2, 0x0a /* Public */,
-      14,    0,   81,    2, 0x0a /* Public */,
+      11,    1,   83,    2, 0x0a /* Public */,
+      14,    0,   86,    2, 0x0a /* Public */,
+      15,    0,   87,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::Bool,    3,    4,
@@ -89,6 +92,7 @@ static const uint qt_meta_data_KPDGUINode[] = {
 
  // slots: parameters
     QMetaType::Void, 0x80000000 | 12,   13,
+    QMetaType::Void,
     QMetaType::Void,
 
        0        // eod
@@ -108,6 +112,7 @@ void KPDGUINode::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 5: _t->nodeLeft((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 6: _t->updateVisibility((*reinterpret_cast< KPDGUIDisplaySettings*(*)>(_a[1]))); break;
         case 7: _t->selectIfVisible(); break;
+        case 8: _t->editNode(); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -185,13 +190,13 @@ int KPDGUINode::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }

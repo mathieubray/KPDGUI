@@ -7,7 +7,7 @@
 
 #include "KPDGUINode.h"
 #include "KPDGUINodeWrapper.h"
-#include "KPDGUIArrow.h"
+#include "KPDGUIMatch.h"
 
 class KPDGUIStructure
 {
@@ -43,7 +43,7 @@ public:
 
 private:
 	QVector<KPDGUINode *> myPairList;
-	QSet<KPDGUIArrow *> myArrows;
+	QSet<KPDGUIMatch *> myArrows;
 	KPDOptimizationScheme myOptScheme;
 	double myUtility;
 	int myID;		

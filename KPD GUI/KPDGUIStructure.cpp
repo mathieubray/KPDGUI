@@ -17,7 +17,7 @@ KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimization
 			myPairList.removeFirst();
 			myPairList.push_back(node);
 
-			if (myPairList.first()->getType() != PAIR){
+			if (myPairList.first()->getNodeType() != PAIR){
 				chain = true;
 			}
 		}
@@ -28,12 +28,18 @@ KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimization
 		for (int j = 0; j < myPairList.size() - 1; j++){
 			KPDGUINode * firstPair = myPairList.at(j);
 			KPDGUINode * secondPair = myPairList.at(j + 1);
-			KPDGUIArrow * arrow = firstPair->findOutArrow(secondPair);
+			
+			//FIX
+
+			KPDGUIMatch * arrow = firstPair->findCandidateMatch(secondPair,0);
 			myArrows.insert(arrow);
 		}
 
 		if (!chain){
-			KPDGUIArrow * arrow = myPairList.last()->findOutArrow(myPairList.first());
+
+			// FIX
+
+			KPDGUIMatch * arrow = myPairList.last()->findCandidateMatch(myPairList.first(),0);
 			if (arrow != NULL){
 				myArrows.insert(arrow);
 			}			
@@ -44,7 +50,10 @@ KPDGUIStructure::KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimization
 		for (int j = 0; j < myPairList.size(); j++){
 			for (int k = 0; k < myPairList.size(); k++){
 				if (j != k){
-					KPDGUIArrow * arrow = myPairList.at(j)->findOutArrow(myPairList.at(k));
+
+					// FIX
+
+					KPDGUIMatch * arrow = myPairList.at(j)->findCandidateMatch(myPairList.at(k), 0);
 					if (arrow != NULL){
 						myArrows.insert(arrow);
 					}
@@ -65,13 +74,13 @@ void KPDGUIStructure::select(){
 }
 
 void KPDGUIStructure::highlight(){	
-	foreach(KPDGUIArrow * arrow, myArrows){
-		arrow->highlightCycle();
+	foreach(KPDGUIMatch * arrow, myArrows){
+		arrow->highlightMatch(1);
 	}
 }
 
 void KPDGUIStructure::undoHighlights(){
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->endDisplayAsPartOfSolution();
 	}
 }
@@ -141,7 +150,7 @@ QString KPDGUIStructure::text(){
 
 	QString structureString = "";
 	foreach(KPDGUINode * node, myPairList){
-		structureString += QString::number(node->getInternalID());
+		structureString += QString::number(node->getNodeID());
 		structureString += ", ";
 	}
 
@@ -183,7 +192,7 @@ void KPDGUIStructure::increasePopularityInStructures(){
 	foreach(KPDGUINode * node, myPairList){
 		node->increasePopularityInStructures();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->increasePopularityInStructures();
 	}
 }
@@ -192,7 +201,7 @@ void KPDGUIStructure::increasePopularityInSolutions(){
 	foreach(KPDGUINode * node, myPairList){
 		node->increasePopularityInSolutions();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->increasePopularityInSolutions();
 	}
 }
@@ -201,7 +210,7 @@ void KPDGUIStructure::decreasePopularityInStructures(){
 	foreach(KPDGUINode * node, myPairList){
 		node->decreasePopularityInStructures();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->decreasePopularityInStructures();
 	}
 }
@@ -210,7 +219,7 @@ void KPDGUIStructure::decreasePopularityInSolutions(){
 	foreach(KPDGUINode * node, myPairList){
 		node->decreasePopularityInSolutions();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->decreasePopularityInSolutions();
 	}
 }
@@ -219,7 +228,7 @@ void KPDGUIStructure::resetPopularityInStructures(){
 	foreach(KPDGUINode * node, myPairList){
 		node->resetPopularityInStructures();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->resetPopularityInStructures();
 	}
 }
@@ -228,7 +237,7 @@ void KPDGUIStructure::resetPopularityInSolutions(){
 	foreach(KPDGUINode * node, myPairList){
 		node->resetPopularityInSolutions();
 	}
-	foreach(KPDGUIArrow * arrow, myArrows){
+	foreach(KPDGUIMatch * arrow, myArrows){
 		arrow->resetPopularityInSolutions();
 	}
 }
@@ -249,7 +258,7 @@ QString KPDGUIStructure::toString(){
 	}
 
 	foreach(KPDGUINode * node, myPairList){
-		structureString += QString::number(node->getInternalID());
+		structureString += QString::number(node->getNodeID());
 		structureString += ", ";
 	}
 
@@ -261,17 +270,17 @@ QString KPDGUIStructure::toString(){
 		for (int j = 0; j < myPairList.size() - 1; j++){
 			KPDGUINode * firstPair = myPairList.at(j);
 			KPDGUINode * secondPair = myPairList.at(j + 1);
-			nodeString = nodeString + QString::number(firstPair->getInternalID()) + "->" + QString::number(secondPair->getInternalID()) + ", ";
+			nodeString = nodeString + QString::number(firstPair->getNodeID()) + "->" + QString::number(secondPair->getNodeID()) + ", ";
 		}
 		if (!chain){
-			nodeString = nodeString + QString::number(myPairList.last()->getInternalID()) + "->" + QString::number(myPairList.first()->getInternalID()) + ", ";
+			nodeString = nodeString + QString::number(myPairList.last()->getNodeID()) + "->" + QString::number(myPairList.first()->getNodeID()) + ", ";
 		}
 		nodeString.chop(2);
 		structureString += nodeString;
 	}
 	else {
-		foreach(KPDGUIArrow * arrow, myArrows){
-			QString arrowString = QString::number(arrow->startItem()->getInternalID()) + "->" + QString::number(arrow->endItem()->getInternalID());
+		foreach(KPDGUIMatch * arrow, myArrows){
+			QString arrowString = QString::number(arrow->getFromNode()->getNodeID()) + "->" + QString::number(arrow->getToNode()->getNodeID());
 			structureString += arrowString;
 			structureString += ", ";
 		}

@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-#ifndef KPDGUIARROW_H
-#define KPDGUIARROW_H
+#ifndef KPDGUIMATCH_H
+#define KPDGUIMATCH_H
 
 #include <QGraphicsLineItem>
 #include <QDebug>
@@ -50,7 +50,6 @@
 
 #include "KPDGUINode.h"
 #include "KPDGUIDisplaySettings.h"
-//#include "EnumsFunctions.h"
 
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;
@@ -61,38 +60,63 @@ class QGraphicsSceneMouseEvent;
 class QPainterPath;
 QT_END_NAMESPACE
 
-class KPDGUIArrow : public QObject, public QGraphicsLineItem
+class KPDGUIMatch : public QObject, public QGraphicsLineItem
 {
 	Q_OBJECT;
 
-public:
-    enum { Type = UserType + 4 };
-
-	KPDGUIArrow(KPDGUINode *startItem, KPDGUINode *endItem, bool arrow=true);
-	~KPDGUIArrow();
+private:
 
 	//Nodes
-	KPDGUINode *startItem() const { return myStartItem; }
-	KPDGUINode *endItem() const { return myEndItem; }
+	KPDGUINode * myFromNode;
+	KPDGUINode * myToNode;
+
+	int associatedDonor;
+	
+	//Visual Arrow Properties
+	QColor myColor;	
+	int myWidth;
+	qreal myOpacity;
+	int myZValue;
+
+	QPolygonF arrowHead;
+
+	//Match Properties
+	double matchSuccessProbability;
+	double matchUtility;
+
+	int myPopularityInStructures;
+	int myPopularityInSolutions;
+
+	bool displayAsPartOfSolution;
+
+public:
+    //enum { Type = UserType + 4 };
+
+	KPDGUIMatch(KPDGUINode *fromNode, KPDGUINode *toNode, int donor = 1);
+	~KPDGUIMatch();
+
+	//Nodes
+	KPDGUINode *getFromNode() const { return myFromNode; }
+	KPDGUINode *getToNode() const { return myToNode; }
 
 	//Visual Arrow Properties
     QRectF boundingRect() const;
     QPainterPath shape() const;
 	void updatePosition();
-   	int type() const { return Type; }
-	void setColor(const QColor &color) { myColor = color; }
-	void setWidth(int width) { myWidth = width; }
-	QColor color() const { return pen().color(); }
-    
-	//QTreeWidgetItem * getListItem();
-	//QTreeWidgetItem * getListItemCopy();
-	
-	//Highlights
-	void clearHighlight();
-	void highlightConnection();
-	void highlightCycle();
+   	//int type() const { return Type; }
 
-	//Popularity
+	void setArrowColor(const QColor &color) { myColor = color; }
+	void setArrowWidth(int width) { myWidth = width; }
+	void setArrowOpacity(qreal opacity) { myOpacity = opacity; }
+	void setArrowZValue(int zValue) { myZValue = zValue; }
+	
+	QColor color() const { return pen().color(); }
+    	
+	void highlightMatch(int level);
+	void clearHighlight();
+
+
+	//Match Properties
 	int getPopularityInStructures() const { return myPopularityInStructures; }
 	int getPopularityInSolutions() const { return myPopularityInSolutions; }
 
@@ -100,42 +124,23 @@ public:
 	void increasePopularityInSolutions();
 	void decreasePopularityInStructures();
 	void decreasePopularityInSolutions();
-
 	void resetPopularityInStructures();
 	void resetPopularityInSolutions();
+
+	double getMatchSuccessProbability() const { return matchSuccessProbability; }
+	double getMatchUtility() const { return matchUtility; }
 
 signals:
 	void selectArrowInMatchList(bool);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
-
-private:
-
-	//Helper Functions
 	bool checkVisibility(KPDGUIDisplaySettings * displaySettings);
 
-	//Nodes
-    KPDGUINode *myStartItem;
-    KPDGUINode *myEndItem;
+	void setArrowProperties(QColor color, int width, qreal opacity, int zValue);
 	
-	//QTreeWidgetItem * arrowListItem;
-    
-	//Visual Arrow Properties
-	bool isArrow;
-	QColor myColor;
-	QPolygonF arrowHead;
-	int myWidth;
-	qreal myOpacity;
-
-	//Popularity Properties
-	int myPopularityInStructures;
-	int myPopularityInSolutions;
-
-	bool displayAsPartOfSolution;
-
 public slots:
-	void changeArrowSelection(int id, bool selected);
+	void updateSelection(int id, bool selected);
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void endDisplayAsPartOfSolution();
 };

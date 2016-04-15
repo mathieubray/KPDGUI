@@ -1,154 +1,333 @@
 #include "KPDGUINode.h"
-#include "KPDGUIArrow.h"
+#include "KPDGUIMatch.h"
 
 #include "DialogDonor.h"
 
-KPDGUINode::KPDGUINode() {
-	pairType = KPDPairType::PAIR;
-	holdStatus = false;
+KPDGUINode::KPDGUINode()
+{
+	myType = PAIR;
 
+
+}
+
+KPDGUINode::KPDGUINode(KPDGUIDonorInfo * donor)
+{
+	myType = KPDNodeType::AD;
+	
+	myDonors << donor;	
+	myDonorStatuses << false;
+
+	QGraphicsEllipseItem * newDonorItem = new QGraphicsEllipseItem();
+	newDonorItem->setRect(QRectF(0, 0, 75, 65));
+	addToGroup(newDonorItem);
+	myDonorItems << newDonorItem;
+		
 	setAdditionalProperties();	
 }
 
-KPDGUINode::KPDGUINode(Donor d, bool hold) : donor(d)
+KPDGUINode::KPDGUINode(QVector<KPDGUIDonorInfo *> donors, KPDGUICandidateInfo * candidate)
 {
-	pairType = KPDPairType::AD;
-	holdStatus = hold;
-
-	myDonor = new QGraphicsEllipseItem();
-	myDonor->setRect(QRectF(0, 0, 75, 65));
+	myType = KPDNodeType::PAIR;
 	
-	addToGroup(myDonor);
-
-	setAdditionalProperties();
-	
-}
-
-KPDGUINode::KPDGUINode(Donor d, Candidate c, bool hold) : donor(d), candidate(c)
-{
-	pairType = KPDPairType::PAIR;
-	holdStatus = hold;
+	int numberOfDonors = donors.size();
 
 	qreal dist = 45;
 	qreal donorAngle = -PI / 4;
 
-	myRecip = new QGraphicsEllipseItem();
-	myRecip->setRect(QRectF(0, 0, 65, 55));
-	myRecip->setZValue(1);
+	foreach(KPDGUIDonorInfo * donor, donors) {
+		myDonors << donor;
+		myDonorStatuses << false;
 
-	addToGroup(myRecip);
+		QGraphicsEllipseItem * associatedDonorItem = new QGraphicsEllipseItem();
+		associatedDonorItem->setRect(QRectF(dist*cos(donorAngle), dist*sin(donorAngle), 75, 65));
+		addToGroup(associatedDonorItem);
+		myDonorItems << associatedDonorItem;
+		
+		donorAngle += (2 * PI) / numberOfDonors;
+	}
 
-	myDonor = new QGraphicsEllipseItem();
-	myDonor->setRect(QRectF(dist*cos(donorAngle), dist*sin(donorAngle), 45, 35));
-	myDonor->setZValue(40000);
+	myCandidate = candidate;
 
-	addToGroup(myDonor);
+	myCandidateItem = new QGraphicsEllipseItem();
+	myCandidateItem->setRect(QRectF(0, 0, 65, 55));
+	addToGroup(myCandidateItem);
 
+	myCandidateStatus = false;
 
 	setAdditionalProperties();	
 }
 
 KPDGUINode::~KPDGUINode()
 {
-	foreach(KPDGUIArrow *link, myInArrows)
-		delete link;
-	foreach(KPDGUIArrow *link, myOutArrows)
-		delete link;
+	foreach(KPDGUIMatch * match, myCompatibleDonorMatches)
+		delete match;
+	foreach(QSet<KPDGUIMatch * > candidateMatchesByDonor, myCompatibleCandidateMatches){
+		foreach(KPDGUIMatch * match, candidateMatchesByDonor) {
+			delete match;
+		}
+	}
 }
 
-void KPDGUINode::setAdditionalProperties(){
+int KPDGUINode::getNodeID() const {
+	return nodeID;
+}
+
+KPDNodeType KPDGUINode::getNodeType() const {
+	return myType;
+}
+
+KPDGUIDonorInfo * KPDGUINode::getDonor(int i) const {
+	return myDonors[i];
+}
+
+QVector<KPDGUIDonorInfo *> KPDGUINode::getDonors() const {
+	return myDonors;
+}
+
+int KPDGUINode::getNumberOfDonors() const {
+	return myDonors.size();
+}
+
+KPDGUICandidateInfo * KPDGUINode::getCandidate() const {
+	return myCandidate;
+}
+
+bool KPDGUINode::getDonorStatus(int i) const {
+	return myDonorStatuses[i];
+}
+
+bool KPDGUINode::getCandidateStatus() const {
+	return myCandidateStatus;
+}
+
+bool KPDGUINode::getNodeStatus() {
+
+	if (getCandidateStatus()) {
+		return true;
+	}
+	else {
+		foreach(bool donorStatus, myDonorStatuses) {
+			if (!donorStatus) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+}
+
+QVector<QString> KPDGUINode::getPrograms() const {
+	return myPrograms;
+}
+
+int KPDGUINode::getNumberOfPrograms() const {
+	return myPrograms.size();
+}
+
+void KPDGUINode::setCandidate(KPDGUICandidateInfo * c) {
+
+	myCandidate = c;
+}
+
+void KPDGUINode::setNodeID(int id) {
+	nodeID = id;
+
+	if (myType == PAIR) {
+		setToolTip("Pair " + QString::number(id));
+	}
+	else {
+		setToolTip("AD " + QString::number(id));
+	}
+}
+
+void KPDGUINode::setNodeType(KPDNodeType type) {
+	myType = type;
+}
+
+void KPDGUINode::setDonors(QVector<KPDGUIDonorInfo *> donors) {
+	myDonors = donors;
+
+	//FIX
+}
+
+void KPDGUINode::addDonor(KPDGUIDonorInfo * d) {
+
+	myDonors << d;
+
+	int numberOfDonors = myDonors.size();
+
+	qreal dist = 45;
+	qreal donorAngle = -PI / 4;
+
+	foreach(QGraphicsEllipseItem * donorItem, myDonorItems) {
+		donorItem->setRect(QRectF(dist*cos(donorAngle), dist*sin(donorAngle), 75, 65));
+		donorAngle += (2 * PI) / numberOfDonors;
+	}
+
+	QGraphicsEllipseItem * donorItem = new QGraphicsEllipseItem();
+	donorItem->setRect(QRectF(dist*cos(donorAngle), dist*sin(donorAngle), 75, 65));
+	addToGroup(donorItem);
+	myDonorItems << donorItem;
+
+	myDonorStatuses << false;
+
+}
+
+void KPDGUINode::removeDonor(int i) {
+	myDonors.remove(i);
+	myDonorItems.remove(i);
+	myDonorStatuses.remove(i);
+
+	int numberOfDonors = myDonors.size();
+
+	qreal dist = 45;
+	qreal donorAngle = -PI / 4;
+
+	foreach(QGraphicsEllipseItem * donorItem, myDonorItems) {
+		donorItem->setRect(QRectF(dist*cos(donorAngle), dist*sin(donorAngle), 75, 65));
+		donorAngle += (2 * PI) / numberOfDonors;
+	}
+}
+
+void KPDGUINode::setDonorStatus(int i, bool status) {
+	myDonorStatuses[i] = status;
 	setBackgroundColors();
-	setZValue(0);
-	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-	setAcceptHoverEvents(true);
 
-	popularityInStructures = 0;
-	popularityInSolutions = 0;
+	emit nodeHoldStatusChanged(nodeID, status);
 }
 
-void KPDGUINode::setText(const QString &text)
-{
-    prepareGeometryChange();
-    myText = text;
-    update();
+void KPDGUINode::setCandidateStatus(bool status) {
+
+}
+
+void KPDGUINode::setPrograms(QVector<QString> programs) {
+
+}
+
+void KPDGUINode::addProgram(QString program) {
+
+}
+
+void KPDGUINode::removeProgram(QString program) {
+
+}
+
+QGraphicsEllipseItem * KPDGUINode::getDonorItem(int i) {
+	return myDonorItems[i];
+}
+
+QGraphicsEllipseItem * KPDGUINode::getCandidateItem() {
+	return myCandidateItem;
+}
+
+QPointF KPDGUINode::getDonorCenter(int i) {
+
+	//qreal x = myDonor->mapFromScene(myDonor->boundingRect().x());
+	//qreal y = myDonor->mapFromScene(myDonor->boundingRect().y());
+	QPointF point = mapToScene(myDonorItems[i]->boundingRect().topLeft());
+	qreal x = point.x();
+	qreal y = point.y();
+
+	qreal width = myDonorItems[i]->boundingRect().width();
+	qreal height = myDonorItems[i]->boundingRect().height();
+
+	return QPointF(x + width / 2, y + height / 2);
+}
+
+QPointF KPDGUINode::getCandidateCenter() {
+
+	QPointF point = mapToScene(myCandidateItem->boundingRect().topLeft());
+	qreal x = point.x();
+	qreal y = point.y();
+	qreal width = myCandidateItem->boundingRect().width();
+	qreal height = myCandidateItem->boundingRect().height();
+
+	return QPointF(x + width / 2, y + height / 2);
+
 }
 
 QString KPDGUINode::text() const
 {
-    return myText;
+	return myText;
+}
+
+void KPDGUINode::setText(const QString &text)
+{
+	prepareGeometryChange();
+	myText = text;
+	update();
 }
 
 void KPDGUINode::setBackgroundColors()
 {
-	if (holdStatus){
-		if (pairType == PAIR){
-			myRecipBackgroundColor = QColor(100, 100, 100);
-			myDonorBackgroundColor = QColor(100, 100, 125);
+	if (myType == PAIR) {
+		if (myCandidateStatus) {
+			myCandidateBackgroundColor = QColor(100, 100, 100);
 		}
 		else {
-			myDonorBackgroundColor = QColor(100, 100, 125);
-		}
-	}
-	else {
-		if (pairType == PAIR){
-			myRecipBackgroundColor = QColor(255, candidate.getPRA() * 1.5, candidate.getPRA() * 1.5);
-			myDonorBackgroundColor = QColor(0, 0, 255);
-		}
-		else {
-			myDonorBackgroundColor = QColor(0, 0, 255);
+			int pra = myCandidate->getPRA();
+			myCandidateBackgroundColor = QColor(255, pra * 1.5, pra * 1.5);
 		}
 	}
 
-    update();
+	for (int i = 1; i <= getNumberOfDonors(); i++) {
+		if (myDonorStatuses[i - 1]) {
+			myDonorBackgroundColors[i - 1] = QColor(100, 100, 125);
+		}
+		else {
+			myDonorBackgroundColors[i - 1] = QColor(0, 0, 255);
+		}
+	}
+
+	update();
 }
 
-QColor KPDGUINode::donorBackgroundColor() const
+QColor KPDGUINode::donorBackgroundColor(int i) const
 {
-    return myDonorBackgroundColor;
+	return myDonorBackgroundColors[i];
 }
 
-QColor KPDGUINode::recipBackgroundColor() const
+QColor KPDGUINode::candidateBackgroundColor() const
 {
-	return myRecipBackgroundColor;
+	return myCandidateBackgroundColor;
 }
 
 //QRectF KPDGUINode::boundingRect() const
 //{
-	//const int Margin = 1;
-	//return outlineRect().adjusted(-Margin, -Margin, +Margin, +Margin);
+//const int Margin = 1;
+//return outlineRect().adjusted(-Margin, -Margin, +Margin, +Margin);
 //}
 
 //QRectF KPDGUINode::outlineRect() const
 //{
-	/*qreal x1; qreal x2; qreal y1; qreal y2;
+/*qreal x1; qreal x2; qreal y1; qreal y2;
 
-	int Padding = 12;
-	QFont * font = new QFont();
-	font->setBold(true);
-	font->setPointSize(8);
-	QFontMetricsF * metrics = new QFontMetricsF(*font);
-	QRectF rect = metrics->boundingRect(myText);
-	rect.getCoords(&x1, &y1, &x2, &y2);
-	rect.adjust(-(2.5*Padding - x1), -(Padding - y1), (2.5*Padding - x2), (Padding - y2));
-	rect.translate(-rect.center());
-	return rect; */
+int Padding = 12;
+QFont * font = new QFont();
+font->setBold(true);
+font->setPointSize(8);
+QFontMetricsF * metrics = new QFontMetricsF(*font);
+QRectF rect = metrics->boundingRect(myText);
+rect.getCoords(&x1, &y1, &x2, &y2);
+rect.adjust(-(2.5*Padding - x1), -(Padding - y1), (2.5*Padding - x2), (Padding - y2));
+rect.translate(-rect.center());
+return rect; */
 //}
 
 //QPainterPath KPDGUINode::shape() const
 //{
-	//QRectF rect = outlineRect();
+//QRectF rect = outlineRect();
 
-	//QPainterPath path;
-	//path.addEllipse(rect);
-	//return path;
+//QPainterPath path;
+//path.addEllipse(rect);
+//return path;
 //}
 
 void KPDGUINode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * /* widget */)
 {
-
 	QColor myOutlineColor = Qt::black;
 	QColor myTextColor = Qt::white;
-	
+
 	//Outline
 	QPen pen(myOutlineColor);
 
@@ -158,11 +337,11 @@ void KPDGUINode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	}
 
 	painter->setPen(pen);
-	painter->setBrush(QBrush(myDonorBackgroundColor, Qt::SolidPattern));
+	painter->setBrush(QBrush(myDonorBackgroundColors[0], Qt::SolidPattern));
 
-	QRectF donorRect = myDonor->boundingRect();
+	QRectF donorRect = myDonorItems[0]->boundingRect();
 	painter->drawEllipse(donorRect);
-	
+
 	painter->setPen(QPen(myTextColor, 16, Qt::SolidLine, Qt::RoundCap));
 
 	QFont * font = new QFont();
@@ -170,13 +349,13 @@ void KPDGUINode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 	font->setPointSize(8);
 	painter->setFont(*font);
 
-	painter->drawText(donorRect, Qt::AlignCenter, QString::number(internalID));
+	painter->drawText(donorRect, Qt::AlignCenter, QString::number(nodeID));
 
-	if (pairType == PAIR){
+	if (myType == PAIR) {
 		painter->setPen(pen);
-		painter->setBrush(QBrush(myRecipBackgroundColor, Qt::SolidPattern));
+		painter->setBrush(QBrush(myCandidateBackgroundColor, Qt::SolidPattern));
 
-		QRectF recipRect = myRecip->boundingRect();
+		QRectF recipRect = myCandidateItem->boundingRect();
 		painter->drawEllipse(recipRect);
 
 		painter->setPen(QPen(myTextColor, 16, Qt::SolidLine, Qt::RoundCap));
@@ -188,237 +367,131 @@ void KPDGUINode::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
 
 		//painter->drawText(recipRect, Qt::AlignCenter, QString::number(internalID));
 	}
-	
+
 }
 
-void KPDGUINode::addInArrow(KPDGUIArrow *link)
+//QVariant KPDGUINode::data(int column) const {
+//}
+
+
+void KPDGUINode::addDonorMatch(KPDGUIMatch * match)
 {
-	myInArrows.insert(link);
+	myCompatibleDonorMatches.insert(match);
 }
 
-void KPDGUINode::removeInArrow(KPDGUIArrow *link)
+void KPDGUINode::removeDonorMatch(KPDGUIMatch * match)
 {
-	myInArrows.remove(link);
+	myCompatibleDonorMatches.remove(match);
 }
 
-void KPDGUINode::addOutArrow(KPDGUIArrow *link)
+void KPDGUINode::addCandidateMatch(KPDGUIMatch * match, int i)
 {
-	myOutArrows.insert(link);
+	myCompatibleCandidateMatches[i].insert(match);
 }
 
-void KPDGUINode::removeOutArrow(KPDGUIArrow *link)
+void KPDGUINode::removeCandidateMatch(KPDGUIMatch * match, int i)
 {
-	myOutArrows.remove(link);
+	myCompatibleCandidateMatches[i].remove(match);
 }
 
-KPDGUIArrow * KPDGUINode::findOutArrow(KPDGUINode * toNode){
-	foreach(KPDGUIArrow * arrow, myOutArrows){
-		if (arrow->endItem() == toNode){
-			return arrow;
+KPDGUIMatch * KPDGUINode::findDonorMatch(KPDGUINode * toNode) {
+	foreach(KPDGUIMatch * match, myCompatibleDonorMatches) {
+		if (match->getToNode() == toNode) {
+			return match;
 		}
 	}
 
 	return NULL;
 }
 
-bool KPDGUINode::hasNoCompatibilities(){
-	if (myInArrows.count() + myOutArrows.count() == 0){
-		return true;
+KPDGUIMatch * KPDGUINode::findCandidateMatch(KPDGUINode * fromNode, int i) {
+	foreach(KPDGUIMatch * match, myCompatibleCandidateMatches[i]) {
+		if (match->getFromNode() == fromNode) {
+			return match;
+		}
 	}
-	return false;
+
+	return NULL;
 }
 
-int KPDGUINode::getNumberOfCompatibilities(){
-	return myInArrows.count() + myOutArrows.count();
+bool KPDGUINode::hasNoCompatibilities() {
+	return (getNumberOfCompatibleDonors() == 0);
 }
 
-int KPDGUINode::getNumberOfCompatibleDonors(){
-	return myInArrows.count();
+int KPDGUINode::getNumberOfCompatibilities() {
+	return myCompatibleDonorMatches.count() + myCompatibleCandidateMatches.count();
 }
 
-int KPDGUINode::getNumberOfCompatibleRecipients(){
-	return myOutArrows.count();
+int KPDGUINode::getNumberOfCompatibleDonors() {
+	return myCompatibleDonorMatches.count();
 }
 
-int KPDGUINode::getNumberOfAssociatedDonors(){
-	return 1;
+int KPDGUINode::getNumberOfCompatibleCandidates() {
+	return myCompatibleCandidateMatches.count();
 }
 
-int KPDGUINode::getPopularityInStructures(){
+
+int KPDGUINode::getPopularityInStructures() {
 	return popularityInStructures;
 }
 
-int KPDGUINode::getPopularityInSolutions(){
+int KPDGUINode::getPopularityInSolutions() {
 	return popularityInSolutions;
 }
 
-void KPDGUINode::increasePopularityInStructures(){
+void KPDGUINode::increasePopularityInStructures() {
 	popularityInStructures++;
 }
 
-void KPDGUINode::increasePopularityInSolutions(){
+void KPDGUINode::increasePopularityInSolutions() {
 	popularityInSolutions++;
 }
 
-void KPDGUINode::decreasePopularityInStructures(){
+void KPDGUINode::decreasePopularityInStructures() {
 	popularityInStructures--;
 }
 
-void KPDGUINode::decreasePopularityInSolutions(){
+void KPDGUINode::decreasePopularityInSolutions() {
 	popularityInSolutions--;
 }
 
-void KPDGUINode::resetPopularityInStructures(){
+void KPDGUINode::resetPopularityInStructures() {
 	popularityInStructures = 0;
 }
 
-void KPDGUINode::resetPopularityInSolutions(){
+void KPDGUINode::resetPopularityInSolutions() {
 	popularityInSolutions = 0;
 }
 
-bool KPDGUINode::getHoldStatus() const{
-	return holdStatus;
-}
+QString KPDGUINode::getNameString() {
 
-void KPDGUINode::setHoldStatus(bool hold){
-	holdStatus = hold;
-	setBackgroundColors();
+	// Should be drawn from Candidate and Donor files
 
-	emit nodeHoldStatusChanged(internalID, holdStatus);
-}
-
-void KPDGUINode::editNode(){
-	
-}
-
-QGraphicsEllipseItem * KPDGUINode::getDonorItem(){
-	return myDonor;
-}
-
-QGraphicsEllipseItem * KPDGUINode::getRecipItem(){
-	return myRecip;
-}
-
-QPointF KPDGUINode::getDonorCenter(){
-
-	//qreal x = myDonor->mapFromScene(myDonor->boundingRect().x());
-	//qreal y = myDonor->mapFromScene(myDonor->boundingRect().y());
-	QPointF point = mapToScene(myDonor->boundingRect().topLeft());
-	qreal x = point.x();
-	qreal y = point.y();
-	
-	qreal width = myDonor->boundingRect().width();
-	qreal height = myDonor->boundingRect().height();
-
-	qDebug() << internalID << " DONOR CENTER " << x << " " << y << " " << width << " " << height;
-
-	return QPointF(x + width / 2, y + height / 2);
-}
-
-QPointF KPDGUINode::getRecipCenter(){
-
-	QPointF point = mapToScene(myRecip->boundingRect().topLeft());
-	qreal x = point.x();
-	qreal y = point.y();
-	qreal width = myRecip->boundingRect().width();
-	qreal height = myRecip->boundingRect().height();
-
-	qDebug() << internalID << " RECIP CENTER " << x << " " << y << " " << width << " " << height;
-
-	return QPointF(x + width / 2, y + height / 2);
-	//return QPointF(x + 55*cos((-1)*PI/4)+width / 2, y + 55*sin((-1)*PI/4) + height / 2);
-}
-
-int KPDGUINode::getInternalID() const{
-	return internalID;
-}
-
-void KPDGUINode::setInternalID(int id){
-	internalID = id;
-
-	if (pairType == PAIR){
-		setToolTip("Pair " + QString::number(id));
+	if (myType == AD) {
+		return "AD: " + myDonors.first()->getName();
 	}
 	else {
-		setToolTip("AD " + QString::number(id));
-	}
-}
+		QString nameString = myCandidate->getName() + "/";
+		foreach(KPDGUIDonorInfo * donor, myDonors) {
+			nameString += donor->getName() + ",";
+		}
+		nameString.chop(1);
 
-void KPDGUINode::setDonor(Donor d){
-	
-	donor = d;
-}
-
-void KPDGUINode::setCandidate(Candidate c){
-	
-	candidate = c;	
-}
-
-KPDPairType KPDGUINode::getType() const{
-	return pairType;
-}
-
-void KPDGUINode::setType(KPDPairType type){
-	pairType = type;
-}
-
-Candidate KPDGUINode::getCandidate() const{
-	return candidate;
-}
-
-Donor KPDGUINode::getDonor() const{
-	return donor;
-}
-
-QString KPDGUINode::getDonorName() const {
-	return donor.getName();
-}
-
-int	KPDGUINode::getDonorAge() const {
-	return donor.getAge();
-}
-
-KPDBloodType KPDGUINode::getDonorBT() const {
-	return donor.getBT();
-}
-
-QString	KPDGUINode::getCandidateName() const {
-	return candidate.getName();
-}
-
-int	KPDGUINode::getCandidateAge() const {
-	return candidate.getAge();
-}
-
-KPDBloodType KPDGUINode::getCandidateBT() const{
-	return candidate.getBT();
-}
-
-int	KPDGUINode::getCandidatePRA() const {
-	return candidate.getPRA();
-}
-
-QString KPDGUINode::getNameString(){
-
-	if (pairType == AD){
-		return "AD: " + donor.getName();
-	}
-	else {
-		return candidate.getName() + "/" + donor.getName();
+		return nameString;
 	}
 
 }
 
-QString KPDGUINode::getCompatibleDonorString(){
+QString KPDGUINode::getCompatibleDonorString() {
 	QString compatibleDonorString = "Compatible Donors: ";
 
-	if (myInArrows.count() > 0){
+	if (myCompatibleDonorMatches.count() > 0) {
 		QVector<int> compatibleDonors;
-		foreach(KPDGUIArrow * arrow, myInArrows){
-			compatibleDonors.push_back(arrow->startItem()->getInternalID());
+		foreach(KPDGUIMatch * match, myCompatibleDonorMatches) {
+			compatibleDonors.push_back(match->getFromNode()->getNodeID());
 		}
 		qSort(compatibleDonors);
-		foreach(int id, compatibleDonors){
+		foreach(int id, compatibleDonors) {
 			compatibleDonorString += QString::number(id);
 			compatibleDonorString += ", ";
 		}
@@ -431,42 +504,56 @@ QString KPDGUINode::getCompatibleDonorString(){
 	return compatibleDonorString;
 }
 
-QString KPDGUINode::getCompatibleRecipientsString(){
-	QString compatibleRecipientString = "Compatible Recipients: ";
+QString KPDGUINode::getCompatibleCandidatesString() {
+	QString compatibleCandidateString = "Compatible Candidates: ";
 
-	if (myOutArrows.count() > 0){
-		QVector<int> compatibleRecipients;
-		foreach(KPDGUIArrow * arrow, myOutArrows){
-			compatibleRecipients.push_back(arrow->endItem()->getInternalID());
+	foreach(QSet<KPDGUIMatch *> compatibleMatchesByDonor, myCompatibleCandidateMatches) {
+		if (compatibleMatchesByDonor.size() > 0) {
+			QVector<int> compatibleCandidates;
+			foreach(KPDGUIMatch * match, compatibleMatchesByDonor) {
+				compatibleCandidates.push_back(match->getToNode()->getNodeID());
+			}
+			qSort(compatibleCandidates);
+			foreach(int id, compatibleCandidates) {
+				compatibleCandidateString += QString::number(id);
+				compatibleCandidateString += ", ";
+			}
+			compatibleCandidateString.chop(2);
 		}
-		qSort(compatibleRecipients);
-		foreach(int id, compatibleRecipients){
-			compatibleRecipientString += QString::number(id);
-			compatibleRecipientString += ", ";
+		else {
+			compatibleCandidateString += "None";
 		}
-		compatibleRecipientString.chop(2);
-	}
-	else {
-		compatibleRecipientString += "None";
 	}
 
-	return compatibleRecipientString;
+	return compatibleCandidateString;
 }
 
-QString KPDGUINode::getConsoleString(){
+QString KPDGUINode::getDashboardString() {
 	QString consoleString = "";
-	
-	if (pairType == PAIR){
+
+	if (myType == PAIR) {
 		consoleString += "Pair ";
 	}
 	else {
 		consoleString += "AD ";
 	}
-	consoleString += QString::number(getInternalID());
-	
-	if (getHoldStatus()){
-		consoleString += "(ON HOLD)";
+	consoleString += QString::number(nodeID);
+	consoleString += " (";
+	if (myCandidateStatus) {
+		consoleString += "KPDGUICandidateInfo on hold, ";
 	}
+
+	int i = 0;
+	foreach(bool status, myDonorStatuses) {
+		i++;
+		if (status) {
+			consoleString += "KPDGUIDonorInfo ";
+			consoleString += i;
+			consoleString += " on hold, ";
+		}
+	}
+	consoleString.chop(2);
+
 	//MOVE
 	/*
 	consoleString += "\nDonor: ";
@@ -474,50 +561,50 @@ QString KPDGUINode::getConsoleString(){
 	consoleString += " (";
 	consoleString += getDonorBT();
 	consoleString += ")";
-	if (donor.type == PAIR){
-		consoleString += ", Candidate: ";
-		consoleString += getRecipName();
-		consoleString += " (";
-		consoleString += getRecipBT();
-		consoleString += ")";
+	if (myDonors[i]->type == PAIR){
+	consoleString += ", Candidate: ";
+	consoleString += getCandidateName();
+	consoleString += " (";
+	consoleString += getCandidateBT();
+	consoleString += ")";
 	}
-	consoleString += "\n\nDonor HLA : ";
+	consoleString += "\n\nKPDGUIDonorInfo HLA : ";
 
 	QString donorHLAString = getFullDonorHLAString();
 	donorHLAString.replace(";", " ");
 	if (donorHLAString.size() > 0){
-		consoleString += donorHLAString;
+	consoleString += donorHLAString;
 	}
 	else {
-		consoleString += "None";
+	consoleString += "None";
 	}
 
-	if (donor.type == PAIR){
-		consoleString += "\nCandidate HLA: ";
+	if (myDonors[i]->type == PAIR){
+	consoleString += "\nKPDGUICandidateInfo HLA: ";
 
-		QString recipHLAString = getRecipHLAString();
-		recipHLAString.replace(";", " ");
-		if (recipHLAString.size() > 0){
-			consoleString += recipHLAString;
-		}
-		else {
-			consoleString += "None";
-		}
+	QString recipHLAString = getCandidateHLAString();
+	recipHLAString.replace(";", " ");
+	if (recipHLAString.size() > 0){
+	consoleString += recipHLAString;
+	}
+	else {
+	consoleString += "None";
+	}
 	}
 
 	consoleString += "\n";
-	if (donor.type == PAIR){
-		consoleString += "\n";
-		consoleString += getCompatibleDonorString();
-		consoleString += "\n";
-	}
-	consoleString += getCompatibleRecipientsString();
+	if (myDonors[i]->type == PAIR){
 	consoleString += "\n";
-		
+	consoleString += getCompatibleDonorString();
+	consoleString += "\n";
+	}
+	consoleString += getCompatibleCandidatesString();
+	consoleString += "\n";
+
 	if (comment.size() > 0){
-		consoleString += "\n";
-		consoleString += "Additional Comments: ";
-		consoleString += comment;
+	consoleString += "\n";
+	consoleString += "Additional Comments: ";
+	consoleString += comment;
 	}
 	*/
 	//MOVE
@@ -527,96 +614,111 @@ QString KPDGUINode::getConsoleString(){
 QVariant KPDGUINode::itemChange(GraphicsItemChange change, const QVariant &value)
 {
 	if (change == ItemPositionHasChanged) {
-		foreach(KPDGUIArrow *link, myInArrows)
-			link->updatePosition();
-		foreach(KPDGUIArrow *link, myOutArrows)
-			link->updatePosition();
+		foreach(KPDGUIMatch * match, myCompatibleDonorMatches)
+			match->updatePosition();
+		foreach(QSet<KPDGUIMatch *> compatibleCandidatesByDonor, myCompatibleCandidateMatches) {
+			foreach(KPDGUIMatch * match, compatibleCandidatesByDonor)
+				match->updatePosition();
+
+		}
 	}
 
 	if (change == ItemSelectedHasChanged) {
-		emit nodeSelectionChanged(internalID, value.toBool());
+		emit nodeSelectionChanged(nodeID, value.toBool());
 	}
 
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void KPDGUINode::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
-		
+void KPDGUINode::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+
 	qDebug() << "Entered!";
-	emit nodeEntered(internalID);
+	emit nodeEntered(nodeID);
 }
 
-void KPDGUINode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
+void KPDGUINode::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 	qDebug() << "Left";
-	emit nodeLeft(internalID);
+	emit nodeLeft(nodeID);
 }
 
-void KPDGUINode::mousePressEvent(QGraphicsSceneMouseEvent *event){
+void KPDGUINode::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 
 	setSelected(true);
-	
-	emit nodeWasClicked(internalID,isSelected());
+
+	emit nodeWasClicked(nodeID, isSelected());
 }
 
-void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event){
-	
+void KPDGUINode::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
+
 	editNode();
-	
+
 	//QGraphicsObject::mouseDoubleClickEvent(event);
 }
 
 
-bool KPDGUINode::checkWithinBounds(bool pairsOfMinPRA, int minPRA, bool pairsOfMaxPRA, int maxPRA){
-	if (pairType == AD){
-		return true;
-	}
-	else {
-		if (pairsOfMinPRA){
-			if (minPRA > candidate.getPRA()){
-				return false;
-			}
-		}
+void KPDGUINode::editNode() {
 
-		if (pairsOfMaxPRA){
-			if (maxPRA < candidate.getPRA()){
-				return false;
-			}
-		}
-
-		return true;
-	}
 }
 
-void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 
-	qDebug() << "Update Visibility of Node " << getInternalID();
+void KPDGUINode::setAdditionalProperties() {
+	setBackgroundColors();
+	setZValue(0);
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
 
-	if (displaySettings->getShowPairsInStructures()){
-		if (getPopularityInStructures() == 0){
+	popularityInStructures = 0;
+	popularityInSolutions = 0;
+}
+
+
+
+
+
+bool KPDGUINode::checkWithinBounds(int minPRA, int maxPRA) {
+
+	int pra = myCandidate->getPRA();
+
+	if (myType == AD || (minPRA < pra && maxPRA > pra)) {
+		return true;
+	}
+
+	return false;
+}
+
+void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings) {
+
+	qDebug() << "Update Visibility of Node " << nodeID;
+
+	if (displaySettings->getShowNodesInStructures()) {
+		if (getPopularityInStructures() == 0) {
 			setVisible(false);
 			setSelected(false);
 		}
 	}
-	else if (displaySettings->getShowPairsInSolutions()){
-		if (getPopularityInSolutions() == 0){
+	else if (displaySettings->getShowNodesInSolutions()) {
+		if (getPopularityInSolutions() == 0) {
 			setVisible(false);
 			setSelected(false);
 		}
 	}
 
-	else if (displaySettings->getShowPairSubset()){
+	else if (displaySettings->getShowNodeSubset()) {
 
-		bool withinBounds = checkWithinBounds(displaySettings->getShowPairsOfMinPRA(), displaySettings->getMinPRA(), displaySettings->getShowPairsOfMaxPRA(), displaySettings->getMaxPRA());
-		
-		if (!withinBounds){
+		bool withinBounds = true;
+		if (displaySettings->getShowCandidatesInPRARange()) {
+			bool withinBounds = checkWithinBounds(displaySettings->getMinPRA(), displaySettings->getMaxPRA());
+		}
+
+		if (!withinBounds) {
 			setVisible(false);
 			setSelected(false);
 		}
-		else if (!displaySettings->getShowPairsWithNoCompatibilities() && hasNoCompatibilities()){
+		else if (!displaySettings->getShowNodesWithNoCompatibilities() && hasNoCompatibilities()) {
 			setVisible(false);
 			setSelected(false);
 		}
-		else if (!displaySettings->getShowPairsOnHold() && getHoldStatus()){
+		else if (!displaySettings->getShowNodesOnHold() && getNodeStatus()) {
 			setVisible(false);
 			setSelected(false);
 		}
@@ -629,23 +731,36 @@ void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 	}
 }
 
-void KPDGUINode::selectIfVisible(){
-	if (isVisible()){
+
+void KPDGUINode::selectIfVisible() {
+	if (isVisible()) {
 		setSelected(true);
 	}
 }
 
+
+
 QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
 {
-	out << qint32(node.getInternalID());
-	out << qint32(KPDFunctions::pairTypeToInt(node.getType()));
-	out << node.getDonor();
+	out << qint32(node.getNodeID());
+	out << qint32(KPDFunctions::nodeTypeToInt(node.getNodeType()));
 	
-	if (node.getType() == PAIR){
+	if (node.getNodeType() == PAIR){
 		out << node.getCandidate();
+		out << node.getCandidateStatus();
 	}
 
-	out << node.getHoldStatus();
+	out << qint32(node.getNumberOfDonors());
+
+	for (int i = 0; i < node.getNumberOfDonors(); i++) {
+		out << node.getDonor(i);
+	}
+
+	for (int i = 0; i < node.getNumberOfDonors(); i++) {
+		out << node.getDonorStatus(i);
+	}
+
+	out << node.getPrograms();
 	
 	return out;
 }
@@ -654,26 +769,47 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 {
 	int internalID;
 	int type;
-	Donor d;
-	Candidate c;
-	bool hold;
-	
-	in >> internalID;
-	in >> type;
-	KPDPairType pairType = KPDFunctions::intToPairType(type);
-	in >> d;
-	if (pairType == PAIR){
-		in >> c;
-	}	
-	in >> hold;
-	
-	node.setInternalID(internalID);
-	node.setType(pairType);
-	node.setDonor(d);
-	if (pairType == PAIR){
-		node.setCandidate(c);
+	int numberOfDonors;
+		
+	in >> internalID >> type;
+	KPDNodeType myType = KPDFunctions::intToNodeType(type);
+
+	node.setNodeID(internalID);
+	node.setNodeType(myType);
+
+	if (myType == PAIR) {
+		KPDGUICandidateInfo c;
+		bool cStatus;
+
+		in >> c >> cStatus;
+
+		node.setCandidate(&c);
+		node.setCandidateStatus(cStatus);
 	}
-	node.setHoldStatus(hold);
+
+	in >> numberOfDonors;
+
+	for (int i = 0; i < numberOfDonors; i++) {
+		KPDGUIDonorInfo d;
+		
+		in >> d;
+
+		node.addDonor(&d);		
+	}
+
+	for (int i = 0; i < numberOfDonors; i++) {
+		bool dStatus;
+
+		in >> dStatus;
+
+		node.setDonorStatus(dStatus,i);
+	}
+
+	QVector<QString> programs;
+
+	in >> programs;
+
+	node.setPrograms(programs);
 
 	return in;
 }

@@ -12,8 +12,8 @@
 
 #include "KPDGUINode.h"
 #include "KPDGUINodeWrapper.h"
-#include "KPDGUIArrow.h"
-#include "KPDGUIArrowWrapper.h"
+#include "KPDGUIMatch.h"
+#include "KPDGUIMatchWrapper.h"
 #include "KPDGUIGraphicsScene.h"
 #include "KPDGUISimParameters.h"
 
@@ -25,70 +25,79 @@ class KPDGUIRecord : public QObject
 public:
 	KPDGUIRecord();
 	~KPDGUIRecord();
-	
-	//Pairs
-	void insertNode(KPDGUINode * node, bool fromSavedFile = false);
-	void insertArrow(KPDGUIArrow * arrow);
-			
-	KPDGUINode * getNode(int id);
-	KPDGUINode * getNodeFromIndex(int i);
-	
-	int size();
-	void clear();
 
-	bool isMatch(Donor donor, Candidate candidate, bool reserveOtoO, bool checkAdditionalHLA);
-	bool isMatch(KPDGUINode * donor, KPDGUINode * candidate, bool reserveOtoO, bool checkAdditionalHLA);
-	
-	QList<KPDGUINode *> getNodes();
-
-	//Matrices
-	void generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress);
-	
-	std::vector<std::vector<int> > viableTransplantMatrix;
-	std::vector<std::vector<double > > scoreMatrix;
-	std::vector<std::vector<double > > survival5yearMatrix;
-	std::vector<std::vector<double > > survival10yearMatrix;
-	std::vector<std::vector<double > > probabilityMatrix;
-	std::vector<std::vector<int> > labCrossmatchMatrix;
-	std::vector<std::vector<bool> > incidenceMatrix;
-	std::vector<AdditionalPairInfo> pairInfoVector;
-	
-	//Other Settings
 	int getBaselineIDCode();
 	void setBaselineIDCode(int code);
-
+	
+	void insertNode(KPDGUINode * node, bool fromSavedFile = false);
+	void insertMatch(KPDGUIMatch * match);
+			
+	KPDGUINode * getNode(int nodeID);
+	KPDGUINode * getNodeFromIndex(int i);
+	QList<KPDGUINode *> getNodes();
+	
 	int getNumberOfNodes();
+	int getNumberOfAvailableNodes();	
+	
+	//Matrices
+	void generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress);
+
+	std::vector<std::vector<bool> > getIncidenceMatrix();
+	std::vector<std::vector<std::vector<int> > > getAssociatedDonorMatrix();
+	std::vector<std::vector<std::vector<double> > > getAssociatedScoresMatrix();
+	std::vector<std::vector<std::vector<double> > > getAssociated5YearSurvivalMatrix();
+	std::vector<std::vector<std::vector<double> > > getAssociated10YearSurvivalMatrix();
+	std::vector<std::vector<std::vector<double> > > getAssociatedProbabilitiesMatrix();
+	std::vector<AdditionalNodeInfo> getNodeInfoVector();
+
+	bool isMatch(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, bool reserveOtoO, bool checkAdditionalHLA);
+	bool isMatch(KPDGUINode * donorNode, KPDGUINode * candidateNode, int donor, bool reserveOtoO, bool checkAdditionalHLA);
+
+	double calculateSurvival(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, int fiveyear);
+	double calculateSurvival(KPDGUINode * donorNode, KPDGUINode * candidateNode, int donor, int fiveyear);
+
+	void clearRecord();
 
 	QString getRecordLog();
 	
 signals:
-	
-	void takeAdditionalDeleteNodeActions(KPDGUINode * node);
+	//void takeAdditionalDeleteNodeActions(KPDGUINode * node);
 
 public slots:
-	void deleteNodeFromRecord(int id);
+	//void deleteNodeFromRecord(int id);
 
 protected:
-	void loadDictionary();	
+	void loadDictionary();
+	void loadSurvivalParameters();
 	void clearMatrices();
+
 	
-	double survival(Donor d, Candidate c, int fiveyear);
-	double survival(KPDGUINode * d, KPDGUINode * c, int fiveyear);
 	
+
 
 private:
-	//Input Vectors 
-	QMap<QString, QVector<QString> > hla_dictionary;
+
+	int baselineID;
+
+	//Data Vectors 
+	QMap<QString, QVector<QString> > hlaDictionary;
+	QMap<QString, QVector<double> > survivalParameters;
 
 	//Stored Items
-	QMap<int, KPDGUINode*> pairs;
-	QSet<KPDGUIArrow *> arrows;
-	
-	//Parameters
-	int id_code;
+	QMap<int, KPDGUINode*> nodes;
+	QMap<int, KPDGUIMatch*> fromMatches;
+	QMap<int, KPDGUIMatch*> toMatches;
 
-	QString recordLog;
-	
+	std::vector<KPDGUINode *> availableNodes;
+	std::vector<std::vector<bool> > incidenceMatrix;
+	std::vector<std::vector<std::vector<int> > > associatedDonorMatrix;
+	std::vector<std::vector<std::vector<double> > > associatedScoresMatrix;
+	std::vector<std::vector<std::vector<double> > > associated5YearSurvivalMatrix;
+	std::vector<std::vector<std::vector<double> > > associated10YearSurvivalMatrix;
+	std::vector<std::vector<std::vector<double> > > associatedProbabilitiesMatrix;
+	std::vector<AdditionalNodeInfo> nodeInfoVector;
+
+	QString recordLog;	
 };
 
 #endif

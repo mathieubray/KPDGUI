@@ -2,7 +2,8 @@
 
 #include "DialogCandidate.h"
 
-#include "Candidate.h"
+#include "KPDGUICandidateInfo.h"
+
 #include "MultiSelectCompleter.h"
 
 //New Candidate Constructor
@@ -13,24 +14,24 @@ DialogCandidate::DialogCandidate(QWidget *parent) : QDialog(parent)
 }
 
 //Edit Candidate Constructor
-DialogCandidate::DialogCandidate(Candidate candidate, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
+DialogCandidate::DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();
 
 	setWindowTitle("Edit Candidate Information");
 
-	//Recipient Name
-	recipNameLineEdit->setText(candidate.getName());
+	//Candidate Name
+	candidateNameLineEdit->setText(candidate.getName());
 
-	//Recipient Age
-	recipAgeSpinBox->setValue(candidate.getAge());
+	//Candidate Age
+	candidateAgeSpinBox->setValue(candidate.getAge());
 
-	//Recipient Blood Type
-	recipBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(candidate.getBT()));
+	//Candidate Blood Type
+	candidateBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(candidate.getBT()));
 
-	//Recipient PRA
-	recipPRASpinBox->setValue(candidate.getPRA());
+	//Candidate PRA
+	candidatePRASpinBox->setValue(candidate.getPRA());
 
 	//Excluded Donors
 	QString excludedDonorsString = "";
@@ -41,49 +42,49 @@ DialogCandidate::DialogCandidate(Candidate candidate, bool disableMajorEdits, QW
 	excludedDonorsString.chop(1);
 	excludedDonorLineEdit->setText(excludedDonorsString);
 
-	//Recipient Gender
-	if (candidate.getMale()) { recipGenderComboBox->setCurrentIndex(0); }
-	else { recipGenderComboBox->setCurrentIndex(1); }
+	//Candidate Gender
+	if (candidate.getMale()) { candidateGenderComboBox->setCurrentIndex(0); }
+	else { candidateGenderComboBox->setCurrentIndex(1); }
 	
-	//Recipient Height
-	double recipHeight = sqrt(candidate.getWeight() / (candidate.getBMI()));
-	recipHeightSpinBox->setValue(recipHeight);
+	//Candidate Height
+	double candidateHeight = sqrt(candidate.getWeight() / (candidate.getBMI()));
+	candidateHeightSpinBox->setValue(candidateHeight);
 
-	//Recipient Weight
-	recipWeightSpinBox->setValue(candidate.getWeight());
+	//Candidate Weight
+	candidateWeightSpinBox->setValue(candidate.getWeight());
 
-	//Recipient Diabetes
-	recipDiabetesCheckBox->setChecked(candidate.getDiabetes());
+	//Candidate Diabetes
+	candidateDiabetesCheckBox->setChecked(candidate.getDiabetes());
 
-	//Recipient Hepatitis C
-	recipHepCCheckBox->setChecked(candidate.getHepC());
+	//Candidate Hepatitis C
+	candidateHepCCheckBox->setChecked(candidate.getHepC());
 
-	//Recipient Race
-	recipRaceComboBox->setCurrentIndex(KPDFunctions::raceToInt(candidate.getRace()));
+	//Candidate Race
+	candidateRaceComboBox->setCurrentIndex(KPDFunctions::raceToInt(candidate.getRace()));
 	
-	//Recipient Time On Dialysis
-	recipTODSpinBox->setValue(candidate.getTOD());
+	//Candidate Time On Dialysis
+	candidateTODSpinBox->setValue(candidate.getTOD());
 
-	//Recipient Previous Transplant
-	recipPrevTransCheckBox->setChecked(candidate.getPrevTrans());
+	//Candidate Previous Transplant
+	candidatePrevTransCheckBox->setChecked(candidate.getPrevTrans());
 
-	//Recipient HLA
+	//Candidate HLA
 	QString antibodyString = "";
-	foreach(QString antibody, candidate.getAntibodies()){
+	foreach(QString antibody, candidate.getHLA()){
 		antibodyString.append(antibody);
 		antibodyString.append(";");
 	}
 	antibodyString.chop(1);
-	recipHLALineEdit->setText(antibodyString);
+	candidateHLALineEdit->setText(antibodyString);
 
 	if (disableMajorEdits){
 
-		recipBTComboBox->setEnabled(false);
-		recipPRASpinBox->setEnabled(false);
+		candidateBTComboBox->setEnabled(false);
+		candidatePRASpinBox->setEnabled(false);
 		praSlider->setEnabled(false);
 
 		excludedDonorLineEdit->setEnabled(false);
-		recipHLALineEdit->setEnabled(false);
+		candidateHLALineEdit->setEnabled(false);
 	}
 
 	//Comment
@@ -102,6 +103,6 @@ void DialogCandidate::additionalSetup(){
 
 	MultiSelectCompleter * hlaCompleter = new MultiSelectCompleter(hlaList, this);
 
-	recipHLALineEdit->setCompleter(hlaCompleter);
+	candidateHLALineEdit->setCompleter(hlaCompleter);
 
 }

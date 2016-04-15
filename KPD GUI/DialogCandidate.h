@@ -8,8 +8,7 @@
 
 #include "EnumsFunctions.h"
 
-
-class Candidate;
+class KPDGUICandidateInfo;
 
 class DialogCandidate : public QDialog, public Ui_DialogCandidate
 {
@@ -17,7 +16,7 @@ class DialogCandidate : public QDialog, public Ui_DialogCandidate
 
 public:
 	DialogCandidate(QWidget *parent = 0);
-	DialogCandidate(Candidate candidate, bool disableMajorEdits, QWidget *parent = 0);
+	DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajorEdits, QWidget *parent = 0);
 
 	QTextEdit * commentTextEdit;
 

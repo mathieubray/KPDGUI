@@ -1,9 +1,9 @@
-#ifndef _RNG_h
-#define _RNG_h
+#ifndef RNG_H
+#define RNG_H
 
 #include <math.h>
 
-class RNG{
+class RNG {
 
 private:
 	int seed; //Default seed is 1, which will be initialized in the constructor function;

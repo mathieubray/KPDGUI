@@ -2,19 +2,18 @@
 #include "KPDGUIDisplaySettings.h"
 
 KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
-	showAllPairs = true;
-	showPairSubset = false;
-	showPairsInSolutions = false;
-	showPairsInStructures = false;
-	showPairsOnHold = true;
-	showPairsWithNoCompatibilities = true;
-	showPairsOfMinPRA = false;
-	showPairsOfMaxPRA = false;
+	showAllNodes = true;
+	showNodeSubset = false;
+	showNodesInSolutions = false;
+	showNodesInStructures = false;
+	showNodesOnHold = true;
+	showNodesWithNoCompatibilities = true;
+	showCandidatesInPRARange = false;
 
 	minPRA = 0;
 	maxPRA = 100;
 
-	arrowDisplayMode = WITHIN_SELECTION;
+	matchDisplayMode = WITHIN_SELECTION;
 }
 
 KPDGUIDisplaySettings::~KPDGUIDisplaySettings(){
@@ -23,51 +22,55 @@ KPDGUIDisplaySettings::~KPDGUIDisplaySettings(){
 
 bool KPDGUIDisplaySettings::changeDisplaySettings(DialogDisplaySettings * d){
 
-	showAllPairs = d->allPairsButton->isChecked();
-	showPairSubset = d->pairSubsetButton->isChecked();
-	showPairsInStructures = d->showStructuresRadioButton->isChecked();
-	showPairsInSolutions = d->showSolutionsRadioButton->isChecked();
-	showPairsOnHold = d->showHoldCheckBox->isChecked();
-	showPairsWithNoCompatibilities = d->showIncompatibleCheckBox->isChecked();
-	showPairsOfMinPRA = d->minPRACheckBox->isChecked();
-	showPairsOfMaxPRA = d->maxPRACheckBox->isChecked();
+	showAllNodes = d->allNodesButton->isChecked();
+	showNodeSubset = d->nodeSubsetButton->isChecked();
+	showNodesInStructures = d->showStructuresRadioButton->isChecked();
+	showNodesInSolutions = d->showSolutionsRadioButton->isChecked();
+	showNodesOnHold = d->showHoldCheckBox->isChecked();
+	showNodesWithNoCompatibilities = d->showIncompatibleCheckBox->isChecked();
+	showCandidatesInPRARange = d->praCheckBox->isChecked();
 
-	minPRA = d->minPRASpinBox->value();
-	maxPRA = d->maxPRASpinBox->value();
+	int leftPRAVal = d->praSpinBoxLeft->value();
+	int rightPRAVal = d->praSpinBoxRight->value();
+
+	if (leftPRAVal < rightPRAVal) {
+		minPRA = leftPRAVal;
+		maxPRA = rightPRAVal;
+	}
+	else {
+		minPRA = rightPRAVal;
+		maxPRA = leftPRAVal;
+	}	
 
 	return true;
 }
 
-bool KPDGUIDisplaySettings::getShowAllPairs() const {
-	return showAllPairs;
+bool KPDGUIDisplaySettings::getShowAllNodes() const {
+	return showAllNodes;
 }
 
-bool KPDGUIDisplaySettings::getShowPairSubset() const {
-	return showPairSubset;
+bool KPDGUIDisplaySettings::getShowNodeSubset() const {
+	return showNodeSubset;
 }
 
-bool KPDGUIDisplaySettings::getShowPairsInStructures() const {
-	return showPairsInStructures;
+bool KPDGUIDisplaySettings::getShowNodesInStructures() const {
+	return showNodesInStructures;
 }
 
-bool KPDGUIDisplaySettings::getShowPairsInSolutions() const {
-	return showPairsInSolutions;
+bool KPDGUIDisplaySettings::getShowNodesInSolutions() const {
+	return showNodesInSolutions;
 }
 
-bool KPDGUIDisplaySettings::getShowPairsOnHold() const {
-	return showPairsOnHold;
+bool KPDGUIDisplaySettings::getShowNodesOnHold() const {
+	return showNodesOnHold;
 }
 
-bool KPDGUIDisplaySettings::getShowPairsWithNoCompatibilities() const {
-	return showPairsWithNoCompatibilities;
+bool KPDGUIDisplaySettings::getShowNodesWithNoCompatibilities() const {
+	return showNodesWithNoCompatibilities;
 }
 
-bool KPDGUIDisplaySettings::getShowPairsOfMinPRA() const {
-	return showPairsOfMinPRA;
-}
-
-bool KPDGUIDisplaySettings::getShowPairsOfMaxPRA() const {
-	return showPairsOfMaxPRA;
+bool KPDGUIDisplaySettings::getShowCandidatesInPRARange() const {
+	return showCandidatesInPRARange;
 }
 
 int KPDGUIDisplaySettings::getMinPRA() const {
@@ -78,40 +81,36 @@ int KPDGUIDisplaySettings::getMaxPRA() const {
 	return maxPRA;
 }
 
-KPDArrowDisplayMode KPDGUIDisplaySettings::getArrowDisplayMode() const {
-	return arrowDisplayMode;
+KPDMatchDisplayMode KPDGUIDisplaySettings::getMatchDisplayMode() const {
+	return matchDisplayMode;
 }
 
-void KPDGUIDisplaySettings::setShowAllPairs(bool show){
-	showAllPairs = show;
+void KPDGUIDisplaySettings::setShowAllNodes(bool show){
+	showAllNodes = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairSubset(bool show){
-	showPairSubset = show;
+void KPDGUIDisplaySettings::setShowNodeSubset(bool show){
+	showNodeSubset = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairsInStructures(bool show){
-	showPairsInStructures = show;
+void KPDGUIDisplaySettings::setShowNodesInStructures(bool show){
+	showNodesInStructures = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairsInSolutions(bool show){
-	showPairsInSolutions = show;
+void KPDGUIDisplaySettings::setShowNodesInSolutions(bool show){
+	showNodesInSolutions = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairsOnHold(bool show){
-	showPairsOnHold = show;
+void KPDGUIDisplaySettings::setShowNodesOnHold(bool show){
+	showNodesOnHold = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairsWithNoCompatibilities(bool show){
-	showPairsWithNoCompatibilities = show;
+void KPDGUIDisplaySettings::setShowNodesWithNoCompatibilities(bool show){
+	showNodesWithNoCompatibilities = show;
 }
 
-void KPDGUIDisplaySettings::setShowPairsOfMinPRA(bool show){
-	showPairsOfMinPRA = show;
-}
-
-void KPDGUIDisplaySettings::setShowPairsOfMaxPRA(bool show){
-	showPairsOfMaxPRA = show;
+void KPDGUIDisplaySettings::setShowCandidatesInPRARange(bool show){
+	showCandidatesInPRARange = show;
 }
 
 void KPDGUIDisplaySettings::setMinPRA(int pra){
@@ -122,60 +121,58 @@ void KPDGUIDisplaySettings::setMaxPRA(int pra){
 	maxPRA = pra;
 }
 
-void KPDGUIDisplaySettings::setArrowDisplayMode(KPDArrowDisplayMode mode){
-	arrowDisplayMode = mode;
+void KPDGUIDisplaySettings::setMatchDisplayMode(KPDMatchDisplayMode mode){
+	matchDisplayMode = mode;
 }
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings)
 {
-	out << settings.getShowAllPairs() << settings.getShowPairSubset() 
-		<< settings.getShowPairsInSolutions() << settings.getShowPairsInStructures()
-		<< settings.getShowPairsOnHold() << settings.getShowPairsWithNoCompatibilities() 
-		<< settings.getShowPairsOfMinPRA() << settings.getShowPairsOfMaxPRA();
+	out << settings.getShowAllNodes() << settings.getShowNodeSubset()
+		<< settings.getShowNodesInSolutions() << settings.getShowNodesInStructures()
+		<< settings.getShowNodesOnHold() << settings.getShowNodesWithNoCompatibilities()
+		<< settings.getShowCandidatesInPRARange();
 
 	out << qint32(settings.getMinPRA()) << qint32(settings.getMaxPRA());
 
-	out << qint32(KPDFunctions::arrowDisplayModeToInt(settings.getArrowDisplayMode()));
+	out << qint32(KPDFunctions::matchDisplayModeToInt(settings.getMatchDisplayMode()));
 	
 	return out;
 }
 
 QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 {
-	bool showAllPairs;
-	bool showPairSubset;
-	bool showPairsInSolutions;
-	bool showPairsInStructures;
-	bool showPairsOnHold;
-	bool showPairsWithNoCompatibilities;
-	bool showPairsOfMinPRA;
-	bool showPairsOfMaxPRA;
+	bool showAllNodes;
+	bool showNodeSubset;
+	bool showNodesInSolutions;
+	bool showNodesInStructures;
+	bool showNodesOnHold;
+	bool showNodesWithNoCompatibilities;
+	bool showCandidatesInPRARange;
 
 	int minPRA;
 	int maxPRA;
 
 	int mode;
 	
-	in >> showAllPairs >> showPairSubset >> showPairsInSolutions >> showPairsInStructures
-		>> showPairsOnHold >> showPairsWithNoCompatibilities >> showPairsOfMinPRA >> showPairsOfMaxPRA;
+	in >> showAllNodes >> showNodeSubset >> showNodesInSolutions >> showNodesInStructures
+		>> showNodesOnHold >> showNodesWithNoCompatibilities >> showCandidatesInPRARange;
 
 	in >> minPRA >> maxPRA;
 
 	in >> mode;
 
-	settings.setShowAllPairs(showAllPairs);
-	settings.setShowPairSubset(showPairSubset);
-	settings.setShowPairsInSolutions(showPairsInSolutions);
-	settings.setShowPairsInStructures(showPairsInStructures);
-	settings.setShowPairsOnHold(showPairsOnHold);
-	settings.setShowPairsWithNoCompatibilities(showPairsWithNoCompatibilities);
-	settings.setShowPairsOfMinPRA(showPairsOfMinPRA);
-	settings.setShowPairsOfMaxPRA(showPairsOfMaxPRA);
+	settings.setShowAllNodes(showAllNodes);
+	settings.setShowNodeSubset(showNodeSubset);
+	settings.setShowNodesInSolutions(showNodesInSolutions);
+	settings.setShowNodesInStructures(showNodesInStructures);
+	settings.setShowNodesOnHold(showNodesOnHold);
+	settings.setShowNodesWithNoCompatibilities(showNodesWithNoCompatibilities);
+	settings.setShowCandidatesInPRARange(showCandidatesInPRARange);
 
 	settings.setMinPRA(minPRA);
 	settings.setMaxPRA(maxPRA);
 
-	settings.setArrowDisplayMode(KPDFunctions::intToArrowDisplayMode(mode));
+	settings.setMatchDisplayMode(KPDFunctions::intToMatchDisplayMode(mode));
 
 	return in;
 

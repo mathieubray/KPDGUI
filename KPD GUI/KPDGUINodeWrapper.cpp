@@ -32,13 +32,13 @@ void KPDGUINodeWrapper::updateSelections(){
 
 void KPDGUINodeWrapper::updateText(){
 	
-	setText(0, QString::number(myNode->getInternalID()));
+	setText(0, QString::number(myNode->getNodeID()));
 	setText(1, myNode->getNameString());
-	setText(2, QString::number(myNode->getNumberOfAssociatedDonors()));
+	setText(2, QString::number(myNode->getNumberOfDonors()));
 	setText(3, QString::number(myNode->getPopularityInStructures()));
 	setText(4, QString::number(myNode->getPopularityInSolutions()));
 	setText(5, QString::number(myNode->getNumberOfCompatibleDonors()));
-	setText(6, QString::number(myNode->getNumberOfCompatibleRecipients()));
+	setText(6, QString::number(myNode->getNumberOfCompatibleCandidates()));
 
 	for (int i = 0; i < columnCount(); i++){
 		setTextAlignment(i, Qt::AlignHCenter | Qt::AlignVCenter);

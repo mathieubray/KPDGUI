@@ -1,6 +1,5 @@
 #include "RNG.h"
 
-
 RNG::RNG(){
 
 	setSeed(1); // Could set seed according to random time

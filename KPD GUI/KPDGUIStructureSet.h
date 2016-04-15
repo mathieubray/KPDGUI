@@ -13,12 +13,12 @@ class KPDGUIStructureSet : public QTreeWidgetItem
 
 public:
 	KPDGUIStructureSet();
-	KPDGUIStructureSet(KPDGUISimParameters * parameters, QString timeStamp, QString recordLog, QString simLog, bool solution, int solutionNumber = 0);
+	KPDGUIStructureSet(KPDGUISimParameters * params, QString timeStamp, QString recordLog, QString simLog, bool solution, int solutionNumber = 0);
 	~KPDGUIStructureSet();
 
-	void construct(KPDGUISimParameters * parameters, QString timeStamp, QString recordLog, QString simLog, bool solution, int solutionNumber = 0);
+	void construct(KPDGUISimParameters * params, QString timeStamp, QString recordLog, QString simLog, bool solution, int solutionNumber = 0);
 		
-	void push_back(KPDGUIStructure * structure);
+	void addStructure(KPDGUIStructure * structure);
 	void removeStructure(KPDGUIStructure * structure);
 
 	KPDGUISimParameters * getParameters() const { return myParameters;  }
@@ -28,6 +28,7 @@ public:
 	QString getRecordLog() const { return myRecordLog;  }
 	QString getSimLog() const { return mySimLog;  }
 	int getSolutionNumber() const { return mySolutionNumber;  }
+	
 	QList<KPDGUIStructure *> getStructures();
 	
 	void selectStructures();
@@ -61,7 +62,7 @@ private:
 	QVector<KPDGUIStructure *> myStructureList;
 	KPDGUISimParameters * myParameters;
 
-	QTreeWidgetItem * cycleSizeTwo;
+	/*QTreeWidgetItem * cycleSizeTwo;
 	QTreeWidgetItem * cycleSizeThree;
 	QTreeWidgetItem * chainSizeOne;
 	QTreeWidgetItem * chainSizeTwo;
@@ -73,7 +74,11 @@ private:
 	QTreeWidgetItem * componentSizeThree;
 	QTreeWidgetItem * componentSizeFour;
 	QTreeWidgetItem * componentSizeFive;
-	QTreeWidgetItem * componentSizeSix;
+	QTreeWidgetItem * componentSizeSix; */
+
+	QMap<int, QTreeWidgetItem *> myCycles;
+	QMap<int, QTreeWidgetItem *> myChains;
+	QMap<int, QTreeWidgetItem *> myComponents;
 
 	QString myTimeStamp;
 	QString myRecordLog;

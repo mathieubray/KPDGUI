@@ -100,7 +100,7 @@ void KPDGUIGraphicsScene::addAssociatedDonor(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit addAssociatedDonor(node->getInternalID());
+			emit addAssociatedDonor(node->getNodeID());
 			//qDebug() << "Triggered";
 		}
 	}
@@ -111,7 +111,7 @@ void KPDGUIGraphicsScene::highlightRelevantStructures(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit highlightRelevantStructures(node->getInternalID());
+			emit highlightRelevantStructures(node->getNodeID());
 		}
 	}
 }
@@ -121,7 +121,7 @@ void KPDGUIGraphicsScene::highlightRelevantSolutions(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit highlightRelevantSolutions(node->getInternalID());
+			emit highlightRelevantSolutions(node->getNodeID());
 		}
 	}
 }
@@ -149,7 +149,7 @@ void KPDGUIGraphicsScene::holdNode(){
 	QList<QGraphicsItem*> items = selectedItems();
 	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 	if (node){
-		node->setHoldStatus(true);
+		//node->setStatus(true);
 		emit screenChanged();
 	}	
 }
@@ -158,7 +158,7 @@ void KPDGUIGraphicsScene::unholdNode(){
 	QList<QGraphicsItem*> items = selectedItems();
 	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 	if (node){
-		node->setHoldStatus(false);
+		//node->setStatus(false);
 		emit screenChanged();
 	}	
 }
@@ -171,7 +171,7 @@ void KPDGUIGraphicsScene::deleteNode(){
 		QList<QGraphicsItem*> items = selectedItems();
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit deleteNode(node->getInternalID());
+			emit deleteNode(node->getNodeID());
 		}
 	}
 }
@@ -181,7 +181,7 @@ void KPDGUIGraphicsScene::holdMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setHoldStatus(true);
+			//node->setHoldStatus(true);
 			emit screenChanged();
 		}
 	}	
@@ -192,7 +192,7 @@ void KPDGUIGraphicsScene::unholdMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setHoldStatus(false);
+			//node->setHoldStatus(false);
 			emit screenChanged();
 		}
 	}
@@ -255,7 +255,7 @@ void KPDGUIGraphicsScene::deleteMultipleNodes(){
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 			if (node){
-				emit deleteNode(node->getInternalID());
+				emit deleteNode(node->getNodeID());
 			}
 		}
 		QApplication::restoreOverrideCursor();

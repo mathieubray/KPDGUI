@@ -17,10 +17,11 @@ public:
 	DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget *parent = 0);
 
 public slots:
+	void enableComponentOptions(int index);
 	void enablePRAOptions(bool enabled);
 	void enableBridgeDonorOptions(bool enabled);
 	
-	void changeLabel(int index);
+	//void changeLabel(int index);
 
 };
 

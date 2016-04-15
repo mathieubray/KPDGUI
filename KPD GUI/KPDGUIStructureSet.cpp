@@ -27,9 +27,9 @@ KPDGUIStructureSet::~KPDGUIStructureSet(){
 	}
 }
 
-void KPDGUIStructureSet::construct(KPDGUISimParameters * parameters, QString timestamp, QString recordLog, QString simLog, bool solution, int solutionNumber){
+void KPDGUIStructureSet::construct(KPDGUISimParameters * params, QString timestamp, QString recordLog, QString simLog, bool solution, int solutionNumber){
 	
-	myParameters->copyParameters(parameters);
+	myParameters->copyParameters(params);
 
 	myTimeStamp = timestamp;
 	myRecordLog = recordLog;
@@ -51,7 +51,7 @@ void KPDGUIStructureSet::construct(KPDGUISimParameters * parameters, QString tim
 
 	setUpWidgets();
 
-	if (myOptScheme != KPDOptimizationScheme::SCC){
+	/*if (myOptScheme != KPDOptimizationScheme::SCC){
 		addChild(cycleSizeTwo);
 		addChild(cycleSizeThree);
 
@@ -86,62 +86,30 @@ void KPDGUIStructureSet::construct(KPDGUISimParameters * parameters, QString tim
 		if (parameters->getMaxSize() == 6){
 			addChild(componentSizeSix);
 		}
-	}
+	}*/
 	
 }
 
-void KPDGUIStructureSet::push_back(KPDGUIStructure * structure){
+void KPDGUIStructureSet::addStructure(KPDGUIStructure * structure){
 	myStructureList.push_back(structure);
 	KPDGUIStructureWrapper * wrapper = new KPDGUIStructureWrapper(structure);
 	
 	KPDOptimizationScheme myOptScheme = myParameters->getOptimizationScheme();
 
+	int structureSize = structure->size();
+
 	if (myOptScheme != KPDOptimizationScheme::SCC){
-		if (structure->size() == 2){
-			if (structure->isChain()){
-				chainSizeOne->addChild(wrapper);
-			}
-			else {
-				cycleSizeTwo->addChild(wrapper);
-			}
+		
+		if (structure->isChain()) {
+			myChains[structureSize-1]->addChild(wrapper);
 		}
-		else if (structure->size() == 3){
-			if (structure->isChain()) {
-				chainSizeTwo->addChild(wrapper);
-			}
-			else {
-				cycleSizeThree->addChild(wrapper);
-			}
-		}
-		else if (structure->size() == 4){
-			chainSizeThree->addChild(wrapper);
-		}
-		else if (structure->size() == 5){
-			chainSizeFour->addChild(wrapper);
-		}
-		else if (structure->size() == 6){
-			chainSizeFive->addChild(wrapper);
-		}
-		else if (structure->size() >= 7){
-			chainSizeSix->addChild(wrapper);
+		else {
+			myCycles[structureSize]->addChild(wrapper);
 		}
 	}
+
 	else {
-		if (structure->size() == 2){
-			componentSizeTwo->addChild(wrapper);
-		}
-		else if (structure->size() == 3){
-			componentSizeThree->addChild(wrapper);
-		}
-		else if (structure->size() == 4){
-			componentSizeFour->addChild(wrapper);
-		}
-		else if (structure->size() == 5){
-			componentSizeFive->addChild(wrapper);
-		}
-		else if (structure->size() >= 6){
-			componentSizeSix->addChild(wrapper);
-		}
+		myComponents[structureSize]->addChild(wrapper);
 	}
 
 	updateText();
@@ -326,6 +294,7 @@ QString KPDGUIStructureSet::getConsoleString(){
 }
 
 void KPDGUIStructureSet::setUpWidgets(){
+	/*
 	cycleSizeTwo = new QTreeWidgetItem();
 	cycleSizeThree = new QTreeWidgetItem();
 	chainSizeOne = new QTreeWidgetItem();
@@ -339,12 +308,25 @@ void KPDGUIStructureSet::setUpWidgets(){
 	componentSizeFour = new QTreeWidgetItem();
 	componentSizeFive = new QTreeWidgetItem();
 	componentSizeSix = new QTreeWidgetItem();
-
+	*/
 	updateText();
 }
 
 void KPDGUIStructureSet::updateText(){
-	cycleSizeTwo->setText(0, "Two-Way Exchange (" + QString::number(cycleSizeTwo->childCount()) + ")");
+
+	foreach(int size, myCycles.keys()) {
+		myCycles[size]->setText(0, QString::number(size) + "-Way Exchange (" + QString::number(myCycles[size]->childCount()) + ")");
+	}
+
+	foreach(int size, myChains.keys()) {
+		myChains[size]->setText(0, "Chains of Length " + QString::number(size) + " (" + QString::number(myChains[size]->childCount()) + ")");
+	}
+
+	foreach(int size, myComponents.keys()) {
+		myComponents[size]->setText(0, "Components of Size " + QString::number(size) + " (" + QString::number(myComponents[size]->childCount()) + ")");
+	}
+
+	/*cycleSizeTwo->setText(0, "Two-Way Exchange (" + QString::number(cycleSizeTwo->childCount()) + ")");
 	cycleSizeThree->setText(0, "Three-Way Exchange (" + QString::number(cycleSizeThree->childCount()) + ")");
 	chainSizeOne->setText(0, "Chains of Length 1 (" + QString::number(chainSizeOne->childCount()) + ")");
 	chainSizeTwo->setText(0, "Chains of Length 2 (" + QString::number(chainSizeTwo->childCount()) + ")");
@@ -356,7 +338,8 @@ void KPDGUIStructureSet::updateText(){
 	componentSizeThree->setText(0, "Components of Size 3 (" + QString::number(componentSizeThree->childCount()) + ")");
 	componentSizeFour->setText(0, "Components of Size 4 (" + QString::number(componentSizeFour->childCount()) + ")");
 	componentSizeFive->setText(0, "Components of Size 5 (" + QString::number(componentSizeFive->childCount()) + ")");
-	componentSizeSix->setText(0, "Components of Size 6 (" + QString::number(componentSizeSix->childCount()) + ")");
+	componentSizeSix->setText(0, "Components of Size 6 (" + QString::number(componentSizeSix->childCount()) + ")"); */
+
 }
 
 void KPDGUIStructureSet::sort(){

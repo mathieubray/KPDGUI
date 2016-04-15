@@ -13,29 +13,31 @@ const int MAXIMUM_SLIDER_POSITION = 3;
 
 enum KPDOptimizationScheme { MUC, MEUC, MEUS, SCC };
 enum KPDUtilityScheme { TRANSPLANTS, SURVIVAL5YEAR, SURVIVAL10YEAR, SCORE };
-enum KPDPairType { PAIR, AD };
-
-enum KPDArrowDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, COMPATIBLE_DONORS, COMPATIBLE_RECIPIENTS, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
 
 enum KPDBloodType { BT_O, BT_A, BT_B, BT_AB };
 enum KPDRace { RACE_WHITE, RACE_BLACK, RACE_HISPANIC, RACE_OTHER };
 
+enum KPDMatchDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, COMPATIBLE_DONORS, COMPATIBLE_RECIPIENTS, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
 enum KPDNodeSortMode { NODESORT_ID, NODESORT_POPULARITY_SOLUTIONS, NODESORT_POPULARITY_STRUCTURES, NODESORT_COMPATIBILITIES, NODESORT_COMPATIBLE_DONORS, NODESORT_COMPATIBLE_RECIPIENTS, NODESORT_PRA };
 enum KPDMatchSortMode { MATCHSORT_POPULARITY_SOLUTIONS, MATCHSORT_POPULARITY_STRUCTURES, MATCHSORT_DONORID, MATCHSORT_RECIPID };
 
 enum KPDChainStorage { AS_FOUND, CHAINS_FIRST, CHAINS_LAST };
 
-struct AdditionalPairInfo{
-	int pairID;
+enum KPDNodeType { PAIR, AD };
 
-	KPDPairType pairType;
+struct AdditionalNodeInfo{
+	
+	int nodeID;
+	KPDNodeType nodeType;
 
-	KPDBloodType donorBT;
-	KPDBloodType recipBT;
+	int numberOfDonors;
 
-	int recipPRA;
+	QVector<KPDBloodType> donorBTs;
+	QVector<double> donorUncertainty;
 
-	double uncertainty;	
+	KPDBloodType candidateBT;
+	int candidatePRA;	
+	double candidateUncertainty;
 };
 
 
@@ -103,69 +105,6 @@ namespace KPDFunctions {
 		else { return ""; }
 	}
 
-	//Pair Type
-	
-	inline KPDPairType intToPairType(int i){
-
-		KPDPairType type = PAIR;
-
-		if (i == 1){ type = AD; }
-
-		return type;
-	}
-
-	inline int pairTypeToInt(KPDPairType type){
-		
-		int i = 0;
-
-		if (type == AD){ i = 1; }
-
-		return i;
-	}
-
-	inline QString toString(KPDPairType type){
-		if (type == PAIR){ return "Pair"; }
-		else if (type == AD){ return "AD"; }
-		else { return ""; }
-	}
-
-	//Arrow Display Mode
-	inline KPDArrowDisplayMode intToArrowDisplayMode(int i){
-
-		KPDArrowDisplayMode mode = WITHIN_SELECTION;
-
-		if (i == 1){ mode = SELECTED_COMPATIBILITIES; }
-		else if (i == 2){ mode = COMPATIBLE_DONORS; }
-		else if (i == 3){ mode = COMPATIBLE_RECIPIENTS;	}
-		else if (i == 4){ mode = ALL_COMPATIBILITIES; }
-		else if (i == 5){ mode = NO_COMPATIBILITIES; }
-
-		return mode;
-	}
-
-	inline int arrowDisplayModeToInt(KPDArrowDisplayMode mode){
-
-		int i = 0;
-
-		if (mode == SELECTED_COMPATIBILITIES){ i = 1; }
-		else if (mode == COMPATIBLE_DONORS){ i = 2;	}
-		else if (mode == COMPATIBLE_RECIPIENTS){ i = 3; }
-		else if (mode == ALL_COMPATIBILITIES){ i = 4; }
-		else if (mode == NO_COMPATIBILITIES){ i = 5; }
-
-		return i;
-	}
-
-	inline QString toString(KPDArrowDisplayMode mode){
-		if (mode == WITHIN_SELECTION){ return "Within Selection"; }
-		else if (mode == SELECTED_COMPATIBILITIES){ return "Selected Compatibilities"; }
-		else if (mode == COMPATIBLE_DONORS){ return "Compatible Donors"; }
-		else if (mode == COMPATIBLE_RECIPIENTS){ return "Compatible Recipients"; }
-		else if (mode == ALL_COMPATIBILITIES){ return "All Compatibilities"; }
-		else if (mode == NO_COMPATIBILITIES){ return "No Compatibilities"; }
-		else { return ""; }
-	}
-
 	//Blood Type
 	inline KPDBloodType intToBloodType(int i){
 
@@ -228,6 +167,43 @@ namespace KPDFunctions {
 		else { return ""; }
 	}
 
+	//Match Display Mode
+	inline KPDMatchDisplayMode intToMatchDisplayMode(int i) {
+
+		KPDMatchDisplayMode mode = WITHIN_SELECTION;
+
+		if (i == 1) { mode = SELECTED_COMPATIBILITIES; }
+		else if (i == 2) { mode = COMPATIBLE_DONORS; }
+		else if (i == 3) { mode = COMPATIBLE_RECIPIENTS; }
+		else if (i == 4) { mode = ALL_COMPATIBILITIES; }
+		else if (i == 5) { mode = NO_COMPATIBILITIES; }
+
+		return mode;
+	}
+
+	inline int matchDisplayModeToInt(KPDMatchDisplayMode mode) {
+
+		int i = 0;
+
+		if (mode == SELECTED_COMPATIBILITIES) { i = 1; }
+		else if (mode == COMPATIBLE_DONORS) { i = 2; }
+		else if (mode == COMPATIBLE_RECIPIENTS) { i = 3; }
+		else if (mode == ALL_COMPATIBILITIES) { i = 4; }
+		else if (mode == NO_COMPATIBILITIES) { i = 5; }
+
+		return i;
+	}
+
+	inline QString toString(KPDMatchDisplayMode mode) {
+		if (mode == WITHIN_SELECTION) { return "Within Selection"; }
+		else if (mode == SELECTED_COMPATIBILITIES) { return "Selected Compatibilities"; }
+		else if (mode == COMPATIBLE_DONORS) { return "Compatible Donors"; }
+		else if (mode == COMPATIBLE_RECIPIENTS) { return "Compatible Recipients"; }
+		else if (mode == ALL_COMPATIBILITIES) { return "All Compatibilities"; }
+		else if (mode == NO_COMPATIBILITIES) { return "No Compatibilities"; }
+		else { return ""; }
+	}
+
 	//Node Sort Mode
 	inline KPDNodeSortMode intToNodeSortMode(int i){
 
@@ -268,34 +244,34 @@ namespace KPDFunctions {
 		else { return ""; }
 	}
 
-	//Arrow Sort Mode
-	inline KPDMatchSortMode intToMatchSortMode(int i){
+	//Match Sort Mode
+	inline KPDMatchSortMode intToMatchSortMode(int i) {
 
 		KPDMatchSortMode mode = MATCHSORT_POPULARITY_SOLUTIONS;
 
-		if (i == 1){ mode = MATCHSORT_POPULARITY_STRUCTURES; }
-		else if (i == 2){ mode = MATCHSORT_DONORID;	}
-		else if (i == 3){ mode = MATCHSORT_RECIPID; }
+		if (i == 1) { mode = MATCHSORT_POPULARITY_STRUCTURES; }
+		else if (i == 2) { mode = MATCHSORT_DONORID; }
+		else if (i == 3) { mode = MATCHSORT_RECIPID; }
 
 		return mode;
 	}
 
-	inline int matchSortModeToInt(KPDMatchSortMode mode){
+	inline int matchSortModeToInt(KPDMatchSortMode mode) {
 
 		int i = 0;
 
-		if (mode == MATCHSORT_POPULARITY_STRUCTURES){ i = 1; }
-		else if (mode == MATCHSORT_DONORID){ i = 2;	}
-		else if (mode == MATCHSORT_RECIPID){ i = 3;	}
+		if (mode == MATCHSORT_POPULARITY_STRUCTURES) { i = 1; }
+		else if (mode == MATCHSORT_DONORID) { i = 2; }
+		else if (mode == MATCHSORT_RECIPID) { i = 3; }
 
 		return i;
 	}
 
-	inline QString toString(KPDMatchSortMode mode){
-		if (mode == MATCHSORT_POPULARITY_SOLUTIONS){ return "Popularity in Solutions"; }
-		else if (mode == MATCHSORT_POPULARITY_STRUCTURES){ return "Popularity in Structures"; }
-		else if (mode == MATCHSORT_DONORID){ return "Donor ID"; }
-		else if (mode == MATCHSORT_RECIPID){ return "Candidate ID"; }
+	inline QString toString(KPDMatchSortMode mode) {
+		if (mode == MATCHSORT_POPULARITY_SOLUTIONS) { return "Popularity in Solutions"; }
+		else if (mode == MATCHSORT_POPULARITY_STRUCTURES) { return "Popularity in Structures"; }
+		else if (mode == MATCHSORT_DONORID) { return "Donor ID"; }
+		else if (mode == MATCHSORT_RECIPID) { return "Candidate ID"; }
 		else { return ""; }
 	}
 
@@ -324,6 +300,31 @@ namespace KPDFunctions {
 		if (mode == AS_FOUND){ return "As They Are Found"; }
 		else if (mode == CHAINS_FIRST){ return "First"; }
 		else if (mode == CHAINS_LAST){ return "Last"; }
+		else { return ""; }
+	}
+
+	//Node Type
+	inline KPDNodeType intToNodeType(int i) {
+
+		KPDNodeType type = PAIR;
+
+		if (i == 1) { type = AD; }
+
+		return type;
+	}
+
+	inline int nodeTypeToInt(KPDNodeType type) {
+
+		int i = 0;
+
+		if (type == AD) { i = 1; }
+
+		return i;
+	}
+
+	inline QString toString(KPDNodeType type) {
+		if (type == PAIR) { return "Pair"; }
+		else if (type == AD) { return "AD"; }
 		else { return ""; }
 	}
 

@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
-    <height>427</height>
+    <width>392</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>376</width>
-    <height>427</height>
+    <width>392</width>
+    <height>467</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>376</width>
-    <height>427</height>
+    <width>392</width>
+    <height>467</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -36,7 +36,7 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QGroupBox" name="recipGroupBox">
+     <widget class="QGroupBox" name="candidateGroupBox">
       <property name="title">
        <string>Candidate Information</string>
       </property>
@@ -44,21 +44,21 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>30</y>
+         <y>20</y>
          <width>341</width>
-         <height>128</height>
+         <height>140</height>
         </rect>
        </property>
-       <layout class="QGridLayout" name="recipGridLayout">
+       <layout class="QGridLayout" name="candidateGridLayout">
         <item row="2" column="0">
-         <widget class="QLabel" name="recipBTLabel">
+         <widget class="QLabel" name="candidateBTLabel">
           <property name="text">
            <string>Blood Type</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QSpinBox" name="recipAgeSpinBox">
+         <widget class="QSpinBox" name="candidateAgeSpinBox">
           <property name="maximum">
            <number>130</number>
           </property>
@@ -68,7 +68,7 @@
          </widget>
         </item>
         <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="recipNameLineEdit">
+         <widget class="QLineEdit" name="candidateNameLineEdit">
           <property name="text">
            <string>Candidate Name</string>
           </property>
@@ -78,21 +78,21 @@
          </widget>
         </item>
         <item row="0" column="0">
-         <widget class="QLabel" name="recipNameLabel">
+         <widget class="QLabel" name="candidateNameLabel">
           <property name="text">
            <string>Name</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QLabel" name="recipAgeLabel">
+         <widget class="QLabel" name="candidateAgeLabel">
           <property name="text">
            <string>Age</string>
           </property>
          </widget>
         </item>
         <item row="1" column="2">
-         <spacer name="recipAgeSpacer">
+         <spacer name="candidateAgeSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -105,7 +105,7 @@
          </spacer>
         </item>
         <item row="2" column="1">
-         <widget class="QComboBox" name="recipBTComboBox">
+         <widget class="QComboBox" name="candidateBTComboBox">
           <item>
            <property name="text">
             <string>O</string>
@@ -129,7 +129,7 @@
          </widget>
         </item>
         <item row="2" column="2">
-         <spacer name="recipBTSpacer">
+         <spacer name="candidateBTSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -142,14 +142,14 @@
          </spacer>
         </item>
         <item row="3" column="0">
-         <widget class="QLabel" name="recipPRALabel">
+         <widget class="QLabel" name="candidatePRALabel">
           <property name="text">
            <string>PRA</string>
           </property>
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QSpinBox" name="recipPRASpinBox">
+         <widget class="QSpinBox" name="candidatePRASpinBox">
           <property name="maximum">
            <number>100</number>
           </property>
@@ -166,9 +166,9 @@
          </widget>
         </item>
         <item row="4" column="0">
-         <layout class="QHBoxLayout" name="recipAdditionalHorizontalLayout_3">
+         <layout class="QHBoxLayout" name="candidateAdditionalHLAHorizontalLayout">
           <item>
-           <widget class="QLabel" name="recipAdditionalLayout_3">
+           <widget class="QLabel" name="candidateAdditionalLabel">
             <property name="text">
              <string>Candidate Antibodies</string>
             </property>
@@ -177,7 +177,7 @@
          </layout>
         </item>
         <item row="4" column="1" colspan="2">
-         <widget class="QLineEdit" name="recipHLALineEdit"/>
+         <widget class="QLineEdit" name="candidateHLALineEdit"/>
         </item>
        </layout>
       </widget>
@@ -189,12 +189,12 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>190</y>
-     <width>361</width>
-     <height>231</height>
+     <y>200</y>
+     <width>371</width>
+     <height>261</height>
     </rect>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="candidateVerticalLayout">
     <item>
      <widget class="QTabWidget" name="moreRecipInfo">
       <property name="enabled">
@@ -207,231 +207,240 @@
        <attribute name="title">
         <string>Candidate Characteristics</string>
        </attribute>
-       <widget class="QWidget" name="layoutWidget_6">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>140</y>
-          <width>341</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Excluded Donors</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="excludedDonorLineEdit"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_5">
+       <widget class="QWidget" name="">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>167</width>
-          <height>126</height>
+          <width>351</width>
+          <height>175</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="recipCharacteristicsGridLayout_3">
-         <item row="0" column="1">
-          <spacer name="recipGenderSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="2">
-          <widget class="QComboBox" name="recipGenderComboBox">
-           <item>
-            <property name="text">
-             <string>Male</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Female</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <spacer name="recipWeightSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="recipHeightLabel_3">
-           <property name="text">
-            <string>Height (kg)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="recipWeightLabel_3">
-           <property name="text">
-            <string>Weight (kg)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <spacer name="recipHeightSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="recipRaceLabel_3">
-           <property name="text">
-            <string>Race</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QDoubleSpinBox" name="recipTODSpinBox">
-           <property name="maximum">
-            <double>200.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QComboBox" name="recipRaceComboBox">
-           <item>
-            <property name="text">
-             <string>White</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Black</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Hispanic</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Other</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <spacer name="recipRaceSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="recipGenderLabel_3">
-           <property name="text">
-            <string>Gender</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0" colspan="2">
-          <widget class="QLabel" name="recipTODLabel_3">
-           <property name="text">
-            <string>Months On Dialysis</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QDoubleSpinBox" name="recipHeightSpinBox">
-           <property name="maximum">
-            <double>3.000000000000000</double>
-           </property>
-           <property name="value">
-            <double>1.500000000000000</double>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QDoubleSpinBox" name="recipWeightSpinBox">
-           <property name="maximum">
-            <double>400.000000000000000</double>
-           </property>
-           <property name="value">
-            <double>60.000000000000000</double>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_2">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>10</y>
-          <width>122</width>
-          <height>88</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="recipVerticalLayout_3">
+        <layout class="QVBoxLayout" name="donorCharacteristicsVerticalLayout">
          <item>
-          <widget class="QCheckBox" name="recipHepCCheckBox">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Hepatitis C</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="donorMajorInfoHorizontalLayout">
+           <item>
+            <layout class="QGridLayout" name="candidateCharacteristicsGridLayout">
+             <item row="0" column="1">
+              <spacer name="candidateGenderSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="2">
+              <widget class="QComboBox" name="candidateGenderComboBox">
+               <item>
+                <property name="text">
+                 <string>Male</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Female</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <spacer name="candidateWeightSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="candidateHeightLabel">
+               <property name="text">
+                <string>Height (kg)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="candidateWeightLabel">
+               <property name="text">
+                <string>Weight (kg)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <spacer name="candidateHeightSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="candidateRaceLabel">
+               <property name="text">
+                <string>Race</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QDoubleSpinBox" name="candidateTODSpinBox">
+               <property name="maximum">
+                <double>200.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="candidateRaceComboBox">
+               <item>
+                <property name="text">
+                 <string>White</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Black</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Hispanic</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Other</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <spacer name="candidateRaceSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="candidateGenderLabel">
+               <property name="text">
+                <string>Gender</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QLabel" name="candidateTODLabel">
+               <property name="text">
+                <string>Months On Dialysis</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QDoubleSpinBox" name="candidateHeightSpinBox">
+               <property name="maximum">
+                <double>3.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>1.500000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QDoubleSpinBox" name="candidateWeightSpinBox">
+               <property name="maximum">
+                <double>400.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>60.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="donorMinorInfoVerticalLayout">
+             <item>
+              <layout class="QVBoxLayout" name="checkBoxesVerticalLayout">
+               <item>
+                <widget class="QCheckBox" name="candidateHepCCheckBox">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Hepatitis C</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="candidateDiabetesCheckBox">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Diabetes</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QCheckBox" name="candidatePrevTransCheckBox">
+                 <property name="layoutDirection">
+                  <enum>Qt::LeftToRight</enum>
+                 </property>
+                 <property name="text">
+                  <string>Previous Transplant </string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>28</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QCheckBox" name="recipDiabetesCheckBox">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Diabetes</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="recipPrevTransCheckBox">
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Previous Transplant </string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="excludedDonorsHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="exccludedDonorsLabel">
+             <property name="text">
+              <string>Excluded Donors</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="excludedDonorLineEdit"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -439,7 +448,7 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <layout class="QHBoxLayout" name="buttonBoxHorizontalLayout">
       <item>
        <spacer name="buttonHorizontalSpacer">
         <property name="orientation">
@@ -505,7 +514,7 @@
   <connection>
    <sender>praSlider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>recipPRASpinBox</receiver>
+   <receiver>candidatePRASpinBox</receiver>
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
@@ -519,7 +528,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>recipPRASpinBox</sender>
+   <sender>candidatePRASpinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>praSlider</receiver>
    <slot>setValue(int)</slot>

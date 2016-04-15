@@ -1,0 +1,74 @@
+#include "KPDGUIMatchWrapper.h"
+
+KPDGUIMatchWrapper::KPDGUIMatchWrapper(KPDGUIMatch * match){
+	myMatch = match;
+
+	updateText();
+
+	//connect(match, SIGNAL(selectArrowInMatchList(bool)), this, SLOT(changeArrowSelection(bool)));
+}
+
+KPDGUIMatchWrapper::~KPDGUIMatchWrapper(){
+
+}
+
+KPDGUIMatch * KPDGUIMatchWrapper::getMatch(){
+	return myMatch;
+}
+
+void KPDGUIMatchWrapper::updateText(){
+	
+	setText(0, QString::number(myMatch->getFromNode()->getNodeID()));
+	setText(1, QString::number(myMatch->getToNode()->getNodeID()));
+	setText(2, QString::number(myMatch->getPopularityInStructures()));
+	setText(3, QString::number(myMatch->getPopularityInSolutions()));
+
+}
+
+
+bool KPDGUIMatchWrapper::operator<(const QTreeWidgetItem &other)const {
+
+	int column = treeWidget()->sortColumn();
+
+	QString fromNode = text(0).toInt();
+	QString otherFromNode = other.text(0).toInt();
+
+	QString toNode = text(1).toInt();
+	QString otherToNode = other.text(1).toInt();
+
+	if (column == 0){
+		if (fromNode == otherFromNode){
+			return toNode < otherToNode;
+		}
+		else {
+			return fromNode < otherFromNode;
+		}
+	}
+	else if (column == 1){
+		if (toNode == otherToNode){
+			return fromNode < otherFromNode;
+		}
+		else {
+			return toNode < otherToNode;
+		}
+	}
+	else {
+
+		QString popularity = text(column).toInt();
+		QString otherPopularity = other.text(column).toInt();
+
+		if (popularity == otherPopularity){
+
+			if (fromNode == otherFromNode){
+				return toNode < otherToNode;
+			}
+			else {
+				return fromNode < otherFromNode;
+			}
+		}
+		else {
+			return popularity < otherPopularity;
+		}
+	}
+
+}

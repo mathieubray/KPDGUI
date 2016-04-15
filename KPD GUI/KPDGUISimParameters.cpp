@@ -1,18 +1,23 @@
 #include "KPDGUISimParameters.h"
 
 KPDGUISimParameters::KPDGUISimParameters(){
+	
 	//Default Parameters
 
-	parametersSet = false;
+	parametersHaveBeenUpdated = false;
 
 	//Simulation Settings
-	optScheme = KPDOptimizationScheme::MUC;
-	utilityScheme = KPDUtilityScheme::TRANSPLANTS;	
-	maxSize = 2;
+	optScheme = MUC;
+	utilityScheme = TRANSPLANTS;	
+	
+	maxCycleSize = 3;
+	maxChainLength = 3;
+	maxComponentSize = 4;
 	
 	//Numerical Parameters
-	pairFailureRate = 0.1;
-	adFailureRate = 0.0;
+	defaultDonorFailureRate = 0.1;
+	defaultCandidateFailureRate = 0.1;
+	defaultADFailureRate = 0.0;
 	exogenousFailureRate = 0.0;	
 		
 	addAdvantageToHighPRACandidates = false;
@@ -20,7 +25,9 @@ KPDGUISimParameters::KPDGUISimParameters(){
 	praAdvantageValue = 0.0;
 
 	numberOfSolutions = 1;
-	numberOfEUSimulations = 100;
+	
+	estimateExpectedUtility = false;
+	numberOfExpectedUtilityIterations = 100;
 
 	//Additional Options
 	chainStorage = AS_FOUND;
@@ -39,33 +46,29 @@ KPDGUISimParameters::~KPDGUISimParameters(){
 
 void KPDGUISimParameters::changeParameters(DialogSimParameters * d){
 
-	parametersSet = true;
+	parametersHaveBeenUpdated = true;
 
 	optScheme = KPDFunctions::intToOptScheme(d->optComboBox->currentIndex());
 	utilityScheme = KPDFunctions::intToUtilScheme(d->utilComboBox->currentIndex());
-	maxSize = d->sizeSpinBox->value();
+	
+	maxCycleSize = d->cycleSizeSpinBox->value();
+	maxChainLength = d->chainLengthSpinBox->value();
+	maxComponentSize = d->componentSizeSpinBox->value();
 
-	pairFailureRate = d->pairFailureRateSpinBox->value();
-	adFailureRate = d->adFailureRateSpinBox->value();
-	exogenousFailureRate = d->exogenousFailureRateSpinBox->value();
+	defaultDonorFailureRate = d->donorFailureSpinBox->value();
+	defaultCandidateFailureRate = d->candidateFailureSpinBox->value();
+	defaultADFailureRate = d->adFailureSpinBox->value();
+	exogenousFailureRate = d->exogenousFailureSpinBox->value();
 
-	addAdvantageToHighPRACandidates = d->praBox->isChecked();
+	addAdvantageToHighPRACandidates = d->praCheckBox->isChecked();
 	praAdvantageCutoff = d->praCutoffSpinBox->value();
 	praAdvantageValue = d->praAdvantageSpinBox->value();
 
 	numberOfSolutions = d->solutionsSpinBox->value();
-	numberOfEUSimulations = d->euSimSpinBox->value();
+	
+	estimateExpectedUtility = d->estimateEUCheckBox->isChecked();
+	numberOfExpectedUtilityIterations = d->numberOfEUSimSpinBox->value();
 
-	/*QString chainStorage = d->chainStorageComboBox->currentText();
-	if (chainStorage == "As They Are Found"){
-		chainStorage = "NONE";
-	}
-	else if (chainStorage == "First"){
-		chainStorage = "FIRST";
-	}
-	else if (chainStorage == "Last"){
-		chainStorage = "LAST";
-	}*/
 	chainStorage = KPDFunctions::intToChainStorage(d->chainStorageComboBox->currentIndex());
 	reserveODonorsForOCandidates = d->reserveOtoOBox->isChecked();
 	checkAdditionalHLA = d->checkAdditionalHLABox->isChecked();
@@ -78,10 +81,14 @@ void KPDGUISimParameters::changeParameters(DialogSimParameters * d){
 void KPDGUISimParameters::copyParameters(KPDGUISimParameters * d){
 	optScheme = d->getOptimizationScheme();
 	utilityScheme = d->getUtilityScheme();
-	maxSize = d->getMaxSize();
+	
+	maxCycleSize = d->getMaxCycleSize();
+	maxChainLength = d->getMaxChainLength();
+	maxComponentSize = d->getMaxComponentSize();
 
-	pairFailureRate = d->getPairFailureRate();
-	adFailureRate = d->getADFailureRate();
+	defaultDonorFailureRate = d->getDefaultDonorFailureRate();
+	defaultCandidateFailureRate = d->getDefaultCandidateFailureRate();
+	defaultADFailureRate = d->getDefaultADFailureRate();
 	exogenousFailureRate = d->getExogenousFailureRate();
 
 	addAdvantageToHighPRACandidates = d->getAddAdvantageToHighPRACandidates();
@@ -89,7 +96,9 @@ void KPDGUISimParameters::copyParameters(KPDGUISimParameters * d){
 	praAdvantageValue = d->getPRAAdvantageValue();
 
 	numberOfSolutions = d->getNumberOfSolutions();
-	numberOfEUSimulations = d->getNumberOfEUSimulations();
+
+	estimateExpectedUtility = d->getEstimateExpectedUtility();
+	numberOfExpectedUtilityIterations = d->getNumberOfExpectedUtilityIterations();
 
 	chainStorage = d->getChainStorage();
 	reserveODonorsForOCandidates = d->getReserveODonorsForOCandidates();
@@ -99,12 +108,12 @@ void KPDGUISimParameters::copyParameters(KPDGUISimParameters * d){
 	allowABBridgeDonors = d->getAllowABBridgeDonors();
 }
 
-bool KPDGUISimParameters::getParametersSet(){
-	return parametersSet;
+bool KPDGUISimParameters::getParametersHaveBeenUpdated(){
+	return parametersHaveBeenUpdated;
 }
 
-void KPDGUISimParameters::setParametersSet(bool flag){
-	parametersSet = flag;
+void KPDGUISimParameters::setParametersHaveBeenUpdated(bool flag){
+	parametersHaveBeenUpdated = flag;
 }
 
 QString KPDGUISimParameters::toString(){
@@ -137,20 +146,28 @@ QString KPDGUISimParameters::toString(){
 	}
 
 	if (optScheme != KPDOptimizationScheme::SCC){
-		parameterString.append("Maximum Chain Length: " + QString::number(maxSize) + "\n");
+		parameterString.append("Maximum Cycle Size: " + QString::number(maxCycleSize) + "\n");
+		parameterString.append("Maximum Chain Length: " + QString::number(maxChainLength) + "\n");
 	}
 	else {
-		parameterString.append("Maximum Locally Relevant Subgraph Size: " + QString::number(maxSize) + "\n");
+		parameterString.append("Maximum Locally Relevant Subgraph Size: " + QString::number(maxComponentSize) + "\n");
+		parameterString.append("Maximum Sub-cycle Size: " + QString::number(maxCycleSize) + "\n");
+		parameterString.append("Maximum Sub-chain Length: " + QString::number(maxChainLength) + "\n");
 	}
 
-	parameterString.append("Pair Failure Rate: " + QString::number(pairFailureRate) + "\n");
-	parameterString.append("AD Failure Rate: " + QString::number(adFailureRate) + "\n");
+	parameterString.append("Default Donor Failure Rate: " + QString::number(defaultDonorFailureRate) + "\n");
+	parameterString.append("Default Candidate Failure Rate: " + QString::number(defaultCandidateFailureRate) + "\n");
+	parameterString.append("Default Altruistic Donor Failure Rate: " + QString::number(defaultADFailureRate) + "\n");
 	parameterString.append("Exogenous Match Failure Rate: " + QString::number(exogenousFailureRate) + "\n");
+	
 	if (numberOfSolutions > 1){
-		parameterString.append(numberOfSolutions + " Alternate Solutions Will Be Produced\n");
+		parameterString.append(numberOfSolutions + " Alternate Solutions Produced\n");
 	}
-	if (optScheme == KPDOptimizationScheme::SCC){
-		parameterString.append(numberOfEUSimulations + " Simulations used to Calculate Expected Utility\n");
+
+	if (estimateExpectedUtility) {
+		if (optScheme == KPDOptimizationScheme::SCC) {
+			parameterString.append(QString::number(numberOfExpectedUtilityIterations) + " Simulations used to Calculate Expected Utility\n");
+		}
 	}
 
 	if (addAdvantageToHighPRACandidates){
@@ -211,16 +228,28 @@ KPDUtilityScheme KPDGUISimParameters::getUtilityScheme() const {
 	return utilityScheme;
 }
 
-int KPDGUISimParameters::getMaxSize() const {
-	return maxSize;
+int KPDGUISimParameters::getMaxCycleSize() const {
+	return maxCycleSize;
 }
 
-double KPDGUISimParameters::getPairFailureRate() const {
-	return pairFailureRate;
+int KPDGUISimParameters::getMaxChainLength() const {
+	return maxChainLength;
 }
 
-double KPDGUISimParameters::getADFailureRate() const {
-	return adFailureRate;
+int KPDGUISimParameters::getMaxComponentSize() const {
+	return maxComponentSize;
+}
+
+double KPDGUISimParameters::getDefaultDonorFailureRate() const {
+	return defaultDonorFailureRate;
+}
+
+double KPDGUISimParameters::getDefaultCandidateFailureRate() const {
+	return defaultCandidateFailureRate;
+}
+
+double KPDGUISimParameters::getDefaultADFailureRate() const {
+	return defaultADFailureRate;
 }
 
 double KPDGUISimParameters::getExogenousFailureRate() const {
@@ -243,8 +272,12 @@ int KPDGUISimParameters::getNumberOfSolutions() const {
 	return numberOfSolutions;
 }
 
-int KPDGUISimParameters::getNumberOfEUSimulations() const {
-	return numberOfEUSimulations;
+bool KPDGUISimParameters::getEstimateExpectedUtility() const {
+	return estimateExpectedUtility;
+}
+
+int KPDGUISimParameters::getNumberOfExpectedUtilityIterations() const {
+	return numberOfExpectedUtilityIterations;
 }
 
 KPDChainStorage KPDGUISimParameters::getChainStorage() const {
@@ -279,16 +312,28 @@ void KPDGUISimParameters::setUtilityScheme(KPDUtilityScheme scheme){
 	utilityScheme = scheme;
 }
 
-void KPDGUISimParameters::setMaxSize(int size){
-	maxSize = size;
+void KPDGUISimParameters::setMaxCycleSize(int size){
+	maxCycleSize = size;
 }
 
-void KPDGUISimParameters::setPairFailureRate(double rate){
-	pairFailureRate = rate;
+void KPDGUISimParameters::setMaxChainLength(int length) {
+	maxChainLength = length;
 }
 
-void KPDGUISimParameters::setADFailureRate(double rate){
-	adFailureRate = rate;
+void KPDGUISimParameters::setMaxComponentSize(int size) {
+	maxComponentSize = size;
+}
+
+void KPDGUISimParameters::setDefaultDonorFailureRate(double rate) {
+	defaultDonorFailureRate = rate;
+}
+
+void KPDGUISimParameters::setDefaultCandidateFailureRate(double rate) {
+	defaultCandidateFailureRate = rate;
+}
+
+void KPDGUISimParameters::setDefaultADFailureRate(double rate) {
+	defaultADFailureRate = rate;
 }
 
 void KPDGUISimParameters::setExogenousFailureRate(double rate){
@@ -311,8 +356,12 @@ void KPDGUISimParameters::setNumberOfSolutions(int solutions){
 	numberOfSolutions = solutions;
 }
 
-void KPDGUISimParameters::setNumberOfEUSimulations(int simulations){
-	numberOfEUSimulations = simulations;
+void KPDGUISimParameters::setEstimateExpectedUtility(bool estimate) {
+	estimateExpectedUtility = estimate;
+}
+
+void KPDGUISimParameters::setNumberOfExpectedUtilityIterations(int iterations){
+	numberOfExpectedUtilityIterations = iterations;
 }
 
 void KPDGUISimParameters::setChainStorage(KPDChainStorage storage){
@@ -344,10 +393,14 @@ QDataStream &operator<<(QDataStream &out, const KPDGUISimParameters & parameters
 {
 	out << qint32(KPDFunctions::optSchemeToInt(parameters.getOptimizationScheme()));
 	out << qint32(KPDFunctions::utilSchemeToInt(parameters.getUtilityScheme()));
-	out << qint32(parameters.getMaxSize());
 
-	out << qreal(parameters.getPairFailureRate());
-	out << qreal(parameters.getADFailureRate());
+	out << qint32(parameters.getMaxCycleSize());
+	out << qint32(parameters.getMaxChainLength());
+	out << qint32(parameters.getMaxComponentSize());
+
+	out << qreal(parameters.getDefaultDonorFailureRate());
+	out << qreal(parameters.getDefaultCandidateFailureRate());
+	out << qreal(parameters.getDefaultADFailureRate());
 	out << qreal(parameters.getExogenousFailureRate());
 
 	out << parameters.getAddAdvantageToHighPRACandidates();
@@ -355,7 +408,9 @@ QDataStream &operator<<(QDataStream &out, const KPDGUISimParameters & parameters
 	out << qreal(parameters.getPRAAdvantageValue());
 
 	out << qint32(parameters.getNumberOfSolutions());
-	out << qint32(parameters.getNumberOfEUSimulations());
+
+	out << parameters.getEstimateExpectedUtility();
+	out << qint32(parameters.getNumberOfExpectedUtilityIterations());
 
 	out << qint32(KPDFunctions::chainStorageToInt(parameters.getChainStorage()));
 	out << parameters.getReserveODonorsForOCandidates();
@@ -371,14 +426,20 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 {
 	int opt;
 	int util;
-	int size;
 
-	double pairFailureRate;
-	double adFailureRate;
+	int cycleSize;
+	int chainLength;
+	int componentSize;
+
+	double defaultDonorFailureRate;
+	double defaultCandidateFailureRate;
+	double defaultADFailureRate;
 	double exogenousFailureRate;
 
 	int numberOfSolutions;
-	int numberOfEUSimulations;
+
+	bool estimateExpectedUtility;
+	int numberOfExpectedUtilityIterations;
 
 	bool addAdvantageToHighPRACandidates;
 	int praAdvantageCutoff;
@@ -391,10 +452,10 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 	bool excludeABDonorsFromSimulation;
 	bool allowABBridgeDonors;
 	
-	in >> opt >> util >> size;
-	in >> pairFailureRate >> adFailureRate >> exogenousFailureRate;
+	in >> opt >> util >> cycleSize >> chainLength >> componentSize;
+	in >> defaultDonorFailureRate >> defaultCandidateFailureRate << defaultADFailureRate << exogenousFailureRate;
 
-	in >> numberOfSolutions >> numberOfEUSimulations;
+	in >> numberOfSolutions >> estimateExpectedUtility << numberOfExpectedUtilityIterations;
 
 	in >> addAdvantageToHighPRACandidates >> praAdvantageCutoff >> praAdvantageValue;
 
@@ -404,12 +465,16 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 
 	parameters.setOptimizationScheme(KPDFunctions::intToOptScheme(opt));
 	parameters.setUtilityScheme(KPDFunctions::intToUtilScheme(util));
-	parameters.setMaxSize(size);
-	parameters.setPairFailureRate(pairFailureRate);
-	parameters.setADFailureRate(adFailureRate);
+	parameters.setMaxCycleSize(cycleSize);
+	parameters.setMaxChainLength(chainLength);
+	parameters.setMaxComponentSize(componentSize);
+	parameters.setDefaultDonorFailureRate(defaultDonorFailureRate);
+	parameters.setDefaultCandidateFailureRate(defaultCandidateFailureRate);
+	parameters.setDefaultADFailureRate(defaultADFailureRate);
 	parameters.setExogenousFailureRate(exogenousFailureRate);
 	parameters.setNumberOfSolutions(numberOfSolutions);
-	parameters.setNumberOfEUSimulations(numberOfEUSimulations);
+	parameters.setEstimateExpectedUtility(estimateExpectedUtility);
+	parameters.setNumberOfExpectedUtilityIterations(numberOfExpectedUtilityIterations);
 	parameters.setAddAdvantagetoHighPRACandidates(addAdvantageToHighPRACandidates);
 	parameters.setPRAAdvantageCutoff(praAdvantageCutoff);
 	parameters.setPRAAdvantageValue(praAdvantageValue);

@@ -8,8 +8,7 @@
 
 #include "EnumsFunctions.h"
 
-
-class Donor;
+class KPDGUIDonorInfo;
 
 class DialogDonor : public QDialog, public Ui_DialogDonor
 {
@@ -17,7 +16,7 @@ class DialogDonor : public QDialog, public Ui_DialogDonor
 
 public:
 	DialogDonor(QWidget *parent = 0);
-	DialogDonor(Donor donor, bool disableMajorEdits, QWidget *parent = 0);
+	DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget *parent = 0);
 
 	QTextEdit * commentTextEdit;
 

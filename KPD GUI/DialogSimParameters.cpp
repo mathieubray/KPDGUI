@@ -19,63 +19,27 @@ DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget
 	//Optimization Scheme
 	optComboBox->setCurrentIndex(KPDFunctions::optSchemeToInt(paramInfo->getOptimizationScheme()));
 	if (paramInfo->getOptimizationScheme() == SCC){
-		sizeLabel->setText("Maximum Component Size");
+		componentSizeSpinBox->setEnabled(true);
+		componentSizeSlider->setEnabled(true);
+		estimateEUCheckBox->setEnabled(true);
+		numberOfEUSimSpinBox->setEnabled(true);
 	}
-	/*if (paramInfo->getOptimizationScheme() == KPDOptimizationScheme::MUC){
-		int optIndex = optComboBox->findText("Utility");
-		if (optIndex >= 0)
-			optComboBox->setCurrentIndex(optIndex);
-	}
-	else if (paramInfo->getOptimizationScheme() == KPDOptimizationScheme::MEUC){
-		int optIndex = optComboBox->findText("Expected Utility");
-		if (optIndex >= 0)
-			optComboBox->setCurrentIndex(optIndex);
-	}
-	else if (paramInfo->getOptimizationScheme() == KPDOptimizationScheme::MEUS){
-		int optIndex = optComboBox->findText("Fallbacks");
-		if (optIndex >= 0)
-			optComboBox->setCurrentIndex(optIndex);
-	}
-	else if (paramInfo->getOptimizationScheme() == KPDOptimizationScheme::SCC){
-		int optIndex = optComboBox->findText("Extended Fallbacks");
-		if (optIndex >= 0){
-			optComboBox->setCurrentIndex(optIndex);
-			sizeLabel->setText("Maximum Component Size");
-		}
-	}*/
 
 	//Utility Scheme
 	utilComboBox->setCurrentIndex(KPDFunctions::utilSchemeToInt(paramInfo->getUtilityScheme()));
-	/*if (paramInfo->getUtilityScheme() == KPDUtilityScheme::TRANSPLANTS){
-		int utilIndex = utilComboBox->findText("Transplants");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo->getUtilityScheme() == KPDUtilityScheme::SURVIVAL5YEAR){
-		int utilIndex = utilComboBox->findText("5 Year Survival");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo->getUtilityScheme() == KPDUtilityScheme::SURVIVAL10YEAR){
-		int utilIndex = utilComboBox->findText("10 Year Survival");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}
-	else if (paramInfo->getUtilityScheme() == KPDUtilityScheme::SCORE){
-		int utilIndex = utilComboBox->findText("Score");
-		if (utilIndex >= 0)
-			utilComboBox->setCurrentIndex(utilIndex);
-	}*/
-
+	
 	//Max Chain Length
-	sizeSpinBox->setValue(paramInfo->getMaxSize());
-
+	cycleSizeSpinBox->setValue(paramInfo->getMaxCycleSize());
+	chainLengthSpinBox->setValue(paramInfo->getMaxChainLength());
+	componentSizeSpinBox->setValue(paramInfo->getMaxComponentSize());
+	
 	//Numerical Parameters
-	pairFailureRateSpinBox->setValue(paramInfo->getPairFailureRate());
-	adFailureRateSpinBox->setValue(paramInfo->getADFailureRate());
-	exogenousFailureRateSpinBox->setValue(paramInfo->getExogenousFailureRate());
+	donorFailureSpinBox->setValue(paramInfo->getDefaultDonorFailureRate());
+	candidateFailureSpinBox->setValue(paramInfo->getDefaultCandidateFailureRate());
+	adFailureSpinBox->setValue(paramInfo->getDefaultADFailureRate());
+	exogenousFailureSpinBox->setValue(paramInfo->getExogenousFailureRate());
 
-	praBox->setChecked(paramInfo->getAddAdvantageToHighPRACandidates());
+	praCheckBox->setChecked(paramInfo->getAddAdvantageToHighPRACandidates());
 	if (paramInfo->getAddAdvantageToHighPRACandidates()){
 		praCutoffSpinBox->setValue(paramInfo->getPRAAdvantageCutoff());
 		praAdvantageSpinBox->setValue(paramInfo->getPRAAdvantageValue());
@@ -86,32 +50,34 @@ DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget
 	}
 
 	solutionsSpinBox->setValue(paramInfo->getNumberOfSolutions());
-	euSimSpinBox->setValue(paramInfo->getNumberOfEUSimulations());
+
+	estimateEUCheckBox->setChecked(paramInfo->getEstimateExpectedUtility());
+	numberOfEUSimSpinBox->setValue(paramInfo->getNumberOfExpectedUtilityIterations());
 
 	//Additional Options
-	chainStorageComboBox->setCurrentIndex(KPDFunctions::chainStorageToInt(paramInfo->getChainStorage()));
-	/*if (paramInfo->getChainStorage() == "NONE"){
-		int chainStorageIndex = chainStorageComboBox->findText("As They Are Found");
-		if (chainStorageIndex >= 0)
-			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
-	}
-	else if (paramInfo->getChainStorage() == "FIRST"){
-		int chainStorageIndex = chainStorageComboBox->findText("First");
-		if (chainStorageIndex >= 0)
-			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
-	}
-	else if (paramInfo->getChainStorage() == "LAST"){
-		int chainStorageIndex = chainStorageComboBox->findText("Last");
-		if (chainStorageIndex >= 0)
-			chainStorageComboBox->setCurrentIndex(chainStorageIndex);
-	}*/
-
+	chainStorageComboBox->setCurrentIndex(KPDFunctions::chainStorageToInt(paramInfo->getChainStorage()));	
 	reserveOtoOBox->setChecked(paramInfo->getReserveODonorsForOCandidates());
 	checkAdditionalHLABox->setChecked(paramInfo->getCheckAdditionalHLA());
 	compatibleBox->setChecked(paramInfo->getIncludeCompatiblePairs());
 	excludeABDonorsBox->setChecked(paramInfo->getExcludeABDonorsFromSimulation());
 	allowABBridgeBox->setChecked(paramInfo->getAllowABBridgeDonors());
 	
+}
+
+void DialogSimParameters::enableComponentOptions(int index) {
+	if (index == 3) {
+		componentSizeSpinBox->setEnabled(true);
+		componentSizeSlider->setEnabled(true);
+		estimateEUCheckBox->setEnabled(true);
+		numberOfEUSimSpinBox->setEnabled(true);
+
+	}
+	else {
+		componentSizeSpinBox->setEnabled(false);
+		componentSizeSlider->setEnabled(false);
+		estimateEUCheckBox->setEnabled(false);
+		numberOfEUSimSpinBox->setEnabled(false);
+	}
 }
 
 void DialogSimParameters::enablePRAOptions(bool enabled){
@@ -123,13 +89,4 @@ void DialogSimParameters::enableBridgeDonorOptions(bool enabled){
 	allowABBridgeBox->setEnabled(!enabled);
 }
 
-void DialogSimParameters::changeLabel(int index){
-	if (index == 3){		
-		sizeLabel->setText("Maximum Component Size");
-		euSimSpinBox->setEnabled(true);
-	}
-	else {
-		sizeLabel->setText("Maximum Chain Length");
-		euSimSpinBox->setEnabled(false);
-	}	
-}
+

@@ -12,20 +12,20 @@
 #include "DialogSimParameters.h"
 
 #include "KPDGUINode.h"
-#include "KPDGUIArrow.h"
+#include "KPDGUIMatch.h"
 #include "KPDGUIRecord.h"
 #include "KPDGUISimParameters.h"
 #include "KPDGUISimulation.h"
 #include "KPDGUIStructure.h"
 #include "KPDGUIStructureSet.h"
 #include "KPDGUIDashboard.h"
-#include "KPDGUICloud.h"
+//#include "KPDGUICloud.h"
 #include "KPDGUIDisplaySettings.h"
 #include "KPDGUIGraphicsView.h"
 #include "KPDGUIPairList.h"
 
 #include "KPDGUINodeWrapper.h"
-#include "KPDGUIArrowWrapper.h"
+#include "KPDGUIMatchWrapper.h"
 #include "KPDGUIStructureWrapper.h"
 
 #include "EnumsFunctions.h"

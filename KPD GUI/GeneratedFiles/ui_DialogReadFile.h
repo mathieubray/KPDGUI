@@ -50,7 +50,7 @@ public:
         DialogReadFile->setMaximumSize(QSize(270, 100));
         layoutWidget = new QWidget(DialogReadFile);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 246, 79));
+        layoutWidget->setGeometry(QRect(10, 10, 246, 90));
         readFileVerticalLayout = new QVBoxLayout(layoutWidget);
         readFileVerticalLayout->setObjectName(QStringLiteral("readFileVerticalLayout"));
         readFileVerticalLayout->setContentsMargins(0, 0, 0, 0);

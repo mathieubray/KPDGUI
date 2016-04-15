@@ -9,6 +9,20 @@
 #include "EnumsFunctions.h"
 
 class KPDGUIDisplaySettings {
+	
+private:
+	bool showAllNodes;
+	bool showNodeSubset;
+	bool showNodesInSolutions;
+	bool showNodesInStructures;
+	bool showNodesOnHold;
+	bool showNodesWithNoCompatibilities;
+	bool showCandidatesInPRARange;
+
+	int minPRA;
+	int maxPRA;
+
+	KPDMatchDisplayMode matchDisplayMode;
 
 public:
 
@@ -17,48 +31,32 @@ public:
 
 	bool changeDisplaySettings(DialogDisplaySettings * d);
 
-	bool getShowAllPairs() const;
-	bool getShowPairSubset() const;
-	bool getShowPairsInStructures() const;
-	bool getShowPairsInSolutions() const;
-	bool getShowPairsOnHold() const;
-	bool getShowPairsWithNoCompatibilities() const;
-	bool getShowPairsOfMinPRA() const;
-	bool getShowPairsOfMaxPRA() const;
+	bool getShowAllNodes() const;
+	bool getShowNodeSubset() const;
+	bool getShowNodesInStructures() const;
+	bool getShowNodesInSolutions() const;
+	bool getShowNodesOnHold() const;
+	bool getShowNodesWithNoCompatibilities() const;
+	bool getShowCandidatesInPRARange() const;
 
 	int getMinPRA() const;
 	int getMaxPRA() const;
 
-	KPDArrowDisplayMode getArrowDisplayMode() const;
+	KPDMatchDisplayMode getMatchDisplayMode() const;
 
-	void setShowAllPairs(bool show);
-	void setShowPairSubset(bool show);
-	void setShowPairsInStructures(bool show);
-	void setShowPairsInSolutions(bool show);
-	void setShowPairsOnHold(bool show);
-	void setShowPairsWithNoCompatibilities(bool show);
-	void setShowPairsOfMinPRA(bool show);
-	void setShowPairsOfMaxPRA(bool show);
+	void setShowAllNodes(bool show);
+	void setShowNodeSubset(bool show);
+	void setShowNodesInStructures(bool show);
+	void setShowNodesInSolutions(bool show);
+	void setShowNodesOnHold(bool show);
+	void setShowNodesWithNoCompatibilities(bool show);
+	void setShowCandidatesInPRARange(bool show);
 
 	void setMinPRA(int pra);
 	void setMaxPRA(int pra);
 
-	void setArrowDisplayMode(KPDArrowDisplayMode mode);
+	void setMatchDisplayMode(KPDMatchDisplayMode mode);
 
-private:
-	bool showAllPairs;
-	bool showPairSubset;
-	bool showPairsInSolutions;
-	bool showPairsInStructures;
-	bool showPairsOnHold;
-	bool showPairsWithNoCompatibilities;
-	bool showPairsOfMinPRA;
-	bool showPairsOfMaxPRA;
-
-	int minPRA;
-	int maxPRA;
-
-	KPDArrowDisplayMode arrowDisplayMode;
 };
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings);

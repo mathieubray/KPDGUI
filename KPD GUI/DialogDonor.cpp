@@ -2,7 +2,8 @@
 
 #include "DialogDonor.h"
 
-#include "Donor.h"
+#include "KPDGUIDonorInfo.h"
+
 #include "MultiSelectCompleter.h"
 
 //New Donor Constructor
@@ -13,7 +14,7 @@ DialogDonor::DialogDonor(QWidget *parent) : QDialog(parent)
 }
 
 //Edit Donor Constructor
-DialogDonor::DialogDonor(Donor donor, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
+DialogDonor::DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();

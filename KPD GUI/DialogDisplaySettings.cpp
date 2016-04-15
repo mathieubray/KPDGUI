@@ -9,7 +9,7 @@
 DialogDisplaySettings::DialogDisplaySettings(QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);	
-	displaySettingsBox->setEnabled(pairSubsetButton->isChecked());		
+	displaySettingsBox->setEnabled(nodeSubsetButton->isChecked());		
 }
 
 //Display Dialog Constructor with Preset Values
@@ -17,38 +17,37 @@ DialogDisplaySettings::DialogDisplaySettings(KPDGUIDisplaySettings *displaySetti
 {
 	setupUi(this);
 
-	//Display All Pairs
-	allPairsButton->setChecked(displaySettings->getShowAllPairs());
+	//Display All Nodes
+	allNodesButton->setChecked(displaySettings->getShowAllNodes());
 	
-	//Display Pairs in Structures
-	showStructuresRadioButton->setChecked(displaySettings->getShowPairsInStructures());
+	//Display Nodes in Structures
+	showStructuresRadioButton->setChecked(displaySettings->getShowNodesInStructures());
 	
-	//Display Pairs in Solutions
-	showSolutionsRadioButton->setChecked(displaySettings->getShowPairsInSolutions());
+	//Display Nodes in Solutions
+	showSolutionsRadioButton->setChecked(displaySettings->getShowNodesInSolutions());
 	
-	//Display Pair Subset
-	pairSubsetButton->setChecked(displaySettings->getShowPairSubset());
+	//Display Node Subset
+	nodeSubsetButton->setChecked(displaySettings->getShowNodeSubset());
 
-	//Pair Subset Options
-	if (pairSubsetButton->isChecked()){
+	//Node Subset Options
+	if (nodeSubsetButton->isChecked()){
 		displaySettingsBox->setEnabled(true);
 
-		showHoldCheckBox->setChecked(displaySettings->getShowPairsOnHold());
-		showIncompatibleCheckBox->setChecked(displaySettings->getShowPairsWithNoCompatibilities());
-		maxPRACheckBox->setChecked(displaySettings->getShowPairsOfMaxPRA());
-		maxPRASpinBox->setValue(displaySettings->getMaxPRA());
-		minPRACheckBox->setChecked(displaySettings->getShowPairsOfMinPRA());
-		minPRASpinBox->setValue(displaySettings->getMinPRA());
+		showHoldCheckBox->setChecked(displaySettings->getShowNodesOnHold());
+		showIncompatibleCheckBox->setChecked(displaySettings->getShowNodesWithNoCompatibilities());
+		praCheckBox->setChecked(displaySettings->getShowCandidatesInPRARange());
+		praSpinBoxLeft->setValue(displaySettings->getMinPRA());
+		praSpinBoxRight->setValue(displaySettings->getMaxPRA());		
 	}
 	else {
 		displaySettingsBox->setEnabled(false);
 		
 		showHoldCheckBox->setChecked(true);
 		showIncompatibleCheckBox->setChecked(true);
-		maxPRACheckBox->setChecked(false);
-		maxPRASpinBox->setValue(100);
-		minPRACheckBox->setChecked(false);
-		minPRASpinBox->setValue(0);
+		praCheckBox->setChecked(false);
+		praSpinBoxLeft->setValue(0);
+		praSpinBoxRight->setValue(100);
+		
 	}
 	
 }

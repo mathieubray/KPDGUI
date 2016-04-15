@@ -6,20 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>387</width>
-    <height>441</height>
+    <width>410</width>
+    <height>479</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>387</width>
-    <height>441</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>387</width>
-    <height>441</height>
+    <width>66666</width>
+    <height>888888</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -206,8 +206,8 @@
     <rect>
      <x>10</x>
      <y>140</y>
-     <width>371</width>
-     <height>291</height>
+     <width>391</width>
+     <height>331</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -223,193 +223,203 @@
        <attribute name="title">
         <string>HLA Information</string>
        </attribute>
-       <widget class="QWidget" name="layoutWidget_7">
+       <widget class="QWidget" name="">
         <property name="geometry">
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>241</width>
-          <height>141</height>
+          <width>364</width>
+          <height>251</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="donorHLAGridLayout">
-         <item row="2" column="0">
-          <widget class="QLabel" name="donorCWLabel">
-           <property name="text">
-            <string>Donor HLA CW</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="donorALabel">
-           <property name="text">
-            <string>Donor HLA A</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="donorBLabel">
-           <property name="text">
-            <string>Donor HLA B</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="donorDRLabel">
-           <property name="text">
-            <string>Donor HLA DR</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="donorDQLabel">
-           <property name="text">
-            <string>Donor HLA DQ</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QComboBox" name="donorHLAA1ComboBox"/>
-         </item>
-         <item row="0" column="2">
-          <widget class="QComboBox" name="donorHLAA2ComboBox"/>
-         </item>
-         <item row="2" column="2">
-          <widget class="QComboBox" name="donorHLACW2ComboBox"/>
-         </item>
-         <item row="1" column="1">
-          <widget class="QComboBox" name="donorHLAB1ComboBox"/>
-         </item>
-         <item row="2" column="1">
-          <widget class="QComboBox" name="donorHLACW1ComboBox"/>
-         </item>
-         <item row="1" column="2">
-          <widget class="QComboBox" name="donorHLAB2ComboBox"/>
-         </item>
-         <item row="3" column="1">
-          <widget class="QComboBox" name="donorHLADQ1ComboBox"/>
-         </item>
-         <item row="4" column="1">
-          <widget class="QComboBox" name="donorHLADR1ComboBox"/>
-         </item>
-         <item row="3" column="2">
-          <widget class="QComboBox" name="donorHLADQ2ComboBox"/>
-         </item>
-         <item row="4" column="2">
-          <widget class="QComboBox" name="donorHLADR2ComboBox"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget_9">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>200</y>
-          <width>341</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="donorHLAAdditionalHorizontalLayout">
+        <layout class="QVBoxLayout" name="donorHLAInfoVerticalLayout">
          <item>
-          <widget class="QLabel" name="donorHLAAdditionalLabel">
-           <property name="text">
-            <string>Additional Donor Antigens</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="donorHLALineEdit"/>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>260</x>
-          <y>10</y>
-          <width>91</width>
-          <height>181</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="donorHLAVerticalLayout">
-         <item>
-          <widget class="QGroupBox" name="donorHLADRLayout">
-           <property name="title">
-            <string>Donor HLA DR</string>
-           </property>
-           <widget class="QWidget" name="layoutWidget_5">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>20</y>
-              <width>51</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="donorHLADRVerticalLayout">
+          <layout class="QHBoxLayout" name="donorHLAInfoHorizontalLayout">
+           <item>
+            <layout class="QVBoxLayout" name="donorMajorHLAVerticalLayout">
              <item>
-              <widget class="QCheckBox" name="donorDR51CheckBox">
-               <property name="text">
-                <string>DR51</string>
+              <layout class="QGridLayout" name="donorHLAGridLayout">
+               <item row="2" column="0">
+                <widget class="QLabel" name="donorCWLabel">
+                 <property name="text">
+                  <string>Donor HLA CW</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="donorALabel">
+                 <property name="text">
+                  <string>Donor HLA A</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="donorBLabel">
+                 <property name="text">
+                  <string>Donor HLA B</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="donorDRLabel">
+                 <property name="text">
+                  <string>Donor HLA DR</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="donorDQLabel">
+                 <property name="text">
+                  <string>Donor HLA DQ</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="donorHLAA1ComboBox"/>
+               </item>
+               <item row="0" column="2">
+                <widget class="QComboBox" name="donorHLAA2ComboBox"/>
+               </item>
+               <item row="2" column="2">
+                <widget class="QComboBox" name="donorHLACW2ComboBox"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="donorHLAB1ComboBox"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="donorHLACW1ComboBox"/>
+               </item>
+               <item row="1" column="2">
+                <widget class="QComboBox" name="donorHLAB2ComboBox"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="donorHLADQ1ComboBox"/>
+               </item>
+               <item row="4" column="1">
+                <widget class="QComboBox" name="donorHLADR1ComboBox"/>
+               </item>
+               <item row="3" column="2">
+                <widget class="QComboBox" name="donorHLADQ2ComboBox"/>
+               </item>
+               <item row="4" column="2">
+                <widget class="QComboBox" name="donorHLADR2ComboBox"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
                </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="donorHLAVerticalLayout">
+             <item>
+              <widget class="QGroupBox" name="donorHLADRLayout">
+               <property name="title">
+                <string>Donor HLA DR</string>
+               </property>
+               <widget class="QWidget" name="layoutWidget_5">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>59</width>
+                  <height>76</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="donorHLADRVerticalLayout">
+                 <item>
+                  <widget class="QCheckBox" name="donorDR51CheckBox">
+                   <property name="text">
+                    <string>DR51</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="donorDR52CheckBox">
+                   <property name="text">
+                    <string>DR52</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="donorDR53CheckBox">
+                   <property name="text">
+                    <string>DR53</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
              <item>
-              <widget class="QCheckBox" name="donorDR52CheckBox">
-               <property name="text">
-                <string>DR52</string>
+              <widget class="QGroupBox" name="donorHLABWLayout">
+               <property name="title">
+                <string>Donor HLA BW</string>
                </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="donorDR53CheckBox">
-               <property name="text">
-                <string>DR53</string>
-               </property>
+               <widget class="QWidget" name="layoutWidget_6">
+                <property name="geometry">
+                 <rect>
+                  <x>20</x>
+                  <y>20</y>
+                  <width>55</width>
+                  <height>49</height>
+                 </rect>
+                </property>
+                <layout class="QVBoxLayout" name="donorHLABWVerticalLayout">
+                 <item>
+                  <widget class="QCheckBox" name="donorBW4CheckBox">
+                   <property name="text">
+                    <string>BW4</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="donorBW6CheckBox">
+                   <property name="text">
+                    <string>BW6</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </widget>
              </item>
             </layout>
-           </widget>
-          </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QGroupBox" name="donorHLABWLayout">
-           <property name="title">
-            <string>Donor HLA BW</string>
-           </property>
-           <widget class="QWidget" name="layoutWidget_6">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>20</y>
-              <width>47</width>
-              <height>42</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="donorHLABWVerticalLayout">
-             <item>
-              <widget class="QCheckBox" name="donorBW4CheckBox">
-               <property name="text">
-                <string>BW4</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QCheckBox" name="donorBW6CheckBox">
-               <property name="text">
-                <string>BW6</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </widget>
+          <layout class="QHBoxLayout" name="donorHLAAdditionalHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="donorHLAAdditionalLabel">
+             <property name="text">
+              <string>Additional Donor Antigens</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="donorHLALineEdit"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
        <zorder>layoutWidget</zorder>
        <zorder>layoutWidget_7</zorder>
        <zorder>layoutWidget_9</zorder>
+       <zorder>verticalSpacer</zorder>
       </widget>
      </widget>
     </item>

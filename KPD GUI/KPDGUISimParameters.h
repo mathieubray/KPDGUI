@@ -13,18 +13,22 @@ public:
 	void changeParameters(DialogSimParameters * d);
 	void copyParameters(KPDGUISimParameters * d);
 
-	bool getParametersSet();
-	void setParametersSet(bool flag);
+	bool getParametersHaveBeenUpdated();
+	void setParametersHaveBeenUpdated(bool flag);
 
 	QString toString();
 
 	//Getters
 	KPDOptimizationScheme getOptimizationScheme() const;
 	KPDUtilityScheme getUtilityScheme() const;
-	int getMaxSize() const;
 
-	double getPairFailureRate() const;
-	double getADFailureRate() const;
+	int getMaxCycleSize() const;
+	int getMaxChainLength() const;
+	int getMaxComponentSize() const;
+
+	double getDefaultDonorFailureRate() const;
+	double getDefaultCandidateFailureRate() const;
+	double getDefaultADFailureRate() const;
 	double getExogenousFailureRate() const;
 
 	bool getAddAdvantageToHighPRACandidates() const;
@@ -32,7 +36,9 @@ public:
 	double getPRAAdvantageValue() const;
 
 	int getNumberOfSolutions() const;
-	int getNumberOfEUSimulations() const;
+
+	bool getEstimateExpectedUtility() const;
+	int getNumberOfExpectedUtilityIterations() const;
 
 	KPDChainStorage getChainStorage() const;
 	bool getReserveODonorsForOCandidates() const;
@@ -44,10 +50,14 @@ public:
 	//Setters
 	void setOptimizationScheme(KPDOptimizationScheme scheme);
 	void setUtilityScheme(KPDUtilityScheme scheme);
-	void setMaxSize(int size);
 
-	void setPairFailureRate(double rate);
-	void setADFailureRate(double rate);
+	void setMaxCycleSize(int size);
+	void setMaxChainLength(int length);
+	void setMaxComponentSize(int size);
+
+	void setDefaultDonorFailureRate(double rate);
+	void setDefaultCandidateFailureRate(double rate);
+	void setDefaultADFailureRate(double rate);
 	void setExogenousFailureRate(double rate);
 
 	void setAddAdvantagetoHighPRACandidates(bool flag);
@@ -55,7 +65,9 @@ public:
 	void setPRAAdvantageValue(double value);
 
 	void setNumberOfSolutions(int solutions);
-	void setNumberOfEUSimulations(int simulations);
+
+	void setEstimateExpectedUtility(bool estimate);
+	void setNumberOfExpectedUtilityIterations(int iterations);
 
 	void setChainStorage(KPDChainStorage storage);
 	void setReserveODonorsForOCandidates(bool flag);
@@ -66,16 +78,20 @@ public:
 
 private:
 
-	bool parametersSet;
+	bool parametersHaveBeenUpdated;
 
 	//Simulation Settings
 	KPDOptimizationScheme optScheme;
 	KPDUtilityScheme utilityScheme;
-	int maxSize; //Max Chain Length for MUC, MEUC, MEUS; Max Component Size for SCC
 	
+	int maxCycleSize;
+	int maxChainLength;
+	int maxComponentSize;
+
 	//Numerical Parameters
-	double pairFailureRate;
-	double adFailureRate;
+	double defaultDonorFailureRate;
+	double defaultCandidateFailureRate;
+	double defaultADFailureRate;
 	double exogenousFailureRate;	
 		
 	bool addAdvantageToHighPRACandidates;
@@ -83,7 +99,9 @@ private:
 	double praAdvantageValue;
 
 	int numberOfSolutions;
-	int numberOfEUSimulations;
+
+	bool estimateExpectedUtility;
+	int numberOfExpectedUtilityIterations;
 
 	//Additional Options
 	KPDChainStorage chainStorage;

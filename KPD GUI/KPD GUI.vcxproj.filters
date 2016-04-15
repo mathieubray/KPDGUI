@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;cxx;c;def</Extensions>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h</Extensions>
-    </Filter>
     <Filter Include="Form Files">
       <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
       <Extensions>ui</Extensions>
@@ -33,20 +29,23 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
-    <Filter Include="Dialog Headers">
+    <Filter Include="GUI Components">
+      <UniqueIdentifier>{a0dfc6ee-2a2a-44c0-b8c2-b0a2578943b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KPD Simulation Components">
+      <UniqueIdentifier>{533a0aaf-37c0-46af-8d56-7c02d64ddbe7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Nodes, Matches and Structures">
+      <UniqueIdentifier>{3c600c3a-2fb7-4b75-af02-b9a20f4cd425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Helper Code">
+      <UniqueIdentifier>{239a44ef-429c-4d2d-abf4-bcde26a8679e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
       <UniqueIdentifier>{56bdccd1-63d2-434c-8d1f-f4656f325174}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialog Source">
-      <UniqueIdentifier>{895fd849-797e-40d7-9bb9-19d47c802c17}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Structures">
-      <UniqueIdentifier>{6fd21465-9495-4c6d-9448-121bb37209b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Wrapper Headers">
+    <Filter Include="Wrappers">
       <UniqueIdentifier>{51b32b79-0a2d-43cc-9724-b90a4bc64458}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Wrapper Source">
-      <UniqueIdentifier>{5d141d6f-ea85-4817-b65f-818ce4c2e330}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -77,30 +76,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_DialogReadFile.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUIArrow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIGraphicsScene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIRecord.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIStructure.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIStructureSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUINode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIArrow.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIArrow.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -116,26 +91,11 @@
     <ClCompile Include="GeneratedFiles\Release\moc_MultiSelectCompleter.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUICloud.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUICloud.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUICloud.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogReadFile.cpp">
-      <Filter>Dialog Source</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DialogDonor.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_DialogDonor.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogDonor.cpp">
-      <Filter>Dialog Source</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DialogCandidate.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -146,17 +106,11 @@
     <ClCompile Include="GeneratedFiles\Release\moc_DialogDisplaySettings.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="DialogDisplaySettings.cpp">
-      <Filter>Dialog Source</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DialogSimParameters.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_DialogSimParameters.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogSimParameters.cpp">
-      <Filter>Dialog Source</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUI.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -164,53 +118,11 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUI.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUI.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIDisplaySettings.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUISimulation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUISimParameters.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Donor.cpp">
-      <Filter>Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="Candidate.cpp">
-      <Filter>Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogCandidate.cpp">
-      <Filter>Dialog Source</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIGraphicsView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RNG.cpp">
-      <Filter>Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="MultiSelectCompleter.cpp">
-      <Filter>Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIDashboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIDashboard.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIDashboard.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIStructureWrapper.cpp">
-      <Filter>Wrapper Source</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIArrowWrapper.cpp">
-      <Filter>Wrapper Source</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUINodeWrapper.cpp">
-      <Filter>Wrapper Source</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINodeWrapper.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -221,49 +133,106 @@
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIPairList.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIMatch.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIMatch.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIDashboard.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIGraphicsScene.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIGraphicsView.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
     <ClCompile Include="KPDGUIPairList.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUI.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIDisplaySettings.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIRecord.cpp">
+      <Filter>KPD Simulation Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUISimParameters.cpp">
+      <Filter>KPD Simulation Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUISimulation.cpp">
+      <Filter>KPD Simulation Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIStructure.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIStructureSet.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIMatch.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUINode.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiSelectCompleter.cpp">
+      <Filter>Helper Code</Filter>
+    </ClCompile>
+    <ClCompile Include="RNG.cpp">
+      <Filter>Helper Code</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIDonorInfo.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUICandidateInfo.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogCandidate.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogDisplaySettings.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogDonor.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogReadFile.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogSimParameters.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUINodeWrapper.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIStructureWrapper.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIMatchWrapper.cpp">
+      <Filter>Wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="KPDGUIGraphicsScene.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUIRecord.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUIStructure.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUIStructureSet.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUINode.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUIArrow.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="mainwindow.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUICloud.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="DialogReadFile.h">
-      <Filter>Dialog Headers</Filter>
+      <Filter>Dialog</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogDonor.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogDonor.h">
-      <Filter>Dialog Headers</Filter>
+      <Filter>Dialog</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogDisplaySettings.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogDisplaySettings.h">
-      <Filter>Dialog Headers</Filter>
+      <Filter>Dialog</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogReadFile.ui">
       <Filter>Form Files</Filter>
@@ -272,37 +241,55 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogSimParameters.h">
-      <Filter>Dialog Headers</Filter>
+      <Filter>Dialog</Filter>
     </CustomBuild>
     <CustomBuild Include="KPDGUI.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUI.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="KPDGUIGraphicsView.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="DialogCandidate.h">
-      <Filter>Dialog Headers</Filter>
+      <Filter>Dialog</Filter>
     </CustomBuild>
     <CustomBuild Include="DialogCandidate.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="KPDGUINodeWrapper.h">
+      <Filter>Wrappers</Filter>
+    </CustomBuild>
     <CustomBuild Include="MultiSelectCompleter.h">
-      <Filter>Structures</Filter>
+      <Filter>Helper Code</Filter>
     </CustomBuild>
     <CustomBuild Include="KPDGUIDashboard.h">
-      <Filter>Header Files</Filter>
+      <Filter>GUI Components</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUINodeWrapper.h">
-      <Filter>Wrapper Headers</Filter>
+    <CustomBuild Include="KPDGUIGraphicsScene.h">
+      <Filter>GUI Components</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUIArrowWrapper.h">
-      <Filter>Wrapper Headers</Filter>
+    <CustomBuild Include="KPDGUIGraphicsView.h">
+      <Filter>GUI Components</Filter>
     </CustomBuild>
     <CustomBuild Include="KPDGUIPairList.h">
-      <Filter>Header Files</Filter>
+      <Filter>GUI Components</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUI.h">
+      <Filter>GUI Components</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIRecord.h">
+      <Filter>KPD Simulation Components</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIStructure.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIStructureSet.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIMatch.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUINode.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIMatchWrapper.h">
+      <Filter>Wrappers</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -321,32 +308,32 @@
     <ClInclude Include="GeneratedFiles\ui_KPDGUI.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Candidate.h">
-      <Filter>Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="KPDGUIDisplaySettings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KPDGUISimulation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="KPDGUISimParameters.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_DialogCandidate.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="Donor.h">
-      <Filter>Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="EnumsFunctions.h">
-      <Filter>Structures</Filter>
+    <ClInclude Include="KPDGUIStructureWrapper.h">
+      <Filter>Wrappers</Filter>
     </ClInclude>
     <ClInclude Include="RNG.h">
-      <Filter>Structures</Filter>
+      <Filter>Helper Code</Filter>
     </ClInclude>
-    <ClInclude Include="KPDGUIStructureWrapper.h">
-      <Filter>Wrapper Headers</Filter>
+    <ClInclude Include="EnumsFunctions.h">
+      <Filter>Helper Code</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUIDisplaySettings.h">
+      <Filter>GUI Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUISimParameters.h">
+      <Filter>KPD Simulation Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUISimulation.h">
+      <Filter>KPD Simulation Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUIDonorInfo.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUICandidateInfo.h">
+      <Filter>Nodes, Matches and Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

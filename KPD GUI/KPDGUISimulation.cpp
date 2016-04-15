@@ -5,89 +5,112 @@ KPDGUISimulation::KPDGUISimulation(KPDGUIRecord * record, KPDGUISimParameters * 
 	kpdguiRecord = record;
 	kpdguiParameters->copyParameters(params);
 
-	/*kpdguiParameters->getOptimizationScheme() = params->getOptimizationScheme();
-	kpdguiParameters->getUtilityScheme() = params.utilityScheme;
-	kpdguiParameters.maxSize = params.maxSize;
-	
-	kpdguiParameters.pairFailureRate = params.pairFailureRate;
-	kpdguiParameters.adFailureRate = params.adFailureRate;
-	kpdguiParameters.exogenousFailureRate = params.exogenousFailureRate;
-	
-	kpdguiParameters->getAddAdvantageToHighPRACandidates() = params.addAdvantageToHighPRACandidates;
-	kpdguiParameters->getPRAAdvantageCutoff() = params->getPRAAdvantageCutoff();
-	kpdguiParameters->getPRAAdvantageValue = params->getPRAAdvantageValue;
+	incidenceMatrix = kpdguiRecord->getIncidenceMatrix();
+	associatedDonorMatrix = kpdguiRecord->getAssociatedDonorMatrix();
+	associatedScoresMatrix = kpdguiRecord->getAssociatedScoresMatrix();
+	associated5YearSurvivalMatrix = kpdguiRecord->getAssociated5YearSurvivalMatrix();
+	associated10YearSurvivalMatrix = kpdguiRecord->getAssociated10YearSurvivalMatrix();
+	associatedProbabilitiesMatrix = kpdguiRecord->getAssociatedProbabilitiesMatrix();
 
-	kpdguiParameters->getNumberOfSolutions() = params->getNumberOfSolutions();
-	kpdguiParameters->getNumberOfEUSimulations() = params->getNumberOfEUSimulations();
-
-	kpdguiParameters.chainStorage = params.chainStorage;
-	kpdguiParameters.reserveODonorsForOCandidates = params.reserveODonorsForOCandidates;
-	kpdguiParameters.checkAdditionalHLA = params.checkAdditionalHLA;
-	kpdguiParameters.includeCompatiblePairs = params.includeCompatiblePairs;
-	kpdguiParameters.excludeABDonorsFromSimulation = params.excludeABDonorsFromSimulation;
-	kpdguiParameters.allowABBridgeDonors = params.allowABBridgeDonors;*/
+	nodeInfoVector = kpdguiRecord->getNodeInfoVector();
 
 }
 
 KPDGUISimulation::~KPDGUISimulation(){
 
-	currentMatchRunStructureNodeLists.clear();
+	currentMatchRunNodes.clear();
+	currentMatchRunStructures.clear();
 
 	utilityOfCurrentMatchRunCyclesAndChains.clear();
 	expectedUtilityOfCurrentMatchRunCyclesAndChains.clear();
 	expectedUtilityOfCurrentMatchRunSets.clear();
 	expectedUtilityOfCurrentMatchRunComponents.clear();
 
-	SelectedSolutions.clear();
-	SelectedStructures.clear();
-	SolutionObjectives.clear();
+	selectedSolutions.clear();
+	selectedStructures.clear();
+	solutionObjectives.clear();
+}
+
+int KPDGUISimulation::selectDonor(int donorNodeID, int candidateNodeID) {
+	double maxVal = 0.0;
+	int maxIndex = -1;
+
+	int associatedDonors = nodeInfoVector[donorNodeID].numberOfDonors;
+
+	for (int k = 1; k <= associatedDonors; k++) {
+
+		if (associatedDonorMatrix[donorNodeID][candidateNodeID][k] == 1) {
+			if (kpdguiParameters->getUtilityScheme() == SCORE) {
+				if (associatedScoresMatrix[donorNodeID][candidateNodeID][k] > maxVal) {
+					maxIndex = k;
+				}
+			}
+			else if (kpdguiParameters->getUtilityScheme() == SURVIVAL5YEAR) {
+				if (associated5YearSurvivalMatrix[donorNodeID][candidateNodeID][k] > maxVal) {
+					maxIndex = k;
+				}
+			}
+			else if (kpdguiParameters->getUtilityScheme() == SURVIVAL10YEAR) {
+				if (associated10YearSurvivalMatrix[donorNodeID][candidateNodeID][k] > maxVal) {
+					maxIndex = k;
+				}
+			}
+			else {
+				maxIndex = k;
+			}
+		}
+
+		k++;
+	}
+
+	return maxIndex;
 }
 
 vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
 
 	//Parameters
-	int maxSize = kpdguiParameters->getMaxSize();
-	int maximum = std::max(maxSize + 1, 3);
+	int maxCycleSize = kpdguiParameters->getMaxCycleSize();
+	int maxChainLength = kpdguiParameters->getMaxChainLength();
+	int maximum = std::max(maxChainLength + 1, maxCycleSize);
 
-	QString chainStorage = kpdguiParameters->getChainStorage();
+	KPDChainStorage chainStorage = kpdguiParameters->getChainStorage();
 	bool allowABBridgeDonors = kpdguiParameters->getAllowABBridgeDonors();
 
 	vector<vector<int> > storedCyclesAndChains;
 
 	int start = 1;
-	int nVertices = kpdguiRecord->getNumberOfNodes();
-	vector<int> visitedVector(nVertices + 1, 0);
+	int currentMatchRunSize = kpdguiRecord->getNumberOfAvailableNodes() - 1;
+	vector<int> visitedVector(currentMatchRunSize + 1, 0);
 	vector<int> stack_vec;
 
-	progressBar->setLabelText("Discovering Cycles and Chains...");
-	progressBar->setRange(0, nVertices);
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Discovering Cycles and Chains...");
+	//progressBar->setRange(0, nVertices);
+	//progressBar->setValue(0);
 
 	//Depth-first search of graph
-	while (start <= nVertices){
-		progressBar->setValue(start);
+	while (start <= currentMatchRunSize){
+		//progressBar->setValue(start);
 
 		visitedVector[start] = 1;
 		stack_vec.push_back(start);
-		int v = getChild(start, start, visitedVector, kpdguiRecord->incidenceMatrix);
-		while (!stack_vec.empty()){
+		int v = getChild(start, start, visitedVector, incidenceMatrix);
 
+		while (!stack_vec.empty()){
 			if (v == -1){
 				int top = stack_vec.back();
 				stack_vec.pop_back();
-
 				if (top == start){
 					visitedVector[top] = 0;
 					break;
 				}
 				visitedVector[top] = 0;
-				v = getChild(top, stack_vec.back(), visitedVector, kpdguiRecord->incidenceMatrix);
+				v = getChild(top, stack_vec.back(), visitedVector, incidenceMatrix);
 			}
 			else{
 				visitedVector[v] = 1;
 				stack_vec.push_back(v);
 
-				if (kpdguiRecord->incidenceMatrix[v][start] == true){
+				if (incidenceMatrix[v][start] == true){
 					
 					int multipleADCheck = 0;
 					int index = 0;
@@ -98,7 +121,7 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 					}
 
 					for (unsigned i = 0; i < potentialCycleOrChain.size(); i++){
-						if (kpdguiRecord->pairInfoVector[potentialCycleOrChain[i]].pairType == KPDPairType::AD){
+						if (nodeInfoVector[potentialCycleOrChain[i]].nodeType == AD){
 							multipleADCheck++;
 							index = i;
 						}
@@ -106,7 +129,7 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 
 					if (multipleADCheck == 1){
 						//Check if size of chain is appropriate
-						if ((int)potentialCycleOrChain.size() <= maxSize + 1){
+						if ((int)potentialCycleOrChain.size() <= maxChainLength + 1){
 							//Queue up AD to front of chain
 							while (index > 0){
 								int temp = *(potentialCycleOrChain.begin());
@@ -115,20 +138,30 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 								index--;
 							}
 
-							bool exclude = false;
-							//Check for AB Bridge Donor
-							if (!allowABBridgeDonors){
-								if (kpdguiRecord->pairInfoVector[potentialCycleOrChain.back()].donorBT == BT_AB){
-									exclude = true;
-								}
-							}
-
-							if (!exclude){
-								if (chainStorage == "LAST"){
+							if (allowABBridgeDonors) {
+								if (chainStorage == CHAINS_LAST) {
 									storedCyclesAndChains.push_back(potentialCycleOrChain);
 								}
 								else {
-									currentMatchRunStructureNodeLists.push_back(potentialCycleOrChain);
+									currentMatchRunStructures.push_back(potentialCycleOrChain);
+								}
+							}
+							else {
+								bool exclude = true;
+
+								for (int k = 1; k <= nodeInfoVector[*(potentialCycleOrChain.end() - 1)].numberOfDonors; k++) {
+									if (nodeInfoVector[*(potentialCycleOrChain.end() - 1)].donorBTs[k] != BT_AB) {
+										exclude = false;
+									}
+								}
+
+								if (!exclude) {
+									if (chainStorage == CHAINS_LAST) {
+										storedCyclesAndChains.push_back(potentialCycleOrChain);
+									}
+									else {
+										currentMatchRunStructures.push_back(potentialCycleOrChain);
+									}
 								}
 							}
 						}
@@ -137,12 +170,12 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 					//Cycle
 					else if (multipleADCheck == 0){
 						//Check if size of cycle is appropriate
-						if ((int)potentialCycleOrChain.size() <= 3){
-							if (chainStorage == "FIRST"){
+						if ((int)potentialCycleOrChain.size() <= maxCycleSize){
+							if (chainStorage == CHAINS_FIRST){
 								storedCyclesAndChains.push_back(potentialCycleOrChain);
 							}
 							else {
-								currentMatchRunStructureNodeLists.push_back(potentialCycleOrChain);
+								currentMatchRunStructures.push_back(potentialCycleOrChain);
 							}
 						}
 					}
@@ -151,7 +184,7 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 				if (stack_vec.size() >= maximum)
 					v = -1;
 				else {
-					v = getChild(start, v, visitedVector, kpdguiRecord->incidenceMatrix);
+					v = getChild(start, v, visitedVector, incidenceMatrix);
 				}
 			}
 		}
@@ -160,168 +193,168 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProg
 
 	if (storedCyclesAndChains.size()>0){
 		for (vector<vector<int> >::iterator it = storedCyclesAndChains.begin(); it != storedCyclesAndChains.end(); ++it){
-			currentMatchRunStructureNodeLists.push_back(*it);
+			currentMatchRunStructures.push_back(*it);
 		}
 	}
-	return currentMatchRunStructureNodeLists;
+	return currentMatchRunStructures;
 }
 
-/*
-vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
+vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponentsNaive(QProgressDialog * progressBar){
 
 	//Parameters
-	int maxSize = kpdguiParameters->getMaxSize();
-	int maximum = std::max(maxSize, 3);
+	int maxCycleSize = kpdguiParameters->getMaxCycleSize();
+	int maxChainLength = kpdguiParameters->getMaxChainLength();
+	int maxComponentSize = kpdguiParameters->getMaxComponentSize();
 
-	QString chainStorage = kpdguiParameters->getChainStorage();
+	KPDChainStorage chainStorage = kpdguiParameters->getChainStorage();
 
 	vector<vector<int> > storedComponents;
-	int nVertices = kpdguiRecord->getNumberOfVertices();
+	int currentMatchRunSize = kpdguiRecord->getNumberOfAvailableNodes() - 1;
 
 	//Size 2 components
-	for (int i = 1; i <= nVertices - 1; i++){
-		for (int j = i + 1; j <= nVertices; j++){
-			if (kpdguiRecord->incidenceMatrix[i][j] == true && kpdguiRecord->incidenceMatrix[j][i] == true){
-				bool chain = (kpdguiRecord->pairInfoVector[i].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[j].pairType == KPDPairType::AD);
+	for (int i = 1; i <= currentMatchRunSize - 1; i++){
+		for (int j = i + 1; j <= currentMatchRunSize; j++){
+			if (incidenceMatrix[i][j] == true && incidenceMatrix[j][i] == true){
+				bool chain = (nodeInfoVector[i].nodeType == AD || nodeInfoVector[j].nodeType == AD);
 
 				vector<int > temp;
 				temp.push_back(i); temp.push_back(j);
 
-				if ((chain && chainStorage == "LAST") || (!chain && chainStorage == "FIRST")){
+				if ((chain && chainStorage == CHAINS_LAST) || (!chain && chainStorage == CHAINS_FIRST)){
 					storedComponents.push_back(temp);
 				}
 				else {
-					currentMatchRunStructureNodeLists.push_back(temp);
+					currentMatchRunStructures.push_back(temp);
 				}
 			}
 		}
 	}
 
 	//Size 3 components
-	for (int i = 1; i <= nVertices - 2; i++){
-		for (int j = i + 1; j <= nVertices - 1; j++){
-			for (int k = j + 1; k <= nVertices; k++){
+	for (int i = 1; i <= currentMatchRunSize - 2; i++){
+		for (int j = i + 1; j <= currentMatchRunSize - 1; j++){
+			for (int k = j + 1; k <= currentMatchRunSize; k++){
 				//i to j
-				if (kpdguiRecord->incidenceMatrix[i][j] == false && (kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false))
+				if (incidenceMatrix[i][j] == false && (incidenceMatrix[i][k] == false || incidenceMatrix[k][j] == false))
 					continue;
 				//i to k
-				if (kpdguiRecord->incidenceMatrix[i][k] == false && (kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false))
+				if (incidenceMatrix[i][k] == false && (incidenceMatrix[i][j] == false || incidenceMatrix[j][k] == false))
 					continue;
 				//j to i
-				if (kpdguiRecord->incidenceMatrix[j][i] == false && (kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false))
+				if (incidenceMatrix[j][i] == false && (incidenceMatrix[j][k] == false || incidenceMatrix[k][i] == false))
 					continue;
 				//j to k
-				if (kpdguiRecord->incidenceMatrix[j][k] == false && (kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false))
+				if (incidenceMatrix[j][k] == false && (incidenceMatrix[j][i] == false || incidenceMatrix[i][k] == false))
 					continue;
 				//k to i
-				if (kpdguiRecord->incidenceMatrix[k][i] == false && (kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false))
+				if (incidenceMatrix[k][i] == false && (incidenceMatrix[k][j] == false || incidenceMatrix[j][i] == false))
 					continue;
 				//k to j
-				if (kpdguiRecord->incidenceMatrix[k][j] == false && (kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false))
+				if (incidenceMatrix[k][j] == false && (incidenceMatrix[k][i] == false || incidenceMatrix[i][j] == false))
 					continue;
 
-				bool chain = (kpdguiRecord->pairInfoVector[i].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[j].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[k].pairType == KPDPairType::AD);
+				bool chain = (nodeInfoVector[i].nodeType == AD || nodeInfoVector[j].nodeType == AD || nodeInfoVector[k].nodeType == AD);
 				vector<int > temp;
 				temp.push_back(i); temp.push_back(j); temp.push_back(k);
 
-				if ((chain && chainStorage == "LAST") || (!chain && chainStorage == "FIRST")){
+				if ((chain && chainStorage == CHAINS_LAST) || (!chain && chainStorage == CHAINS_FIRST)){
 					storedComponents.push_back(temp);
 				}
 				else {
-					currentMatchRunStructureNodeLists.push_back(temp);
+					currentMatchRunStructures.push_back(temp);
 				}
 			}
 		}
 	}
 
 	//Size 4 components
-	if (maximum >= 4){
-		for (int i = 1; i <= nVertices - 3; i++){
-			for (int j = i + 1; j <= nVertices - 2; j++){
-				for (int k = j + 1; k <= nVertices - 1; k++){
-					for (int l = k + 1; l <= nVertices; l++){
+	if (maxComponentSize >= 4){
+		for (int i = 1; i <= currentMatchRunSize - 3; i++){
+			for (int j = i + 1; j <= currentMatchRunSize - 2; j++){
+				for (int k = j + 1; k <= currentMatchRunSize - 1; k++){
+					for (int l = k + 1; l <= currentMatchRunSize; l++){
 						// i to j
-						if (kpdguiRecord->incidenceMatrix[i][j] == false && (kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false))
+						if (incidenceMatrix[i][j] == false && (incidenceMatrix[i][k] == false || incidenceMatrix[k][j] == false)
+							&& (incidenceMatrix[i][l] == false || incidenceMatrix[l][j] == false)
+							&& (incidenceMatrix[i][k] == false || incidenceMatrix[k][l] == false || incidenceMatrix[l][j] == false)
+							&& (incidenceMatrix[i][l] == false || incidenceMatrix[l][k] == false || incidenceMatrix[k][j] == false))
 							continue;
 						// i to k
-						if (kpdguiRecord->incidenceMatrix[i][k] == false && (kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false))
+						if (incidenceMatrix[i][k] == false && (incidenceMatrix[i][j] == false || incidenceMatrix[j][k] == false)
+							&& (incidenceMatrix[i][l] == false || incidenceMatrix[l][k] == false)
+							&& (incidenceMatrix[i][l] == false || incidenceMatrix[l][j] == false || incidenceMatrix[j][k] == false)
+							&& (incidenceMatrix[i][j] == false || incidenceMatrix[j][l] == false || incidenceMatrix[l][k] == false))
 							continue;
 						// i to l
-						if (kpdguiRecord->incidenceMatrix[i][l] == false && (kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false))
+						if (incidenceMatrix[i][l] == false && (incidenceMatrix[i][j] == false || incidenceMatrix[j][l] == false)
+							&& (incidenceMatrix[i][k] == false || incidenceMatrix[k][l] == false)
+							&& (incidenceMatrix[i][j] == false || incidenceMatrix[j][k] == false || incidenceMatrix[k][l] == false)
+							&& (incidenceMatrix[i][k] == false || incidenceMatrix[k][j] == false || incidenceMatrix[j][l] == false))
 							continue;
 						// j to i
-						if (kpdguiRecord->incidenceMatrix[j][i] == false && (kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false))
+						if (incidenceMatrix[j][i] == false && (incidenceMatrix[j][k] == false || incidenceMatrix[k][i] == false)
+							&& (incidenceMatrix[j][l] == false || incidenceMatrix[l][i] == false)
+							&& (incidenceMatrix[j][k] == false || incidenceMatrix[k][l] == false || incidenceMatrix[l][i] == false)
+							&& (incidenceMatrix[j][l] == false || incidenceMatrix[l][k] == false || incidenceMatrix[k][i] == false))
 							continue;
 						// j to k
-						if (kpdguiRecord->incidenceMatrix[j][k] == false && (kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false))
+						if (incidenceMatrix[j][k] == false && (incidenceMatrix[j][i] == false || incidenceMatrix[i][k] == false)
+							&& (incidenceMatrix[j][l] == false || incidenceMatrix[l][k] == false)
+							&& (incidenceMatrix[j][i] == false || incidenceMatrix[i][l] == false || incidenceMatrix[l][k] == false)
+							&& (incidenceMatrix[j][l] == false || incidenceMatrix[l][i] == false || incidenceMatrix[i][k] == false))
 							continue;
 						// j to l
-						if (kpdguiRecord->incidenceMatrix[j][l] == false && (kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false))
+						if (incidenceMatrix[j][l] == false && (incidenceMatrix[j][i] == false || incidenceMatrix[i][l] == false)
+							&& (incidenceMatrix[j][k] == false || incidenceMatrix[k][l] == false)
+							&& (incidenceMatrix[j][i] == false || incidenceMatrix[i][k] == false || incidenceMatrix[k][l] == false)
+							&& (incidenceMatrix[j][k] == false || incidenceMatrix[k][i] == false || incidenceMatrix[i][l] == false))
 							continue;
 						// k to i
-						if (kpdguiRecord->incidenceMatrix[k][i] == false && (kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false))
+						if (incidenceMatrix[k][i] == false && (incidenceMatrix[k][j] == false || incidenceMatrix[j][i] == false)
+							&& (incidenceMatrix[k][l] == false || incidenceMatrix[l][i] == false)
+							&& (incidenceMatrix[k][j] == false || incidenceMatrix[j][l] == false || incidenceMatrix[l][i] == false)
+							&& (incidenceMatrix[k][l] == false || incidenceMatrix[l][j] == false || incidenceMatrix[j][i] == false))
 							continue;
 						// k to j
-						if (kpdguiRecord->incidenceMatrix[k][j] == false && (kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false || kpdguiRecord->incidenceMatrix[l][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][l] == false || kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false))
+						if (incidenceMatrix[k][j] == false && (incidenceMatrix[k][i] == false || incidenceMatrix[i][j] == false)
+							&& (incidenceMatrix[k][l] == false || incidenceMatrix[l][j] == false)
+							&& (incidenceMatrix[k][i] == false || incidenceMatrix[i][l] == false || incidenceMatrix[l][j] == false)
+							&& (incidenceMatrix[k][l] == false || incidenceMatrix[l][i] == false || incidenceMatrix[i][j] == false))
 							continue;
 						// k to l
-						if (kpdguiRecord->incidenceMatrix[k][l] == false && (kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][l] == false)
-							&& (kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][l] == false))
+						if (incidenceMatrix[k][l] == false && (incidenceMatrix[k][i] == false || incidenceMatrix[i][l] == false)
+							&& (incidenceMatrix[k][j] == false || incidenceMatrix[j][l] == false)
+							&& (incidenceMatrix[k][i] == false || incidenceMatrix[i][j] == false || incidenceMatrix[j][l] == false)
+							&& (incidenceMatrix[k][j] == false || incidenceMatrix[j][i] == false || incidenceMatrix[i][l] == false))
 							continue;
 						// l to i
-						if (kpdguiRecord->incidenceMatrix[l][i] == false && (kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false))
+						if (incidenceMatrix[l][i] == false && (incidenceMatrix[l][j] == false || incidenceMatrix[j][i] == false)
+							&& (incidenceMatrix[l][k] == false || incidenceMatrix[k][i] == false)
+							&& (incidenceMatrix[l][j] == false || incidenceMatrix[j][k] == false || incidenceMatrix[k][i] == false)
+							&& (incidenceMatrix[l][k] == false || incidenceMatrix[k][j] == false || incidenceMatrix[j][i] == false))
 							continue;
 						// l to j
-						if (kpdguiRecord->incidenceMatrix[l][j] == false && (kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false || kpdguiRecord->incidenceMatrix[k][j] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][k] == false || kpdguiRecord->incidenceMatrix[k][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false))
+						if (incidenceMatrix[l][j] == false && (incidenceMatrix[l][i] == false || incidenceMatrix[i][j] == false)
+							&& (incidenceMatrix[l][k] == false || incidenceMatrix[k][j] == false)
+							&& (incidenceMatrix[l][i] == false || incidenceMatrix[i][k] == false || incidenceMatrix[k][j] == false)
+							&& (incidenceMatrix[l][k] == false || incidenceMatrix[k][i] == false || incidenceMatrix[i][j] == false))
 							continue;
 						// l to k
-						if (kpdguiRecord->incidenceMatrix[l][k] == false && (kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][i] == false || kpdguiRecord->incidenceMatrix[i][j] == false || kpdguiRecord->incidenceMatrix[j][k] == false)
-							&& (kpdguiRecord->incidenceMatrix[l][j] == false || kpdguiRecord->incidenceMatrix[j][i] == false || kpdguiRecord->incidenceMatrix[i][k] == false))
+						if (incidenceMatrix[l][k] == false && (incidenceMatrix[l][i] == false || incidenceMatrix[i][k] == false)
+							&& (incidenceMatrix[l][j] == false || incidenceMatrix[j][k] == false)
+							&& (incidenceMatrix[l][i] == false || incidenceMatrix[i][j] == false || incidenceMatrix[j][k] == false)
+							&& (incidenceMatrix[l][j] == false || incidenceMatrix[j][i] == false || incidenceMatrix[i][k] == false))
 							continue;
 
-						bool chain = (kpdguiRecord->pairInfoVector[i].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[j].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[k].pairType == KPDPairType::AD || kpdguiRecord->pairInfoVector[l].pairType == KPDPairType::AD);
+						bool chain = (nodeInfoVector[i].nodeType == AD || nodeInfoVector[j].nodeType == AD || nodeInfoVector[k].nodeType == AD || nodeInfoVector[l].nodeType == AD);
 
 						vector<int > temp;
 						temp.push_back(i); temp.push_back(j); temp.push_back(k); temp.push_back(l);
-						if ((chain && chainStorage == "LAST") || (!chain && chainStorage == "FIRST")){
+						if ((chain && chainStorage == CHAINS_LAST) || (!chain && chainStorage == CHAINS_FIRST)){
 							storedComponents.push_back(temp);
 						}
 						else {
-							currentMatchRunStructureNodeLists.push_back(temp);
+							currentMatchRunStructures.push_back(temp);
 						}
 					}
 				}
@@ -329,53 +362,20 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 		}
 	}
 
-	return currentMatchRunStructureNodeLists;
+	return currentMatchRunStructures;
 }
-*/
 
-std::vector<std::vector<int > > & KPDGUISimulation::getCurrentMatchRunComponents(QProgressDialog * progressBar){
+std::vector<std::vector<int > > & KPDGUISimulation::getCurrentMatchRunComponentsNew(QProgressDialog * progressBar){
 
-	//Clear Information from Previous Match Run
-	//currentMatchRunNodes.clear();
-	//currentMatchRunStructures.clear();
-
-	//Update Match Run Time
-	//currentMatchRun++;
-	//mostRecentMatchRunTime = currentTime;
-
-	//Collect Nodes for Current Match Run
-	//simulationLog << "Match Run: " << currentMatchRun << " at time " << currentTime << std::endl;
-	//simulationLog << "Active Pool: ";
-
-	//currentMatchRunNodes.push_back(0);
-	//for (unsigned i = 1; i < pairUnderlyingStatus.size(); i++){
-		//If pair is active and not already transplanted
-		//if (pairTransplantationStatus[i] == NOTTRANSPLANTED && pairUnderlyingStatus[i] == ACTIVE){
-			//currentMatchRunNodes.push_back(i);
-			//simulationLog << i << " ";
-		//}
-	//}
-	//simulationLog << std::endl;
-
-	//int currentMatchRunSize = (int)currentMatchRunNodes.size() - 1;
-
-	//Build Incidence Matrix
-	//std::vector<std::vector<bool> > subIncidenceMatrix;
-	//subIncidenceMatrix.assign(1 + currentMatchRunSize, std::vector<bool>(1 + currentMatchRunSize, false));
-
-	int nVertices = kpdguiRecord->getNumberOfNodes();
+	int nVertices = kpdguiRecord->getNumberOfAvailableNodes();
 	bool matchRunContainsADs = false;
 
-	progressBar->setLabelText("Discovering Locally Relevant Subgraphs...");
-	progressBar->setRange(0, nVertices);
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Discovering Locally Relevant Subgraphs...");
+	//progressBar->setRange(0, nVertices);
+	//progressBar->setValue(0);
 
 	for (int i = 1; i <= nVertices; i++){
-		//for (int j = 1; j <= currentMatchRunSize; j++){
-			//subIncidenceMatrix[i][j] = incidenceMatrix[currentMatchRunNodes[i]][currentMatchRunNodes[j]];
-		//}
-
-		if (kpdguiRecord->pairInfoVector[i].pairType != PAIR){
+		if (nodeInfoVector[i].nodeType != PAIR){
 			matchRunContainsADs = true;
 		}
 	}
@@ -386,16 +386,16 @@ std::vector<std::vector<int > > & KPDGUISimulation::getCurrentMatchRunComponents
 
 	getSCCPairsOnly(progressBar);
 
-	return currentMatchRunStructureNodeLists;
+	return currentMatchRunStructures;
 }
 
 vector<double> & KPDGUISimulation::getUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
 
 	utilityOfCurrentMatchRunCyclesAndChains.clear();
 
-	progressBar->setLabelText("Calculating Utility...");
-	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Calculating Utility...");
+	//progressBar->setRange(0, currentMatchRunStructures.size());
+	//progressBar->setValue(0);
 
 	//Parameters
 	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
@@ -403,97 +403,947 @@ vector<double> & KPDGUISimulation::getUtilityForCurrentMatchRunCyclesAndChains(Q
 	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
 	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
 	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
-	int i = 0;
+	//int i = 0;
 	
-	for (vector<vector<int> >::iterator itLists = currentMatchRunStructureNodeLists.begin(); itLists != currentMatchRunStructureNodeLists.end(); itLists++){
+	for (vector<vector<int> >::iterator itStructures = currentMatchRunStructures.begin(); itStructures != currentMatchRunStructures.end(); itStructures++){
 		double u = 0;
 		//Sums over all utility values
-		for (vector<int>::iterator itNodes = (*itLists).begin(); itNodes != (*itLists).end() - 1; itNodes++){
-			//Transplants
-			if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-				u += kpdguiRecord->viableTransplantMatrix[*itNodes][*(itNodes + 1)];
+		for (vector<int>::iterator itNodes = (*itStructures).begin(); itNodes != (*itStructures).end() - 1; itNodes++){
+
+			int donorIndex = selectDonor(*itNodes, *(itNodes + 1));
+
+			if (utilityScheme == TRANSPLANTS){
+				if (nodeInfoVector[*(itNodes + 1)].nodeType == PAIR) {
+					u += 1;
+				}
 			}
 			//5 year survival
-			else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-				u += kpdguiRecord->survival5yearMatrix[*itNodes][*(itNodes + 1)];
+			else if (utilityScheme == SURVIVAL5YEAR){
+				u += associated5YearSurvivalMatrix[*itNodes][*(itNodes + 1)][donorIndex];
 			}
 			//10 year survival
 			else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-				u += kpdguiRecord->survival10yearMatrix[*itNodes][*(itNodes + 1)];
+				u += associated10YearSurvivalMatrix[*itNodes][*(itNodes + 1)][donorIndex];
 			}
 			//Other utility specification
 			else {
-				u += kpdguiRecord->scoreMatrix[*itNodes][*(itNodes + 1)];
+				u += associatedScoresMatrix[*itNodes][*(itNodes + 1)][donorIndex];
 			}
 
-			if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(itNodes + 1)].recipPRA >= praAdvantageCutoff){
+			if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itNodes + 1)].candidatePRA >= praAdvantageCutoff){
 				u += praAdvantageValue;
 			}
 		}
 
-		if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-			u += kpdguiRecord->viableTransplantMatrix[*(itLists->end() - 1)][*(itLists->begin())];
+		int donorIndex = selectDonor(*(itStructures->end() - 1), *(itStructures->begin()));
+
+		if (utilityScheme == TRANSPLANTS){
+			if (nodeInfoVector[*(itStructures->begin())].nodeType == PAIR) {
+				u += 1;
+			}
 		}
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-			u += kpdguiRecord->survival5yearMatrix[*(itLists->end() - 1)][*(itLists->begin())];
+		else if (utilityScheme == SURVIVAL5YEAR){
+			u += associated5YearSurvivalMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][donorIndex];
 		}
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-			u += kpdguiRecord->survival10yearMatrix[*(itLists->end() - 1)][*(itLists->begin())];
+		else if (utilityScheme == SURVIVAL10YEAR){
+			u += associated10YearSurvivalMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][donorIndex];
 		}
 		else {
-			u += kpdguiRecord->scoreMatrix[*(itLists->end() - 1)][*(itLists->begin())];
+			u += associatedScoresMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][donorIndex];
 		}
 
-		if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(itLists->begin())].recipPRA >= praAdvantageCutoff){
+		if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itStructures->begin())].candidatePRA >= praAdvantageCutoff){
 			u += praAdvantageValue;
 		}
 
 		utilityOfCurrentMatchRunCyclesAndChains.push_back(u);
 		
-		i++;
-		progressBar->setValue(i);
+		//i++;
+		//progressBar->setValue(i);
 		QApplication::processEvents();
 	}
 	
 	return utilityOfCurrentMatchRunCyclesAndChains;
 }
 
-vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
-	expectedUtilityOfCurrentMatchRunCyclesAndChains.clear();
+double KPDGUISimulation::calculateExpectedUtility(std::vector<int> structure, KPDUtilityScheme utility) {
 
-	progressBar->setLabelText("Calculating Utility...");
-	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
-	progressBar->setValue(0);
+	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
+	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
+	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
+
+	bool chain = (nodeInfoVector[*(structure.begin())].nodeType != PAIR);
+
+	vector<double> transformedProbabilities;
+	vector<double> transformedUtilities;
+
+	for (vector<int>::iterator itNodes = structure.begin(); itNodes != structure.end() - 1; itNodes++) {
+		//Sort utilities, associated probabilities
+		vector<double> sortedUtilities;
+		vector<double> sortedMatchProbabilities;
+		vector<double> sortedDonorProbabilities;
+
+		vector<double> utils;
+		vector<double> matchProbs;
+		vector<double> donorProbs;
+
+		for (int k = 1; k <= nodeInfoVector[*itNodes].numberOfDonors; k++) {
+			if (associatedDonorMatrix[*itNodes][*(itNodes + 1)][k] == 1) {
+				if (utility == TRANSPLANTS) {
+					if (nodeInfoVector[*(itNodes + 1)].nodeType == PAIR) {
+						utils.push_back(1);
+					}
+				}
+				else if (utility == SURVIVAL5YEAR) {
+					utils.push_back(associated5YearSurvivalMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+				else if (utility == SURVIVAL10YEAR) {
+					utils.push_back(associated10YearSurvivalMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+				else {
+					utils.push_back(associatedScoresMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+
+				matchProbs.push_back(associatedProbabilitiesMatrix[*itNodes][*(itNodes + 1)][k]);
+				donorProbs.push_back(nodeInfoVector[*itNodes].donorUncertainty[k]);
+			}
+		}
+
+		while (utils.size() > 1) {
+			double maxScore = utils[0];
+			double associatedMatchProb = matchProbs[0];
+			double associatedDonorProb = donorProbs[0];
+			int maxIndex = 0;
+
+			for (unsigned i = 1; i < utils.size(); i++) {
+				if (utils[i] > maxScore) {
+					maxScore = utils[i];
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+				else if (utils[i] == maxScore && matchProbs[i] * donorProbs[i] > associatedMatchProb*associatedDonorProb) {
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+			}
+			sortedUtilities.push_back(maxScore);
+			sortedMatchProbabilities.push_back(associatedMatchProb);
+			sortedDonorProbabilities.push_back(associatedDonorProb);
+
+			utils.erase(utils.begin() + maxIndex);
+			matchProbs.erase(matchProbs.begin() + maxIndex);
+			donorProbs.erase(donorProbs.begin() + maxIndex);
+		}
+		sortedUtilities.push_back(utils[0]);
+		sortedMatchProbabilities.push_back(matchProbs[0]);
+		sortedDonorProbabilities.push_back(donorProbs[0]);
+
+		double prob = sortedDonorProbabilities[0] * sortedMatchProbabilities[0];
+		double util = sortedUtilities[0];
+
+		if (sortedUtilities.size() == 1) {
+			transformedProbabilities.push_back(prob);
+			transformedUtilities.push_back(util);
+		}
+		else {
+			double expectedUtil = prob*util;
+			double expectedProb = prob;
+			double probContinue = 1 - prob;
+
+			for (unsigned i = 1; i < sortedUtilities.size(); i++) {
+				expectedUtil += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i] * sortedUtilities[i];
+				expectedProb += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i];
+				probContinue = probContinue * (1 - sortedDonorProbabilities[i] * sortedMatchProbabilities[i]);
+			}
+
+			transformedProbabilities.push_back(expectedProb);
+			transformedUtilities.push_back(expectedUtil / expectedProb);
+		}
+	}
+
+	if (!chain) {
+
+		//Sort utilities, associated probabilities
+		vector<double> sortedUtilities;
+		vector<double> sortedMatchProbabilities;
+		vector<double> sortedDonorProbabilities;
+
+		vector<double> utils;
+		vector<double> matchProbs;
+		vector<double> donorProbs;
+
+		for (int k = 1; k <= nodeInfoVector[*(structure.end() - 1)].numberOfDonors; k++) {
+			if (associatedDonorMatrix[*(structure.end() - 1)][*structure.begin()][k] == 1) {
+				if (utility == TRANSPLANTS) {
+					if (nodeInfoVector[*structure.begin()].nodeType == PAIR) {
+						utils.push_back(1);
+					}
+				}
+				else if (utility == SURVIVAL5YEAR) {
+					utils.push_back(associated5YearSurvivalMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+				else if (utility == SURVIVAL10YEAR) {
+					utils.push_back(associated10YearSurvivalMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+				else {
+					utils.push_back(associatedScoresMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+
+				matchProbs.push_back(associatedProbabilitiesMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				donorProbs.push_back(nodeInfoVector[*(structure.end() - 1)].donorUncertainty[k]);
+			}
+		}
+
+		while (utils.size() > 1) {
+			double maxScore = utils[0];
+			double associatedMatchProb = matchProbs[0];
+			double associatedDonorProb = donorProbs[0];
+			int maxIndex = 0;
+
+			for (unsigned i = 1; i < utils.size(); i++) {
+				if (utils[i] > maxScore) {
+					maxScore = utils[i];
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+				else if (utils[i] == maxScore && matchProbs[i] * donorProbs[i] > associatedMatchProb*associatedDonorProb) {
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+			}
+			sortedUtilities.push_back(maxScore);
+			sortedMatchProbabilities.push_back(associatedMatchProb);
+			sortedDonorProbabilities.push_back(associatedDonorProb);
+
+			utils.erase(utils.begin() + maxIndex);
+			matchProbs.erase(matchProbs.begin() + maxIndex);
+			donorProbs.erase(donorProbs.begin() + maxIndex);
+		}
+		sortedUtilities.push_back(utils[0]);
+		sortedMatchProbabilities.push_back(matchProbs[0]);
+		sortedDonorProbabilities.push_back(donorProbs[0]);
+
+		double prob = sortedDonorProbabilities[0] * sortedMatchProbabilities[0];
+		double util = sortedUtilities[0];
+
+		if (sortedUtilities.size() == 1) {
+			transformedProbabilities.push_back(prob);
+			transformedUtilities.push_back(util);
+		}
+		else {
+			double expectedUtil = prob*util;
+			double expectedProb = prob;
+			double probContinue = 1 - prob;
+
+			for (unsigned i = 1; i < sortedUtilities.size(); i++) {
+				expectedUtil += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i] * sortedUtilities[i];
+				expectedProb += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i];
+				probContinue = probContinue * (1 - sortedDonorProbabilities[i] * sortedMatchProbabilities[i]);
+			}
+
+			transformedProbabilities.push_back(expectedProb);
+			transformedUtilities.push_back(expectedUtil / expectedProb);
+		}
+	}
 
 	int i = 0;
-	for (vector<vector<int> >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
-		i++;		
-		double eu = calculateExpectedUtility(*it);
+	double expUtility = 0.0;
+	double cycleProb = 1.0;
+	double cycleUtil = 0.0;
+
+	//Chain
+	if (chain) {
+		cycleUtil = transformedUtilities[i];
+
+		if (addAdvantageToHighPRACandidates && nodeInfoVector[*(structure.begin() + 1)].candidatePRA >= praAdvantageCutoff) {
+			cycleUtil += praAdvantageValue;
+		}
+
+		cycleProb = nodeInfoVector[*(structure.begin() + 1)].candidateUncertainty * transformedProbabilities[i];
+
+		if (structure.size() == 2) {
+			expUtility = cycleProb*cycleUtil;
+		}
+		else if (structure.size()>2) {
+			for (vector<int >::iterator itNodes = structure.begin() + 1; itNodes != structure.end() - 1; ++itNodes) {
+				i++;
+
+				//Probability of continuing to next transplant
+				double probContinue = nodeInfoVector[*(itNodes + 1)].candidateUncertainty * transformedProbabilities[i];
+				expUtility += (1 - probContinue)*cycleUtil*cycleProb;
+
+				cycleProb = cycleProb*probContinue;
+				cycleUtil += transformedUtilities[i];
+
+				if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itNodes + 1)].candidatePRA >= praAdvantageCutoff) {
+					cycleUtil += praAdvantageValue;
+				}
+			}
+
+			expUtility += cycleUtil*cycleProb;
+		}
+	}
+
+	//Cycles
+	else {
+		//Calculates cycle probability and cycle utility		
+		for (vector<int >::iterator itNodes = structure.begin(); itNodes != structure.end() - 1; ++itNodes) {
+			cycleProb = cycleProb * nodeInfoVector[*(itNodes + 1)].candidateUncertainty * transformedProbabilities[i];
+
+			cycleUtil += transformedUtilities[i];
+
+			if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itNodes + 1)].candidatePRA >= praAdvantageCutoff) {
+				cycleUtil += praAdvantageValue;
+			}
+			i++;
+		}
+
+		cycleProb = cycleProb * nodeInfoVector[*(structure.begin())].candidateUncertainty * transformedProbabilities[i];
+		cycleUtil += transformedUtilities[i];
+
+		if (addAdvantageToHighPRACandidates && nodeInfoVector[*(structure.begin())].candidatePRA >= praAdvantageCutoff) {
+			cycleUtil += praAdvantageValue;
+		}
+
+		expUtility = cycleProb*cycleUtil;
+	}
+
+	return expUtility;
+}
+
+vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar) {
+	expectedUtilityOfCurrentMatchRunCyclesAndChains.clear();
+
+	//progressBar->setLabelText("Calculating Utility...");
+	//progressBar->setRange(0, currentMatchRunStructures.size());
+	//progressBar->setValue(0);
+
+	//int i = 0;
+	for (vector<vector<int> >::iterator it = currentMatchRunStructures.begin(); it != currentMatchRunStructures.end(); it++) {
+		//i++;
+		double eu = calculateExpectedUtility(*it, kpdguiParameters->getUtilityScheme());
 		expectedUtilityOfCurrentMatchRunCyclesAndChains.push_back(eu);
-		
-		progressBar->setValue(i);
-		QApplication::processEvents();
+
+		//progressBar->setValue(i);
+		//QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunCyclesAndChains;
+}
+
+double KPDGUISimulation::calculateExpectedUtilityWithFallbacks(std::vector<int> structure) {
+
+	//Parameters
+	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
+
+	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
+	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
+	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
+
+	double utility = 0;
+
+	int nCandidates = (int)structure.size();
+
+	//Iterates through each possible subset of candidates
+	for (int c = 3; c < pow((double)2, nCandidates); c++) {
+		std::vector<int> candidateFlags(nCandidates, 0);
+		int p = c;
+		int cIndex = 0;
+		int candidateSubsetSize = 0;
+		while (p != 0) {
+			int r = p % 2;
+			if (r == 1) {
+				candidateSubsetSize++;
+				candidateFlags[cIndex] = candidateSubsetSize;
+			}
+			p = p / 2;
+			cIndex++;
+		}
+
+		//Must have at least 2 candidates
+		if (candidateSubsetSize > 1) {
+
+			int numberOfDonorsInCandidateSubset = 0;
+			double probCandidateSubset = 1;
+
+			std::vector<int> subsetCandidateIndices;
+
+			std::vector<int> subsetDonorNodeIndices;
+			std::vector<int> subsetDonorIDs;
+
+			//Iterate through candidates
+			for (int index = 0; index < nCandidates; index++) {
+
+				int candidateID = structure[index];
+
+				//If candidate is included in this subset, include probability
+				if (candidateFlags[index] != 0) {
+					probCandidateSubset = probCandidateSubset * nodeInfoVector[candidateID].candidateUncertainty;
+
+					//Add to subset
+					subsetCandidateIndices.push_back(index);
+
+					//Count donors and add to subset
+					for (int k = 1; k <= nodeInfoVector[candidateID].numberOfDonors; k++) {
+						numberOfDonorsInCandidateSubset++;
+						subsetDonorNodeIndices.push_back(index);
+						subsetDonorIDs.push_back(k);
+					}
+				}
+				//If candidate is not included in this subset, include 1-probability
+				else {
+					probCandidateSubset = probCandidateSubset * (1 - nodeInfoVector[candidateID].candidateUncertainty);
+				}
+			}
+
+			//Iterates through each possible subset of donors
+			for (int d = 3; d < pow((double)2, numberOfDonorsInCandidateSubset); d++) {
+				std::vector<int> donorFlags(numberOfDonorsInCandidateSubset, 0);
+				int p = d;
+				int dIndex = 0;
+				int donorSubsetSize = 0;
+				while (p != 0) {
+					int r = p % 2;
+					if (r == 1) {
+						donorSubsetSize++;
+						donorFlags[dIndex] = donorSubsetSize;
+					}
+					p = p / 2;
+					dIndex++;
+				}
+
+				//Must have at least 2 donors
+				if (donorSubsetSize > 1) {
+
+					int numberOfEdgesInDonorSubset = 0;
+					double probDonorSubset = probCandidateSubset;
+
+					std::vector<int> edgeSubsetCandidateIndices;
+					std::vector<int> edgeSubsetDonorNodeIndices;
+					std::vector<int> edgeSubsetDonorIDs;
+
+					//Iterate through donors
+					for (int index = 0; index < numberOfDonorsInCandidateSubset; index++) {
+
+						int subsetDonorNodeIndex = subsetDonorNodeIndices[index];
+						int subsetDonorNodeID = structure[subsetDonorNodeIndex];
+						int subsetDonorID = subsetDonorIDs[index];
+
+						//If donor is included in this subset, include probability
+						if (donorFlags[index] != 0) {
+							probDonorSubset = probDonorSubset * nodeInfoVector[subsetDonorNodeID].donorUncertainty[subsetDonorID];
+
+							//Iterate through candidates to find edges
+							for (int index2 = 0; index2 < candidateSubsetSize; index2++) {
+
+								int subsetCandidateIndex = subsetCandidateIndices[index2];
+								int subsetCandidateID = structure[subsetCandidateIndex];
+
+								if (subsetDonorNodeID != subsetCandidateID) {
+									//Count edges and add to subset
+									if (associatedDonorMatrix[subsetDonorNodeID][subsetCandidateID][subsetDonorID] == 1) {
+										numberOfEdgesInDonorSubset++;
+
+										edgeSubsetCandidateIndices.push_back(subsetCandidateIndex);
+										edgeSubsetDonorNodeIndices.push_back(subsetDonorNodeIndex);
+										edgeSubsetDonorIDs.push_back(subsetDonorID);
+									}
+								}
+							}
+						}
+
+						//If donor is not included in this subset, include 1-probability
+						else {
+							probDonorSubset = probDonorSubset * (1 - nodeInfoVector[subsetDonorNodeID].donorUncertainty[subsetDonorID]);
+						}
+					}
+
+					// Iterate through every possible combination of edges
+					for (int e = 3; e < pow((double)2, numberOfEdgesInDonorSubset); e++) {
+						std::vector<int> edgeFlags(numberOfEdgesInDonorSubset, 0);
+						int p = e;
+						int eIndex = 0;
+						int edgeSubsetSize = 0;
+						while (p != 0) {
+							int r = p % 2;
+							if (r == 1) {
+								edgeSubsetSize++;
+								edgeFlags[eIndex] = edgeSubsetSize;
+							}
+							p = p / 2;
+							eIndex++;
+						}
+
+						//Must have at least 2 edges
+						if (edgeSubsetSize > 1) {
+
+							double probEdgeSubset = probDonorSubset;
+
+							std::vector<std::vector<std::vector<int> > > reducedDonorMatrix(nCandidates + 1, std::vector<std::vector<int> >(nCandidates + 1, std::vector<int>(1, 0)));
+							std::vector<int> reducedNumberOfDonors(nCandidates + 1, 0);
+
+							std::vector<std::vector<bool> > reducedIncidenceMatrix(nCandidates + 1, std::vector<bool>(nCandidates + 1, false));
+							std::vector<std::vector<std::vector<double> > > reducedUtilityMatrix(nCandidates + 1, std::vector<std::vector<double> >(nCandidates + 1, std::vector<double>(1, 0.0)));
+
+							std::vector<KPDNodeType> reducedNodeTypeVector(nCandidates + 1, PAIR);
+							std::vector<std::vector<KPDBloodType> > reducedDonorBloodTypes(nCandidates + 1, std::vector<KPDBloodType>(1, BT_AB));
+
+							//Build reduced matrices
+							for (int i = 1; i <= nCandidates; i++) {
+
+								int structureNodeDonors = nodeInfoVector[structure[i - 1]].numberOfDonors;
+
+								for (int j = 1; j <= nCandidates; j++) {
+									reducedDonorMatrix[i][j].assign(1 + structureNodeDonors, 0);
+									reducedUtilityMatrix[i][j].assign(1 + structureNodeDonors, 0.0);
+								}
+
+								reducedNodeTypeVector[i] = nodeInfoVector[structure[i - 1]].nodeType;
+
+								reducedDonorBloodTypes[i].assign(1 + structureNodeDonors, BT_AB);
+								for (int k = 1; k <= structureNodeDonors; k++) {
+									reducedDonorBloodTypes[i][k] = nodeInfoVector[structure[i - 1]].donorBTs[k];
+								}
+							}
+
+							for (int l = 0; l < edgeSubsetSize; l++) {
+
+								int edgeSubsetDonorNodeIndex = edgeSubsetDonorNodeIndices[l];
+								int edgeSubsetCandidateIndex = edgeSubsetCandidateIndices[l];
+								int edgeSubsetDonorID = edgeSubsetDonorIDs[l];
+
+								int edgeSubsetDonorNodeID = structure[edgeSubsetDonorNodeIndex];
+								int edgeSubsetCandidateID = structure[edgeSubsetCandidateIndex];
+
+								if (edgeFlags[l] != 0) {
+
+									probEdgeSubset = probEdgeSubset *  associatedProbabilitiesMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+
+									reducedDonorMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = 1;
+									reducedIncidenceMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1] = true;
+									if (utilityScheme == TRANSPLANTS) {
+										if (nodeInfoVector[edgeSubsetCandidateID].nodeType == PAIR) {
+											reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = 1;
+										}
+									}
+									else if (utilityScheme == SURVIVAL5YEAR) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated5YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else if (utilityScheme == SURVIVAL10YEAR) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated10YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associatedScoresMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+
+									if (addAdvantageToHighPRACandidates && nodeInfoVector[edgeSubsetCandidateID].nodeType == PAIR && nodeInfoVector[edgeSubsetCandidateID].candidatePRA >= praAdvantageCutoff) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] += praAdvantageValue;
+									}
+								}
+								else {
+									probEdgeSubset = probEdgeSubset * (1 - associatedProbabilitiesMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID]);
+								}
+							}
+
+							utility += probEdgeSubset*calculatePartialUtility(nCandidates, reducedIncidenceMatrix, reducedUtilityMatrix, reducedNodeTypeVector, reducedDonorBloodTypes);
+							//std::cout << utility << std::endl;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return utility;
+}
+
+
+double KPDGUISimulation::estimateExpectedUtilityWithFallbacks(std::vector<int> &structure) {
+
+	//Parameters
+	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
+
+	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
+	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
+	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
+	
+	int numberOfExpectedUtilityIterations = kpdguiParameters->getNumberOfExpectedUtilityIterations();
+	
+	int nV = (int)structure.size();
+
+	//Initialize submatrices (5 year, 10 year survivals stored in subutility matrix)
+	std::vector<std::vector<bool> > subIncidenceMatrix(nV + 1, std::vector<bool>(nV + 1, false));
+	std::vector<std::vector<std::vector<int> > > subDonorMatrix(nV + 1, std::vector<std::vector<int> >(nV + 1, std::vector<int>(1, 0)));
+	std::vector<std::vector<std::vector<double> > > subUtilityMatrix(nV + 1, std::vector<std::vector<double> >(nV + 1, std::vector<double>(1,0.0)));
+	std::vector<std::vector<std::vector<double> > > subProbabilityMatrix(nV + 1, std::vector<std::vector<double> >(nV + 1, std::vector<double>(1, 0.0)));
+	
+	//AdditionalNodeInfo p;
+	//std::vector<AdditionalNodeInfo> subNodeInfoVector(nV + 1, p);
+	std::vector<KPDNodeType> subNodeTypeVector(nV + 1, PAIR);
+	std::vector<bool> subDonorVector(nV + 1, true);
+	//std::vector<double> subProbVertexVector(nV + 1, 0.0);
+	//std::vector<int> subRecipIDVector(nV + 1, 0);
+
+	int i = 1, j = 1;
+
+	//Form submatrices
+	for (std::vector<int>::iterator itDonors = structure.begin(); itDonors != structure.end(); ++itDonors, i++) {
+		
+		int numberOfDonors = nodeInfoVector[*itDonors].numberOfDonors;
+		
+		
+		for (std::vector<int>::iterator itCandidates = structure.begin(); itCandidates != structure.end(); ++itCandidates, j++) {
+			if (i != j) {
+				subIncidenceMatrix[i][j] = incidenceMatrix[*itDonors][*itCandidates];
+
+				for (int k = 1; k <= numberOfDonors; k++) {
+					if (associatedDonorMatrix[*itDonors][*itCandidates][k] == 1) {
+						subDonorMatrix[i][j][k] = 1;
+						subProbabilityMatrix[i][j][k] = associatedProbabilitiesMatrix[*itDonors][*itCandidates][k];
+						
+						if (utilityScheme == TRANSPLANTS) {
+							if (nodeInfoVector[*itCandidates].nodeType == PAIR) {
+								subUtilityMatrix[i][j][k] = 1;
+							}
+						}
+						else if (utilityScheme == SURVIVAL5YEAR) {
+							subUtilityMatrix[i][j][k] = associated5YearSurvivalMatrix[*itDonors][*itCandidates][k];
+						}
+						else if (utilityScheme == SURVIVAL10YEAR) {
+							subUtilityMatrix[i][j][k] = associated10YearSurvivalMatrix[*itDonors][*itCandidates][k];
+						}
+						else {
+							subUtilityMatrix[i][j][k] = associatedScoresMatrix[*itDonors][*itCandidates][k];
+						}
+
+						if (addAdvantageToHighPRACandidates && nodeInfoVector[*itCandidates].nodeType == PAIR && nodeInfoVector[*itCandidates].candidatePRA >= praAdvantageCutoff) {
+							subUtilityMatrix[i][j][k] += praAdvantageValue;
+						}
+					}					
+				}
+			}
+		}
+
+		//subNodeInfoVector[i] = nodeInfoVector[*itDonors];
+
+		//subPairTypeVector[i] = kpdguiRecord->pairInfoVector[*itDonors].pairType;
+		//subABDonorVector[i] = (kpdguiRecord->pairInfoVector[*itDonors].donorBT == BT_AB);
+		//subRecipIDVector[i] = kpdguiRecord->pairInfoVector[*itDonors].recipID;
+		//subProbVertexVector[i] = kpdguiRecord->pairInfoVector[*itDonors].uncertainty;
+
+		j = 1;
+	}
+
+	double utility = 0;
+	double probability = 0;
+
+	for (int sims = 1; sims <= numberOfExpectedUtilityIterations; sims++) {
+		double prob = 1;
+
+		vector<int> availableNodes;
+		availableNodes.push_back(0);
+
+		vector<vector<int> > availableDonors;
+		availableDonors.assign(nV + 1, vector<int>(1, 0));
+
+		//int numberOfDonorsInCandidateSubset = 0;
+		//std::vector<int> subsetDonorNodeIndices;
+		//std::vector<int> subsetDonorIDs;
+
+		for (int i = 1; i <= nV; i++) {
+			if (rngExpectedUtilitySimulation.runif() <= nodeInfoVector[i].candidateUncertainty) {
+				prob = prob * nodeInfoVector[i].candidateUncertainty;
+
+				int numberOfDonors = nodeInfoVector[i].numberOfDonors;
+				availableDonors[i].assign(1 + numberOfDonors, 0);
+
+				bool includedDonor = false;
+							
+				for (int k = 1; k <= numberOfDonors; k++) {
+					
+					if (rngExpectedUtilitySimulation.runif() <= nodeInfoVector[i].donorUncertainty[k]) {
+						prob = prob * nodeInfoVector[i].donorUncertainty[k];
+						availableDonors[i][k] = 1;
+						includedDonor = true;
+					}
+
+					else {
+						prob = prob * (1 - nodeInfoVector[i].donorUncertainty[k]);
+					}
+					//numberOfDonorsInCandidateSubset++;
+					//subsetDonorNodeIndices.push_back(i);
+					//subsetDonorIDs.push_back(k);
+				}
+
+				if (includedDonor) {
+					availableNodes.push_back(i);
+				}
+			}
+			else {
+				prob = prob * (1 - nodeInfoVector[i].candidateUncertainty);
+			}
+		}
+
+		int subsetSize = (int) availableNodes.size() - 1;
+
+		if (subsetSize > 1) {
+
+			std::vector<std::vector<bool> > subsubIncidenceMatrix(subsetSize + 1, std::vector<bool>(subsetSize + 1, false));
+			//std::vector<std::vector<std::vector<double> > > subsubUtilityMatrix(subsetSize + 1, std::vector<std::vector<double> >(subsetSize + 1, 0));
+			//std::vector<KPDPairType> subsubPairTypeVector(subsetSize + 1, PAIR);
+			//std::vector<bool> subsubABDonorVector(subsetSize + 1, true);
+			//std::vector<int> subsubRecipIDVector(subsetSize + 1, 0);
+
+			//Form subsubmatrices
+			/*for (int k = 1; k <= subsetSize; k++) {
+				for (int l = 1; l <= subsetSize; l++) {
+					if (k != l) {
+						if (subIncidenceMatrix[availableNodes[k]][availableNodes[l]] == true) {
+							if (rngSimulation.runif() <= subProbabilityMatrix[availableNodes[k]][availableNodes[l]]) {
+								subsubIncidenceMatrix[k][l] = true;
+								subsubUtilityMatrix[k][l] = subUtilityMatrix[availableNodes[k]][availableNodes[l]];
+								prob = prob * subProbabilityMatrix[availableNodes[k]][availableNodes[l]];
+							}
+							else {
+								prob = prob * (1 - subProbabilityMatrix[availableNodes[k]][availableNodes[l]]);
+							}
+						}
+					}
+				}
+				subsubPairTypeVector[k] = subPairTypeVector[availableNodes[k]];
+				subsubABDonorVector[k] = subABDonorVector[availableNodes[k]];
+				//subsubRecipIDVector[k] = subRecipIDVector[availableNodes[k]];
+			}
+
+			utility += prob * calculatePartialUtility(subsetSize, subsubIncidenceMatrix, subsubUtilityMatrix, subsubPairTypeVector, subsubABDonorVector);*/
+			//utility += calculatePartialUtility(subsetSize, subsubIncidenceMatrix, subsubUtilityMatrix, subsubPairTypeVector, subsubABDonorVector);
+		}
+
+		//probability += prob;
+	}
+
+	return utility / numberOfExpectedUtilityIterations;
+}
+
+
+double KPDGUISimulation::calculatePartialUtility(int nV, vector<vector<bool> > &incidence, vector<vector<vector<double> > > &utility, vector<KPDNodeType> & nodeTypes, vector<vector<KPDBloodType> > & bloodTypes) {
+
+	//Parameters
+	bool allowABBridgeDonors = kpdguiParameters->getAllowABBridgeDonors();
+
+	int maxCycleSize = kpdguiParameters->getMaxCycleSize();
+	int maxChainLength = kpdguiParameters->getMaxChainLength();
+	int maximum = std::max(maxChainLength + 1, maxCycleSize);
+
+	vector<vector<int> > possibleCyclesOrChains;
+	vector<double> utilityOfPossibleCyclesOrChains;
+
+	double utilityValue = 0;
+
+	int start = 1;
+	vector<int> visitedVec(nV + 1, 0);
+	vector<int> stack_vec;
+
+	while (start <= nV) {
+		visitedVec[start] = 1;
+
+		stack_vec.push_back(start);
+		int v = getChild(start, stack_vec.back(), visitedVec, incidence);
+		while (!stack_vec.empty()) {
+			if (v == -1) {
+				int top = stack_vec.back();
+				stack_vec.pop_back();
+				if (top == start) {
+					visitedVec[top] = 0;
+					break;
+				}
+				visitedVec[top] = 0;
+				v = getChild(top, stack_vec.back(), visitedVec, incidence);
+			}
+			else {
+				visitedVec[v] = 1;
+				stack_vec.push_back(v);
+
+				if (incidence[v][start] == true) {
+					int multipleADCheck = 0;
+					int index = 0;
+
+					vector<int> potentialCycleOrChain;
+					
+					for (unsigned i = 0; i < stack_vec.size() - 1; i++) {
+						potentialCycleOrChain.push_back(stack_vec[i]);
+						if (nodeTypes[stack_vec[i]] != PAIR) {
+							multipleADCheck++;
+							index = i;
+						}
+					}
+					
+					if (multipleADCheck <= 1) {
+						double tempUtil = 0;
+						bool poorOption = false;
+
+						//Chain
+						if (multipleADCheck == 1) {
+							//Check if chain is of appropriate size
+							if ((int)potentialCycleOrChain.size() <= maxChainLength + 1) {
+								//Queue up AD to front of chain
+								while (index > 0) {
+									int tempVec = *(potentialCycleOrChain.begin());
+									potentialCycleOrChain.erase(potentialCycleOrChain.begin());
+									potentialCycleOrChain.push_back(tempVec);
+									index--;
+								}
+
+								//Check for AB bridge donor
+								if (!allowABBridgeDonors) {
+									poorOption = true;
+									for (int k = 1; k < bloodTypes[*(potentialCycleOrChain.end() - 1)].size(); k++) {
+										if (bloodTypes[*(potentialCycleOrChain.end() - 1)][k] != BT_AB) {
+											//If AB bridge donor, contribute minimal utility
+											poorOption = false;
+										}
+									}
+								}
+							}
+							//If not of appropriate size, contribute minimal utility
+							else {
+								poorOption = true;
+							}
+
+							if (poorOption) {
+								tempUtil = 0.00001;
+							}
+							else {
+								for (std::vector<int>::iterator it = potentialCycleOrChain.begin(); it != potentialCycleOrChain.end() - 1; it++) {
+									int selectedDonor = -1;
+									double selectedDonorUtility = 0;
+
+									for (int k = 1; k < utility[*it][*(it + 1)].size(); k++) {
+										if (utility[*it][*(it + 1)][k] > selectedDonorUtility) {
+											selectedDonor = k;
+											selectedDonorUtility = utility[*it][*(it + 1)][k];
+										}
+									}
+									tempUtil += selectedDonorUtility;
+								}
+							}
+						}
+						// Cycle 
+						else {
+							if ((int)potentialCycleOrChain.size() > 3) {
+								poorOption = true;
+							}
+
+							if (poorOption) {
+								tempUtil = 0.00001;
+							}
+							else {
+								for (std::vector<int>::iterator it = potentialCycleOrChain.begin(); it != potentialCycleOrChain.end() - 1; it++) {
+									int selectedDonor = -1;
+									double selectedDonorUtility = 0;
+
+									for (int k = 1; k < utility[*it][*(it + 1)].size(); k++) {
+										if (utility[*it][*(it + 1)][k] > selectedDonorUtility) {
+											selectedDonor = k;
+											selectedDonorUtility = utility[*it][*(it + 1)][k];
+										}
+									}
+									tempUtil += selectedDonorUtility;
+								}
+								int selectedDonor = -1;
+								double selectedDonorUtility = 0;
+
+								for (int k = 1; k < utility[*(potentialCycleOrChain.end() - 1)][*(potentialCycleOrChain.begin())].size(); k++) {
+									if (utility[*(potentialCycleOrChain.end() - 1)][*(potentialCycleOrChain.begin())][k] > selectedDonorUtility) {
+										selectedDonor = k;
+										selectedDonorUtility = utility[*(potentialCycleOrChain.end() - 1)][*(potentialCycleOrChain.begin())][k];
+									}
+								}
+								tempUtil += selectedDonorUtility;
+
+							}
+						}
+
+						possibleCyclesOrChains.push_back(vector<int>(potentialCycleOrChain));
+						utilityOfPossibleCyclesOrChains.push_back(tempUtil);
+					}
+				}
+
+				if (stack_vec.size() >= maximum)
+					v = -1;
+				else
+					v = getChild(start, v, visitedVec, incidence);
+			}
+		}
+		start++;
+	}
+
+	if (possibleCyclesOrChains.size() == 1) {
+		utilityValue = utilityOfPossibleCyclesOrChains.at(0);
+	}
+
+	else if (possibleCyclesOrChains.size() > 1) {
+
+		int nPossibleCycles = (int)possibleCyclesOrChains.size();
+
+		for (int c = 1; c < pow((double)2, nPossibleCycles); c++) {
+			double tempU = 0;
+
+			vector<int> cycle_flags(nPossibleCycles, 0);
+			int mc = c;
+			int kc = 0;
+			int countc = 0;
+			while (mc != 0) {
+				int rc = mc % 2;
+				cycle_flags[kc] = rc;
+				mc = mc / 2;
+				kc++;
+			}
+
+			vector<int> checkUniqueness(nV + 1, 0);
+			bool validSolution = true;
+			double uOfCombination = 0;
+			for (int q = 0; q < nPossibleCycles; q++) {
+				if (cycle_flags[q] == 1) {
+					tempU += utilityOfPossibleCyclesOrChains[q];
+					for (vector<int>::iterator it = possibleCyclesOrChains.at(q).begin(); it != possibleCyclesOrChains.at(q).end(); ++it) {
+						checkUniqueness[*it]++;
+						if (checkUniqueness[*it] > 1) {
+							validSolution = false;
+						}
+					}
+				}
+			}
+
+			if (validSolution == true && tempU > utilityValue) {
+				utilityValue = tempU;
+			}
+		}
+	}
+
+	return utilityValue;
 }
 
 vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunSets(QProgressDialog * progressBar){
 
 	expectedUtilityOfCurrentMatchRunSets.clear();
 
-	progressBar->setLabelText("Calculating Utility...");
-	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Calculating Utility...");
+	//progressBar->setRange(0, currentMatchRunStructures.size());
+	//progressBar->setValue(0);
 
-	int i = 0;
-	for (vector<vector<int> >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
-		i++;
-		double eu = calculateExpectedUtilityWithFallbacks(*it);
+	//int i = 0;
+	for (vector<vector<int> >::iterator itStructures = currentMatchRunStructures.begin(); itStructures != currentMatchRunStructures.end(); itStructures++){
+		//i++;
+		double eu = calculateExpectedUtilityWithFallbacks(*itStructures);
 		expectedUtilityOfCurrentMatchRunSets.push_back(eu);
 
-		progressBar->setValue(i);
-		QApplication::processEvents();
+		//progressBar->setValue(i);
+		//QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunSets;
@@ -502,38 +1352,46 @@ vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunSets(QPro
 vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunComponents(QProgressDialog * progressBar){
 
 	expectedUtilityOfCurrentMatchRunComponents.clear();
-	progressBar->setLabelText("Calculating Utility...");
-	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Calculating Utility...");
+	//progressBar->setRange(0, currentMatchRunStructures.size());
+	//progressBar->setValue(0);
 
-	int i = 0;
-	for (vector<vector<int > >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
+	//int i = 0;
+	for (vector<vector<int > >::iterator it = currentMatchRunStructures.begin(); it != currentMatchRunStructures.end(); it++){
 		//double eu = calculateExpectedUtilityWithFallbacks(*it);
-		i++;
-		double eu = estimateExpectedUtilityWithFallbacks(*it);
+		//i++;
+
+		double eu;
+
+		if (kpdguiParameters->getEstimateExpectedUtility()) {
+			eu = estimateExpectedUtilityWithFallbacks(*it);
+		}
+		else {
+			eu = calculateExpectedUtilityWithFallbacks(*it);
+		}
 		expectedUtilityOfCurrentMatchRunComponents.push_back(eu);
 
-		progressBar->setValue(i);
-		QApplication::processEvents();
+		//progressBar->setValue(i);
+		//QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunComponents;
 }
 
-void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
+void KPDGUISimulation::getOptimalSolutionForCurrentMatchRun(QProgressDialog * progressBar){
 
 	KPDOptimizationScheme optScheme = kpdguiParameters->getOptimizationScheme();
 	int numberOfSolutions = kpdguiParameters->getNumberOfSolutions();
 
-	progressBar->setLabelText("Finding Optimal Solutions...");
-	progressBar->setRange(0, numberOfSolutions);
-	progressBar->setValue(0);
+	//progressBar->setLabelText("Finding Optimal Solutions...");
+	//progressBar->setRange(0, numberOfSolutions);
+	//progressBar->setValue(0);
 
-	SelectedSolutions.clear();
-	SelectedStructures.clear();
-	SolutionObjectives.clear();
+	selectedSolutions.clear();
+	selectedStructures.clear();
+	solutionObjectives.clear();
 
-	int nStructures = (int)currentMatchRunStructureNodeLists.size();
+	int nStructures = (int)currentMatchRunStructures.size();
 	if (nStructures == 0) return;
 
 	double objective = 0;
@@ -555,38 +1413,38 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 		{
 			for (int i = 1; i <= nStructures; i++){
 				string s = "cycle_" + intToString(i);
-				myVars[i] = model.addVar(0.0, 1.0, -1 * utilityOfCurrentMatchRunCyclesAndChains[i - 1] /* Max Utility */, GRB_BINARY, s); //The default is min, hence the -1
+				myVars[i] = model.addVar(0.0, 1.0, -1 * utilityOfCurrentMatchRunCyclesAndChains[i - 1], GRB_BINARY, s); //The default is min, hence the -1
 			}
 		}
 		else if (optScheme == KPDOptimizationScheme::MEUC)
 		{
 			for (int i = 1; i <= nStructures; i++){
 				string s = "cycle_" + intToString(i);
-				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunCyclesAndChains[i - 1] /* Max Utility */, GRB_BINARY, s); //The default is min, hence the -1
+				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunCyclesAndChains[i - 1], GRB_BINARY, s); //The default is min, hence the -1
 			}
 		}
 		else if (optScheme == KPDOptimizationScheme::MEUS)
 		{
 			for (int i = 1; i <= nStructures; i++){
 				string s = "cycle_" + intToString(i);
-				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunSets[i - 1] /* Max Utility */, GRB_BINARY, s); //The default is min, hence the -1
+				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunSets[i - 1], GRB_BINARY, s); //The default is min, hence the -1
 			}
 		}
 		else if (optScheme == KPDOptimizationScheme::SCC)
 		{
 			for (int i = 1; i <= nStructures; i++){
 				string s = "cycle_" + intToString(i);
-				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunComponents[i - 1] /* Max Utility */, GRB_BINARY, s); //The default is min, hence the -1
+				myVars[i] = model.addVar(0.0, 1.0, -1 * expectedUtilityOfCurrentMatchRunComponents[i - 1], GRB_BINARY, s); //The default is min, hence the -1
 			}
 		}
 		model.update();
 
-		int nVertices = kpdguiRecord->getNumberOfNodes();
+		int nVertices = kpdguiRecord->getNumberOfAvailableNodes();
 		//Restriction: Each vertex can only appear at most once in solution
 		for (int i = 1; i <= nVertices; i++){
 			GRBLinExpr expr = 0;
 			for (int j = 0; j <= nStructures - 1; j++){
-				for (vector<int>::iterator it = currentMatchRunStructureNodeLists[j].begin(); it != currentMatchRunStructureNodeLists[j].end(); ++it){
+				for (vector<int>::iterator it = currentMatchRunStructures[j].begin(); it != currentMatchRunStructures[j].end(); ++it){
 					if (*it == i){
 						expr += myVars[j + 1];
 					}
@@ -597,6 +1455,7 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 		}
 
 		model.optimize();
+
 		int optimstatus = model.get(GRB_IntAttr_Status);
 		double objval = 0;
 
@@ -638,8 +1497,8 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 			}
 		}
 
-		SelectedSolutions.push_back(candidateSolution);
-		SolutionObjectives.push_back(objval);
+		selectedSolutions.push_back(candidateSolution);
+		solutionObjectives.push_back(objval);
 
 		progressBar->setValue(iteration);
 		QApplication::processEvents();
@@ -651,7 +1510,7 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 			//Add restriction against previously found solution
 			for (int j = 0; j <= nStructures - 1; j++){
 				bool found = false;
-				for (vector<int>::iterator it = SelectedSolutions[iteration - 2].begin(); it != SelectedSolutions[iteration - 2].end(); ++it){
+				for (vector<int>::iterator it = selectedSolutions[iteration - 2].begin(); it != selectedSolutions[iteration - 2].end(); ++it){
 					if (*it == j){ found = true; }
 				}
 				if (found == true){
@@ -701,8 +1560,8 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 				}
 			}
 
-			SelectedSolutions.push_back(candidateSolution);
-			SolutionObjectives.push_back(objval);
+			selectedSolutions.push_back(candidateSolution);
+			solutionObjectives.push_back(objval);
 
 			progressBar->setValue(iteration);
 			QApplication::processEvents();
@@ -723,11 +1582,11 @@ void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 }
 
 vector<vector<int> > & KPDGUISimulation::returnSolutionSet(){
-	return SelectedSolutions;
+	return selectedSolutions;
 }
 
 vector<double> & KPDGUISimulation::returnSolutionObjectives(){
-	return SolutionObjectives;
+	return solutionObjectives;
 }
 
 QString KPDGUISimulation::getSimLog(){
@@ -748,14 +1607,14 @@ void KPDGUISimulation::getSCCPairsOnly(QProgressDialog * progressBar){
 
 	int progressBarValue = progressBar->value();
 
-	int maxSize = kpdguiParameters->getMaxSize();
+	int maxComponentSize = kpdguiParameters->getMaxComponentSize();
 
 	int nVertices = kpdguiRecord->getNumberOfNodes();
 
 	vector<int> currentMatchRunPairs;
 	currentMatchRunPairs.push_back(0);
 	for (int i = 1; i <= nVertices; i++){
-		if (kpdguiRecord->pairInfoVector[i].pairType == PAIR){
+		if (nodeInfoVector[i].nodeType == PAIR){
 			currentMatchRunPairs.push_back(i);
 		}
 	}
@@ -789,10 +1648,10 @@ void KPDGUISimulation::getSCCPairsOnly(QProgressDialog * progressBar){
 		//While there are still pairs in the bfsTree
 		while (!bfsTree.empty()) {
 			// Get child
-			child = getChildSCCPairsOnly(bfsTree, bfsLevel, currentMatchRunPairs, visited, next, childLevel, numberOfPairs, kpdguiRecord->incidenceMatrix);
+			child = getChildSCCPairsOnly(bfsTree, bfsLevel, currentMatchRunPairs, visited, next, childLevel, numberOfPairs, incidenceMatrix);
 
 			// If (i) the size of the bfsTree is at the limit or (ii) no children, bfsLevel is currently at the next bfsLevel of the previous node
-			if ((int)bfsTree.size() == maxSize || (child == -1 && childLevel == bfsLevel.back() + 1)) {
+			if ((int)bfsTree.size() == maxComponentSize || (child == -1 && childLevel == bfsLevel.back() + 1)) {
 				next = bfsTree.back() + 1;
 				childLevel = bfsLevel.back();
 
@@ -813,12 +1672,12 @@ void KPDGUISimulation::getSCCPairsOnly(QProgressDialog * progressBar){
 
 				visited[child] = true;
 
-				if (judgeReverseTreeSCCPair(currentMatchRunPairs, bfsTree, nVertices, kpdguiRecord->incidenceMatrix)) {
+				if (judgeReverseTreeSCCPair(currentMatchRunPairs, bfsTree, nVertices, incidenceMatrix)) {
 					vector<int> newSCC;
 					for (vector<int>::iterator itTree = bfsTree.begin(); itTree != bfsTree.end(); itTree++) {
 						newSCC.push_back(currentMatchRunPairs[*itTree]);
 					}
-					currentMatchRunStructureNodeLists.push_back(newSCC);
+					currentMatchRunStructures.push_back(newSCC);
 				}
 
 				next = child + 1;
@@ -856,7 +1715,7 @@ void KPDGUISimulation::getSCCWithADs(QProgressDialog * progressBar){
 
 	int progressBarValue = progressBar->value();
 
-	int maxSize = kpdguiParameters->getMaxSize();
+	int maxComponentSize = kpdguiParameters->getMaxComponentSize();
 
 	vector<int> orderedNodes;
 
@@ -867,7 +1726,7 @@ void KPDGUISimulation::getSCCWithADs(QProgressDialog * progressBar){
 	int nVertices = kpdguiRecord->getNumberOfNodes();
 
 	for (int i = 1; i <= nVertices; i++){
-		if (kpdguiRecord->pairInfoVector[i].pairType == PAIR){
+		if (nodeInfoVector[i].nodeType == PAIR){
 			tempNodes.push_back(i);
 			numberOfPairs++;
 		}
@@ -930,11 +1789,11 @@ void KPDGUISimulation::getSCCWithADs(QProgressDialog * progressBar){
 		childCanBeAD = false;
 
 		while (!listOfBFSTrees.empty()){
-			child = getChildSCCWithADs(childIsAdjacentToLowerLevels, listOfBFSTrees, listOfBFSLevels, inducedBFSLevel, orderedNodes, visited, next, nextAD, childLevel, childLevelAD, childCanBeAD, numberOfADs, kpdguiRecord->incidenceMatrix);
+			child = getChildSCCWithADs(childIsAdjacentToLowerLevels, listOfBFSTrees, listOfBFSLevels, inducedBFSLevel, orderedNodes, visited, next, nextAD, childLevel, childLevelAD, childCanBeAD, numberOfADs, incidenceMatrix);
 
 			int mostRecentNodeLevel = listOfBFSLevels.back().back();
 
-			if (treeSize == maxSize || (child == orderedNodes.size() && mostRecentNodeLevel + 1 == childLevel)){
+			if (treeSize == maxComponentSize || (child == orderedNodes.size() && mostRecentNodeLevel + 1 == childLevel)){
 				if (listOfBFSTrees.back().back() < numberOfADs) {
 					if (listOfBFSTrees.size() > 1) {
 						//If previous super tree level is one higher than the super tree level before it
@@ -1051,7 +1910,7 @@ void KPDGUISimulation::getSCCWithADs(QProgressDialog * progressBar){
 							newSCC.push_back(orderedNodes[listOfBFSTrees[i][j]]);
 						}
 					}
-					currentMatchRunStructureNodeLists.push_back(newSCC);
+					currentMatchRunStructures.push_back(newSCC);
 				}
 			}
 		}
@@ -1283,603 +2142,6 @@ bool KPDGUISimulation::judgeReverseTreeSCCPair(std::vector<int> &pairs, std::vec
 	}
 
 	return true;
-}
-
-double KPDGUISimulation::calculateExpectedUtility(vector<int> structure){
-
-	//Parameters
-	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
-
-	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
-	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
-	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
-
-	bool chain = (kpdguiRecord->pairInfoVector[*(structure.begin())].pairType == KPDPairType::AD);
-
-	double expUtility = 0.0;
-	double cycleProb = 1.0;
-	double cycleUtil = 0.0;
-
-	//Chain
-	if (chain == true){
-		//Utility based on number of structure
-		if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-			cycleUtil = kpdguiRecord->viableTransplantMatrix[*(structure.begin())][*(structure.begin() + 1)];
-		}
-		//Utility based on 5 year survival
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-			cycleUtil = kpdguiRecord->survival5yearMatrix[*(structure.begin())][*(structure.begin() + 1)];
-		}
-		//Utility based on 10 year survival
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-			cycleUtil = kpdguiRecord->survival10yearMatrix[*(structure.begin())][*(structure.begin() + 1)];
-		}
-		//Utility based on other specified scoring matrix
-		else {
-			cycleUtil = kpdguiRecord->scoreMatrix[*(structure.begin())][*(structure.begin() + 1)];
-		}
-
-		if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(structure.begin() + 1)].recipPRA >= praAdvantageCutoff){
-			cycleUtil += praAdvantageValue;
-		}
-
-		cycleProb = kpdguiRecord->pairInfoVector[*(structure.begin())].uncertainty*kpdguiRecord->pairInfoVector[*(structure.begin() + 1)].uncertainty*kpdguiRecord->probabilityMatrix[*(structure.begin())][*(structure.begin() + 1)];
-
-		if (structure.size() == 2){
-			expUtility = cycleProb*cycleUtil;
-		}
-
-		//Longer Chains
-		else if (structure.size() > 2){
-			for (vector<int >::iterator itTransplants = structure.begin() + 1; itTransplants != structure.end() - 2; ++itTransplants){
-				//Probability of continuing to next transplant
-				double probContinue = kpdguiRecord->pairInfoVector[*(itTransplants + 1)].uncertainty*kpdguiRecord->probabilityMatrix[*itTransplants][*(itTransplants + 1)];
-				expUtility += (1 - probContinue)*cycleUtil*cycleProb;
-
-				cycleProb = cycleProb*probContinue;
-
-				//Add additional utility from new transplant
-				if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-					cycleUtil += kpdguiRecord->viableTransplantMatrix[*itTransplants][*(itTransplants + 1)];
-				}
-				else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-					cycleUtil += kpdguiRecord->survival5yearMatrix[*itTransplants][*(itTransplants + 1)];
-				}
-				else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-					cycleUtil += kpdguiRecord->survival10yearMatrix[*itTransplants][*(itTransplants + 1)];
-				}
-				else {
-					cycleUtil += kpdguiRecord->scoreMatrix[*itTransplants][*(itTransplants + 1)];
-				}
-
-				if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(itTransplants + 1)].recipPRA >= praAdvantageCutoff){
-					cycleUtil += praAdvantageValue;
-				}
-			}
-
-			//Final transplant
-			double probContinue = kpdguiRecord->pairInfoVector[*(structure.end() - 1)].uncertainty*kpdguiRecord->probabilityMatrix[*(structure.end() - 2)][*(structure.end() - 1)];
-			expUtility += (1 - probContinue)*cycleUtil*cycleProb;
-
-			cycleProb = cycleProb*probContinue;
-			if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-				cycleUtil += kpdguiRecord->viableTransplantMatrix[*(structure.end() - 2)][*(structure.end() - 1)];
-			}
-			else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-				cycleUtil += kpdguiRecord->survival5yearMatrix[*(structure.end() - 2)][*(structure.end() - 1)];
-			}
-			else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-				cycleUtil += kpdguiRecord->survival10yearMatrix[*(structure.end() - 2)][*(structure.end() - 1)];
-			}
-			else {
-				cycleUtil += kpdguiRecord->scoreMatrix[*(structure.end() - 2)][*(structure.end() - 1)];
-			}
-
-			if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(structure.end() - 1)].recipPRA >= praAdvantageCutoff){
-				cycleUtil += praAdvantageValue;
-			}
-
-			expUtility += cycleUtil*cycleProb;
-		}
-	}
-
-	//Cycles
-	else{
-		//Calculates cycle probability and cycle utility
-		cycleProb = kpdguiRecord->pairInfoVector[*(structure.begin())].uncertainty;
-
-		for (vector<int >::iterator itTransplants = structure.begin(); itTransplants != structure.end() - 1; ++itTransplants){
-			cycleProb = cycleProb*kpdguiRecord->pairInfoVector[*(itTransplants + 1)].uncertainty*kpdguiRecord->probabilityMatrix[*itTransplants][*(itTransplants + 1)];
-			if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-				cycleUtil += kpdguiRecord->viableTransplantMatrix[*itTransplants][*(itTransplants + 1)];
-			}
-			else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-				cycleUtil += kpdguiRecord->survival5yearMatrix[*itTransplants][*(itTransplants + 1)];
-			}
-			else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-				cycleUtil += kpdguiRecord->survival10yearMatrix[*itTransplants][*(itTransplants + 1)];
-			}
-			else {
-				cycleUtil += kpdguiRecord->scoreMatrix[*itTransplants][*(itTransplants + 1)];
-			}
-
-			if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(itTransplants + 1)].recipPRA >= praAdvantageCutoff){
-				cycleUtil += praAdvantageValue;
-			}
-		}
-
-		cycleProb = cycleProb*kpdguiRecord->probabilityMatrix[*(structure.end() - 1)][*(structure.begin())];
-
-		if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-			cycleUtil += kpdguiRecord->viableTransplantMatrix[*(structure.end() - 1)][*(structure.begin())];
-		}
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-			cycleUtil += kpdguiRecord->survival5yearMatrix[*(structure.end() - 1)][*(structure.begin())];
-		}
-		else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-			cycleUtil += kpdguiRecord->survival10yearMatrix[*(structure.end() - 1)][*(structure.begin())];
-		}
-		else {
-			cycleUtil += kpdguiRecord->scoreMatrix[*(structure.end() - 1)][*(structure.begin())];
-		}
-
-		if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*(structure.begin())].recipPRA >= praAdvantageCutoff){
-			cycleUtil += praAdvantageValue;
-		}
-
-		expUtility = cycleProb*cycleUtil;
-	}
-
-	return expUtility;
-}
-
-double KPDGUISimulation::calculateExpectedUtilityWithFallbacks(vector<int> structure){
-
-	//Parameters
-	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
-
-	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
-	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
-	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
-
-	int nV = (int)structure.size();
-	double utility = 0;
-
-	//Initialize submatrices (5 year, 10 year survivals stored in subutility matrix)
-	vector<vector<bool> > subIncidenceMatrix(nV + 1, vector<bool>(nV + 1, false));
-	vector<vector<double> > subUtilityMatrix(nV + 1, vector<double>(nV + 1, 0));
-	vector<vector<double> > subProbabilityMatrix(nV + 1, vector<double>(nV + 1, 0));
-	vector<KPDPairType> subPairTypeVector(nV + 1, PAIR);
-	vector<bool> subABDonorVector(nV + 1, true);
-	vector<double> subProbVertexVector(nV + 1, 0.0);
-
-	int i = 1, j = 1;
-
-	//Form submatrices
-	for (vector<int>::iterator it = structure.begin(); it != structure.end(); ++it, i++){
-		for (vector<int>::iterator it2 = structure.begin(); it2 != structure.end(); ++it2, j++){
-			if (i != j){
-				subIncidenceMatrix[i][j] = kpdguiRecord->incidenceMatrix[*it][*it2];
-				subProbabilityMatrix[i][j] = kpdguiRecord->probabilityMatrix[*it][*it2];
-				if (utilityScheme == KPDUtilityScheme::TRANSPLANTS){
-					subUtilityMatrix[i][j] = kpdguiRecord->viableTransplantMatrix[*it][*it2];
-				}
-				else if (utilityScheme == KPDUtilityScheme::SURVIVAL5YEAR){
-					subUtilityMatrix[i][j] = kpdguiRecord->survival5yearMatrix[*it][*it2];
-				}
-				else if (utilityScheme == KPDUtilityScheme::SURVIVAL10YEAR){
-					subUtilityMatrix[i][j] = kpdguiRecord->survival10yearMatrix[*it][*it2];
-				}
-				else {
-					subUtilityMatrix[i][j] = kpdguiRecord->scoreMatrix[*it][*it2];
-				}
-
-				if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*it2].pairType == PAIR && kpdguiRecord->pairInfoVector[*it2].recipPRA >= praAdvantageCutoff){
-					subUtilityMatrix[i][j] += praAdvantageValue;
-				}
-			}
-		}
-		subPairTypeVector[i] = kpdguiRecord->pairInfoVector[*it].pairType;
-		subABDonorVector[i] = (kpdguiRecord->pairInfoVector[*it].donorBT == BT_AB);
-		subProbVertexVector[i] = kpdguiRecord->pairInfoVector[*it].uncertainty;
-
-		j = 1;
-	}
-
-	int possibleConfigs = 0;
-
-	//Iterates through each possible subset of vertices (2^|V| subsets)
-	for (int v = 3; v< pow((double)2, nV); v++){
-		vector<int> vertex_flags(nV + 1, 0);
-		int p = v;
-		int q = 1;
-		int numberOfVertices = 0;
-		while (p != 0){
-			int r = p % 2;
-			if (r == 1) {
-				numberOfVertices++;
-				vertex_flags[q] = numberOfVertices;
-			}
-			p = p / 2;
-			q++;
-		}
-
-		//Must have at least 2 pairs/ADs
-		if (numberOfVertices > 1){
-			double probVertexSubset = 1;
-			for (int vIndex = 1; vIndex < nV + 1; vIndex++){
-				//If vertex is included in this subset, include probability
-				if (vertex_flags[vIndex] != 0){
-					if (subPairTypeVector[vIndex] == PAIR){
-						probVertexSubset = probVertexSubset*subProbVertexVector[vIndex];
-					}
-				}
-				//If vertex is not included in this subset, include 1-probability
-				else{
-					if (subPairTypeVector[vIndex] == PAIR){
-						probVertexSubset = probVertexSubset*(1 - subProbVertexVector[vIndex]);
-					}
-					else {
-						probVertexSubset = 0;
-					}
-				}
-			}
-
-			//Form sub-sub matrices
-			vector<vector<bool> > subsubIncidenceMatrix(numberOfVertices + 1, vector<bool>(numberOfVertices + 1, false));
-			vector<vector<double> > subsubUtilityMatrix(numberOfVertices + 1, vector<double>(numberOfVertices + 1, 0));
-			vector<vector<double> > subsubProbabilityMatrix(numberOfVertices + 1, vector<double>(numberOfVertices + 1, 0));
-			vector<KPDPairType> subsubPairTypeVector(numberOfVertices + 1, PAIR);
-			vector<bool> subsubABDonorVector(numberOfVertices + 1, false);
-
-			int nE = 0;
-			vector<vector<int> > edgeMatrix; edgeMatrix.push_back(vector<int>(0));
-			vector<double> edgeProbVector; edgeProbVector.push_back(0);
-
-			for (int k = 1; k <= numberOfVertices; k++){
-				int i = 0;
-				while (vertex_flags[i] != k){
-					i++;
-				}
-				subsubPairTypeVector[k] = subPairTypeVector[i];
-				subsubABDonorVector[k] = subABDonorVector[i];
-
-				for (int l = 1; l <= numberOfVertices; l++){
-					if (k != l){
-						int j = 0;
-						while (vertex_flags[j] != l){
-							j++;
-						}
-						subsubIncidenceMatrix[k][l] = subIncidenceMatrix[i][j];
-						subsubUtilityMatrix[k][l] = subUtilityMatrix[i][j];
-						subsubProbabilityMatrix[k][l] = subProbabilityMatrix[i][j];
-						if (subsubIncidenceMatrix[k][l] == true){
-							vector<int> temp_vec(3, 0);
-							temp_vec[1] = k; temp_vec[2] = l;
-							edgeMatrix.push_back(temp_vec);
-							edgeProbVector.push_back(1 - subsubProbabilityMatrix[k][l]);
-							nE++;
-						}
-					}
-				}
-			}
-
-			// Iterate through every possible combination of edges
-			double partialUtility = 0;
-			for (int e = 3; e< pow((double)2, nE); e++){
-				vector<vector<bool> > incidenceMatrix_temp(numberOfVertices + 1, vector<bool>(numberOfVertices + 1, false));
-				vector<double> edgeProbVector_temp(edgeProbVector);
-				int w = e;
-				int x = 1;
-				int numberOfEdges = 0;
-				while (w != 0){
-					int y = w % 2;
-					if (y == 1) {
-						incidenceMatrix_temp[edgeMatrix[x][1]][edgeMatrix[x][2]] = true;
-						edgeProbVector_temp[x] = 1 - edgeProbVector[x];
-						numberOfEdges++;
-					}
-					w = w / 2;
-					x++;
-				}
-				//Calculate probability of subset
-				if (numberOfEdges > 1){
-					double probability = 1;
-					for (int j = 1; j < (int)edgeProbVector_temp.size(); j++){
-						probability = probability*edgeProbVector_temp[j];
-					}
-
-					partialUtility = partialUtility + probability*calculatePartialUtility(numberOfVertices, incidenceMatrix_temp, subsubUtilityMatrix, subsubPairTypeVector, subsubABDonorVector);
-				}
-			}
-			utility = utility + partialUtility*probVertexSubset;
-		}
-	}
-
-	return utility;
-}
-
-double KPDGUISimulation::estimateExpectedUtilityWithFallbacks(std::vector<int> &structure){
-
-	//Parameters
-	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
-	int numberOfEUSimulations = kpdguiParameters->getNumberOfEUSimulations();
-
-	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
-	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
-	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
-
-	int nV = (int)structure.size();
-
-	//Initialize submatrices (5 year, 10 year survivals stored in subutility matrix)
-	std::vector<std::vector<bool> > subIncidenceMatrix(nV + 1, std::vector<bool>(nV + 1, false));
-	std::vector<std::vector<double> > subUtilityMatrix(nV + 1, std::vector<double>(nV + 1, 0));
-	std::vector<std::vector<double> > subProbabilityMatrix(nV + 1, std::vector<double>(nV + 1, 0));
-	std::vector<KPDPairType> subPairTypeVector(nV + 1, PAIR);
-	std::vector<bool> subABDonorVector(nV + 1, true);
-	std::vector<double> subProbVertexVector(nV + 1, 0.0);
-	//std::vector<int> subRecipIDVector(nV + 1, 0);
-
-	int i = 1, j = 1;
-
-	//Form submatrices
-	for (std::vector<int>::iterator itDonors = structure.begin(); itDonors != structure.end(); ++itDonors, i++){
-		for (std::vector<int>::iterator itCandidates = structure.begin(); itCandidates != structure.end(); ++itCandidates, j++){
-			if (i != j){
-				subIncidenceMatrix[i][j] = kpdguiRecord->incidenceMatrix[*itDonors][*itCandidates];
-				subProbabilityMatrix[i][j] = kpdguiRecord->probabilityMatrix[*itDonors][*itCandidates];
-				if (utilityScheme == TRANSPLANTS){
-					subUtilityMatrix[i][j] = kpdguiRecord->viableTransplantMatrix[*itDonors][*itCandidates];
-				}
-				else if (utilityScheme == SURVIVAL5YEAR){
-					subUtilityMatrix[i][j] = kpdguiRecord->survival5yearMatrix[*itDonors][*itCandidates];
-				}
-				else if (utilityScheme == SURVIVAL10YEAR){
-					subUtilityMatrix[i][j] = kpdguiRecord->survival10yearMatrix[*itDonors][*itCandidates];
-				}
-				else {
-					subUtilityMatrix[i][j] = kpdguiRecord->scoreMatrix[*itDonors][*itCandidates];
-				}
-
-				if (addAdvantageToHighPRACandidates && kpdguiRecord->pairInfoVector[*itCandidates].pairType == PAIR && kpdguiRecord->pairInfoVector[*itCandidates].recipPRA >= praAdvantageCutoff){
-					subUtilityMatrix[i][j] += praAdvantageValue;
-				}
-
-				qDebug() << *itDonors << " " << *itCandidates << " " << subUtilityMatrix[i][j];
-			}
-		}
-		subPairTypeVector[i] = kpdguiRecord->pairInfoVector[*itDonors].pairType;
-		subABDonorVector[i] = (kpdguiRecord->pairInfoVector[*itDonors].donorBT == BT_AB);
-		//subRecipIDVector[i] = kpdguiRecord->pairInfoVector[*itDonors].recipID;
-		subProbVertexVector[i] = kpdguiRecord->pairInfoVector[*itDonors].uncertainty;
-
-		j = 1;
-	}
-
-	double utility = 0;
-	double probability = 0;
-
-	for (int sims = 1; sims <= numberOfEUSimulations; sims++){
-		double prob = 1;
-
-		vector<int> availableNodes;
-		availableNodes.push_back(0);
-		for (int i = 1; i <= nV; i++){
-			if (rngSimulation.runif() <= subProbVertexVector[i]){
-				availableNodes.push_back(i);
-				prob = prob * subProbVertexVector[i];
-			}
-			else {
-				prob = prob * (1 - subProbVertexVector[i]);
-			}
-		}
-		int subsetSize = (int)availableNodes.size() - 1;
-
-		if (subsetSize > 1){
-
-			std::vector<std::vector<bool> > subsubIncidenceMatrix(subsetSize + 1, std::vector<bool>(subsetSize + 1, false));
-			std::vector<std::vector<double> > subsubUtilityMatrix(subsetSize + 1, std::vector<double>(subsetSize + 1, 0));
-			std::vector<KPDPairType> subsubPairTypeVector(subsetSize + 1, PAIR);
-			std::vector<bool> subsubABDonorVector(subsetSize + 1, true);
-			//std::vector<int> subsubRecipIDVector(subsetSize + 1, 0);
-
-			//Form subsubmatrices
-			for (int k = 1; k <= subsetSize; k++){
-				for (int l = 1; l <= subsetSize; l++){
-					if (k != l){
-						if (subIncidenceMatrix[availableNodes[k]][availableNodes[l]] == true){
-							if (rngSimulation.runif() <= subProbabilityMatrix[availableNodes[k]][availableNodes[l]]){
-								subsubIncidenceMatrix[k][l] = true;
-								subsubUtilityMatrix[k][l] = subUtilityMatrix[availableNodes[k]][availableNodes[l]];
-								prob = prob * subProbabilityMatrix[availableNodes[k]][availableNodes[l]];
-							}
-							else {
-								prob = prob * (1 - subProbabilityMatrix[availableNodes[k]][availableNodes[l]]);
-							}
-						}
-					}
-				}
-				subsubPairTypeVector[k] = subPairTypeVector[availableNodes[k]];
-				subsubABDonorVector[k] = subABDonorVector[availableNodes[k]];
-				//subsubRecipIDVector[k] = subRecipIDVector[availableNodes[k]];
-			}
-
-			//utility += prob * calculatePartialUtility(subsetSize, subsubIncidenceMatrix, subsubUtilityMatrix, subsubPairTypeVector, subsubABDonorVector);
-			utility += calculatePartialUtility(subsetSize, subsubIncidenceMatrix, subsubUtilityMatrix, subsubPairTypeVector, subsubABDonorVector);
-		}
-
-		probability += prob;
-	}
-
-	return utility / numberOfEUSimulations;
-}
-
-double KPDGUISimulation::calculatePartialUtility(int nV, vector<vector<bool> > &incidenceMatrix_temp, vector<vector<double> > &subsubUtilityMatrix, vector<KPDPairType> & subsubPairTypeVector, vector<bool> & subsubABDonorVector){
-
-	//Parameters
-	bool allowABBridgeDonors = kpdguiParameters->getAllowABBridgeDonors();
-
-	int maxSize = kpdguiParameters->getMaxSize();
-	int maximum = std::max(maxSize + 1, 3);
-
-	vector<vector<int> > possibleCyclesOrChains;
-	vector<double> utilityOfPossibleCyclesOrChains;
-
-	double utility = 0;
-	double utilEstimate = 0;
-
-	int start = 1;
-	vector<int> visitedVec(nV + 1, 0);
-	vector<int> stack_vec;
-
-	while (start <= nV){
-		visitedVec[start] = 1;
-
-		stack_vec.push_back(start);
-		int v = getChild(start, stack_vec.back(), visitedVec, incidenceMatrix_temp);
-		while (!stack_vec.empty()){
-			if (v == -1){
-				int top = stack_vec.back();
-				stack_vec.pop_back();
-				if (top == start) {
-					visitedVec[top] = 0;
-					break;
-				}
-				visitedVec[top] = 0;
-				v = getChild(top, stack_vec.back(), visitedVec, incidenceMatrix_temp);
-			}
-			else{
-				visitedVec[v] = 1;
-				stack_vec.push_back(v);
-
-				if (incidenceMatrix_temp[v][start] == true){
-					int multipleADCheck = 0;
-					int index = 0;
-
-					double tempUtil = 0;
-					vector<int> potentialCycleOrChain;
-					for (unsigned i = 0; i < stack_vec.size() - 1; i++){
-						potentialCycleOrChain.push_back(stack_vec[i]);
-						tempUtil += subsubUtilityMatrix[stack_vec[i]][stack_vec[i + 1]];
-					}
-					potentialCycleOrChain.push_back(stack_vec.back());
-					tempUtil += subsubUtilityMatrix[stack_vec.back()][stack_vec.front()];
-
-					for (unsigned i = 0; i < potentialCycleOrChain.size(); i++){
-						if (subsubPairTypeVector[potentialCycleOrChain[i]] != PAIR){
-							multipleADCheck++;
-							index = i;
-						}
-					}
-
-					//Cannot have more than one AD
-					if (multipleADCheck <= 1){
-						bool ignore = false;
-
-						//Chain
-						if (multipleADCheck == 1){
-							//Check if chain is of appropriate size
-							if ((int)potentialCycleOrChain.size() <= maxSize + 1){
-								//Queue up AD to front of chain
-								while (index > 0){
-									int tempVec = *(potentialCycleOrChain.begin());
-									potentialCycleOrChain.erase(potentialCycleOrChain.begin());
-									potentialCycleOrChain.push_back(tempVec);
-									index--;
-								}
-
-								//Check for AB bridge donor
-								if (!allowABBridgeDonors){
-									if (subsubABDonorVector[potentialCycleOrChain.back()]){
-										//If AB bridge donor, contribute minimal utility
-										ignore = true;
-									}
-								}
-							}
-							//If not of appropriate size, contribute minimal utility
-							else {
-								ignore = true;
-							}
-						}
-						// Cycle 
-						else {
-							//If not of appropriate size, contribute minimal utility
-							if ((int)potentialCycleOrChain.size() > 3){
-								ignore = true;
-							}
-						}
-
-						//Add miniscule value to eligible transplants that are likely to be ignored
-						if (ignore){
-							tempUtil = 0.00001;
-						}
-
-						possibleCyclesOrChains.push_back(vector<int>(potentialCycleOrChain));
-						utilityOfPossibleCyclesOrChains.push_back(tempUtil);
-						if (tempUtil > utilEstimate){
-							utilEstimate = tempUtil;
-						}
-					}
-				}
-
-				if (stack_vec.size() >= maximum)
-					v = -1;
-				else
-					v = getChild(start, v, visitedVec, incidenceMatrix_temp);
-			}
-		}
-		start++;
-	}
-
-	//if (maxChainLength > 4){
-	//utility = utilEstimate;
-	//}
-
-	if (possibleCyclesOrChains.size() == 1){
-		//else if (possibleCyclesOrChains.size() == 1){
-		utility = utilityOfPossibleCyclesOrChains.at(0);
-	}
-
-	else if (possibleCyclesOrChains.size() > 1){
-
-		int nPossibleCycles = (int)possibleCyclesOrChains.size();
-
-		for (int c = 1; c < pow((double)2, nPossibleCycles); c++){
-			double tempU = 0;
-
-			vector<int> cycleVec_flags(nPossibleCycles, 0);
-			int mc = c;
-			int kc = 0;
-			int countc = 0;
-			while (mc != 0){
-				int rc = mc % 2;
-				cycleVec_flags[kc] = rc;
-				mc = mc / 2;
-				kc++;
-			}
-
-			vector<int> checkUniqueness(nV + 1, 0);
-			bool validSolution = true;
-			double uOfCombination = 0;
-			for (int q = 0; q < nPossibleCycles; q++){
-				if (cycleVec_flags[q] == 1){
-					tempU += utilityOfPossibleCyclesOrChains[q];
-					for (vector<int>::iterator it = possibleCyclesOrChains.at(q).begin(); it != possibleCyclesOrChains.at(q).end(); ++it){
-						checkUniqueness[*it]++;
-						if (checkUniqueness[*it] > 1){
-							validSolution = false;
-						}
-					}
-				}
-			}
-
-			if (validSolution == true && tempU > utility){
-				utility = tempU;
-			}
-		}
-	}
-
-	return utility;
 }
 
 std::string KPDGUISimulation::intToString(int number){

@@ -4,14 +4,15 @@
 #include <QtGui>
 #include <QtWidgets>
 
+#include "KPDGUIDonorInfo.h"
+#include "KPDGUICandidateInfo.h"
+
 #include "KPDGUIDisplaySettings.h"
 #include "KPDGUIPairModelItem.h"
 
 #include "EnumsFunctions.h"
-#include "Donor.h"
-#include "Candidate.h"
 
-class KPDGUIArrow;
+class KPDGUIMatch;
 class DialogDonor;
 class DialogCandidate;
 
@@ -19,39 +20,114 @@ class KPDGUINode : public QObject, public QGraphicsItemGroup
 {
 	Q_OBJECT
 
+private:
+	
+	//Node Properties
+	int nodeID;
+	KPDNodeType myType;
+
+	QVector<KPDGUIDonorInfo *> myDonors;
+	KPDGUICandidateInfo * myCandidate;
+
+	QVector<bool> myDonorStatuses;
+	bool myCandidateStatus;
+	
+	QVector<QString> myPrograms;
+	
+	//Visual Properties
+	QVector<QGraphicsEllipseItem *> myDonorItems;
+	QGraphicsEllipseItem * myCandidateItem;
+
+	QString myText;
+	QVector<QColor> myDonorBackgroundColors;
+	QColor myCandidateBackgroundColor;
+
+	//Matches
+	QSet<KPDGUIMatch *> myCompatibleDonorMatches;
+	QVector<QSet<KPDGUIMatch *>  > myCompatibleCandidateMatches;
+
+	//Popularity
+	int popularityInStructures;
+	int popularityInSolutions;	
+
+	//Helper Functions
+	// QRectF outlineRect() const;
+
+
 public:
+	
 	KPDGUINode();
-	KPDGUINode(Donor d, bool hold = false);
-	KPDGUINode(Donor d, Candidate c, bool hold = false);
+	KPDGUINode(KPDGUIDonorInfo* donor);
+	KPDGUINode(QVector<KPDGUIDonorInfo*> donors, KPDGUICandidateInfo * candidate);
 	~KPDGUINode();
 
-	//Visual Node Properties
-    void setText(const QString &text);
-    QString text() const;
+	////Node Properties
+	
+	//Getters
+	int getNodeID() const;
+	KPDNodeType getNodeType() const;
+
+	KPDGUIDonorInfo* getDonor(int i) const;
+	QVector<KPDGUIDonorInfo*> getDonors() const;
+	int getNumberOfDonors() const;
+	
+	KPDGUICandidateInfo * getCandidate() const;
+	
+	bool getDonorStatus(int i) const;
+	bool getCandidateStatus() const;
+	bool getNodeStatus();
+
+	QVector<QString> getPrograms() const;
+	int getNumberOfPrograms() const;
+
+	//Setters
+	void setNodeID(int id);
+	void setNodeType(KPDNodeType type);
+
+	void setDonors(QVector<KPDGUIDonorInfo*> donors);
+	void addDonor(KPDGUIDonorInfo* d);
+	void removeDonor(int i);
+	
+	void setCandidate(KPDGUICandidateInfo * c);
+
+	void setDonorStatus(int i, bool status);
+	void setCandidateStatus(bool status);
+	
+	void setPrograms(QVector<QString> programs);
+	void addProgram(QString program);
+	void removeProgram(QString program);
+	
+	//// Visual Properties
+	QGraphicsEllipseItem * getDonorItem(int i);
+	QGraphicsEllipseItem * getCandidateItem();
+
+	QPointF getDonorCenter(int i);
+	QPointF getCandidateCenter();
+
+	QString text() const;
+	void setText(const QString &text);
     void setBackgroundColors();
-    QColor donorBackgroundColor() const;
-	QColor recipBackgroundColor() const;
+    QColor donorBackgroundColor(int i) const;
+	QColor candidateBackgroundColor() const;
 	//QRectF boundingRect() const;
     //QPainterPath shape() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
 	//QVariant data(int column) const;
 
-	//Arrow Properties
-	void addInArrow(KPDGUIArrow *link);
-	void removeInArrow(KPDGUIArrow *link);
-	void addOutArrow(KPDGUIArrow *link);
-	void removeOutArrow(KPDGUIArrow *link);
-	KPDGUIArrow * findOutArrow(KPDGUINode * toNode);
+	//// Matches
+	void addDonorMatch(KPDGUIMatch * match);
+	void removeDonorMatch(KPDGUIMatch * match);
+	void addCandidateMatch(KPDGUIMatch * match, int i);
+	void removeCandidateMatch(KPDGUIMatch * match, int i);	
+	KPDGUIMatch * findDonorMatch(KPDGUINode * fromNode);
+	KPDGUIMatch * findCandidateMatch(KPDGUINode * toNode, int i);
 	    
-	//Compatibilities
 	bool hasNoCompatibilities();
 	int getNumberOfCompatibilities();
 	int getNumberOfCompatibleDonors();
-	int getNumberOfCompatibleRecipients();
-	int getNumberOfAssociatedDonors();
+	int getNumberOfCompatibleCandidates();
 
-	//Popularity
+	//// Popularity
 	int getPopularityInStructures();
 	int getPopularityInSolutions();	
 	void increasePopularityInStructures();
@@ -61,43 +137,11 @@ public:
 	void resetPopularityInStructures();
 	void resetPopularityInSolutions();
 
-	//Hold Status
-	bool getHoldStatus() const;
-	void setHoldStatus(bool hold);
-
-	//Node Properties	
-
-	int getInternalID() const;
-	Donor getDonor() const;
-	Candidate getCandidate() const;
-	KPDPairType getType() const;
-
-	QString getDonorName() const;
-	int	getDonorAge() const;
-	KPDBloodType getDonorBT() const;
-	QString	getCandidateName() const;
-	int	getCandidateAge() const;
-	KPDBloodType getCandidateBT() const;
-	int	getCandidatePRA() const;		
-
-	void setInternalID(int id);
-	void setDonor(Donor d);
-	void setCandidate(Candidate c);
-	void setType(KPDPairType type);
-	
-	void editNode();
-
-	QGraphicsEllipseItem * getDonorItem();
-	QGraphicsEllipseItem * getRecipItem();
-
-	QPointF getDonorCenter();
-	QPointF getRecipCenter();
-
 	//Text
 	QString getNameString();
 	QString getCompatibleDonorString();
-	QString getCompatibleRecipientsString();
-	QString getConsoleString();
+	QString getCompatibleCandidatesString();
+	QString getDashboardString();	
 
 signals:
 	void nodeWasClicked(int i, bool selected);
@@ -114,42 +158,15 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent * event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
-private:
+
 	void setAdditionalProperties();
-
-	//Helper Functions
-   // QRectF outlineRect() const;
-	bool checkWithinBounds(bool pairsWithMinPRA, int minPRA, bool pairsWithMaxPRA, int maxPRA);
-
-	//Node Visual Properties
-    QString myText;
-    QColor myDonorBackgroundColor;
-	QColor myRecipBackgroundColor;
-	
-	//Arrows
-	QSet<KPDGUIArrow *> myOutArrows;
-	QSet<KPDGUIArrow *> myInArrows;
-
-	//Properties
-	int popularityInStructures;
-	int popularityInSolutions;
-
-	//Hold Status
-	bool holdStatus;
-
-	//Node Properties
-	int internalID;	
-	Donor donor;
-	Candidate candidate;
-	KPDPairType pairType;
-
-	QGraphicsEllipseItem * myRecip;
-	QGraphicsEllipseItem * myDonor;
-	
+	bool checkWithinBounds(int minPRA, int maxPRA);
 
 public slots:
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void selectIfVisible();
+
+	void editNode();
 
 };
 
