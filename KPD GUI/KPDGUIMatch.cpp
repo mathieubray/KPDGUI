@@ -11,7 +11,7 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate)
 	//connect(myEndItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	
 	//Arrow Defaults
-	setArrowProperties(Qt::black, 10, 0.25, -1);
+	setArrowProperties(Qt::black, 1, 0.25, 40);
 	
 	//Reset Popularity
 	myPopularityInStructures = 0;
@@ -43,17 +43,10 @@ QPainterPath KPDGUIMatch::shape() const {
 
 void KPDGUIMatch::updatePosition() {
 	
-
-//qDebug() << myDonor->getCenter() << " " << myCandidate->getCenter();
-
-	QLineF newline(mapFromItem(myDonor, 0, 0), mapFromItem(myCandidate, 0, 0));
-
-   //QLineF line(myDonor->getCenter(), myCandidate->getCenter());
-	setLine(newline);
-
-	//qDebug() << line().p1() << " " << line().p2();
-
-	qDebug() << "UPDATE POSITION: " << isVisible() << " " << line().p1() << " " << line().p2();
+	qDebug() << "Update Position: " << myDonor->getCenter() << " " << myCandidate->getCenter();
+	//QLineF line(mapFromItem(myStartItem->getDonorItem(), 0, 0), mapFromItem(myEndItem->getRecipItem(), 0, 0));
+	QLineF line(myDonor->getCenter(), myCandidate->getCenter());
+	setLine(line);
 }
 
 void KPDGUIMatch::highlightMatch(int level){
@@ -126,10 +119,8 @@ void KPDGUIMatch::resetPopularity(bool solution){
 
 void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-	qDebug() << "ARROW PAINTED";
-
+	
 	if (myDonor->collidesWithItem(myCandidate)) {
-		qDebug() << "COLLIDES!!";
 		return;
 	}
 
@@ -140,15 +131,17 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	painter->setPen(myPen);
 	painter->setBrush(myColor);
 	
-	//QPointF startPoint = myDonor->getCenter();
-	//QPointF endPoint = myCandidate->getCenter();	
+	QPointF startPoint = myDonor->getCenter();
+	QPointF endPoint = myCandidate->getCenter();	
 	
-	//QLineF centerLine(startPoint, endPoint);
-	QLineF centerLine(myDonor->pos(), myCandidate->pos());
-	//QPolygonF endPolygon = myCandidate->sceneBoundingRect();
-	QPolygonF endPolygon = myCandidate->boundingRect();
-	//QPointF p1 = endPolygon.first();
-	QPointF p1 = endPolygon.first() + myCandidate->pos();
+	qDebug() << "Painting: " << startPoint << " " << endPoint;
+
+	/*QLineF centerLine(startPoint, endPoint);
+	//QLineF centerLine(myDonor->pos(), myCandidate->pos());
+	QPolygonF endPolygon = myCandidate->sceneBoundingRect();
+	//QPolygonF endPolygon = myCandidate->boundingRect();
+	QPointF p1 = endPolygon.first();
+	//QPointF p1 = endPolygon.first() + myCandidate->pos();
 	QPointF p2;
 	QPointF intersectPoint;
 	QLineF polyLine;
@@ -159,32 +152,34 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 		if (intersectType == QLineF::BoundedIntersection)
 			break;
 		p1 = p2;
-	}
+	}*/
 
 	//setLine(QLineF(intersectPoint, startPoint));
-	setLine(QLineF(intersectPoint, myDonor->pos()));
+	//setLine(QLineF(intersectPoint, myDonor->pos()));
 
-	double angle = ::acos(line().dx() / line().length());
-	if (line().dy() >= 0)
-		angle = (PI * 2) - angle;
+	setLine(QLineF(endPoint, startPoint));
 
-	QPointF arrowP1 = line().p1() + QPointF(sin(angle + PI / 3) * arrowSize, cos(angle + PI / 3) * arrowSize);
-	QPointF arrowP2 = line().p1() + QPointF(sin(angle + PI - PI / 3) * arrowSize, cos(angle + PI - PI / 3) * arrowSize);
+	//double angle = ::acos(line().dx() / line().length());
+	//if (line().dy() >= 0)
+		//angle = (PI * 2) - angle;
 
-	arrowHead.clear();
-	arrowHead << line().p1() << arrowP1 << arrowP2;
+	//QPointF arrowP1 = line().p1() + QPointF(sin(angle + PI / 3) * arrowSize, cos(angle + PI / 3) * arrowSize);
+	//QPointF arrowP2 = line().p1() + QPointF(sin(angle + PI - PI / 3) * arrowSize, cos(angle + PI - PI / 3) * arrowSize);
+
+	//arrowHead.clear();
+	//arrowHead << line().p1() << arrowP1 << arrowP2;
 
 	painter->drawLine(line());
-	painter->drawPolygon(arrowHead);
+	//painter->drawPolygon(arrowHead);
 	
-	if (isSelected()) {
-		painter->setPen(QPen(myColor, myWidth, Qt::DashLine));
-		QLineF myLine = line();
-		myLine.translate(0, 4.0);
-		painter->drawLine(myLine);
-		myLine.translate(0, -8.0);
-		painter->drawLine(myLine);
-	}
+	//if (isSelected()) {
+		//painter->setPen(QPen(myColor, myWidth, Qt::DashLine));
+		//QLineF myLine = line();
+		//myLine.translate(0, 4.0);
+		//painter->drawLine(myLine);
+		//myLine.translate(0, -8.0);
+		//painter->drawLine(myLine);
+	//}
 
 }
 
@@ -220,18 +215,12 @@ bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 void KPDGUIMatch::setArrowProperties(QColor color, int width, qreal opacity, int zValue) {
 	setArrowColor(color);
 	setArrowWidth(width);
-	setArrowZValue(opacity);
-	setArrowOpacity(zValue);
+	setArrowOpacity(opacity);
+	setArrowZValue(zValue);
 
 	setPen(QPen(myColor, myWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-	setZValue(myZValue);
 	setOpacity(myOpacity);
-
-	qDebug() << "Arrow properties set" << isVisible();
-
-	//update();
-	
-	qDebug() << line().p1() << " " << line().p2();
+	setZValue(myZValue);
 
 }
 
@@ -268,10 +257,7 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 			}
 		}
 	}
-
-	qDebug() << "UPDATE VISIBILITY: " << isVisible();
-
-	
+		
 }
 
 void KPDGUIMatch::endDisplayAsPartOfSolution(){

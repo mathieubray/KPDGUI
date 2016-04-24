@@ -474,8 +474,8 @@ void KPDGUIDonor::setComment(QString comment){
 
 QPointF KPDGUIDonor::getCenter() {
 
-	//qreal x = myDonor->mapFromScene(myDonor->boundingRect().x());
-	//qreal y = myDonor->mapFromScene(myDonor->boundingRect().y());
+	//qreal x = boundingRect().x();
+	//qreal y = boundingRect().y();
 	QPointF point = mapToScene(boundingRect().topLeft());
 	qreal x = point.x();
 	qreal y = point.y();

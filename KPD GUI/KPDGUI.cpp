@@ -16,8 +16,6 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
 	
-	changeMatchViewMode_All();
-
 }
 
 KPDGUI::~KPDGUI()
@@ -1321,18 +1319,26 @@ void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
 	candidate->addMatchingDonor(match);
 	donor->addMatchingCandidate(match);
 
-	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+	//connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	//KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(link);
 	//matchListWidget->addTopLevelItem(wrapper);
 	
+
+
 	kpdguiRecord->insertMatch(match);
 	//link->setVisible(false);
 	
 	//qDebug() << "Add Match";
 	
+	//KPDGUINewMatch * link = new KPDGUINewMatch(donor, candidate);
+	//link->setArrowProperties(Qt::red, 5, 0.7, 1);
+	//link->setArrowProperties(Qt::black, 10, 0.25, 1);
+	//kpdguiScene->addItem(link);
+
+
 	kpdguiScene->addItem(match);
-	match->setVisible(true);
-	
+
+
 	//qDebug() << "Is Match Visible? " << match->isVisible();
 
 }

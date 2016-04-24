@@ -226,6 +226,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINode.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="KPDGUINewMatch.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINewMatch.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.qrc">
@@ -307,6 +313,9 @@
       <Filter>Nodes, Matches and Structures</Filter>
     </CustomBuild>
     <CustomBuild Include="KPDGUICandidate.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUINewMatch.h">
       <Filter>Nodes, Matches and Structures</Filter>
     </CustomBuild>
   </ItemGroup>

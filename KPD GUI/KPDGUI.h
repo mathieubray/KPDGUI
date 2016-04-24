@@ -29,6 +29,8 @@
 
 #include "EnumsFunctions.h"
 
+#include "KPDGUINewMatch.h"
+
 
 namespace Ui {
 	class KPDGUI;
