@@ -14,12 +14,7 @@ KPDGUISimParameters::KPDGUISimParameters(){
 	maxChainLength = 3;
 	maxComponentSize = 4;
 	
-	//Numerical Parameters
-	defaultDonorFailureRate = 0.1;
-	defaultCandidateFailureRate = 0.1;
-	defaultADFailureRate = 0.0;
-	exogenousFailureRate = 0.0;	
-		
+	//Numerical Parameters		
 	addAdvantageToHighPRACandidates = false;
 	praAdvantageCutoff = 100;
 	praAdvantageValue = 0.0;
@@ -55,11 +50,6 @@ void KPDGUISimParameters::changeParameters(DialogSimParameters * d){
 	maxChainLength = d->chainLengthSpinBox->value();
 	maxComponentSize = d->componentSizeSpinBox->value();
 
-	defaultDonorFailureRate = d->donorFailureSpinBox->value();
-	defaultCandidateFailureRate = d->candidateFailureSpinBox->value();
-	defaultADFailureRate = d->adFailureSpinBox->value();
-	exogenousFailureRate = d->exogenousFailureSpinBox->value();
-
 	addAdvantageToHighPRACandidates = d->praCheckBox->isChecked();
 	praAdvantageCutoff = d->praCutoffSpinBox->value();
 	praAdvantageValue = d->praAdvantageSpinBox->value();
@@ -85,12 +75,7 @@ void KPDGUISimParameters::copyParameters(KPDGUISimParameters * d){
 	maxCycleSize = d->getMaxCycleSize();
 	maxChainLength = d->getMaxChainLength();
 	maxComponentSize = d->getMaxComponentSize();
-
-	defaultDonorFailureRate = d->getDefaultDonorFailureRate();
-	defaultCandidateFailureRate = d->getDefaultCandidateFailureRate();
-	defaultADFailureRate = d->getDefaultADFailureRate();
-	exogenousFailureRate = d->getExogenousFailureRate();
-
+	
 	addAdvantageToHighPRACandidates = d->getAddAdvantageToHighPRACandidates();
 	praAdvantageCutoff = d->getPRAAdvantageCutoff();
 	praAdvantageValue = d->getPRAAdvantageValue();
@@ -155,11 +140,6 @@ QString KPDGUISimParameters::toString(){
 		parameterString.append("Maximum Sub-chain Length: " + QString::number(maxChainLength) + "\n");
 	}
 
-	parameterString.append("Default Donor Failure Rate: " + QString::number(defaultDonorFailureRate) + "\n");
-	parameterString.append("Default Candidate Failure Rate: " + QString::number(defaultCandidateFailureRate) + "\n");
-	parameterString.append("Default Altruistic Donor Failure Rate: " + QString::number(defaultADFailureRate) + "\n");
-	parameterString.append("Exogenous Match Failure Rate: " + QString::number(exogenousFailureRate) + "\n");
-	
 	if (numberOfSolutions > 1){
 		parameterString.append(numberOfSolutions + " Alternate Solutions Produced\n");
 	}
@@ -240,22 +220,6 @@ int KPDGUISimParameters::getMaxComponentSize() const {
 	return maxComponentSize;
 }
 
-double KPDGUISimParameters::getDefaultDonorFailureRate() const {
-	return defaultDonorFailureRate;
-}
-
-double KPDGUISimParameters::getDefaultCandidateFailureRate() const {
-	return defaultCandidateFailureRate;
-}
-
-double KPDGUISimParameters::getDefaultADFailureRate() const {
-	return defaultADFailureRate;
-}
-
-double KPDGUISimParameters::getExogenousFailureRate() const {
-	return exogenousFailureRate;
-}
-
 bool KPDGUISimParameters::getAddAdvantageToHighPRACandidates() const {
 	return addAdvantageToHighPRACandidates;
 }
@@ -324,22 +288,6 @@ void KPDGUISimParameters::setMaxComponentSize(int size) {
 	maxComponentSize = size;
 }
 
-void KPDGUISimParameters::setDefaultDonorFailureRate(double rate) {
-	defaultDonorFailureRate = rate;
-}
-
-void KPDGUISimParameters::setDefaultCandidateFailureRate(double rate) {
-	defaultCandidateFailureRate = rate;
-}
-
-void KPDGUISimParameters::setDefaultADFailureRate(double rate) {
-	defaultADFailureRate = rate;
-}
-
-void KPDGUISimParameters::setExogenousFailureRate(double rate){
-	exogenousFailureRate = rate;
-}
-
 void KPDGUISimParameters::setAddAdvantagetoHighPRACandidates(bool flag){
 	addAdvantageToHighPRACandidates = flag;
 }
@@ -397,11 +345,6 @@ QDataStream &operator<<(QDataStream &out, const KPDGUISimParameters & parameters
 	out << qint32(parameters.getMaxCycleSize());
 	out << qint32(parameters.getMaxChainLength());
 	out << qint32(parameters.getMaxComponentSize());
-
-	out << qreal(parameters.getDefaultDonorFailureRate());
-	out << qreal(parameters.getDefaultCandidateFailureRate());
-	out << qreal(parameters.getDefaultADFailureRate());
-	out << qreal(parameters.getExogenousFailureRate());
 
 	out << parameters.getAddAdvantageToHighPRACandidates();
 	out << qint32(parameters.getPRAAdvantageCutoff());
@@ -468,10 +411,6 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 	parameters.setMaxCycleSize(cycleSize);
 	parameters.setMaxChainLength(chainLength);
 	parameters.setMaxComponentSize(componentSize);
-	parameters.setDefaultDonorFailureRate(defaultDonorFailureRate);
-	parameters.setDefaultCandidateFailureRate(defaultCandidateFailureRate);
-	parameters.setDefaultADFailureRate(defaultADFailureRate);
-	parameters.setExogenousFailureRate(exogenousFailureRate);
 	parameters.setNumberOfSolutions(numberOfSolutions);
 	parameters.setEstimateExpectedUtility(estimateExpectedUtility);
 	parameters.setNumberOfExpectedUtilityIterations(numberOfExpectedUtilityIterations);

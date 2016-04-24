@@ -64,12 +64,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIRecord.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINode.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINode.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DialogReadFile.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -184,12 +178,6 @@
     <ClCompile Include="RNG.cpp">
       <Filter>Helper Code</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUIDonorInfo.cpp">
-      <Filter>Nodes, Matches and Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUICandidateInfo.cpp">
-      <Filter>Nodes, Matches and Structures</Filter>
-    </ClCompile>
     <ClCompile Include="DialogCandidate.cpp">
       <Filter>Dialog</Filter>
     </ClCompile>
@@ -213,6 +201,30 @@
     </ClCompile>
     <ClCompile Include="KPDGUIMatchWrapper.cpp">
       <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIDonor.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUICandidate.cpp">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIDonor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIDonor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUICandidate.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUICandidate.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINode.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINode.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -291,6 +303,12 @@
     <CustomBuild Include="KPDGUIMatchWrapper.h">
       <Filter>Wrappers</Filter>
     </CustomBuild>
+    <CustomBuild Include="KPDGUIDonor.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUICandidate.h">
+      <Filter>Nodes, Matches and Structures</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_DialogDonor.h">
@@ -328,12 +346,6 @@
     </ClInclude>
     <ClInclude Include="KPDGUISimulation.h">
       <Filter>KPD Simulation Components</Filter>
-    </ClInclude>
-    <ClInclude Include="KPDGUIDonorInfo.h">
-      <Filter>Nodes, Matches and Structures</Filter>
-    </ClInclude>
-    <ClInclude Include="KPDGUICandidateInfo.h">
-      <Filter>Nodes, Matches and Structures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

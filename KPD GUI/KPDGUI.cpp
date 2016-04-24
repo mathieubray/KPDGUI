@@ -13,10 +13,15 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	setUpActions();
 	setUpMenu();
 	setUpToolbar();
-
-	//testNewNodes();
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
+
+	qDebug() << KPDFunctions::toString(kpdguiDisplaySettings->getMatchDisplayMode());
+
+	changeMatchViewMode_All();
+
+	qDebug() << KPDFunctions::toString(kpdguiDisplaySettings->getMatchDisplayMode());
+
 }
 
 KPDGUI::~KPDGUI()
@@ -24,35 +29,11 @@ KPDGUI::~KPDGUI()
     delete ui;
 }
 
-void KPDGUI::testNewNodes(){
-	//KPDGUICloud * cloud = new KPDGUICloud();
-	/*QGraphicsItemGroup * group = new QGraphicsItemGroup();
-	foreach(KPDGUINode * node, kpdguiRecord->getPairs()){
-	group->addToGroup(node);
-	}
-	group->setFlag(QGraphicsItem::ItemIsSelectable);
-	group->setFlag(QGraphicsItem::ItemIsMovable);
-	kpdguiScene->addItem(group);*/
-
-	/*KPDGUICloud * group = new KPDGUICloud(1000,1);
-	group->setPos(0, 0);
-
-	KPDGUICloud * group2 = new KPDGUICloud(1001,2);
-	group2->setPos(200, 200);
-
-	KPDGUICloud * group3 = new KPDGUICloud(1002, 3);
-	group3->setPos(-200, 200);
-
-	kpdguiScene->addItem(group);
-	kpdguiScene->addItem(group2);
-	kpdguiScene->addItem(group3); */
-}
-
 void KPDGUI::initializeParameters(){
 	
 	maxZ = 0;
-	seqNumber = 0;
-	prevSliderPos = 0;
+	nodePlacementSequenceNumber = 0;
+	previousSliderPosition = 0;
 	setCurrentFile("");
 }
 
@@ -82,10 +63,10 @@ void KPDGUI::setUpKPDObjects(){
 void KPDGUI::setUpLists(){
 
 	//Table
-	ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+	//ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
 	//Pair List
-	ui->pairWidget->header()->resizeSection(0, 50);
+	/*ui->pairWidget->header()->resizeSection(0, 50);
 	ui->pairWidget->header()->resizeSection(1, 65);
 	ui->pairWidget->header()->resizeSection(2, 50);
 	ui->pairWidget->header()->resizeSection(3, 65);
@@ -106,7 +87,7 @@ void KPDGUI::setUpLists(){
 	//Solution Tree
 	ui->solutionWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect(ui->solutionWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(solutionTreeSelectionActions(QTreeWidgetItem*)));
-	connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));
+	connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));*/
 	
 	ui->structureWidget->setVisible(false);
 	ui->solutionWidget->setVisible(false);
@@ -131,7 +112,7 @@ void KPDGUI::setUpActions(){
 	clearHighlightsAction = new QAction(tr("&Clear Highlights"), this);
 	connect(clearHighlightsAction, SIGNAL(triggered()), this, SLOT(clearHighlights()));*/
 
-	editDonorAction = new QAction(tr("&Edit Donor"), this);
+	/*editDonorAction = new QAction(tr("&Edit Donor"), this);
 	connect(editDonorAction, SIGNAL(triggered()), this, SLOT(editDonor()));
 
 	editCandidateAction = new QAction(tr("&Edit Candidate"), this);
@@ -156,20 +137,20 @@ void KPDGUI::setUpActions(){
 	connect(clusterMultipleNodesAction, SIGNAL(triggered()), this, SLOT(clusterMultipleNodes()));
 
 	deleteMultipleNodesAction = new QAction(tr("&Delete Selected Pairs"), this);
-	connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));
+	connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));*/
 
 
 	//Structures Custom Menu
-	clusterStructureAction = new QAction("Cluster Structure", this);
-	connect(clusterStructureAction, SIGNAL(triggered()), this, SLOT(clusterStructure()));
+	//clusterStructureAction = new QAction("Cluster Structure", this);
+	//connect(clusterStructureAction, SIGNAL(triggered()), this, SLOT(clusterStructure()));
 
 
 	//Solutions Custom Menu
-	clusterSolutionAction = new QAction("Cluster Solution", this);
-	connect(clusterSolutionAction, SIGNAL(triggered()), this, SLOT(clusterSolution()));
+	//clusterSolutionAction = new QAction("Cluster Solution", this);
+	//connect(clusterSolutionAction, SIGNAL(triggered()), this, SLOT(clusterSolution()));
 
-	removeSolutionAction = new QAction("Remove Solution", this);
-	connect(removeSolutionAction, SIGNAL(triggered()), this, SLOT(removeSolution()));
+	//removeSolutionAction = new QAction("Remove Solution", this);
+	//connect(removeSolutionAction, SIGNAL(triggered()), this, SLOT(removeSolution()));
 }
 
 
@@ -178,8 +159,6 @@ void KPDGUI::setUpMenu(){
 	displayArrowsActionGroup = new QActionGroup(this);
 	displayArrowsActionGroup->addAction(ui->actionDisplay_Compatibilities_Within_Selection);
 	displayArrowsActionGroup->addAction(ui->actionDisplay_Selected_Compatibilities);
-	displayArrowsActionGroup->addAction(ui->actionDisplay_Selected_Compatible_Donors);
-	displayArrowsActionGroup->addAction(ui->actionDisplay_Selected_Compatible_Recipients);
 	displayArrowsActionGroup->addAction(ui->actionDisplay_All_Compatibilities);
 	displayArrowsActionGroup->addAction(ui->actionDisplay_No_Compatibilities);
 }
@@ -200,13 +179,13 @@ void KPDGUI::setUpToolbar(){
 	ui->actionMouse_Tool->setChecked(true);
 }
 
-void KPDGUI::newFile()
+void KPDGUI::newKPD()
 {
     KPDGUI *mainWin = new KPDGUI;
     mainWin->show();
 }
 
-void KPDGUI::open()
+void KPDGUI::openKPD()
 {
     if (okToContinue()) {
         QString fileName = QFileDialog::getOpenFileName(this, tr("Open KPD"), ".", tr("KPD files (*.kpd)"));
@@ -217,16 +196,16 @@ void KPDGUI::open()
     }
 }
 
-bool KPDGUI::save()
+bool KPDGUI::saveKPD()
 {
-    if (curFile.isEmpty()) {
-        return saveAs();
+    if (currentFile.isEmpty()) {
+        return saveKPDAs();
     } else {
-        return saveFile(curFile);
+        return saveFile(currentFile);
     }
 }
 
-bool KPDGUI::saveAs()
+bool KPDGUI::saveKPDAs()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save KPD"), ".", tr("KPD files (*.kpd)"));
     if (fileName.isEmpty()){
@@ -237,77 +216,91 @@ bool KPDGUI::saveAs()
     return saveFile(fileName);
 }
 
-void KPDGUI::addNewPair()
+void KPDGUI::addNewNode()
 {
 	DialogCandidate * dialogCandidate = new DialogCandidate(this);
 
 	if (dialogCandidate->exec()) {
 
-		KPDGUICandidateInfo c(dialogCandidate);
+		KPDGUICandidate * candidate = new KPDGUICandidate(dialogCandidate);
 		
 		DialogDonor * dialogDonor = new DialogDonor(this);
 
-		if (dialogDonor->exec()){
+		if (dialogDonor->exec()) {
+
+			QVector<KPDGUIDonor *> associatedDonors;
 			
-			KPDGUIDonorInfo d(dialogDonor);			
-			QVector<KPDGUIDonorInfo *> associatedDonors;
+			KPDGUIDonor * donor = new KPDGUIDonor(dialogDonor);
+			associatedDonors.push_back(donor);
 
-			associatedDonors.push_back(&d);
-
-			KPDGUINode * newPair = new KPDGUINode(associatedDonors, &c);
-
-			if (kpdguiRecord->getNumberOfNodes() == 0){
-				newPair->setPos(QPointF(0, 0));
-			}
-			else {
-				QRectF boundingRect = kpdguiScene->sceneRect();
-				qreal x = boundingRect.topLeft().x();
-				qreal y = boundingRect.topLeft().y();
-				qreal height = boundingRect.height();
-				qreal width = boundingRect.width();
-
-				newPair->setPos(QPointF(x + width / 2, y + height / 2));
-			}
-
-			addNode(newPair, false);
-
-			int pairID = newPair->getNodeID();
-
-			kpdguiScene->clearSelection();
-			newPair->setSelected(true);
-			changeFocus(newPair);
-
-			updateStatus("Added New Pair: " + d.getName() + ", " + c.getName() + " (" + QString::number(pairID) + ")");
+			int additionalDonorMessage = QMessageBox::warning(this, tr("KPD"),
+				"New Pairing Contains a Single Donor. Add Another Donor to Pairing?",
+				QMessageBox::Yes | QMessageBox::No);
 			
-			emit visibilityChanged(kpdguiDisplaySettings);
-			emit poolChanged();
+			while (additionalDonorMessage == QMessageBox::Yes) {
+
+				DialogDonor * additionalDialogDonor = new DialogDonor(this);
+
+				if (additionalDialogDonor->exec()) {
+
+					KPDGUIDonor * additionalDonor = new KPDGUIDonor(dialogDonor);
+					associatedDonors.push_back(additionalDonor);
+
+					additionalDonorMessage = QMessageBox::warning(this, tr("KPD"),
+						"New Pairing Contains " + QString::number(associatedDonors.size()) + " Donors. Add Another Donor to Pairing?",
+						QMessageBox::Yes | QMessageBox::No);
+				}
+			}
+
+			qDebug() << "Creating Node";
+			KPDGUINode * newNode = new KPDGUINode(associatedDonors, candidate);
+			qDebug() << "Node Created";
+			
+			//newNode->setNodePosition(QPointF(0, 0));
+
+			qDebug() << "Add Node to Record";
+			addNode(newNode, false);
+			qDebug() << "Node Added to Record" << newNode->getID() << " " << newNode->getFirstDonor()->getID();
+			//kpdguiScene->clearSelection();
+			//newNode->setSelected(true);
+			changeFocus(newNode);
+
+			qDebug() << "Write to Dashboard";
+			updateStatus("Added New Pairing: " + newNode->getNameString());
+			qDebug() << "Written to Dashboard";
+
+			//emit visibilityChanged(kpdguiDisplaySettings);
+			//emit poolChanged();
 			setWindowModified(true);
+		}
+
+		else {
+			QMessageBox::about(this, tr("About KPDGUI"),"No Donors added. Node will not be created");
 		}
 	}
 }
 
 void KPDGUI::addNewAD()
 {
-	DialogDonor * dialog = new DialogDonor(this);
+	DialogDonor * dialogAD = new DialogDonor(this);
 
-	if (dialog->exec()) {
+	if (dialogAD->exec()) {
 
-		KPDGUIDonorInfo ad(dialog);
+		KPDGUIDonor * altruisticDonor = new KPDGUIDonor(dialogAD);
 
-		KPDGUINode * newAD = new KPDGUINode(&ad);
+		KPDGUINode * newNode = new KPDGUINode(altruisticDonor);
 
-		addNode(newAD, false);
+		addNode(newNode, false);
 
-		int pairID = newAD->getNodeID();
 		
-		kpdguiScene->clearSelection();
-		newAD->setSelected(true);
-		changeFocus(newAD);
+		//kpdguiScene->clearSelection();
+		//newNode->setSelected(true);
+		changeFocus(newNode);
 		
-		updateStatus("Added New AD: " + ad.getName() + " (" + QString::number(pairID) + ")");
+		updateStatus("Added New Altrustic Donor: " + newNode->getNameString());
 
-		emit visibilityChanged(kpdguiDisplaySettings);
-		emit poolChanged();
+		//emit visibilityChanged(kpdguiDisplaySettings);
+		//emit poolChanged();
 		setWindowModified(true);
 	}
 }
@@ -327,7 +320,7 @@ void KPDGUI::addNewAD()
 
 		addNode(newDonor, false);
 
-		int pairID = newDonor->getNodeID();
+		int pairID = newDonor->getID();
 		//ui->dashboard->addPairInfo(pairID);
 
 		//KPDGUIMatch * link = new KPDGUIMatch(newDonor, kpdguiRecord->getNode(i), false);
@@ -372,7 +365,7 @@ void KPDGUI::addNewAD()
 
 //}
 
-void KPDGUI::loadPairs()
+void KPDGUI::loadNodes()
 {
 	ReadFileDialog readFileDialog(this);
 
@@ -406,7 +399,7 @@ void KPDGUI::exitProgram()
 	qApp->closeAllWindows();
 }
 
-void KPDGUI::run()
+void KPDGUI::performMatchRun()
 {
 	bool proceed = true;
 
@@ -466,7 +459,7 @@ void KPDGUI::clearSolutions(){
 	}
 }
 
-void KPDGUI::changePairViewMode()
+void KPDGUI::changeNodeViewMode()
 {
 	DialogDisplaySettings * displayDialog = new DialogDisplaySettings(kpdguiDisplaySettings, this);
 
@@ -478,37 +471,25 @@ void KPDGUI::changePairViewMode()
 	}
 }
 
-void KPDGUI::changeArrowViewMode_Within()
+void KPDGUI::changeMatchViewMode_Within()
 {
 	kpdguiDisplaySettings->setMatchDisplayMode(WITHIN_SELECTION);
 	updateVisibility();
 }
 
-void KPDGUI::changeArrowViewMode_SelectedComps()
+void KPDGUI::changeMatchViewMode_SelectedComps()
 {
 	kpdguiDisplaySettings->setMatchDisplayMode(SELECTED_COMPATIBILITIES);
 	updateVisibility();
 }
 
-void KPDGUI::changeArrowViewMode_Donors()
-{
-	kpdguiDisplaySettings->setMatchDisplayMode(COMPATIBLE_DONORS);
-	updateVisibility();
-}
-
-void KPDGUI::changeArrowViewMode_Recips()
-{
-	kpdguiDisplaySettings->setMatchDisplayMode(COMPATIBLE_RECIPIENTS);
-	updateVisibility();
-}
-
-void KPDGUI::changeArrowViewMode_All()
+void KPDGUI::changeMatchViewMode_All()
 {
 	kpdguiDisplaySettings->setMatchDisplayMode(ALL_COMPATIBILITIES);
 	updateVisibility();
 }
 
-void KPDGUI::changeArrowViewMode_None()
+void KPDGUI::changeMatchViewMode_None()
 {
 	kpdguiDisplaySettings->setMatchDisplayMode(NO_COMPATIBILITIES);
 	updateVisibility();
@@ -537,17 +518,17 @@ void KPDGUI::zoom(int tick){
 	double scaleFactor = 1.15;
 	ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-	if (tick > prevSliderPos){
-		for (int i = 0; i < (tick - prevSliderPos); i++){
+	if (tick > previousSliderPosition){
+		for (int i = 0; i < (tick - previousSliderPosition); i++){
 			ui->graphicsView->scale(scaleFactor, scaleFactor);
 		}
 	}
-	else if (tick < prevSliderPos){
-		for (int i = 0; i < (prevSliderPos - tick); i++){
+	else if (tick < previousSliderPosition){
+		for (int i = 0; i < (previousSliderPosition - tick); i++){
 			ui->graphicsView->scale(1 / scaleFactor, 1 / scaleFactor);
 		}
 	}
-	prevSliderPos = tick;
+	previousSliderPosition = tick;
 }
 
 void KPDGUI::changeToMouseMode(){
@@ -568,7 +549,7 @@ void KPDGUI::changeToHandMode(){
 	ui->graphicsView->changeMode(1);
 }
 
-void KPDGUI::about()
+void KPDGUI::aboutKPD()
 {
 	QMessageBox::about(this, tr("About KPDGUI"),
 		tr("<h2>KPDGUI 1.1</h2>"
@@ -578,7 +559,7 @@ void KPDGUI::about()
 
 
 //void KPDGUI::newPairListSelectionActions(QTreeWidgetItem* item)
-void KPDGUI::newPairListSelectionActions()
+void KPDGUI::newNodeListSelectionActions()
 {
 	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
 		QTreeWidgetItem * item = ui->pairWidget->topLevelItem(i);
@@ -663,7 +644,7 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 				foreach(KPDGUIStructure * structure, structureSet->getStructures()){
 					selectedStructures.push_back(structure);
 				}
-				ui->dashboard->showSolution(structureSet->getConsoleString());
+				ui->dashboard->showSolution(structureSet->getDashboardString());
 				ui->dashboard->focusOnSolution();
 			}
 		}
@@ -688,9 +669,9 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 				node->setSelected(selected);
 				updateVisibility();
 
-				ui->graphicsView->centerOn(QPoint(node->x(), node->y()));
+				ui->graphicsView->centerOn(node->getNodePosition());
 
-				int i = node->getNodeID();
+				int i = node->getID();
 				
 			}
 		}
@@ -728,11 +709,11 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 	QApplication::processEvents();
 }
 
-void KPDGUI::newPairListDoubleClickActions(QTreeWidgetItem * item)
+void KPDGUI::newNodeListDoubleClickActions(QTreeWidgetItem * item)
 {
 	KPDGUINodeWrapper * node = dynamic_cast<KPDGUINodeWrapper *>(item);
 	if (node){
-		qDebug() << "Double Click " << node->getNode()->getNodeID();
+		qDebug() << "Double Click " << node->getNode()->getID();
 	}
 }
 
@@ -745,7 +726,7 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 		bool allHeld = true;
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-			if (!node->getNodeStatus()){
+			if (!node->getStatus()){
 				allHeld = false;
 			}
 		}
@@ -768,11 +749,11 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 			//menu->addAction(highlightStructuresAction);
 			//menu->addAction(highlightSolutionsAction);
 			menu->addAction(editDonorAction);
-			if (node->getNodeType() == PAIR){
+			if (node->getType() == PAIR){
 				menu->addAction(editCandidateAction);
 			}
 			menu->addSeparator();
-			if (node->getNodeStatus()){
+			if (node->getStatus()){
 				menu->addAction(unholdNodeAction);
 			}
 			else {
@@ -793,7 +774,7 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 
 }
 
-void KPDGUI::pairListCustomMenu(QPoint pos){
+void KPDGUI::nodeListCustomMenu(QPoint pos){
 
 	qDebug() << "Pair List Custom Menu";
 
@@ -808,11 +789,11 @@ void KPDGUI::pairListCustomMenu(QPoint pos){
 		//menu->addAction(highlightStructuresAction);
 		//menu->addAction(highlightSolutionsAction);
 		menu->addAction(editDonorAction);
-		if (node->getNodeType() == PAIR){
+		if (node->getType() == PAIR){
 			menu->addAction(editCandidateAction);
 		}
 		menu->addSeparator();
-		if (node->getNodeStatus()){
+		if (node->getStatus()){
 			menu->addAction(unholdNodeAction);
 		}
 		else {
@@ -858,7 +839,7 @@ void KPDGUI::solutionTreeCustomMenu(QPoint pos){
 	else {
 		KPDGUIStructureSet * structureSet = dynamic_cast<KPDGUIStructureSet *>(item);
 		if (structureSet){
-			if (structureSet->isSolutionSet()){
+			if (structureSet->structureSetisSolutionSet()){
 				menu->addAction(clusterSolutionAction);
 				menu->addAction(removeSolutionAction);
 				rightClickStructureSet = structureSet;
@@ -870,12 +851,12 @@ void KPDGUI::solutionTreeCustomMenu(QPoint pos){
 	}
 }
 
-void KPDGUI::deleteNode(int i)
-{
-	qDebug() << "Delete " << i;
+//void KPDGUI::deleteNode(int i)
+//{
+	//qDebug() << "Delete " << i;
 
 	/*KPDGUINode * nodeToDelete = kpdguiRecord->getNode(i);
-	int id = nodeToDelete->getNodeID();
+	int id = nodeToDelete->getID();
 	nodeToDelete->setSelected(false);
 	
 	QApplication::setOverrideCursor(Qt::WaitCursor);
@@ -889,7 +870,7 @@ void KPDGUI::deleteNode(int i)
 /*	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
 		KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->pairWidget->topLevelItem(i));
 		if (nodeWrapper){
-			if (nodeWrapper->getNode()->getNodeID() == id){
+			if (nodeWrapper->getNode()->getID() == id){
 				nodeWrappersToDelete.insert(nodeWrapper);
 			}
 		}
@@ -898,10 +879,10 @@ void KPDGUI::deleteNode(int i)
 	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
 		KPDGUIMatchWrapper * arrowWrapper = dynamic_cast<KPDGUIMatchWrapper *>(matchListWidget->topLevelItem(i));
 		if (arrowWrapper){
-			if (arrowWrapper->getArrow()->startItem()->getNodeID() == id){
+			if (arrowWrapper->getArrow()->startItem()->getID() == id){
 				arrowWrappersToDelete.insert(arrowWrapper);
 			}
-			else if (arrowWrapper->getArrow()->endItem()->getNodeID() == id){
+			else if (arrowWrapper->getArrow()->endItem()->getID() == id){
 				arrowWrappersToDelete.insert(arrowWrapper);
 			}
 		}
@@ -957,7 +938,7 @@ void KPDGUI::deleteNode(int i)
 		delete structureToDelete;
 	}
 
-	if (nodeToDelete->getNodeType() == KPDPairType::AD){
+	if (nodeToDelete->getType() == KPDPairType::AD){
 		ui->dashboard->appendDashboardText("> Deleted AD: " + nodeToDelete->getDonorName() + " (" + QString::number(id) + ")");
 	}
 	else {
@@ -973,7 +954,7 @@ void KPDGUI::deleteNode(int i)
 
 	QApplication::restoreOverrideCursor();
 	QApplication::processEvents();*/
-}
+//}
 
 void KPDGUI::clickActions(QTreeWidgetItem * item)
 {
@@ -1063,30 +1044,31 @@ void KPDGUI::checkSelections(){
 
 void KPDGUI::updateTable(int i)
 {
-	KPDGUINode * node = kpdguiRecord->getNode(i);
+	//KPDGUINode * node = kpdguiRecord->getNode(i);
 
 	// FIX
-
-	KPDGUIDonorInfo * donor = node->getDonor(0);
-	KPDGUICandidateInfo * candidate = node->getCandidate();
+	/*
+	KPDGUIDonor * donor = node->getDonor(0);
+	KPDGUICandidate * candidate = node->getCandidate();
 
 	ui->tableWidget->item(0, 0)->setData(Qt::EditRole, QString::number(i));
 	ui->tableWidget->item(1, 0)->setData(Qt::EditRole, donor->getName());
 	ui->tableWidget->item(2, 0)->setData(Qt::EditRole, QString::number(donor->getAge()));
 	ui->tableWidget->item(3, 0)->setData(Qt::EditRole, KPDFunctions::toString(donor->getBT()));
 
-	if (node->getNodeType() == PAIR){
+	if (node->getType() == PAIR){
 		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, candidate->getName());
 		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, QString::number(candidate->getAge()));
 		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, KPDFunctions::toString(candidate->getBT()));
 		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, QString::number(candidate->getPRA()));
 	}
-	else if (node->getNodeType() == AD){
+	else if (node->getType() == AD){
 		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, " ");
 		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, " ");
 		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, " ");
 		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, " ");
-	}	
+	}
+	*/
 }
 
 void KPDGUI::updateVisibility(){
@@ -1159,14 +1141,14 @@ bool KPDGUI::loadFile(const QString &fileName)
 		in >> *node;
 		addNode(node, true);
 
-		int internalID = node->getNodeID();
+		int internalID = node->getID();
 		nodeMap.insert(internalID, node);
 
 		qint32 x;
 		qint32 y;
 
 		in >> x >> y;
-		node->setPos(x, y);
+		node->setNodePosition(QPointF(x, y));
 	}
 	
 	in >> *kpdguiDisplaySettings;
@@ -1239,12 +1221,11 @@ bool KPDGUI::saveFile(const QString &fileName)
 	out << qint32(kpdguiRecord->getBaselineIDCode());
 	out << qint32(kpdguiRecord->getNumberOfNodes());
 
-	for (int i = 0; i < kpdguiRecord->getNumberOfNodes(); i++){
-		KPDGUINode const& node = *(kpdguiRecord->getNodeFromIndex(i));
-		out << node;
+	foreach(KPDGUINode * node, kpdguiRecord->getNodes()) {
+		out << &node;
 
-		int x = kpdguiRecord->getNodeFromIndex(i)->x();
-		int y = kpdguiRecord->getNodeFromIndex(i)->y();
+		int x = node->getNodePosition().x();
+		int y = node->getNodePosition().y();
 
 		out << qint32(x) << qint32(y);
 	}
@@ -1274,7 +1255,7 @@ bool KPDGUI::saveFile(const QString &fileName)
 						for (int l = 0; l < structure->childCount(); l++){
 							KPDGUINodeWrapper* node = dynamic_cast<KPDGUINodeWrapper*>(structure->child(l));
 							if (node){
-								out << qint32(node->getNode()->getNodeID());
+								out << qint32(node->getNode()->getID());
 							}
 						}
 					}
@@ -1291,12 +1272,12 @@ bool KPDGUI::saveFile(const QString &fileName)
 
 void KPDGUI::setCurrentFile(const QString &fileName)
 {
-	curFile = fileName;
+	currentFile = fileName;
 	setWindowModified(false);
 
 	QString shownName = tr("Untitled");
-	if (!curFile.isEmpty()) {
-		shownName = QFileInfo(curFile).fileName();
+	if (!currentFile.isEmpty()) {
+		shownName = QFileInfo(currentFile).fileName();
 	}
 
 	this->setWindowTitle(tr("%1[*] - %2").arg(shownName)
@@ -1305,46 +1286,58 @@ void KPDGUI::setCurrentFile(const QString &fileName)
 
 void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 
-	kpdguiScene->addItem(newNode);
-	++seqNumber;
-
+	qDebug() << "Inserting Node into Record";
 	kpdguiRecord->insertNode(newNode, fromSavedFile);
-	newNode->setText(QString::number(newNode->getNodeID()));
+	qDebug() << "Inserted Node into Record";
+	checkNodeMatches(newNode);
+
+	//qDebug() << newNode->getNodePosition();
+
+	if (newNode->getType() == PAIR) {
+		kpdguiScene->addItem(newNode->getCandidate());
+	}
+
+	foreach(KPDGUIDonor * donor, newNode->getDonors()) {
+		kpdguiScene->addItem(donor);
+	}
+
+	if (newNode->getType() == PAIR) {
+		qDebug() << newNode->getCandidate()->pos() << " " << newNode->getFirstDonor()->pos();
+	}
+	++nodePlacementSequenceNumber;	
 
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
 	ui->pairWidget->addTopLevelItem(wrapper);
-
-	foreach(KPDGUINode *node, kpdguiRecord->getNodes()){
-		if (node->getNodeType() == PAIR){
-			if (kpdguiRecord->isMatch(newNode, node, 0, false, false)){
-				addArrow(newNode, node);
-			}
-		}
-		if (newNode->getNodeType() == PAIR){
-			if (kpdguiRecord->isMatch(node, newNode, 0, false, false)){
-				addArrow(node, newNode);
-			}
-		}
-	}
-
-	connect(newNode, SIGNAL(nodeEntered(int)), this, SLOT(updateTable(int)));
-	connect(newNode, SIGNAL(nodeLeft(int)), this, SLOT(clearTable()));
-	connect(newNode, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
 	
-	connect(ui->graphicsView, SIGNAL(mouseReleased()), wrapper, SLOT(updateSelections()));
-	connect(this, SIGNAL(poolChanged()), wrapper, SLOT(updateText()));
-	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), newNode, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+	//connect(newNode, SIGNAL(nodeEntered(int)), this, SLOT(updateTable(int)));
+	//connect(newNode, SIGNAL(nodeLeft(int)), this, SLOT(clearTable()));
+	//connect(newNode, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
+	
+	//connect(ui->graphicsView, SIGNAL(mouseReleased()), wrapper, SLOT(updateSelections()));
+	//connect(this, SIGNAL(poolChanged()), wrapper, SLOT(updateText()));
+	//connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), newNode, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	////connect(this, SIGNAL(selectAll()), newNode, SLOT(selectIfVisible()));
 }
 
-void KPDGUI::addArrow(KPDGUINode * fromNode, KPDGUINode * toNode){
-	KPDGUIMatch *link = new KPDGUIMatch(fromNode, toNode);
-	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), link, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
+	KPDGUIMatch * match = new KPDGUIMatch(donor, candidate);
+
+	candidate->addMatchingDonor(match);
+	donor->addMatchingCandidate(match);
+
+	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	//KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(link);
 	//matchListWidget->addTopLevelItem(wrapper);
-	kpdguiRecord->insertMatch(link);
-	link->setVisible(false);
-	kpdguiScene->addItem(link);
+	
+	kpdguiRecord->insertMatch(match);
+	//link->setVisible(false);
+	
+	qDebug() << "Add Match";
+	
+	kpdguiScene->addItem(match);
+	match->setVisible(true);
+	qDebug() << "Is Match Visible? " << match->isVisible();
+
 }
 
 void KPDGUI::readPairsFromFile(QString fileName, QString layout)
@@ -1421,7 +1414,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 			hold = true;
 		}
 
-		KPDGUIDonorInfo d;
+		KPDGUIDonor d;
 		
 		d.setName(row.at(9).at(0));
 		d.setAge(row.at(11).at(0).toInt());
@@ -1468,7 +1461,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 		KPDGUINode * newNode;
 
 		if (row.at(2).at(0).toInt() == 0){
-			KPDGUICandidateInfo c;
+			KPDGUICandidate c;
 			c.setName(row.at(5).at(0));
 			c.setAge(row.at(7).at(0).toInt());
 
@@ -1538,7 +1531,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 
 			c.setHLA(antibodies);
 
-			QVector<KPDGUIDonorInfo *> donors;
+			QVector<KPDGUIDonor *> donors;
 			donors << &d;
 			
 			newNode = new KPDGUINode(donors, &c);
@@ -1548,13 +1541,13 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 		}		
 
 		if (layout == "Circle"){
-			newNode->setPos(QPointF(dist*cos(nodeAngle), dist*sin(nodeAngle)));
+			newNode->setNodePosition(QPointF(dist*cos(nodeAngle), dist*sin(nodeAngle)));
 			nodeAngle += angle;
 		}
 		else {
 			int h_offset = rand() % 20 - 10;
 			int v_offset = rand() % 20 - 10;
-			newNode->setPos(QPointF(100 + 100 * (seqNumber % max) + h_offset, 100 + 100 * ((seqNumber / max) % max) + v_offset));
+			newNode->setNodePosition(QPointF(100 + 100 * (nodePlacementSequenceNumber % max) + h_offset, 100 + 100 * ((nodePlacementSequenceNumber / max) % max) + v_offset));
 			seq++;
 		}
 
@@ -1576,7 +1569,7 @@ bool KPDGUI::okToContinue()
 			QMessageBox::Yes | QMessageBox::No
 			| QMessageBox::Cancel);
 		if (r == QMessageBox::Yes) {
-			return save();
+			return saveKPD();
 		}
 		else if (r == QMessageBox::Cancel) {
 			return false;
@@ -1588,13 +1581,13 @@ bool KPDGUI::okToContinue()
 
 void KPDGUI::clearTable()
 {
-	for (int i = 0; i < ui->tableWidget->rowCount(); i++){
-		ui->tableWidget->item(i, 0)->setData(Qt::EditRole, " ");
-	}
+	//for (int i = 0; i < ui->tableWidget->rowCount(); i++){
+		//ui->tableWidget->item(i, 0)->setData(Qt::EditRole, " ");
+	//}
 }
 
 void KPDGUI::changeFocus(KPDGUINode * node){
-	ui->graphicsView->centerOn(node->x(), node->y());
+	ui->graphicsView->centerOn(node->getNodePosition());
 
 	setWindowModified(true);
 }
@@ -1686,7 +1679,7 @@ void KPDGUI::runSimulation(){
 			int id = kpdguiRecord->getNodeInfoVector()[allStructures[itStruct][itNode]].nodeID;
 			//Collect Node Object based on Pair ID
 			KPDGUINode * node = kpdguiRecord->getNode(id);
-			if (node->getNodeType() == AD){
+			if (node->getType() == AD){
 				chain = true;
 			}
 			//Add to Node List
@@ -1806,10 +1799,10 @@ void KPDGUI::editDonor(){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
 
-			DialogDonor * dialogDonor = new DialogDonor(*(node->getDonor(0)), true, this);
+			DialogDonor * dialogDonor = new DialogDonor(node->getFirstDonor(), true, this);
 
 			if (dialogDonor->exec()) {
-				qDebug() << "Edit Donor " << node->getNodeID();
+				qDebug() << "Edit Donor " << node->getID();
 			}			
 		}
 	}
@@ -1821,10 +1814,10 @@ void KPDGUI::editCandidate(){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
 
-			DialogCandidate * dialogCandidate = new DialogCandidate(*(node->getCandidate()), true, this);
+			DialogCandidate * dialogCandidate = new DialogCandidate(node->getCandidate(), true, this);
 
 			if (dialogCandidate->exec()){
-				qDebug() << "Edit Candidate " << node->getNodeID();
+				qDebug() << "Edit Candidate " << node->getID();
 			}
 		}
 	}
@@ -1856,7 +1849,7 @@ void KPDGUI::deleteNode(){
 		QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			//emit deleteNode(node->getNodeID());
+			//emit deleteNode(node->getID());
 		}
 	}
 }
@@ -1895,8 +1888,8 @@ void KPDGUI::clusterMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			avgx += node->x();
-			avgy += node->y();
+			avgx += node->getNodePosition().x();
+			avgy += node->getNodePosition().y();
 		}
 	}
 
@@ -1912,12 +1905,12 @@ void KPDGUI::clusterMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setVisible(false);
-			if (!(abs((node->x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->y()) - (y + dist*sin(nodeAngle)) < TOL))){
-				node->setPos(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
+			//node->setVisible(false);
+			if (!(abs((node->getNodePosition().x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->getNodePosition().y()) - (y + dist*sin(nodeAngle)) < TOL))){
+				node->setNodePosition(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
 			}
 			nodeAngle += angle;
-			node->setVisible(true);
+			//node->setVisible(true);
 			node->setSelected(true);
 		}
 	}
@@ -1943,11 +1936,30 @@ void KPDGUI::deleteMultipleNodes(){
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 			if (node){
-				//emit deleteNode(node->getNodeID());
+				//emit deleteNode(node->getID());
 			}
 		}
 		QApplication::restoreOverrideCursor();
 		QApplication::processEvents();*/
+	}
+}
+
+void KPDGUI::checkNodeMatches(KPDGUINode * node) {
+	foreach(KPDGUINode *comparisonNode, kpdguiRecord->getNodes()) {
+		if (comparisonNode->getType() == PAIR) {
+			foreach(KPDGUIDonor * donor, node->getDonors()) {
+				if (kpdguiRecord->isMatch(donor, comparisonNode->getCandidate(), false, false)) {
+					addMatch(donor, comparisonNode->getCandidate());
+				}
+			}
+		}
+		if (node->getType() == PAIR) {
+			foreach(KPDGUIDonor * comparisonDonor, comparisonNode->getDonors()) {
+				if (kpdguiRecord->isMatch(comparisonDonor, node->getCandidate(), false, false)) {
+					addMatch(comparisonDonor, node->getCandidate());
+				}
+			}
+		}
 	}
 }
 

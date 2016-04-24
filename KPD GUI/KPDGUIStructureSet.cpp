@@ -2,14 +2,14 @@
 
 KPDGUIStructureSet::KPDGUIStructureSet(){
 	
-	myParameters = new KPDGUISimParameters();
+	structureSetParameters = new KPDGUISimParameters();
 
-	myTimeStamp = "";
-	myRecordLog = "";
-	mySimLog = "";
+	structureSetTimeStamp = "";
+	structureSetRecordLog = "";
+	structureSetSimLog = "";
 	
-	solutionSet = true;
-	mySolutionNumber = -1;
+	isSolutionSet = true;
+	solutionNumber = -1;
 	
 }
 
@@ -20,109 +20,69 @@ KPDGUIStructureSet::KPDGUIStructureSet(KPDGUISimParameters * parameters, QString
 }
 
 KPDGUIStructureSet::~KPDGUIStructureSet(){
-	if (solutionSet){
-		foreach(KPDGUIStructure * structure, myStructureList){
-			structure->decreasePopularityInSolutions();
+	if (isSolutionSet){
+		foreach(KPDGUIStructure * structure, structureSetList){
+			structure->decreasePopularity(true);
 		}
 	}
 }
 
 void KPDGUIStructureSet::construct(KPDGUISimParameters * params, QString timestamp, QString recordLog, QString simLog, bool solution, int solutionNumber){
 	
-	myParameters->copyParameters(params);
+	structureSetParameters->copyParameters(params);
 
-	myTimeStamp = timestamp;
-	myRecordLog = recordLog;
-	mySimLog = simLog;
+	structureSetTimeStamp = timestamp;
+	structureSetRecordLog = recordLog;
+	structureSetSimLog = simLog;
 
-	solutionSet = solution;
-	mySolutionNumber = solutionNumber;
+	isSolutionSet = solution;
+	solutionNumber = solutionNumber;
 
-	KPDOptimizationScheme myOptScheme = myParameters->getOptimizationScheme();
+	KPDOptimizationScheme myOptScheme = structureSetParameters->getOptimizationScheme();
 
 	QString textOptScheme = KPDFunctions::toString(myOptScheme);
 
-	if (solutionSet){
-		setText(0, textOptScheme + "[" + QString::number(mySolutionNumber) + "] (" + myTimeStamp + ")");
+	if (isSolutionSet){
+		setText(0, textOptScheme + "[" + QString::number(solutionNumber) + "] (" + structureSetTimeStamp + ")");
 	}
 	else{
-		setText(0, textOptScheme + " (" + myTimeStamp + ")");
+		setText(0, textOptScheme + " (" + structureSetTimeStamp + ")");
 	}
 
-	setUpWidgets();
-
-	/*if (myOptScheme != KPDOptimizationScheme::SCC){
-		addChild(cycleSizeTwo);
-		addChild(cycleSizeThree);
-
-		addChild(chainSizeOne);
-		addChild(chainSizeTwo);
-		if (parameters->getMaxSize() >= 3){
-			addChild(chainSizeThree);
-		}
-		if (parameters->getMaxSize() >= 4){
-			addChild(chainSizeFour);
-		}
-		if (parameters->getMaxSize() >= 5){
-			addChild(chainSizeFive);
-		}
-		if (parameters->getMaxSize() >= 6){
-			addChild(chainSizeSix);
-		}
-	}
-
-	else {
-		addChild(componentSizeTwo);
-
-		if (parameters->getMaxSize() >= 3){
-			addChild(componentSizeThree);
-		}
-		if (parameters->getMaxSize() >= 4){
-			addChild(componentSizeFour);
-		}
-		if (parameters->getMaxSize() >= 5){
-			addChild(componentSizeFive);
-		}
-		if (parameters->getMaxSize() == 6){
-			addChild(componentSizeSix);
-		}
-	}*/
-	
+	setUpWidgets();	
 }
 
 void KPDGUIStructureSet::addStructure(KPDGUIStructure * structure){
-	myStructureList.push_back(structure);
+	structureSetList.push_back(structure);
 	KPDGUIStructureWrapper * wrapper = new KPDGUIStructureWrapper(structure);
 	
-	KPDOptimizationScheme myOptScheme = myParameters->getOptimizationScheme();
-
 	int structureSize = structure->size();
 
-	if (myOptScheme != KPDOptimizationScheme::SCC){
+	if (structureSetParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
 		
-		if (structure->isChain()) {
-			myChains[structureSize-1]->addChild(wrapper);
+		if (structure->hasAnAD()) {
+			structureSetChains[structureSize-1]->addChild(wrapper);
 		}
 		else {
-			myCycles[structureSize]->addChild(wrapper);
+			structureSetCycles[structureSize]->addChild(wrapper);
 		}
 	}
 
 	else {
-		myComponents[structureSize]->addChild(wrapper);
+		structureSetComponents[structureSize]->addChild(wrapper);
 	}
 
 	updateText();
 }
 
 void KPDGUIStructureSet::removeStructure(KPDGUIStructure * structure){
-	myStructureList.remove(myStructureList.indexOf(structure));
+	structureSetList.remove(structureSetList.indexOf(structure));
 }
 
 QList<KPDGUIStructure*> KPDGUIStructureSet::getStructures(){
 	QList<KPDGUIStructure *> structureListCopy;
 
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		structureListCopy.push_back(structure);
 	}
 
@@ -130,19 +90,19 @@ QList<KPDGUIStructure*> KPDGUIStructureSet::getStructures(){
 }
 
 void KPDGUIStructureSet::selectStructures(){
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		structure->select();
 	}
 }
 
 void KPDGUIStructureSet::highlight(){
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		structure->highlight();
 	}
 }
 
 void KPDGUIStructureSet::undoHighlights(){
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		structure->undoHighlights();
 	}
 }
@@ -151,10 +111,10 @@ qreal KPDGUIStructureSet::centerX(){
 
 	qreal avgx = 0;
 
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		avgx += structure->centerX();
 	}
-	avgx = avgx / myStructureList.size();
+	avgx = avgx / structureSetList.size();
 
 	return avgx;
 }
@@ -163,100 +123,89 @@ qreal KPDGUIStructureSet::centerY(){
 	
 	qreal avgy = 0;
 
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		avgy += structure->centerY();
 	}
-	avgy = avgy / myStructureList.size();
+	avgy = avgy / structureSetList.size();
 
 	return avgy;
 }
 
 void KPDGUIStructureSet::cluster(){
-	qreal dist = 100 + 10 * myStructureList.size();
+	qreal dist = 100 + 10 * structureSetList.size();
 	
 	qreal centerX = this->centerX();
 	qreal centerY = this->centerY();
 
-	qreal angle = (2 * PI) / myStructureList.size();
+	qreal angle = (2 * PI) / structureSetList.size();
 	qreal nodeAngle = PI;
 	
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		structure->cluster(centerX + dist*cos(nodeAngle), centerY + dist*sin(nodeAngle));
 		nodeAngle += angle;
 	}	
 }
 
-void KPDGUIStructureSet::deleteNode(KPDGUINode * nodeToDelete){ }
+void KPDGUIStructureSet::deleteNode(KPDGUINode * nodeToDelete){ 
 
-int KPDGUIStructureSet::size(){
-	return myStructureList.size();
 }
 
-int KPDGUIStructureSet::numberOfElements(){
-	int numberOfElements = 0;
-	foreach(KPDGUIStructure * structure, myStructureList){
-		numberOfElements += structure->size();
+int KPDGUIStructureSet::size(){
+	return structureSetList.size();
+}
+
+int KPDGUIStructureSet::getNumberOfNodes(){
+	int numberOfNodes = 0;
+	foreach(KPDGUIStructure * structure, structureSetList){
+		numberOfNodes += structure->size();
 	}
 
-	return numberOfElements;
+	return numberOfNodes;
 }
 
 double KPDGUIStructureSet::utility(){
 	double utility = 0;
-	foreach(KPDGUIStructure * structure, myStructureList){
+	foreach(KPDGUIStructure * structure, structureSetList){
 		utility += structure->getUtility();
 	}
 	return utility;
 }
 
-bool KPDGUIStructureSet::isSolutionSet(){
-	return solutionSet;
+bool KPDGUIStructureSet::structureSetisSolutionSet() {
+	return isSolutionSet;
 }
 
 void KPDGUIStructureSet::updatePopularity(){
-	if (solutionSet){
-		foreach(KPDGUIStructure * structure, myStructureList){
-			structure->increasePopularityInSolutions();
-		}
+	foreach(KPDGUIStructure * structure, structureSetList){
+		structure->increasePopularity(isSolutionSet);
 	}
-	else {
-		foreach(KPDGUIStructure * structure, myStructureList){
-			structure->increasePopularityInStructures();
-		}
-	}
+	
 }
 
 void KPDGUIStructureSet::resetPopularity(){
-	if (solutionSet){
-		foreach(KPDGUIStructure * structure, myStructureList){
-			structure->resetPopularityInSolutions();
-		}
-	}
-	else {
-		foreach(KPDGUIStructure * structure, myStructureList){
-			structure->resetPopularityInStructures();
-		}
-	}
+	foreach(KPDGUIStructure * structure, structureSetList){
+		structure->resetPopularity(isSolutionSet);
+	}	
 }
 
-QString KPDGUIStructureSet::getConsoleString(){
+QString KPDGUIStructureSet::getDashboardString(){
 
 	QString receipt = "";
 
-	if (solutionSet){
-		receipt = receipt + "Solution For Match Run Performed On " + myTimeStamp + "\n\n";
+	if (isSolutionSet){
+		receipt = receipt + "Solution For Match Run Performed On " + structureSetTimeStamp + "\n\n";
 	}
 	else {
-		receipt = receipt + "Cycle List For Match Run performed On " + myTimeStamp + "\n\n";
+		receipt = receipt + "Cycle List For Match Run performed On " + structureSetTimeStamp + "\n\n";
 	}
 
-	receipt = receipt + myRecordLog + "\n";
+	receipt = receipt + structureSetRecordLog + "\n";
 
-	if (solutionSet){
-		receipt = receipt + "Solution " + QString::number(mySolutionNumber) + " / Objective: " + QString::number(utility()) + "\n\n";
+	if (isSolutionSet){
+		receipt = receipt + "Solution " + QString::number(solutionNumber) + " / Objective: " + QString::number(utility()) + "\n\n";
 	}
 	else {
-		if (myParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
+		if (structureSetParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
 			receipt = receipt + "List of Cycles:\n";
 		}
 		else{
@@ -267,9 +216,9 @@ QString KPDGUIStructureSet::getConsoleString(){
 	int chains = 0;
 	int cycles = 0;
 
-	foreach(KPDGUIStructure * structure, myStructureList){
-		receipt = receipt + structure->toString() + "\n";
-		if (structure->isChain()){
+	foreach(KPDGUIStructure * structure, structureSetList){
+		receipt = receipt + structure->structureString() + "\n";
+		if (structure->hasAnAD()){
 			chains++;
 		}
 		else {
@@ -277,18 +226,18 @@ QString KPDGUIStructureSet::getConsoleString(){
 		}
 	}
 	receipt = receipt + "\n";
-	if (solutionSet){
-		receipt = receipt + mySimLog + "\n";
+	if (isSolutionSet){
+		receipt = receipt + structureSetSimLog + "\n";
 	}
 
-	if (myParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
+	if (structureSetParameters->getOptimizationScheme() != KPDOptimizationScheme::SCC){
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else{
 		receipt = receipt + "Components: " + QString::number(size()) + "\n";
 	}
 
-	receipt = receipt + myParameters->toString();
+	receipt = receipt + structureSetParameters->toString();
 
 	return receipt;
 }
@@ -314,16 +263,16 @@ void KPDGUIStructureSet::setUpWidgets(){
 
 void KPDGUIStructureSet::updateText(){
 
-	foreach(int size, myCycles.keys()) {
-		myCycles[size]->setText(0, QString::number(size) + "-Way Exchange (" + QString::number(myCycles[size]->childCount()) + ")");
+	foreach(int size, structureSetCycles.keys()) {
+		structureSetCycles[size]->setText(0, QString::number(size) + "-Way Exchange (" + QString::number(structureSetCycles[size]->childCount()) + ")");
 	}
 
-	foreach(int size, myChains.keys()) {
-		myChains[size]->setText(0, "Chains of Length " + QString::number(size) + " (" + QString::number(myChains[size]->childCount()) + ")");
+	foreach(int size, structureSetChains.keys()) {
+		structureSetChains[size]->setText(0, "Chains of Length " + QString::number(size) + " (" + QString::number(structureSetChains[size]->childCount()) + ")");
 	}
 
-	foreach(int size, myComponents.keys()) {
-		myComponents[size]->setText(0, "Components of Size " + QString::number(size) + " (" + QString::number(myComponents[size]->childCount()) + ")");
+	foreach(int size, structureSetComponents.keys()) {
+		structureSetComponents[size]->setText(0, "Components of Size " + QString::number(size) + " (" + QString::number(structureSetComponents[size]->childCount()) + ")");
 	}
 
 	/*cycleSizeTwo->setText(0, "Two-Way Exchange (" + QString::number(cycleSizeTwo->childCount()) + ")");

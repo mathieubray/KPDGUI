@@ -37,29 +37,10 @@ class Ui_DialogCandidate
 {
 public:
     QWidget *layoutWidget;
-    QHBoxLayout *horizontalLayout;
-    QGroupBox *candidateGroupBox;
-    QWidget *layoutWidget_3;
-    QGridLayout *candidateGridLayout;
-    QLabel *candidateBTLabel;
-    QSpinBox *candidateAgeSpinBox;
-    QLineEdit *candidateNameLineEdit;
-    QLabel *candidateNameLabel;
-    QLabel *candidateAgeLabel;
-    QSpacerItem *candidateAgeSpacer;
-    QComboBox *candidateBTComboBox;
-    QSpacerItem *candidateBTSpacer;
-    QLabel *candidatePRALabel;
-    QSpinBox *candidatePRASpinBox;
-    QSlider *praSlider;
-    QHBoxLayout *candidateAdditionalHLAHorizontalLayout;
-    QLabel *candidateAdditionalLabel;
-    QLineEdit *candidateHLALineEdit;
-    QWidget *layoutWidget1;
     QVBoxLayout *candidateVerticalLayout;
     QTabWidget *moreRecipInfo;
     QWidget *donorCharacteristicsTab;
-    QWidget *widget;
+    QWidget *layoutWidget1;
     QVBoxLayout *donorCharacteristicsVerticalLayout;
     QHBoxLayout *donorMajorInfoHorizontalLayout;
     QGridLayout *candidateCharacteristicsGridLayout;
@@ -89,119 +70,48 @@ public:
     QHBoxLayout *buttonBoxHorizontalLayout;
     QSpacerItem *buttonHorizontalSpacer;
     QDialogButtonBox *buttonBox;
+    QGroupBox *candidateGroupBox;
+    QWidget *widget;
+    QGridLayout *gridLayout;
+    QLabel *candidateNameLabel;
+    QLineEdit *candidateNameLineEdit;
+    QLabel *candidateAgeLabel;
+    QSpinBox *candidateAgeSpinBox;
+    QSpacerItem *candidateAgeSpacer;
+    QLabel *candidateBTLabel;
+    QComboBox *candidateBTComboBox;
+    QSpacerItem *candidateBTSpacer;
+    QLabel *candidatePRALabel;
+    QSpinBox *candidatePRASpinBox;
+    QSlider *praSlider;
+    QLabel *candidateAdditionalLabel;
+    QLineEdit *candidateHLALineEdit;
+    QLabel *candidateFailureProbabilityLabel;
+    QDoubleSpinBox *candidateFailureProbabilitySpinBox;
+    QCheckBox *candidateStatusCheckBox;
 
     void setupUi(QDialog *DialogCandidate)
     {
         if (DialogCandidate->objectName().isEmpty())
             DialogCandidate->setObjectName(QStringLiteral("DialogCandidate"));
-        DialogCandidate->resize(392, 467);
-        DialogCandidate->setMinimumSize(QSize(392, 467));
-        DialogCandidate->setMaximumSize(QSize(392, 467));
+        DialogCandidate->resize(391, 480);
+        DialogCandidate->setMinimumSize(QSize(391, 480));
+        DialogCandidate->setMaximumSize(QSize(391, 480));
         layoutWidget = new QWidget(DialogCandidate);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 361, 171));
-        horizontalLayout = new QHBoxLayout(layoutWidget);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        candidateGroupBox = new QGroupBox(layoutWidget);
-        candidateGroupBox->setObjectName(QStringLiteral("candidateGroupBox"));
-        layoutWidget_3 = new QWidget(candidateGroupBox);
-        layoutWidget_3->setObjectName(QStringLiteral("layoutWidget_3"));
-        layoutWidget_3->setGeometry(QRect(10, 20, 341, 140));
-        candidateGridLayout = new QGridLayout(layoutWidget_3);
-        candidateGridLayout->setObjectName(QStringLiteral("candidateGridLayout"));
-        candidateGridLayout->setContentsMargins(0, 0, 0, 0);
-        candidateBTLabel = new QLabel(layoutWidget_3);
-        candidateBTLabel->setObjectName(QStringLiteral("candidateBTLabel"));
-
-        candidateGridLayout->addWidget(candidateBTLabel, 2, 0, 1, 1);
-
-        candidateAgeSpinBox = new QSpinBox(layoutWidget_3);
-        candidateAgeSpinBox->setObjectName(QStringLiteral("candidateAgeSpinBox"));
-        candidateAgeSpinBox->setMaximum(130);
-        candidateAgeSpinBox->setValue(40);
-
-        candidateGridLayout->addWidget(candidateAgeSpinBox, 1, 1, 1, 1);
-
-        candidateNameLineEdit = new QLineEdit(layoutWidget_3);
-        candidateNameLineEdit->setObjectName(QStringLiteral("candidateNameLineEdit"));
-
-        candidateGridLayout->addWidget(candidateNameLineEdit, 0, 1, 1, 2);
-
-        candidateNameLabel = new QLabel(layoutWidget_3);
-        candidateNameLabel->setObjectName(QStringLiteral("candidateNameLabel"));
-
-        candidateGridLayout->addWidget(candidateNameLabel, 0, 0, 1, 1);
-
-        candidateAgeLabel = new QLabel(layoutWidget_3);
-        candidateAgeLabel->setObjectName(QStringLiteral("candidateAgeLabel"));
-
-        candidateGridLayout->addWidget(candidateAgeLabel, 1, 0, 1, 1);
-
-        candidateAgeSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        candidateGridLayout->addItem(candidateAgeSpacer, 1, 2, 1, 1);
-
-        candidateBTComboBox = new QComboBox(layoutWidget_3);
-        candidateBTComboBox->setObjectName(QStringLiteral("candidateBTComboBox"));
-
-        candidateGridLayout->addWidget(candidateBTComboBox, 2, 1, 1, 1);
-
-        candidateBTSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        candidateGridLayout->addItem(candidateBTSpacer, 2, 2, 1, 1);
-
-        candidatePRALabel = new QLabel(layoutWidget_3);
-        candidatePRALabel->setObjectName(QStringLiteral("candidatePRALabel"));
-
-        candidateGridLayout->addWidget(candidatePRALabel, 3, 0, 1, 1);
-
-        candidatePRASpinBox = new QSpinBox(layoutWidget_3);
-        candidatePRASpinBox->setObjectName(QStringLiteral("candidatePRASpinBox"));
-        candidatePRASpinBox->setMaximum(100);
-
-        candidateGridLayout->addWidget(candidatePRASpinBox, 3, 1, 1, 1);
-
-        praSlider = new QSlider(layoutWidget_3);
-        praSlider->setObjectName(QStringLiteral("praSlider"));
-        praSlider->setMaximum(100);
-        praSlider->setOrientation(Qt::Horizontal);
-
-        candidateGridLayout->addWidget(praSlider, 3, 2, 1, 1);
-
-        candidateAdditionalHLAHorizontalLayout = new QHBoxLayout();
-        candidateAdditionalHLAHorizontalLayout->setObjectName(QStringLiteral("candidateAdditionalHLAHorizontalLayout"));
-        candidateAdditionalLabel = new QLabel(layoutWidget_3);
-        candidateAdditionalLabel->setObjectName(QStringLiteral("candidateAdditionalLabel"));
-
-        candidateAdditionalHLAHorizontalLayout->addWidget(candidateAdditionalLabel);
-
-
-        candidateGridLayout->addLayout(candidateAdditionalHLAHorizontalLayout, 4, 0, 1, 1);
-
-        candidateHLALineEdit = new QLineEdit(layoutWidget_3);
-        candidateHLALineEdit->setObjectName(QStringLiteral("candidateHLALineEdit"));
-
-        candidateGridLayout->addWidget(candidateHLALineEdit, 4, 1, 1, 2);
-
-
-        horizontalLayout->addWidget(candidateGroupBox);
-
-        layoutWidget1 = new QWidget(DialogCandidate);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 200, 371, 261));
-        candidateVerticalLayout = new QVBoxLayout(layoutWidget1);
+        layoutWidget->setGeometry(QRect(10, 210, 371, 261));
+        candidateVerticalLayout = new QVBoxLayout(layoutWidget);
         candidateVerticalLayout->setObjectName(QStringLiteral("candidateVerticalLayout"));
         candidateVerticalLayout->setContentsMargins(0, 0, 0, 0);
-        moreRecipInfo = new QTabWidget(layoutWidget1);
+        moreRecipInfo = new QTabWidget(layoutWidget);
         moreRecipInfo->setObjectName(QStringLiteral("moreRecipInfo"));
         moreRecipInfo->setEnabled(true);
         donorCharacteristicsTab = new QWidget();
         donorCharacteristicsTab->setObjectName(QStringLiteral("donorCharacteristicsTab"));
-        widget = new QWidget(donorCharacteristicsTab);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 10, 351, 175));
-        donorCharacteristicsVerticalLayout = new QVBoxLayout(widget);
+        layoutWidget1 = new QWidget(donorCharacteristicsTab);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 10, 352, 175));
+        donorCharacteristicsVerticalLayout = new QVBoxLayout(layoutWidget1);
         donorCharacteristicsVerticalLayout->setObjectName(QStringLiteral("donorCharacteristicsVerticalLayout"));
         donorCharacteristicsVerticalLayout->setContentsMargins(0, 0, 0, 0);
         donorMajorInfoHorizontalLayout = new QHBoxLayout();
@@ -212,7 +122,7 @@ public:
 
         candidateCharacteristicsGridLayout->addItem(candidateGenderSpacer, 0, 1, 1, 1);
 
-        candidateGenderComboBox = new QComboBox(widget);
+        candidateGenderComboBox = new QComboBox(layoutWidget1);
         candidateGenderComboBox->setObjectName(QStringLiteral("candidateGenderComboBox"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateGenderComboBox, 0, 2, 1, 1);
@@ -221,12 +131,12 @@ public:
 
         candidateCharacteristicsGridLayout->addItem(candidateWeightSpacer, 3, 1, 1, 1);
 
-        candidateHeightLabel = new QLabel(widget);
+        candidateHeightLabel = new QLabel(layoutWidget1);
         candidateHeightLabel->setObjectName(QStringLiteral("candidateHeightLabel"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateHeightLabel, 4, 0, 1, 1);
 
-        candidateWeightLabel = new QLabel(widget);
+        candidateWeightLabel = new QLabel(layoutWidget1);
         candidateWeightLabel->setObjectName(QStringLiteral("candidateWeightLabel"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateWeightLabel, 3, 0, 1, 1);
@@ -235,18 +145,18 @@ public:
 
         candidateCharacteristicsGridLayout->addItem(candidateHeightSpacer, 4, 1, 1, 1);
 
-        candidateRaceLabel = new QLabel(widget);
+        candidateRaceLabel = new QLabel(layoutWidget1);
         candidateRaceLabel->setObjectName(QStringLiteral("candidateRaceLabel"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateRaceLabel, 1, 0, 1, 1);
 
-        candidateTODSpinBox = new QDoubleSpinBox(widget);
+        candidateTODSpinBox = new QDoubleSpinBox(layoutWidget1);
         candidateTODSpinBox->setObjectName(QStringLiteral("candidateTODSpinBox"));
         candidateTODSpinBox->setMaximum(200);
 
         candidateCharacteristicsGridLayout->addWidget(candidateTODSpinBox, 2, 2, 1, 1);
 
-        candidateRaceComboBox = new QComboBox(widget);
+        candidateRaceComboBox = new QComboBox(layoutWidget1);
         candidateRaceComboBox->setObjectName(QStringLiteral("candidateRaceComboBox"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateRaceComboBox, 1, 2, 1, 1);
@@ -255,24 +165,24 @@ public:
 
         candidateCharacteristicsGridLayout->addItem(candidateRaceSpacer, 1, 1, 1, 1);
 
-        candidateGenderLabel = new QLabel(widget);
+        candidateGenderLabel = new QLabel(layoutWidget1);
         candidateGenderLabel->setObjectName(QStringLiteral("candidateGenderLabel"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateGenderLabel, 0, 0, 1, 1);
 
-        candidateTODLabel = new QLabel(widget);
+        candidateTODLabel = new QLabel(layoutWidget1);
         candidateTODLabel->setObjectName(QStringLiteral("candidateTODLabel"));
 
         candidateCharacteristicsGridLayout->addWidget(candidateTODLabel, 2, 0, 1, 2);
 
-        candidateHeightSpinBox = new QDoubleSpinBox(widget);
+        candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget1);
         candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
         candidateHeightSpinBox->setMaximum(3);
         candidateHeightSpinBox->setValue(1.5);
 
         candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);
 
-        candidateWeightSpinBox = new QDoubleSpinBox(widget);
+        candidateWeightSpinBox = new QDoubleSpinBox(layoutWidget1);
         candidateWeightSpinBox->setObjectName(QStringLiteral("candidateWeightSpinBox"));
         candidateWeightSpinBox->setMaximum(400);
         candidateWeightSpinBox->setValue(60);
@@ -286,19 +196,19 @@ public:
         donorMinorInfoVerticalLayout->setObjectName(QStringLiteral("donorMinorInfoVerticalLayout"));
         checkBoxesVerticalLayout = new QVBoxLayout();
         checkBoxesVerticalLayout->setObjectName(QStringLiteral("checkBoxesVerticalLayout"));
-        candidateHepCCheckBox = new QCheckBox(widget);
+        candidateHepCCheckBox = new QCheckBox(layoutWidget1);
         candidateHepCCheckBox->setObjectName(QStringLiteral("candidateHepCCheckBox"));
         candidateHepCCheckBox->setLayoutDirection(Qt::LeftToRight);
 
         checkBoxesVerticalLayout->addWidget(candidateHepCCheckBox);
 
-        candidateDiabetesCheckBox = new QCheckBox(widget);
+        candidateDiabetesCheckBox = new QCheckBox(layoutWidget1);
         candidateDiabetesCheckBox->setObjectName(QStringLiteral("candidateDiabetesCheckBox"));
         candidateDiabetesCheckBox->setLayoutDirection(Qt::LeftToRight);
 
         checkBoxesVerticalLayout->addWidget(candidateDiabetesCheckBox);
 
-        candidatePrevTransCheckBox = new QCheckBox(widget);
+        candidatePrevTransCheckBox = new QCheckBox(layoutWidget1);
         candidatePrevTransCheckBox->setObjectName(QStringLiteral("candidatePrevTransCheckBox"));
         candidatePrevTransCheckBox->setLayoutDirection(Qt::LeftToRight);
 
@@ -319,12 +229,12 @@ public:
 
         excludedDonorsHorizontalLayout = new QHBoxLayout();
         excludedDonorsHorizontalLayout->setObjectName(QStringLiteral("excludedDonorsHorizontalLayout"));
-        exccludedDonorsLabel = new QLabel(widget);
+        exccludedDonorsLabel = new QLabel(layoutWidget1);
         exccludedDonorsLabel->setObjectName(QStringLiteral("exccludedDonorsLabel"));
 
         excludedDonorsHorizontalLayout->addWidget(exccludedDonorsLabel);
 
-        excludedDonorLineEdit = new QLineEdit(widget);
+        excludedDonorLineEdit = new QLineEdit(layoutWidget1);
         excludedDonorLineEdit->setObjectName(QStringLiteral("excludedDonorLineEdit"));
 
         excludedDonorsHorizontalLayout->addWidget(excludedDonorLineEdit);
@@ -342,7 +252,7 @@ public:
 
         buttonBoxHorizontalLayout->addItem(buttonHorizontalSpacer);
 
-        buttonBox = new QDialogButtonBox(layoutWidget1);
+        buttonBox = new QDialogButtonBox(layoutWidget);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
@@ -352,6 +262,107 @@ public:
 
         candidateVerticalLayout->addLayout(buttonBoxHorizontalLayout);
 
+        candidateGroupBox = new QGroupBox(DialogCandidate);
+        candidateGroupBox->setObjectName(QStringLiteral("candidateGroupBox"));
+        candidateGroupBox->setGeometry(QRect(10, 10, 371, 191));
+        widget = new QWidget(candidateGroupBox);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(10, 21, 351, 167));
+        gridLayout = new QGridLayout(widget);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        candidateNameLabel = new QLabel(widget);
+        candidateNameLabel->setObjectName(QStringLiteral("candidateNameLabel"));
+
+        gridLayout->addWidget(candidateNameLabel, 0, 0, 1, 1);
+
+        candidateNameLineEdit = new QLineEdit(widget);
+        candidateNameLineEdit->setObjectName(QStringLiteral("candidateNameLineEdit"));
+
+        gridLayout->addWidget(candidateNameLineEdit, 0, 2, 1, 3);
+
+        candidateAgeLabel = new QLabel(widget);
+        candidateAgeLabel->setObjectName(QStringLiteral("candidateAgeLabel"));
+
+        gridLayout->addWidget(candidateAgeLabel, 1, 0, 1, 1);
+
+        candidateAgeSpinBox = new QSpinBox(widget);
+        candidateAgeSpinBox->setObjectName(QStringLiteral("candidateAgeSpinBox"));
+        candidateAgeSpinBox->setMaximum(130);
+        candidateAgeSpinBox->setValue(40);
+
+        gridLayout->addWidget(candidateAgeSpinBox, 1, 2, 1, 2);
+
+        candidateAgeSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(candidateAgeSpacer, 1, 4, 1, 1);
+
+        candidateBTLabel = new QLabel(widget);
+        candidateBTLabel->setObjectName(QStringLiteral("candidateBTLabel"));
+
+        gridLayout->addWidget(candidateBTLabel, 2, 0, 1, 1);
+
+        candidateBTComboBox = new QComboBox(widget);
+        candidateBTComboBox->setObjectName(QStringLiteral("candidateBTComboBox"));
+
+        gridLayout->addWidget(candidateBTComboBox, 2, 2, 1, 2);
+
+        candidateBTSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(candidateBTSpacer, 2, 4, 1, 1);
+
+        candidatePRALabel = new QLabel(widget);
+        candidatePRALabel->setObjectName(QStringLiteral("candidatePRALabel"));
+
+        gridLayout->addWidget(candidatePRALabel, 3, 0, 1, 1);
+
+        candidatePRASpinBox = new QSpinBox(widget);
+        candidatePRASpinBox->setObjectName(QStringLiteral("candidatePRASpinBox"));
+        candidatePRASpinBox->setMaximum(100);
+
+        gridLayout->addWidget(candidatePRASpinBox, 3, 2, 1, 2);
+
+        praSlider = new QSlider(widget);
+        praSlider->setObjectName(QStringLiteral("praSlider"));
+        praSlider->setMaximum(100);
+        praSlider->setOrientation(Qt::Horizontal);
+
+        gridLayout->addWidget(praSlider, 3, 4, 1, 1);
+
+        candidateAdditionalLabel = new QLabel(widget);
+        candidateAdditionalLabel->setObjectName(QStringLiteral("candidateAdditionalLabel"));
+
+        gridLayout->addWidget(candidateAdditionalLabel, 4, 0, 1, 2);
+
+        candidateHLALineEdit = new QLineEdit(widget);
+        candidateHLALineEdit->setObjectName(QStringLiteral("candidateHLALineEdit"));
+
+        gridLayout->addWidget(candidateHLALineEdit, 4, 2, 1, 3);
+
+        candidateFailureProbabilityLabel = new QLabel(widget);
+        candidateFailureProbabilityLabel->setObjectName(QStringLiteral("candidateFailureProbabilityLabel"));
+
+        gridLayout->addWidget(candidateFailureProbabilityLabel, 5, 0, 1, 1);
+
+        candidateFailureProbabilitySpinBox = new QDoubleSpinBox(widget);
+        candidateFailureProbabilitySpinBox->setObjectName(QStringLiteral("candidateFailureProbabilitySpinBox"));
+        candidateFailureProbabilitySpinBox->setMaximum(1);
+        candidateFailureProbabilitySpinBox->setSingleStep(0.1);
+        candidateFailureProbabilitySpinBox->setValue(0.1);
+
+        gridLayout->addWidget(candidateFailureProbabilitySpinBox, 5, 1, 1, 2);
+
+        candidateStatusCheckBox = new QCheckBox(widget);
+        candidateStatusCheckBox->setObjectName(QStringLiteral("candidateStatusCheckBox"));
+        candidateStatusCheckBox->setLayoutDirection(Qt::RightToLeft);
+        candidateStatusCheckBox->setChecked(true);
+
+        gridLayout->addWidget(candidateStatusCheckBox, 5, 3, 1, 2);
+
+        layoutWidget->raise();
+        layoutWidget->raise();
+        candidateGroupBox->raise();
+        moreRecipInfo->raise();
 
         retranslateUi(DialogCandidate);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogCandidate, SLOT(accept()));
@@ -368,21 +379,6 @@ public:
     void retranslateUi(QDialog *DialogCandidate)
     {
         DialogCandidate->setWindowTitle(QApplication::translate("DialogCandidate", "Add New Candidate", 0));
-        candidateGroupBox->setTitle(QApplication::translate("DialogCandidate", "Candidate Information", 0));
-        candidateBTLabel->setText(QApplication::translate("DialogCandidate", "Blood Type", 0));
-        candidateNameLineEdit->setText(QApplication::translate("DialogCandidate", "Candidate Name", 0));
-        candidateNameLineEdit->setPlaceholderText(QString());
-        candidateNameLabel->setText(QApplication::translate("DialogCandidate", "Name", 0));
-        candidateAgeLabel->setText(QApplication::translate("DialogCandidate", "Age", 0));
-        candidateBTComboBox->clear();
-        candidateBTComboBox->insertItems(0, QStringList()
-         << QApplication::translate("DialogCandidate", "O", 0)
-         << QApplication::translate("DialogCandidate", "A", 0)
-         << QApplication::translate("DialogCandidate", "B", 0)
-         << QApplication::translate("DialogCandidate", "AB", 0)
-        );
-        candidatePRALabel->setText(QApplication::translate("DialogCandidate", "PRA", 0));
-        candidateAdditionalLabel->setText(QApplication::translate("DialogCandidate", "Candidate Antibodies", 0));
         candidateGenderComboBox->clear();
         candidateGenderComboBox->insertItems(0, QStringList()
          << QApplication::translate("DialogCandidate", "Male", 0)
@@ -405,6 +401,23 @@ public:
         candidatePrevTransCheckBox->setText(QApplication::translate("DialogCandidate", "Previous Transplant ", 0));
         exccludedDonorsLabel->setText(QApplication::translate("DialogCandidate", "Excluded Donors", 0));
         moreRecipInfo->setTabText(moreRecipInfo->indexOf(donorCharacteristicsTab), QApplication::translate("DialogCandidate", "Candidate Characteristics", 0));
+        candidateGroupBox->setTitle(QApplication::translate("DialogCandidate", "Candidate Information", 0));
+        candidateNameLabel->setText(QApplication::translate("DialogCandidate", "Name", 0));
+        candidateNameLineEdit->setText(QApplication::translate("DialogCandidate", "Candidate Name", 0));
+        candidateNameLineEdit->setPlaceholderText(QString());
+        candidateAgeLabel->setText(QApplication::translate("DialogCandidate", "Age", 0));
+        candidateBTLabel->setText(QApplication::translate("DialogCandidate", "Blood Type", 0));
+        candidateBTComboBox->clear();
+        candidateBTComboBox->insertItems(0, QStringList()
+         << QApplication::translate("DialogCandidate", "O", 0)
+         << QApplication::translate("DialogCandidate", "A", 0)
+         << QApplication::translate("DialogCandidate", "B", 0)
+         << QApplication::translate("DialogCandidate", "AB", 0)
+        );
+        candidatePRALabel->setText(QApplication::translate("DialogCandidate", "PRA", 0));
+        candidateAdditionalLabel->setText(QApplication::translate("DialogCandidate", "Candidate Antibodies", 0));
+        candidateFailureProbabilityLabel->setText(QApplication::translate("DialogCandidate", "Failure Probability", 0));
+        candidateStatusCheckBox->setText(QApplication::translate("DialogCandidate", "Include in Match Runs", 0));
     } // retranslateUi
 
 };

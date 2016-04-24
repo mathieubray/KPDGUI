@@ -12,7 +12,7 @@
 class KPDGUIStructure
 {
 public:
-	KPDGUIStructure(QVector<KPDGUINode *> pairList, KPDOptimizationScheme optScheme, double utility, int id);
+	KPDGUIStructure(QVector<KPDGUINode *> nodeList, KPDOptimizationScheme optScheme, double utility, int id);
 	~KPDGUIStructure();
 
 	void select();
@@ -25,29 +25,32 @@ public:
 	
 	QString text();
 	int size();
-	bool isChain();
+	bool hasAnAD();
+
 	bool contains(KPDGUINode * node);
+	bool contains(KPDGUIDonor * donor);
+	bool contains(KPDGUICandidate * candidate);
+	
 	double getUtility() const;
 	int getID() const;
 
-	void increasePopularityInStructures();
-	void increasePopularityInSolutions();
-	void decreasePopularityInStructures();
-	void decreasePopularityInSolutions();
-	void resetPopularityInStructures();
-	void resetPopularityInSolutions();
+	void increasePopularity(bool solution);
+	void decreasePopularity(bool solution);
+	void resetPopularity(bool solution);
 	
-	QString toString();
+	QString structureString();
 
 	QList<QTreeWidgetItem *> getItemList();
 
 private:
-	QVector<KPDGUINode *> myPairList;
-	QSet<KPDGUIMatch *> myArrows;
-	KPDOptimizationScheme myOptScheme;
-	double myUtility;
-	int myID;		
-	bool chain;
+	QVector<KPDGUINode *> structureNodeList;
+	QSet<KPDGUIMatch *> structureMatches;
+
+	KPDOptimizationScheme structureOptScheme;
+	
+	double structureUtility;
+	int structureID;		
+	bool structureHasAnAD;
 };
 
 #endif

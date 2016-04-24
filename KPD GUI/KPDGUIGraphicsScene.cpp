@@ -100,7 +100,7 @@ void KPDGUIGraphicsScene::addAssociatedDonor(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit addAssociatedDonor(node->getNodeID());
+			emit addAssociatedDonor(node->getID());
 			//qDebug() << "Triggered";
 		}
 	}
@@ -111,7 +111,7 @@ void KPDGUIGraphicsScene::highlightRelevantStructures(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit highlightRelevantStructures(node->getNodeID());
+			emit highlightRelevantStructures(node->getID());
 		}
 	}
 }
@@ -121,7 +121,7 @@ void KPDGUIGraphicsScene::highlightRelevantSolutions(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit highlightRelevantSolutions(node->getNodeID());
+			emit highlightRelevantSolutions(node->getID());
 		}
 	}
 }
@@ -139,7 +139,7 @@ void KPDGUIGraphicsScene::editNode(){
 	if (items.size() == 1){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			node->editNode();
+			//node->editNode();
 			
 		}
 	}
@@ -171,7 +171,7 @@ void KPDGUIGraphicsScene::deleteNode(){
 		QList<QGraphicsItem*> items = selectedItems();
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
 		if (node){
-			emit deleteNode(node->getNodeID());
+			emit deleteNode(node->getID());
 		}
 	}
 }
@@ -207,8 +207,8 @@ void KPDGUIGraphicsScene::clusterMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			avgx += node->x();
-			avgy += node->y();
+			avgx += node->getNodePosition().x();
+			avgy += node->getNodePosition().y();
 		}
 	}
 
@@ -224,12 +224,13 @@ void KPDGUIGraphicsScene::clusterMultipleNodes(){
 	foreach(QGraphicsItem * item, items){
 		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 		if (node){
-			node->setVisible(false);
-			if (!(abs((node->x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->y()) - (y + dist*sin(nodeAngle)) < TOL))){
-				node->setPos(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
+			//node->setVisible(false);
+			if (!(abs((node->getNodePosition().x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->getNodePosition().y()) - (y + dist*sin(nodeAngle)) < TOL))){
+				node->setNodePosition(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
 			}
 			nodeAngle += angle;
-			node->setVisible(true);
+			//node->setVisible(true);
+			
 			node->setSelected(true);
 		}
 	}
@@ -255,7 +256,7 @@ void KPDGUIGraphicsScene::deleteMultipleNodes(){
 		foreach(QGraphicsItem * item, items){
 			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
 			if (node){
-				emit deleteNode(node->getNodeID());
+				emit deleteNode(node->getID());
 			}
 		}
 		QApplication::restoreOverrideCursor();

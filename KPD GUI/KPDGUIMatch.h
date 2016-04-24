@@ -67,11 +67,9 @@ class KPDGUIMatch : public QObject, public QGraphicsLineItem
 private:
 
 	//Nodes
-	KPDGUINode * myFromNode;
-	KPDGUINode * myToNode;
-
-	int associatedDonor;
-	
+	KPDGUIDonor * myDonor;
+	KPDGUICandidate * myCandidate;
+		
 	//Visual Arrow Properties
 	QColor myColor;	
 	int myWidth;
@@ -90,20 +88,20 @@ private:
 	bool displayAsPartOfSolution;
 
 public:
-    //enum { Type = UserType + 4 };
+    enum { Type = UserType + 4 };
 
-	KPDGUIMatch(KPDGUINode *fromNode, KPDGUINode *toNode, int donor = 1);
+	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate);
 	~KPDGUIMatch();
 
 	//Nodes
-	KPDGUINode *getFromNode() const { return myFromNode; }
-	KPDGUINode *getToNode() const { return myToNode; }
+	KPDGUIDonor * getDonor() const { return myDonor; }
+	KPDGUICandidate *getCandidate() const { return myCandidate; }
 
 	//Visual Arrow Properties
     QRectF boundingRect() const;
     QPainterPath shape() const;
 	void updatePosition();
-   	//int type() const { return Type; }
+   	int type() const { return Type; }
 
 	void setArrowColor(const QColor &color) { myColor = color; }
 	void setArrowWidth(int width) { myWidth = width; }
@@ -115,23 +113,19 @@ public:
 	void highlightMatch(int level);
 	void clearHighlight();
 
-
 	//Match Properties
 	int getPopularityInStructures() const { return myPopularityInStructures; }
 	int getPopularityInSolutions() const { return myPopularityInSolutions; }
 
-	void increasePopularityInStructures();
-	void increasePopularityInSolutions();
-	void decreasePopularityInStructures();
-	void decreasePopularityInSolutions();
-	void resetPopularityInStructures();
-	void resetPopularityInSolutions();
+	void increasePopularity(bool solution);
+	void decreasePopularity(bool solution);
+	void resetPopularity(bool solution);
 
 	double getMatchSuccessProbability() const { return matchSuccessProbability; }
 	double getMatchUtility() const { return matchUtility; }
 
 signals:
-	void selectArrowInMatchList(bool);
+	//void selectMatchInList(bool);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

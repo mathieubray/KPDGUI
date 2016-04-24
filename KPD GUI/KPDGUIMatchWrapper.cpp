@@ -18,8 +18,8 @@ KPDGUIMatch * KPDGUIMatchWrapper::getMatch(){
 
 void KPDGUIMatchWrapper::updateText(){
 	
-	setText(0, QString::number(myMatch->getFromNode()->getNodeID()));
-	setText(1, QString::number(myMatch->getToNode()->getNodeID()));
+	setText(0, QString::number(myMatch->getDonor()->getID()));
+	setText(1, QString::number(myMatch->getCandidate()->getID()));
 	setText(2, QString::number(myMatch->getPopularityInStructures()));
 	setText(3, QString::number(myMatch->getPopularityInSolutions()));
 

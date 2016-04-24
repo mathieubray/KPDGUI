@@ -19,7 +19,6 @@
 #include "KPDGUIStructure.h"
 #include "KPDGUIStructureSet.h"
 #include "KPDGUIDashboard.h"
-//#include "KPDGUICloud.h"
 #include "KPDGUIDisplaySettings.h"
 #include "KPDGUIGraphicsView.h"
 #include "KPDGUIPairList.h"
@@ -46,28 +45,30 @@ public:
 public slots:
 	
 	//Window-->File
-    void newFile();
-    void open();
-	bool save();
-    bool saveAs();
-	void addNewPair();
+    void newKPD();
+    void openKPD();
+	bool saveKPD();
+    bool saveKPDAs();
+
+	void addNewNode();
 	void addNewAD();
-	void loadPairs();
+	void loadNodes();
+	
 	void exitProgram();
 		
 	//Window-->Match Run
-	void run();
+	void performMatchRun();
 	bool setSimParameters();
 	void clearSolutions();
 
 	//Window-->Display
-	void changePairViewMode();
-	void changeArrowViewMode_Within();
-	void changeArrowViewMode_SelectedComps();
-	void changeArrowViewMode_Donors();
-	void changeArrowViewMode_Recips();
-	void changeArrowViewMode_All();
-	void changeArrowViewMode_None();
+	void changeNodeViewMode();
+	void changeMatchViewMode_Within();
+	void changeMatchViewMode_SelectedComps();
+	//void changeMatchViewMode_Donors();
+	//void changeMatchViewMode_Candidates();
+	void changeMatchViewMode_All();
+	void changeMatchViewMode_None();
 
 	//Window-->Tools
 	void zoomIn();
@@ -78,18 +79,18 @@ public slots:
 	void changeToHandMode();
 
 	//Window-->About
-	void about();
+	void aboutKPD();
 
 	//Custom Menus
 	void screenCustomMenu(QPoint);
-	void pairListCustomMenu(QPoint);
+	void nodeListCustomMenu(QPoint);
 	void structureTreeCustomMenu(QPoint);
 	void solutionTreeCustomMenu(QPoint);
 
 	//Pair List Actions
 	//void newPairListSelectionActions(QTreeWidgetItem *);
-	void newPairListSelectionActions();
-	void newPairListDoubleClickActions(QTreeWidgetItem *);
+	void newNodeListSelectionActions();
+	void newNodeListDoubleClickActions(QTreeWidgetItem *);
 
 	void clusterStructure();
 	void clusterSolution();
@@ -113,7 +114,7 @@ public slots:
 	void clusterMultipleNodes();
 	void deleteMultipleNodes();
 
-	void deleteNode(int);
+	//void deleteNode(int);
 	void clickActions(QTreeWidgetItem *);
 	
 
@@ -147,8 +148,6 @@ private:
 	void setUpMenu();
 	void setUpToolbar();
 
-	void testNewNodes();
-
 	//Saving and Loading
 	bool loadFile(const QString &fileName);
 	bool saveFile(const QString &fileName);
@@ -156,8 +155,10 @@ private:
 
 	//Adding Pairs/ADs
 	void addNode(KPDGUINode * newNode, bool fromSavedFile);
-	void addArrow(KPDGUINode * fromNode, KPDGUINode * toNode);
+	void addMatch(KPDGUIDonor * fromNode, KPDGUICandidate * toNode);
 	void readPairsFromFile(QString fileName, QString layout);
+
+	void checkNodeMatches(KPDGUINode * node);
 
 	//Display Modes
 	void setDisplaySettings(KPDGUIDisplaySettings * newDisplaySettings);
@@ -177,10 +178,10 @@ private:
 	void writeSettings();
 	
 	//Parameters
-	QString curFile;
+	QString currentFile;
 	int maxZ;
-	int seqNumber;
-	int prevSliderPos;
+	int nodePlacementSequenceNumber;
+	int previousSliderPosition;
 
 	//KPDGUI Objects
 	QGraphicsScene * kpdguiScene;

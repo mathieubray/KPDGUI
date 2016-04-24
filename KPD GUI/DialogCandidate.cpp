@@ -2,19 +2,19 @@
 
 #include "DialogCandidate.h"
 
-#include "KPDGUICandidateInfo.h"
+#include "KPDGUICandidate.h"
 
 #include "MultiSelectCompleter.h"
 
 //New Candidate Constructor
-DialogCandidate::DialogCandidate(QWidget *parent) : QDialog(parent)
+DialogCandidate::DialogCandidate(QWidget * parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();
 }
 
 //Edit Candidate Constructor
-DialogCandidate::DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
+DialogCandidate::DialogCandidate(KPDGUICandidate * candidate, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();
@@ -22,20 +22,37 @@ DialogCandidate::DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajo
 	setWindowTitle("Edit Candidate Information");
 
 	//Candidate Name
-	candidateNameLineEdit->setText(candidate.getName());
+	candidateNameLineEdit->setText(candidate->getName());
 
 	//Candidate Age
-	candidateAgeSpinBox->setValue(candidate.getAge());
+	candidateAgeSpinBox->setValue(candidate->getAge());
 
 	//Candidate Blood Type
-	candidateBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(candidate.getBT()));
+	candidateBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(candidate->getBT()));
 
 	//Candidate PRA
-	candidatePRASpinBox->setValue(candidate.getPRA());
+	candidatePRASpinBox->setValue(candidate->getPRA());
+
+	//Candidate Failure Probability
+	candidateFailureProbabilitySpinBox->setValue(candidate->getFailureProbability());
+
+	//Candidate Status
+	candidateStatusCheckBox->setChecked(candidate->getStatus());
+
+	//Candidate HLA
+	QString antibodyString = "";
+	foreach(QString antibody, candidate->getHLA()) {
+		antibodyString.append(antibody);
+		antibodyString.append(";");
+	}
+	antibodyString.chop(1);
+	candidateHLALineEdit->setText(antibodyString);
+
+	
 
 	//Excluded Donors
 	QString excludedDonorsString = "";
-	foreach(int donor, candidate.getExcludedDonors()){
+	foreach(int donor, candidate->getExcludedDonors()){
 		excludedDonorsString.append(QString::number(donor));
 		excludedDonorsString.append(";");
 	}
@@ -43,39 +60,30 @@ DialogCandidate::DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajo
 	excludedDonorLineEdit->setText(excludedDonorsString);
 
 	//Candidate Gender
-	if (candidate.getMale()) { candidateGenderComboBox->setCurrentIndex(0); }
+	if (candidate->getMale()) { candidateGenderComboBox->setCurrentIndex(0); }
 	else { candidateGenderComboBox->setCurrentIndex(1); }
 	
 	//Candidate Height
-	double candidateHeight = sqrt(candidate.getWeight() / (candidate.getBMI()));
+	double candidateHeight = sqrt(candidate->getWeight() / (candidate->getBMI()));
 	candidateHeightSpinBox->setValue(candidateHeight);
 
 	//Candidate Weight
-	candidateWeightSpinBox->setValue(candidate.getWeight());
+	candidateWeightSpinBox->setValue(candidate->getWeight());
 
 	//Candidate Diabetes
-	candidateDiabetesCheckBox->setChecked(candidate.getDiabetes());
+	candidateDiabetesCheckBox->setChecked(candidate->getDiabetes());
 
 	//Candidate Hepatitis C
-	candidateHepCCheckBox->setChecked(candidate.getHepC());
+	candidateHepCCheckBox->setChecked(candidate->getHepC());
 
 	//Candidate Race
-	candidateRaceComboBox->setCurrentIndex(KPDFunctions::raceToInt(candidate.getRace()));
+	candidateRaceComboBox->setCurrentIndex(KPDFunctions::raceToInt(candidate->getRace()));
 	
 	//Candidate Time On Dialysis
-	candidateTODSpinBox->setValue(candidate.getTOD());
+	candidateTODSpinBox->setValue(candidate->getTOD());
 
 	//Candidate Previous Transplant
-	candidatePrevTransCheckBox->setChecked(candidate.getPrevTrans());
-
-	//Candidate HLA
-	QString antibodyString = "";
-	foreach(QString antibody, candidate.getHLA()){
-		antibodyString.append(antibody);
-		antibodyString.append(";");
-	}
-	antibodyString.chop(1);
-	candidateHLALineEdit->setText(antibodyString);
+	candidatePrevTransCheckBox->setChecked(candidate->getPrevTrans());	
 
 	if (disableMajorEdits){
 
@@ -88,7 +96,7 @@ DialogCandidate::DialogCandidate(KPDGUICandidateInfo candidate, bool disableMajo
 	}
 
 	//Comment
-	commentTextEdit->setText(candidate.getComment());
+	commentTextEdit->setText(candidate->getComment());
 }
 
 void DialogCandidate::additionalSetup(){

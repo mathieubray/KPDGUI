@@ -38,6 +38,7 @@ public:
     QRadioButton *showStructuresRadioButton;
     QRadioButton *showSolutionsRadioButton;
     QRadioButton *nodeSubsetButton;
+    QSpacerItem *horizontalSpacer;
     QVBoxLayout *buttonBoxVerticalLayout;
     QDialogButtonBox *buttonBox;
     QSpacerItem *verticalSpacer;
@@ -55,18 +56,18 @@ public:
     {
         if (DialogDisplaySettings->objectName().isEmpty())
             DialogDisplaySettings->setObjectName(QStringLiteral("DialogDisplaySettings"));
-        DialogDisplaySettings->resize(334, 236);
+        DialogDisplaySettings->resize(380, 222);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(DialogDisplaySettings->sizePolicy().hasHeightForWidth());
         DialogDisplaySettings->setSizePolicy(sizePolicy);
-        DialogDisplaySettings->setMinimumSize(QSize(334, 236));
-        DialogDisplaySettings->setMaximumSize(QSize(334, 236));
+        DialogDisplaySettings->setMinimumSize(QSize(380, 222));
+        DialogDisplaySettings->setMaximumSize(QSize(380, 222));
         DialogDisplaySettings->setSizeGripEnabled(true);
         layoutWidget = new QWidget(DialogDisplaySettings);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(13, 18, 318, 105));
+        layoutWidget->setGeometry(QRect(10, 10, 361, 105));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -102,6 +103,10 @@ public:
 
         horizontalLayout->addLayout(displayVerticalLayout);
 
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
         buttonBoxVerticalLayout = new QVBoxLayout();
         buttonBoxVerticalLayout->setObjectName(QStringLiteral("buttonBoxVerticalLayout"));
         buttonBox = new QDialogButtonBox(layoutWidget);
@@ -121,14 +126,14 @@ public:
         displaySettingsBox = new QGroupBox(DialogDisplaySettings);
         displaySettingsBox->setObjectName(QStringLiteral("displaySettingsBox"));
         displaySettingsBox->setEnabled(true);
-        displaySettingsBox->setGeometry(QRect(13, 128, 311, 101));
+        displaySettingsBox->setGeometry(QRect(10, 120, 361, 91));
         showIncompatibleCheckBox = new QCheckBox(displaySettingsBox);
         showIncompatibleCheckBox->setObjectName(QStringLiteral("showIncompatibleCheckBox"));
         showIncompatibleCheckBox->setGeometry(QRect(10, 40, 185, 17));
         showIncompatibleCheckBox->setChecked(true);
         layoutWidget1 = new QWidget(displaySettingsBox);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 63, 325, 24));
+        layoutWidget1->setGeometry(QRect(10, 60, 341, 24));
         displaySettingsGridLayout = new QGridLayout(layoutWidget1);
         displaySettingsGridLayout->setObjectName(QStringLiteral("displaySettingsGridLayout"));
         displaySettingsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -154,7 +159,7 @@ public:
 
         showHoldCheckBox = new QCheckBox(displaySettingsBox);
         showHoldCheckBox->setObjectName(QStringLiteral("showHoldCheckBox"));
-        showHoldCheckBox->setGeometry(QRect(10, 17, 141, 17));
+        showHoldCheckBox->setGeometry(QRect(10, 17, 211, 17));
         showHoldCheckBox->setChecked(true);
 
         retranslateUi(DialogDisplaySettings);
@@ -176,8 +181,8 @@ public:
         nodeSubsetButton->setText(QApplication::translate("DialogDisplaySettings", "Display Nodes Subset...", 0));
         displaySettingsBox->setTitle(QApplication::translate("DialogDisplaySettings", "Node Subset Settings", 0));
         showIncompatibleCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes with No Compatibilities", 0));
-        praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Candidates in PRA Range", 0));
-        showHoldCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes on Hold", 0));
+        praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Nodes with Candidates in PRA Range", 0));
+        showHoldCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes Excluded From Match Runs", 0));
     } // retranslateUi
 
 };

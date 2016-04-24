@@ -2,19 +2,19 @@
 
 #include "DialogDonor.h"
 
-#include "KPDGUIDonorInfo.h"
+#include "KPDGUIDonor.h"
 
 #include "MultiSelectCompleter.h"
 
 //New Donor Constructor
-DialogDonor::DialogDonor(QWidget *parent) : QDialog(parent)
+DialogDonor::DialogDonor(QWidget * parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();
 }
 
 //Edit Donor Constructor
-DialogDonor::DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
+DialogDonor::DialogDonor(KPDGUIDonor * donor, bool disableMajorEdits, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
 	additionalSetup();
@@ -22,96 +22,104 @@ DialogDonor::DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget 
 	setWindowTitle("Edit Donor Information");
 
 	//Name
-	donorNameLineEdit->setText(donor.getName());
+	donorNameLineEdit->setText(donor->getName());
 
 	//Age
-	donorAgeSpinBox->setValue(donor.getAge());
+	donorAgeSpinBox->setValue(donor->getAge());
 
 	//Blood Type
-	donorBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(donor.getBT()));
+	donorBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(donor->getBT()));
 	
+	//Failure Probability
+	donorFailureProbabilitySpinBox->setValue(donor->getFailureProbability());
+
+	//Status
+	donorStatusCheckBox->setChecked(donor->getStatus());
+
 	//Gender
-	if (donor.getMale()) { donorGenderComboBox->setCurrentIndex(0); }
+	if (donor->getMale()) { donorGenderComboBox->setCurrentIndex(0); }
 	else { donorGenderComboBox->setCurrentIndex(1); }
 	
 	//Height
-	double donorHeight = sqrt(donor.getWeight() / ( donor.getBMI()));
+	double donorHeight = sqrt(donor->getWeight() / ( donor->getBMI()));
 	donorHeightSpinBox->setValue(donorHeight);
 
 	//Weight
-	donorWeightSpinBox->setValue(donor.getWeight());
+	donorWeightSpinBox->setValue(donor->getWeight());
+
+	
 
 	//HLA
-	if (donor.getA().size() >= 1){
-		int hlaA1index = donorHLAA1ComboBox->findText(donor.getA().at(0));
+	if (donor->getA().size() >= 1){
+		int hlaA1index = donorHLAA1ComboBox->findText(donor->getA().at(0));
 		if (hlaA1index >= 0){
 			donorHLAA1ComboBox->setCurrentIndex(hlaA1index);
 		}
-		if (donor.getA().size() >= 2){
-			int hlaA2index = donorHLAA2ComboBox->findText(donor.getA().at(1));
+		if (donor->getA().size() >= 2){
+			int hlaA2index = donorHLAA2ComboBox->findText(donor->getA().at(1));
 			if (hlaA2index >= 0){
 				donorHLAA2ComboBox->setCurrentIndex(hlaA2index);
 			}
 		}
 	}
-	if (donor.getB().size() >= 1){
-		int hlaB1index = donorHLAB1ComboBox->findText(donor.getB().at(0));
+	if (donor->getB().size() >= 1){
+		int hlaB1index = donorHLAB1ComboBox->findText(donor->getB().at(0));
 		if (hlaB1index >= 0){
 			donorHLAB1ComboBox->setCurrentIndex(hlaB1index);
 		}
-		if (donor.getB().size() >= 2){
-			int hlaB2index = donorHLAB2ComboBox->findText(donor.getB().at(1));
+		if (donor->getB().size() >= 2){
+			int hlaB2index = donorHLAB2ComboBox->findText(donor->getB().at(1));
 			if (hlaB2index >= 0){
 				donorHLAB2ComboBox->setCurrentIndex(hlaB2index);
 			}
 		}
 	}
-	if (donor.getCW().size() >= 1){
-		int hlaCW1index = donorHLACW1ComboBox->findText(donor.getCW().at(0));
+	if (donor->getCW().size() >= 1){
+		int hlaCW1index = donorHLACW1ComboBox->findText(donor->getCW().at(0));
 		if (hlaCW1index >= 0){
 			donorHLACW1ComboBox->setCurrentIndex(hlaCW1index);
 		}
-		if (donor.getCW().size() >= 2){
-			int hlaCW2index = donorHLACW2ComboBox->findText(donor.getCW().at(1));
+		if (donor->getCW().size() >= 2){
+			int hlaCW2index = donorHLACW2ComboBox->findText(donor->getCW().at(1));
 			if (hlaCW2index >= 0){
 				donorHLACW2ComboBox->setCurrentIndex(hlaCW2index);
 			}
 		}
 	}
-	if (donor.getDQ().size() >= 1){
-		int hlaDQ1index = donorHLADQ1ComboBox->findText(donor.getDQ().at(0));
+	if (donor->getDQ().size() >= 1){
+		int hlaDQ1index = donorHLADQ1ComboBox->findText(donor->getDQ().at(0));
 		if (hlaDQ1index >= 0){
 			donorHLADQ1ComboBox->setCurrentIndex(hlaDQ1index);
 		}
-		if (donor.getDQ().size() >= 2){
-			int hlaDQ2index = donorHLADQ2ComboBox->findText(donor.getDQ().at(1));
+		if (donor->getDQ().size() >= 2){
+			int hlaDQ2index = donorHLADQ2ComboBox->findText(donor->getDQ().at(1));
 			if (hlaDQ2index >= 0){
 				donorHLADQ2ComboBox->setCurrentIndex(hlaDQ2index);
 			}
 		}
 	}
-	if (donor.getDR().size() >= 1){
-		int hlaDR1index = donorHLADR1ComboBox->findText(donor.getDR().at(0));
+	if (donor->getDR().size() >= 1){
+		int hlaDR1index = donorHLADR1ComboBox->findText(donor->getDR().at(0));
 		if (hlaDR1index >= 0){
 			donorHLADR1ComboBox->setCurrentIndex(hlaDR1index);
 		}
-		if (donor.getDR().size() >= 2){
-			int hlaDR2index = donorHLADR2ComboBox->findText(donor.getDR().at(1));
+		if (donor->getDR().size() >= 2){
+			int hlaDR2index = donorHLADR2ComboBox->findText(donor->getDR().at(1));
 			if (hlaDR2index >= 0){
 				donorHLADR2ComboBox->setCurrentIndex(hlaDR2index);
 			}
 		}
 	}
 
-	donorBW4CheckBox->setChecked(donor.getBW4());
-	donorBW6CheckBox->setChecked(donor.getBW6());
-	donorDR51CheckBox->setChecked(donor.getDR51());
-	donorDR52CheckBox->setChecked(donor.getDR52());
-	donorDR53CheckBox->setChecked(donor.getDR53());
+	donorBW4CheckBox->setChecked(donor->getBW4());
+	donorBW6CheckBox->setChecked(donor->getBW6());
+	donorDR51CheckBox->setChecked(donor->getDR51());
+	donorDR52CheckBox->setChecked(donor->getDR52());
+	donorDR53CheckBox->setChecked(donor->getDR53());
 	
 	//Additional Donor HLA
 	QString additionalDonorHLAString = "";
-	foreach(QString additionalDonorHLA, donor.getAdditionalHLA()){
+	foreach(QString additionalDonorHLA, donor->getAdditionalHLA()){
 		additionalDonorHLAString.append(additionalDonorHLA);
 		additionalDonorHLAString.append(";");
 	}
@@ -142,7 +150,7 @@ DialogDonor::DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget 
 	}
 
 	//Comments
-	commentTextEdit->setText(donor.getComment());
+	commentTextEdit->setText(donor->getComment());
 }
 
 

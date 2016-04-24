@@ -27,12 +27,12 @@ void KPDGUINodeWrapper::editActions(int id){
 
 void KPDGUINodeWrapper::updateSelections(){
 	//qDebug() << "Update Selections";
-	setSelected(myNode->isSelected());
+	//setSelected(myNode->isSelected());
 }
 
 void KPDGUINodeWrapper::updateText(){
 	
-	setText(0, QString::number(myNode->getNodeID()));
+	/*setText(0, QString::number(myNode->getNodeID()));
 	setText(1, myNode->getNameString());
 	setText(2, QString::number(myNode->getNumberOfDonors()));
 	setText(3, QString::number(myNode->getPopularityInStructures()));
@@ -42,7 +42,7 @@ void KPDGUINodeWrapper::updateText(){
 
 	for (int i = 0; i < columnCount(); i++){
 		setTextAlignment(i, Qt::AlignHCenter | Qt::AlignVCenter);
-	}
+	}*/
 
 }
 

@@ -26,11 +26,6 @@ public:
 	int getMaxChainLength() const;
 	int getMaxComponentSize() const;
 
-	double getDefaultDonorFailureRate() const;
-	double getDefaultCandidateFailureRate() const;
-	double getDefaultADFailureRate() const;
-	double getExogenousFailureRate() const;
-
 	bool getAddAdvantageToHighPRACandidates() const;
 	int getPRAAdvantageCutoff() const;
 	double getPRAAdvantageValue() const;
@@ -54,11 +49,6 @@ public:
 	void setMaxCycleSize(int size);
 	void setMaxChainLength(int length);
 	void setMaxComponentSize(int size);
-
-	void setDefaultDonorFailureRate(double rate);
-	void setDefaultCandidateFailureRate(double rate);
-	void setDefaultADFailureRate(double rate);
-	void setExogenousFailureRate(double rate);
 
 	void setAddAdvantagetoHighPRACandidates(bool flag);
 	void setPRAAdvantageCutoff(int cutoff);
@@ -88,12 +78,7 @@ private:
 	int maxChainLength;
 	int maxComponentSize;
 
-	//Numerical Parameters
-	double defaultDonorFailureRate;
-	double defaultCandidateFailureRate;
-	double defaultADFailureRate;
-	double exogenousFailureRate;	
-		
+	//Numerical Parameters		
 	bool addAdvantageToHighPRACandidates;
 	int praAdvantageCutoff;
 	double praAdvantageValue;

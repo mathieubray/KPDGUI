@@ -50,11 +50,8 @@ public:
 	std::vector<std::vector<std::vector<double> > > getAssociatedProbabilitiesMatrix();
 	std::vector<AdditionalNodeInfo> getNodeInfoVector();
 
-	bool isMatch(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, bool reserveOtoO, bool checkAdditionalHLA);
-	bool isMatch(KPDGUINode * donorNode, KPDGUINode * candidateNode, int donor, bool reserveOtoO, bool checkAdditionalHLA);
-
-	double calculateSurvival(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, int fiveyear);
-	double calculateSurvival(KPDGUINode * donorNode, KPDGUINode * candidateNode, int donor, int fiveyear);
+	bool isMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, bool reserveOtoO, bool checkAdditionalHLA);
+	double calculateSurvival(KPDGUIDonor * donor, KPDGUICandidate * candidate, int fiveyear);
 
 	void clearRecord();
 
@@ -71,10 +68,6 @@ protected:
 	void loadSurvivalParameters();
 	void clearMatrices();
 
-	
-	
-
-
 private:
 
 	int baselineID;
@@ -84,9 +77,8 @@ private:
 	QMap<QString, QVector<double> > survivalParameters;
 
 	//Stored Items
-	QMap<int, KPDGUINode*> nodes;
-	QMap<int, KPDGUIMatch*> fromMatches;
-	QMap<int, KPDGUIMatch*> toMatches;
+	QMap<int, KPDGUINode *> nodes;
+	QMap<int, QVector<KPDGUIMatch *> > matches;
 
 	std::vector<KPDGUINode *> availableNodes;
 	std::vector<std::vector<bool> > incidenceMatrix;

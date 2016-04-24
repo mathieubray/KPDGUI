@@ -1,20 +1,17 @@
 #include "KPDGUIMatch.h"
 
-KPDGUIMatch::KPDGUIMatch(KPDGUINode *fromNode, KPDGUINode *toNode, int donor)
+KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate)
 {
-	//Add Arrow to Nodes
-    myFromNode = fromNode;
-    myToNode = toNode;
-	myFromNode->addCandidateMatch(this, donor);
-	myToNode->addDonorMatch(this);
-
-	associatedDonor = donor;
+	myDonor = donor;
+    myCandidate = candidate;
+	//myDonor->addMatchingCandidate(this);
+	//myCandidate->addMatchingDonor(this);
 
 	//connect(myStartItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	//connect(myEndItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	
 	//Arrow Defaults
-	setArrowProperties(Qt::black, 1, 0.25, -1);
+	setArrowProperties(Qt::black, 10, 0.25, -1);
 	
 	//Reset Popularity
 	myPopularityInStructures = 0;
@@ -25,8 +22,8 @@ KPDGUIMatch::KPDGUIMatch(KPDGUINode *fromNode, KPDGUINode *toNode, int donor)
 
 KPDGUIMatch::~KPDGUIMatch()
 {
-    myFromNode->removeCandidateMatch(this, associatedDonor);
-    myToNode->removeDonorMatch(this);
+    //myDonor->removeCandidateMatch(this, associatedDonor);
+    //myCandidate->removeDonorMatch(this);
 }
 
 QRectF KPDGUIMatch::boundingRect() const
@@ -45,26 +42,29 @@ QPainterPath KPDGUIMatch::shape() const {
 }
 
 void KPDGUIMatch::updatePosition() {
+	
 
-   QLineF line(myFromNode->getDonorCenter(associatedDonor), myToNode->getCandidateCenter());
-	setLine(line);
+//qDebug() << myDonor->getCenter() << " " << myCandidate->getCenter();
+
+	QLineF newline(mapFromItem(myDonor, 0, 0), mapFromItem(myCandidate, 0, 0));
+
+   //QLineF line(myDonor->getCenter(), myCandidate->getCenter());
+	setLine(newline);
+
+	qDebug() << line().p1() << " " << line().p2();
 }
 
 void KPDGUIMatch::highlightMatch(int level){
 
 	if (level == 1) {
 		if (!displayAsPartOfSolution) {
-			qreal z = myFromNode->zValue();
-
-			setArrowProperties(Qt::black, 2, 1, z - 1);
+			setArrowProperties(Qt::black, 2, 1, myDonor->zValue() - 0.1);
 		}
 	}
 	else if (level == 2) {
-		qreal z = myFromNode->zValue();
-		
-		setVisible(false);
-		setArrowProperties(Qt::magenta, 4, 1, z - 1);
-		setVisible(true);
+		//setVisible(false);
+		setArrowProperties(Qt::magenta, 4, 1, myDonor->zValue() - 0.1);
+		//setVisible(true);
 
 		displayAsPartOfSolution = true;
 	}
@@ -77,33 +77,56 @@ void KPDGUIMatch::clearHighlight() {
 	}
 }
 
-void KPDGUIMatch::increasePopularityInStructures(){
-	myPopularityInStructures++;
+void KPDGUIMatch::increasePopularity(bool solution){
+	if (solution) {
+		myPopularityInSolutions++;
+
+		myDonor->increasePopularityInSolutions();
+		myCandidate->increasePopularityInSolutions();		
+	}
+	else {
+		myPopularityInStructures++;
+
+		myDonor->increasePopularityInStructures();
+		myCandidate->increasePopularityInStructures();
+	}
 }
 
-void KPDGUIMatch::increasePopularityInSolutions(){
-	myPopularityInSolutions++;
+void KPDGUIMatch::decreasePopularity(bool solution){
+	if (solution) {
+		myPopularityInSolutions--;
+
+		myDonor->decreasePopularityInSolutions();
+		myCandidate->decreasePopularityInSolutions();
+	}
+	else {
+		myPopularityInStructures--;
+
+		myDonor->decreasePopularityInStructures();
+		myCandidate->decreasePopularityInStructures();
+	}
 }
 
-void KPDGUIMatch::decreasePopularityInStructures(){
-	myPopularityInStructures--;
-}
+void KPDGUIMatch::resetPopularity(bool solution){
+	if (solution) {
+		myPopularityInSolutions = 0;
 
-void KPDGUIMatch::decreasePopularityInSolutions(){
-	myPopularityInSolutions--;
-}
+		myDonor->resetPopularityInSolutions();
+		myCandidate->resetPopularityInSolutions();
+	}
+	else {
+		myPopularityInStructures = 0;
 
-void KPDGUIMatch::resetPopularityInStructures(){
-	myPopularityInStructures = 0;
-}
-
-void KPDGUIMatch::resetPopularityInSolutions(){
-	myPopularityInSolutions = 0;
+		myDonor->resetPopularityInStructures();
+		myCandidate->resetPopularityInStructures();
+	}
 }
 
 void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-	if (myFromNode->getDonorItem(associatedDonor)->collidesWithItem(myToNode->getCandidateItem())){
+	qDebug() << "Arrow painted";
+
+	if (myDonor->collidesWithItem(myCandidate)) {
 		return;
 	}
 
@@ -114,12 +137,15 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	painter->setPen(myPen);
 	painter->setBrush(myColor);
 	
-	QPointF startPoint = myFromNode->getDonorCenter(associatedDonor);
-	QPointF endPoint = myToNode->getCandidateCenter();
+	//QPointF startPoint = myDonor->getCenter();
+	//QPointF endPoint = myCandidate->getCenter();	
 	
-	QLineF centerLine(startPoint, endPoint);
-	QPolygonF endPolygon = myToNode->getCandidateItem()->sceneBoundingRect();
-	QPointF p1 = endPolygon.first();
+	//QLineF centerLine(startPoint, endPoint);
+	QLineF centerLine(myDonor->pos(), myCandidate->pos());
+	//QPolygonF endPolygon = myCandidate->sceneBoundingRect();
+	QPolygonF endPolygon = myCandidate->boundingRect();
+	//QPointF p1 = endPolygon.first();
+	QPointF p1 = endPolygon.first() + myCandidate->pos();
 	QPointF p2;
 	QPointF intersectPoint;
 	QLineF polyLine;
@@ -132,8 +158,9 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 		p1 = p2;
 	}
 
-	setLine(QLineF(intersectPoint, startPoint));
-	
+	//setLine(QLineF(intersectPoint, startPoint));
+	setLine(QLineF(intersectPoint, myDonor->pos()));
+
 	double angle = ::acos(line().dx() / line().length());
 	if (line().dy() >= 0)
 		angle = (PI * 2) - angle;
@@ -155,34 +182,34 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 		myLine.translate(0, -8.0);
 		painter->drawLine(myLine);
 	}
+
 }
 
 bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 	
-	if (displaySettings->getShowNodeSubset()){
-		if (!displaySettings->getShowNodesOnHold() && (myFromNode->getNodeStatus() || myToNode->getNodeStatus())){
+	/*if (displaySettings->getShowNodeSubset()){
+		if (!displaySettings->getShowNodesOnHold() && (myDonor->getStatus() || myCandidate->getStatus())){
 			return false;
 		}
 
-		int fromPRA = myFromNode->getCandidate()->getPRA();
-		int toPRA = myToNode->getCandidate()->getPRA();
+		int toPRA = myCandidate->getPRA();
 
-		if (displaySettings->getShowCandidatesInPRARange() && (toPRA < displaySettings->getMinPRA() || fromPRA < displaySettings->getMinPRA() || toPRA > displaySettings->getMaxPRA() ||fromPRA > displaySettings->getMaxPRA())){
+		if (displaySettings->getShowCandidatesInPRARange() && (toPRA < displaySettings->getMinPRA() || toPRA > displaySettings->getMaxPRA())){
 			return false;
 		}
 	}
 
 	else if (displaySettings->getShowNodesInStructures()) {
-		if (myToNode->getPopularityInStructures() == 0 || myFromNode->getPopularityInStructures() == 0) {
+		if (myCandidate->getPopularityInStructures() == 0 || myDonor->getPopularityInStructures() == 0) {
 			return false;
 		}
 	}
 	
 	else if (displaySettings->getShowNodesInSolutions()){
-		if (myToNode->getPopularityInSolutions() == 0 || myFromNode->getPopularityInSolutions() == 0){
+		if (myCandidate->getPopularityInSolutions() == 0 || myDonor->getPopularityInSolutions() == 0){
 			return false;
 		}
-	}
+	}*/
 
 	return true;
 }
@@ -197,12 +224,17 @@ void KPDGUIMatch::setArrowProperties(QColor color, int width, qreal opacity, int
 	setZValue(myZValue);
 	setOpacity(myOpacity);
 
+	qDebug() << "Arrow properties set";
+	//update();
+	
+	qDebug() << line().p1() << " " << line().p2();
+
 }
 
 void KPDGUIMatch::updateSelection(int id, bool selected){	
-	if ((myFromNode->isSelected() && myToNode->getNodeID()==id) || (myToNode->isSelected() && myFromNode->getNodeID()==id)){		
-		emit selectArrowInMatchList(selected);
-	}
+	//if ((myDonor->isSelected() && myCandidate->getNodeID()==id) || (myCandidate->isSelected() && myDonor->getNodeID()==id)){		
+		//emit selectMatchInList(selected);
+	//}
 }
 
 void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
@@ -211,7 +243,7 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 		setVisible(false);
 		clearHighlight();
 
-		if (myFromNode->isSelected() && myToNode->isSelected()){
+		if (myDonor->isSelected() && myCandidate->isSelected()){
 			highlightMatch(1);
 		}
 
@@ -219,29 +251,29 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 			setVisible(checkVisibility(displaySettings));
 		}
 		else if (displaySettings->getMatchDisplayMode() == SELECTED_COMPATIBILITIES){
-			if (myFromNode->isSelected()){
+			if (myDonor->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
-			else if (myToNode->isSelected()){
+			else if (myCandidate->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
 		else if (displaySettings->getMatchDisplayMode() == COMPATIBLE_DONORS){
-			if (myToNode->isSelected()){
+			if (myCandidate->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
 		else if (displaySettings->getMatchDisplayMode() == COMPATIBLE_RECIPIENTS){
-			if (myFromNode->isSelected()){
+			if (myDonor->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
 		else if (displaySettings->getMatchDisplayMode() == WITHIN_SELECTION){
-			if (myFromNode->isSelected() && myToNode->isSelected()){
+			if (myDonor->isSelected() && myCandidate->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-	}	
+	}
 }
 
 void KPDGUIMatch::endDisplayAsPartOfSolution(){

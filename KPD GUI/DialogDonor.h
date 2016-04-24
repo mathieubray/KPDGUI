@@ -8,15 +8,15 @@
 
 #include "EnumsFunctions.h"
 
-class KPDGUIDonorInfo;
+class KPDGUIDonor;
 
 class DialogDonor : public QDialog, public Ui_DialogDonor
 {
 	Q_OBJECT
 
 public:
-	DialogDonor(QWidget *parent = 0);
-	DialogDonor(KPDGUIDonorInfo donor, bool disableMajorEdits, QWidget *parent = 0);
+	DialogDonor(QWidget * parent = 0);
+	DialogDonor(KPDGUIDonor * donor, bool disableMajorEdits, QWidget *parent = 0);
 
 	QTextEdit * commentTextEdit;
 

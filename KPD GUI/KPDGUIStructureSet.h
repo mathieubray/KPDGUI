@@ -21,13 +21,13 @@ public:
 	void addStructure(KPDGUIStructure * structure);
 	void removeStructure(KPDGUIStructure * structure);
 
-	KPDGUISimParameters * getParameters() const { return myParameters;  }
-	KPDOptimizationScheme getOptScheme() const { return myParameters->getOptimizationScheme(); }
+	KPDGUISimParameters * getParameters() const { return structureSetParameters;  }
+	KPDOptimizationScheme getOptScheme() const { return structureSetParameters->getOptimizationScheme(); }
 
-	QString getTimeStamp() const { return myTimeStamp; }
-	QString getRecordLog() const { return myRecordLog;  }
-	QString getSimLog() const { return mySimLog;  }
-	int getSolutionNumber() const { return mySolutionNumber;  }
+	QString getTimeStamp() const { return structureSetTimeStamp; }
+	QString getRecordLog() const { return structureSetRecordLog;  }
+	QString getSimLog() const { return structureSetSimLog;  }
+	int getSolutionNumber() const { return solutionNumber;  }
 	
 	QList<KPDGUIStructure *> getStructures();
 	
@@ -40,14 +40,14 @@ public:
 	void deleteNode(KPDGUINode * node);
 	
 	int size();
-	int numberOfElements();
+	int getNumberOfNodes();
 	double utility();
-	bool isSolutionSet();
+	bool structureSetisSolutionSet();
 	void updatePopularity();
 	void resetPopularity();
 	void sort();
 
-	QString getConsoleString();
+	QString getDashboardString();
 
 public slots:
 	void updateTree();
@@ -55,37 +55,22 @@ public slots:
 private:
 
 	void setUpWidgets();
-
 	void updateText();
 
-	QVector<KPDGUIStructureWrapper *> myStructureWrappers;
-	QVector<KPDGUIStructure *> myStructureList;
-	KPDGUISimParameters * myParameters;
+	QVector<KPDGUIStructureWrapper *> structureSetWrappers;
+	QVector<KPDGUIStructure *> structureSetList;
+	KPDGUISimParameters * structureSetParameters;
 
-	/*QTreeWidgetItem * cycleSizeTwo;
-	QTreeWidgetItem * cycleSizeThree;
-	QTreeWidgetItem * chainSizeOne;
-	QTreeWidgetItem * chainSizeTwo;
-	QTreeWidgetItem * chainSizeThree;
-	QTreeWidgetItem * chainSizeFour;
-	QTreeWidgetItem * chainSizeFive;
-	QTreeWidgetItem * chainSizeSix;
-	QTreeWidgetItem * componentSizeTwo;
-	QTreeWidgetItem * componentSizeThree;
-	QTreeWidgetItem * componentSizeFour;
-	QTreeWidgetItem * componentSizeFive;
-	QTreeWidgetItem * componentSizeSix; */
+	QMap<int, QTreeWidgetItem *> structureSetCycles;
+	QMap<int, QTreeWidgetItem *> structureSetChains;
+	QMap<int, QTreeWidgetItem *> structureSetComponents;
 
-	QMap<int, QTreeWidgetItem *> myCycles;
-	QMap<int, QTreeWidgetItem *> myChains;
-	QMap<int, QTreeWidgetItem *> myComponents;
+	QString structureSetTimeStamp;
+	QString structureSetRecordLog;
+	QString structureSetSimLog;
 
-	QString myTimeStamp;
-	QString myRecordLog;
-	QString mySimLog;
-
-	bool solutionSet;
-	int mySolutionNumber;
+	bool isSolutionSet;
+	int solutionNumber;
 };
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIStructureSet & structureSet);

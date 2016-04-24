@@ -22,24 +22,24 @@ void KPDGUIRecord::setBaselineIDCode(int code) {
 
 void KPDGUIRecord::insertNode(KPDGUINode * node, bool fromSavedFile) {
 
+	qDebug() << "Inserting Node";
 	if (!fromSavedFile) {
-		node->setNodeID(baselineID);
+		qDebug() << "Setting ID to Node";
+		node->setID(baselineID);
+		qDebug() << "Node ID Set";
 		baselineID++;
 	}
 
-	nodes.insert(node->getNodeID(), node);
+	qDebug() << "Node ID: " << node->getID();
+	nodes.insert(node->getID(), node);
 }
 
-void KPDGUIRecord::insertMatch(KPDGUIMatch * arrow) {
+void KPDGUIRecord::insertMatch(KPDGUIMatch * match) {
 
-	int fromID = arrow->getFromNode()->getNodeID();
-	fromMatches.insert(fromID, arrow);
+	int nodeID = match->getDonor()->getID();
 
-	int toID = arrow->getToNode()->getNodeID();
-	toMatches.insert(toID, arrow);
+	matches[nodeID] << match;
 }
-
-
 
 KPDGUINode * KPDGUIRecord::getNode(int nodeID){
 	if (nodes.keys().contains(nodeID)){
@@ -50,11 +50,13 @@ KPDGUINode * KPDGUIRecord::getNode(int nodeID){
 	}
 }
 
+/*
 KPDGUINode * KPDGUIRecord::getNodeFromIndex(int i){
 	QList<int> idList = nodes.keys();
 	int id = idList.at(i);
 	return nodes[id];
 }
+*/
 
 int KPDGUIRecord::getNumberOfNodes(){
 	return nodes.size();
@@ -68,8 +70,6 @@ QList<KPDGUINode *> KPDGUIRecord::getNodes(){
 	return nodes.values();
 }
 
-
-
 // Generate master matrices for selected nodes
 void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress){
 
@@ -79,7 +79,7 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 	//double defaultDonorFailureRate = params->getDefaultDonorFailureRate();
 	//double defaultCandidateFailureRate = params->getDefaultCandidateFailureRate();
 	//double defaultADFailureRate = params->getDefaultADFailureRate();
-	double exogenousFailureRate = params->getExogenousFailureRate();
+	//double exogenousFailureRate = params->getExogenousFailureRate();
 	bool reserveODonorsForOCandidates = params->getReserveODonorsForOCandidates();
 	bool checkAdditionalHLA = params->getCheckAdditionalHLA();
 		
@@ -87,7 +87,7 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 	availableNodes.clear();
 
 	foreach(KPDGUINode * node, nodes.values()){
-		if (!node->getNodeStatus()){
+		if (!node->getStatus()){
 			availableNodes.push_back(node);
 		}
 	}
@@ -114,11 +114,11 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 		int numberOfDonors = currentNode->getNumberOfDonors();
 
 		//Node ID
-		nodeInfoVector[i].nodeID = currentNode->getNodeID();
+		nodeInfoVector[i].nodeID = currentNode->getID();
 		
 		//For ADs
-		if (currentNode->getNodeType() == AD){ 
-			KPDGUIDonorInfo * ad = currentNode->getDonor(0);
+		if (currentNode->getType() == AD){ 
+			KPDGUIDonor * ad = currentNode->getFirstDonor();
 
 			nodeInfoVector[i].nodeType = AD;
 
@@ -128,7 +128,7 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 
 		//For Pairs
 		else {
-			KPDGUICandidateInfo * candidate = currentNode->getCandidate();
+			KPDGUICandidate * candidate = currentNode->getCandidate();
 
 			nodeInfoVector[i].nodeType = PAIR;
 			
@@ -138,9 +138,7 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 			nodeInfoVector[i].candidateUncertainty = 1 - candidate->getFailureProbability();
 			
 			//Donor Blood Types and PRA
-			for (int k = 1; k <= numberOfDonors; k++) {
-				KPDGUIDonorInfo * donor = currentNode->getDonor(k - 1);
-
+			foreach (KPDGUIDonor * donor, currentNode->getDonors()) {
 				nodeInfoVector[i].donorBTs.push_back(donor->getBT());
 				nodeInfoVector[i].donorUncertainty.push_back(1 - donor->getFailureProbability());
 			}
@@ -154,7 +152,8 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 	for (int i = 1; i <= N; i++){
 
 		KPDGUINode * donorNode = availableNodes.at(i - 1);
-		int numberOfDonors = donorNode->getNumberOfDonors();
+		QVector<KPDGUIDonor *> donors = donorNode->getDonors();
+		int numberOfDonors = donors.size();
 
 		for (int j = 1; j <= N; j++){
 
@@ -168,7 +167,7 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 				KPDGUINode * candidateNode = availableNodes.at(j - 1);
 				
 				// Pairing -> AD (Implicit Backward Edge from all Donors to the AD)
-				if (donorNode->getNodeType() == PAIR && candidateNode->getNodeType() == AD){
+				if (donorNode->getType() == PAIR && candidateNode->getType() == AD){
 					incidenceMatrix[i][j] = true;
 
 					for (int k = 1; k <= numberOfDonors; k++) {
@@ -177,14 +176,14 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 					}
 				}
 				// Pairing
-				else if (candidateNode->getNodeType() == PAIR)  {
+				else if (candidateNode->getType() == PAIR) {
 					
-					KPDGUICandidateInfo * candidate = candidateNode->getCandidate();
+					KPDGUICandidate * candidate = candidateNode->getCandidate();
 					double pra = candidate->getPRA();
 
 					for (int k = 1; k <= numberOfDonors; k++) {
 
-						KPDGUIDonorInfo * donor = donorNode->getDonor(k - 1);						
+						KPDGUIDonor * donor = donors[k - 1];						
 						
 						if (isMatch(donor, candidate, reserveODonorsForOCandidates, checkAdditionalHLA)) {
 
@@ -217,9 +216,9 @@ void KPDGUIRecord::generateMatrices(KPDGUISimParameters * params, QProgressDialo
 	int nADs = 0;
 
 	foreach(KPDGUINode * node, availableNodes){
-		recordLog.append(QString::number(node->getNodeID()) + " ");
+		recordLog.append(QString::number(node->getID()) + " ");
 
-		if (node->getNodeType() == AD){
+		if (node->getType() == AD){
 			nADs++;
 		}
 		else {
@@ -478,12 +477,15 @@ void KPDGUIRecord::clearMatrices(){
 
 void KPDGUIRecord::clearRecord() {
 	nodes.clear();
-	fromMatches.clear();
-	toMatches.clear();
+	matches.clear();
 }
 
 //Checks for a match between donor and candidate
-bool KPDGUIRecord::isMatch(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, bool reserveOtoO, bool checkAdditionalHLA){
+bool KPDGUIRecord::isMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, bool reserveOtoO, bool checkAdditionalHLA){
+
+	if (donor->getID() == candidate->getID()) {
+		return false;
+	}
 
 	if (donor->getBT() != BT_AB && donor->getBT() != BT_B && donor->getBT() != BT_A && donor->getBT() != BT_O){
 		return false;
@@ -613,12 +615,7 @@ bool KPDGUIRecord::isMatch(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candid
 	return true;
 }
 
-bool KPDGUIRecord::isMatch(KPDGUINode * donorNode, KPDGUINode * candidateNode, int donor, bool reserveOtoO, bool checkAdditionalHLA)
-{
-	return isMatch(donorNode->getDonor(donor), candidateNode->getCandidate(), reserveOtoO, checkAdditionalHLA);
-}
-
-double KPDGUIRecord::calculateSurvival(KPDGUIDonorInfo * donor, KPDGUICandidateInfo * candidate, int fiveyear) {
+double KPDGUIRecord::calculateSurvival(KPDGUIDonor * donor, KPDGUICandidate * candidate, int fiveyear) {
 	double survival = 0.0;
 
 	//Age
@@ -768,13 +765,6 @@ double KPDGUIRecord::calculateSurvival(KPDGUIDonorInfo * donor, KPDGUICandidateI
 
 	return survival;
 }
-
-double KPDGUIRecord::calculateSurvival(KPDGUINode *  donorNode, KPDGUINode * candidateNode, int donor, int fiveyear){
-
-	return calculateSurvival(donorNode->getDonor(donor), candidateNode->getCandidate(), fiveyear);
-	
-}
-
 
 QString KPDGUIRecord::getRecordLog(){
 	return recordLog;

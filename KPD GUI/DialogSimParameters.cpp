@@ -34,11 +34,6 @@ DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget
 	componentSizeSpinBox->setValue(paramInfo->getMaxComponentSize());
 	
 	//Numerical Parameters
-	donorFailureSpinBox->setValue(paramInfo->getDefaultDonorFailureRate());
-	candidateFailureSpinBox->setValue(paramInfo->getDefaultCandidateFailureRate());
-	adFailureSpinBox->setValue(paramInfo->getDefaultADFailureRate());
-	exogenousFailureSpinBox->setValue(paramInfo->getExogenousFailureRate());
-
 	praCheckBox->setChecked(paramInfo->getAddAdvantageToHighPRACandidates());
 	if (paramInfo->getAddAdvantageToHighPRACandidates()){
 		praCutoffSpinBox->setValue(paramInfo->getPRAAdvantageCutoff());
