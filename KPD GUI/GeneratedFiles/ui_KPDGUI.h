@@ -330,9 +330,9 @@ public:
         QObject::connect(actionHand_Tool, SIGNAL(triggered()), KPDGUI, SLOT(changeToHandMode()));
         QObject::connect(actionMouse_Tool, SIGNAL(triggered()), KPDGUI, SLOT(changeToMouseMode()));
         QObject::connect(actionDisplay_All_Compatibilities, SIGNAL(triggered()), KPDGUI, SLOT(changeMatchViewMode_All()));
-        QObject::connect(actionDisplay_Compatibilities_Within_Selection, SIGNAL(triggered()), KPDGUI, SLOT(changeArrowViewMode_Within()));
-        QObject::connect(actionDisplay_No_Compatibilities, SIGNAL(triggered()), KPDGUI, SLOT(changeArrowViewMode_None()));
-        QObject::connect(actionDisplay_Selected_Compatibilities, SIGNAL(triggered()), KPDGUI, SLOT(changeMatchViewMode_SelectedComps()));
+        QObject::connect(actionDisplay_Compatibilities_Within_Selection, SIGNAL(triggered()), KPDGUI, SLOT(changeMatchViewMode_Within()));
+        QObject::connect(actionDisplay_No_Compatibilities, SIGNAL(triggered()), KPDGUI, SLOT(changeMatchViewMode_None()));
+        QObject::connect(actionDisplay_Selected_Compatibilities, SIGNAL(triggered()), KPDGUI, SLOT(changeMatchViewMode_SelectedCompatibilities()));
         QObject::connect(actionView_Structures_Solutions, SIGNAL(toggled(bool)), structureWidget, SLOT(setVisible(bool)));
         QObject::connect(actionView_Structures_Solutions, SIGNAL(toggled(bool)), solutionWidget, SLOT(setVisible(bool)));
         QObject::connect(graphicsView, SIGNAL(customContextMenuRequested(QPoint)), KPDGUI, SLOT(screenCustomMenu(QPoint)));

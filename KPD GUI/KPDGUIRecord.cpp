@@ -22,15 +22,15 @@ void KPDGUIRecord::setBaselineIDCode(int code) {
 
 void KPDGUIRecord::insertNode(KPDGUINode * node, bool fromSavedFile) {
 
-	qDebug() << "Inserting Node";
+	//qDebug() << "Inserting Node";
 	if (!fromSavedFile) {
-		qDebug() << "Setting ID to Node";
+		//qDebug() << "Setting ID to Node";
 		node->setID(baselineID);
-		qDebug() << "Node ID Set";
+		//qDebug() << "Node ID Set";
 		baselineID++;
 	}
 
-	qDebug() << "Node ID: " << node->getID();
+	//qDebug() << "Node ID: " << node->getID();
 	nodes.insert(node->getID(), node);
 }
 

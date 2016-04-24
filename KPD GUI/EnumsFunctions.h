@@ -17,7 +17,7 @@ enum KPDUtilityScheme { TRANSPLANTS, SURVIVAL5YEAR, SURVIVAL10YEAR, SCORE };
 enum KPDBloodType { BT_O, BT_A, BT_B, BT_AB };
 enum KPDRace { RACE_WHITE, RACE_BLACK, RACE_HISPANIC, RACE_OTHER };
 
-enum KPDMatchDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, COMPATIBLE_DONORS, COMPATIBLE_RECIPIENTS, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
+enum KPDMatchDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
 enum KPDNodeSortMode { NODESORT_ID, NODESORT_POPULARITY_SOLUTIONS, NODESORT_POPULARITY_STRUCTURES, NODESORT_COMPATIBILITIES, NODESORT_COMPATIBLE_DONORS, NODESORT_COMPATIBLE_RECIPIENTS, NODESORT_PRA };
 enum KPDMatchSortMode { MATCHSORT_POPULARITY_SOLUTIONS, MATCHSORT_POPULARITY_STRUCTURES, MATCHSORT_DONORID, MATCHSORT_RECIPID };
 
@@ -25,7 +25,7 @@ enum KPDChainStorage { AS_FOUND, CHAINS_FIRST, CHAINS_LAST };
 
 enum KPDNodeType { PAIR, AD };
 
-struct AdditionalNodeInfo{
+struct AdditionalNodeInfo {
 	
 	int nodeID;
 	KPDNodeType nodeType;
@@ -129,10 +129,10 @@ namespace KPDFunctions {
 	}
 
 	inline QString toString(KPDBloodType type){
-		if (type == WITHIN_SELECTION){ return "O"; }
-		else if (type == SELECTED_COMPATIBILITIES){ return "A"; }
-		else if (type == COMPATIBLE_DONORS){ return "B"; }
-		else if (type == COMPATIBLE_RECIPIENTS){ return "AB"; }
+		if (type == BT_O){ return "O"; }
+		else if (type == BT_A){ return "A"; }
+		else if (type == BT_B){ return "B"; }
+		else if (type == BT_AB){ return "AB"; }
 		else { return ""; }
 	}
 
@@ -173,10 +173,8 @@ namespace KPDFunctions {
 		KPDMatchDisplayMode mode = WITHIN_SELECTION;
 
 		if (i == 1) { mode = SELECTED_COMPATIBILITIES; }
-		else if (i == 2) { mode = COMPATIBLE_DONORS; }
-		else if (i == 3) { mode = COMPATIBLE_RECIPIENTS; }
-		else if (i == 4) { mode = ALL_COMPATIBILITIES; }
-		else if (i == 5) { mode = NO_COMPATIBILITIES; }
+		else if (i == 2) { mode = ALL_COMPATIBILITIES; }
+		else if (i == 3) { mode = NO_COMPATIBILITIES; }
 
 		return mode;
 	}
@@ -186,10 +184,8 @@ namespace KPDFunctions {
 		int i = 0;
 
 		if (mode == SELECTED_COMPATIBILITIES) { i = 1; }
-		else if (mode == COMPATIBLE_DONORS) { i = 2; }
-		else if (mode == COMPATIBLE_RECIPIENTS) { i = 3; }
-		else if (mode == ALL_COMPATIBILITIES) { i = 4; }
-		else if (mode == NO_COMPATIBILITIES) { i = 5; }
+		else if (mode == ALL_COMPATIBILITIES) { i = 2; }
+		else if (mode == NO_COMPATIBILITIES) { i = 3; }
 
 		return i;
 	}
@@ -197,8 +193,6 @@ namespace KPDFunctions {
 	inline QString toString(KPDMatchDisplayMode mode) {
 		if (mode == WITHIN_SELECTION) { return "Within Selection"; }
 		else if (mode == SELECTED_COMPATIBILITIES) { return "Selected Compatibilities"; }
-		else if (mode == COMPATIBLE_DONORS) { return "Compatible Donors"; }
-		else if (mode == COMPATIBLE_RECIPIENTS) { return "Compatible Recipients"; }
 		else if (mode == ALL_COMPATIBILITIES) { return "All Compatibilities"; }
 		else if (mode == NO_COMPATIBILITIES) { return "No Compatibilities"; }
 		else { return ""; }

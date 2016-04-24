@@ -92,17 +92,17 @@ int KPDGUINode::getNumberOfPrograms() const {
 void KPDGUINode::setID(int id) {
 	nodeID = id;
 
-	qDebug() << "Setting ID";
+	//qDebug()() << "Setting ID";
 
 	int i = 1;
 	foreach(KPDGUIDonor * donor, nodeDonors) {
 		
-		qDebug() << "Setting ID for Donor " << i;
+		//qDebug()() << "Setting ID for Donor " << i;
 
 		donor->setID(id);
 		donor->setDonorNumber(i);
 
-		qDebug() << "Donor ID" << donor->getID() << " " << donor->getDonorNumber();
+		//qDebug()() << "Donor ID" << donor->getID() << " " << donor->getDonorNumber();
 		i++;
 	}
 
@@ -284,7 +284,7 @@ void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings) {
 
 QString KPDGUINode::getNameString() {
 	
-	qDebug() << "Donor ID: " << nodeDonors.first()->getID();
+	//qDebug()() << "Donor ID: " << nodeDonors.first()->getID();
 
 	QString nameString = "";
 	

@@ -15,12 +15,8 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	setUpToolbar();
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
-
-	qDebug() << KPDFunctions::toString(kpdguiDisplaySettings->getMatchDisplayMode());
-
+	
 	changeMatchViewMode_All();
-
-	qDebug() << KPDFunctions::toString(kpdguiDisplaySettings->getMatchDisplayMode());
 
 }
 
@@ -252,22 +248,22 @@ void KPDGUI::addNewNode()
 				}
 			}
 
-			qDebug() << "Creating Node";
+			//qDebug() << "Creating Node";
 			KPDGUINode * newNode = new KPDGUINode(associatedDonors, candidate);
-			qDebug() << "Node Created";
+			//qDebug() << "Node Created";
 			
 			//newNode->setNodePosition(QPointF(0, 0));
 
-			qDebug() << "Add Node to Record";
+			//qDebug() << "Add Node to Record";
 			addNode(newNode, false);
-			qDebug() << "Node Added to Record" << newNode->getID() << " " << newNode->getFirstDonor()->getID();
+			//qDebug() << "Node Added to Record" << newNode->getID() << " " << newNode->getFirstDonor()->getID();
 			//kpdguiScene->clearSelection();
 			//newNode->setSelected(true);
 			changeFocus(newNode);
 
-			qDebug() << "Write to Dashboard";
+			//qDebug() << "Write to Dashboard";
 			updateStatus("Added New Pairing: " + newNode->getNameString());
-			qDebug() << "Written to Dashboard";
+			//qDebug() << "Written to Dashboard";
 
 			//emit visibilityChanged(kpdguiDisplaySettings);
 			//emit poolChanged();
@@ -477,7 +473,7 @@ void KPDGUI::changeMatchViewMode_Within()
 	updateVisibility();
 }
 
-void KPDGUI::changeMatchViewMode_SelectedComps()
+void KPDGUI::changeMatchViewMode_SelectedCompatibilities()
 {
 	kpdguiDisplaySettings->setMatchDisplayMode(SELECTED_COMPATIBILITIES);
 	updateVisibility();
@@ -713,7 +709,7 @@ void KPDGUI::newNodeListDoubleClickActions(QTreeWidgetItem * item)
 {
 	KPDGUINodeWrapper * node = dynamic_cast<KPDGUINodeWrapper *>(item);
 	if (node){
-		qDebug() << "Double Click " << node->getNode()->getID();
+		//qDebug() << "Double Click " << node->getNode()->getID();
 	}
 }
 
@@ -776,7 +772,7 @@ void KPDGUI::screenCustomMenu(QPoint pos){
 
 void KPDGUI::nodeListCustomMenu(QPoint pos){
 
-	qDebug() << "Pair List Custom Menu";
+	//qDebug() << "Pair List Custom Menu";
 
 	QTreeWidgetItem * item = ui->pairWidget->itemAt(pos);
 
@@ -853,7 +849,7 @@ void KPDGUI::solutionTreeCustomMenu(QPoint pos){
 
 //void KPDGUI::deleteNode(int i)
 //{
-	//qDebug() << "Delete " << i;
+	////qDebug() << "Delete " << i;
 
 	/*KPDGUINode * nodeToDelete = kpdguiRecord->getNode(i);
 	int id = nodeToDelete->getID();
@@ -1072,7 +1068,7 @@ void KPDGUI::updateTable(int i)
 }
 
 void KPDGUI::updateVisibility(){
-	qDebug() << "KPDGUI::updateVisibility";
+	//qDebug() << "KPDGUI::updateVisibility";
 	emit visibilityChanged(kpdguiDisplaySettings);
 }
 
@@ -1136,7 +1132,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 	QMap<int, KPDGUINode*> nodeMap;
 
 	for (int i = 0; i < size; i++){
-		//qDebug() << i;
+		////qDebug() << i;
 		KPDGUINode * node = new KPDGUINode();
 		in >> *node;
 		addNode(node, true);
@@ -1286,12 +1282,12 @@ void KPDGUI::setCurrentFile(const QString &fileName)
 
 void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 
-	qDebug() << "Inserting Node into Record";
+	//qDebug() << "Inserting Node into Record";
 	kpdguiRecord->insertNode(newNode, fromSavedFile);
-	qDebug() << "Inserted Node into Record";
+	//qDebug() << "Inserted Node into Record";
 	checkNodeMatches(newNode);
 
-	//qDebug() << newNode->getNodePosition();
+	////qDebug() << newNode->getNodePosition();
 
 	if (newNode->getType() == PAIR) {
 		kpdguiScene->addItem(newNode->getCandidate());
@@ -1302,7 +1298,7 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	}
 
 	if (newNode->getType() == PAIR) {
-		qDebug() << newNode->getCandidate()->pos() << " " << newNode->getFirstDonor()->pos();
+		//qDebug() << newNode->getCandidate()->pos() << " " << newNode->getFirstDonor()->pos();
 	}
 	++nodePlacementSequenceNumber;	
 
@@ -1332,11 +1328,12 @@ void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
 	kpdguiRecord->insertMatch(match);
 	//link->setVisible(false);
 	
-	qDebug() << "Add Match";
+	//qDebug() << "Add Match";
 	
 	kpdguiScene->addItem(match);
 	match->setVisible(true);
-	qDebug() << "Is Match Visible? " << match->isVisible();
+	
+	//qDebug() << "Is Match Visible? " << match->isVisible();
 
 }
 
@@ -1802,7 +1799,7 @@ void KPDGUI::editDonor(){
 			DialogDonor * dialogDonor = new DialogDonor(node->getFirstDonor(), true, this);
 
 			if (dialogDonor->exec()) {
-				qDebug() << "Edit Donor " << node->getID();
+				//qDebug() << "Edit Donor " << node->getID();
 			}			
 		}
 	}
@@ -1817,7 +1814,7 @@ void KPDGUI::editCandidate(){
 			DialogCandidate * dialogCandidate = new DialogCandidate(node->getCandidate(), true, this);
 
 			if (dialogCandidate->exec()){
-				qDebug() << "Edit Candidate " << node->getID();
+				//qDebug() << "Edit Candidate " << node->getID();
 			}
 		}
 	}

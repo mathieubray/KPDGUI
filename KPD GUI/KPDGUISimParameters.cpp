@@ -374,11 +374,6 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 	int chainLength;
 	int componentSize;
 
-	double defaultDonorFailureRate;
-	double defaultCandidateFailureRate;
-	double defaultADFailureRate;
-	double exogenousFailureRate;
-
 	int numberOfSolutions;
 
 	bool estimateExpectedUtility;
@@ -396,9 +391,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUISimParameters & parameters)
 	bool allowABBridgeDonors;
 	
 	in >> opt >> util >> cycleSize >> chainLength >> componentSize;
-	in >> defaultDonorFailureRate >> defaultCandidateFailureRate << defaultADFailureRate << exogenousFailureRate;
 
-	in >> numberOfSolutions >> estimateExpectedUtility << numberOfExpectedUtilityIterations;
+	in >> numberOfSolutions >> estimateExpectedUtility >> numberOfExpectedUtilityIterations;
 
 	in >> addAdvantageToHighPRACandidates >> praAdvantageCutoff >> praAdvantageValue;
 

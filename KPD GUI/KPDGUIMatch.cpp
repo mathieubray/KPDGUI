@@ -4,8 +4,8 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate)
 {
 	myDonor = donor;
     myCandidate = candidate;
-	//myDonor->addMatchingCandidate(this);
-	//myCandidate->addMatchingDonor(this);
+	myDonor->addMatchingCandidate(this);
+	myCandidate->addMatchingDonor(this);
 
 	//connect(myStartItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	//connect(myEndItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
@@ -51,7 +51,9 @@ void KPDGUIMatch::updatePosition() {
    //QLineF line(myDonor->getCenter(), myCandidate->getCenter());
 	setLine(newline);
 
-	qDebug() << line().p1() << " " << line().p2();
+	//qDebug() << line().p1() << " " << line().p2();
+
+	qDebug() << "UPDATE POSITION: " << isVisible() << " " << line().p1() << " " << line().p2();
 }
 
 void KPDGUIMatch::highlightMatch(int level){
@@ -124,9 +126,10 @@ void KPDGUIMatch::resetPopularity(bool solution){
 
 void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-	qDebug() << "Arrow painted";
+	qDebug() << "ARROW PAINTED";
 
 	if (myDonor->collidesWithItem(myCandidate)) {
+		qDebug() << "COLLIDES!!";
 		return;
 	}
 
@@ -224,7 +227,8 @@ void KPDGUIMatch::setArrowProperties(QColor color, int width, qreal opacity, int
 	setZValue(myZValue);
 	setOpacity(myOpacity);
 
-	qDebug() << "Arrow properties set";
+	qDebug() << "Arrow properties set" << isVisible();
+
 	//update();
 	
 	qDebug() << line().p1() << " " << line().p2();
@@ -258,22 +262,16 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
-		else if (displaySettings->getMatchDisplayMode() == COMPATIBLE_DONORS){
-			if (myCandidate->isSelected()){
-				setVisible(checkVisibility(displaySettings));
-			}
-		}
-		else if (displaySettings->getMatchDisplayMode() == COMPATIBLE_RECIPIENTS){
-			if (myDonor->isSelected()){
-				setVisible(checkVisibility(displaySettings));
-			}
-		}
 		else if (displaySettings->getMatchDisplayMode() == WITHIN_SELECTION){
 			if (myDonor->isSelected() && myCandidate->isSelected()){
 				setVisible(checkVisibility(displaySettings));
 			}
 		}
 	}
+
+	qDebug() << "UPDATE VISIBILITY: " << isVisible();
+
+	
 }
 
 void KPDGUIMatch::endDisplayAsPartOfSolution(){

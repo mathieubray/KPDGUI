@@ -855,7 +855,7 @@
    <sender>actionDisplay_Compatibilities_Within_Selection</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
-   <slot>changeArrowViewMode_Within()</slot>
+   <slot>changeMatchViewMode_Within()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -871,7 +871,7 @@
    <sender>actionDisplay_No_Compatibilities</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
-   <slot>changeArrowViewMode_None()</slot>
+   <slot>changeMatchViewMode_None()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -887,7 +887,7 @@
    <sender>actionDisplay_Selected_Compatibilities</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
-   <slot>changeMatchViewMode_SelectedComps()</slot>
+   <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1057,7 +1057,7 @@
   <slot>changeToMouseMode()</slot>
   <slot>changeMatchViewMode_None()</slot>
   <slot>changeMatchViewMode_Within()</slot>
-  <slot>changeMatchViewMode_SelectedComps()</slot>
+  <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
   <slot>screenCustomMenu(QPoint)</slot>
   <slot>updateVisibility()</slot>
  </slots>

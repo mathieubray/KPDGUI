@@ -64,9 +64,7 @@ public slots:
 	//Window-->Display
 	void changeNodeViewMode();
 	void changeMatchViewMode_Within();
-	void changeMatchViewMode_SelectedComps();
-	//void changeMatchViewMode_Donors();
-	//void changeMatchViewMode_Candidates();
+	void changeMatchViewMode_SelectedCompatibilities();
 	void changeMatchViewMode_All();
 	void changeMatchViewMode_None();
 
