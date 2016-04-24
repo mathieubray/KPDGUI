@@ -340,7 +340,7 @@ void KPDGUICandidate::setComment(QString comment){
 
 QPointF KPDGUICandidate::getCenter() {
 
-	QPointF point = mapFromScene(boundingRect().topLeft());
+	QPointF point = scenePos();
 	qreal x = point.x();
 	qreal y = point.y();
 

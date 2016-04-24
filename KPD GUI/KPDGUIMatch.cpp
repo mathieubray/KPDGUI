@@ -11,7 +11,7 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate)
 	//connect(myEndItem, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(changeArrowSelection(int, bool)));
 	
 	//Arrow Defaults
-	setArrowProperties(Qt::black, 1, 0.25, 40);
+	setArrowProperties(Qt::black, 1, 0.25, -1);
 	
 	//Reset Popularity
 	myPopularityInStructures = 0;
@@ -43,8 +43,8 @@ QPainterPath KPDGUIMatch::shape() const {
 
 void KPDGUIMatch::updatePosition() {
 	
-	qDebug() << "Update Position: " << myDonor->getCenter() << " " << myCandidate->getCenter();
-	//QLineF line(mapFromItem(myStartItem->getDonorItem(), 0, 0), mapFromItem(myEndItem->getRecipItem(), 0, 0));
+	//qDebug() << "Update Position: " << myDonor->getCenter() << " " << myCandidate->getCenter();
+	//QLineF line(mapFromItem(myDonor, 0, 0), mapFromItem(myCandidate, 0, 0));
 	QLineF line(myDonor->getCenter(), myCandidate->getCenter());
 	setLine(line);
 }
@@ -136,7 +136,7 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	
 	qDebug() << "Painting: " << startPoint << " " << endPoint;
 
-	/*QLineF centerLine(startPoint, endPoint);
+	QLineF centerLine(startPoint, endPoint);
 	//QLineF centerLine(myDonor->pos(), myCandidate->pos());
 	QPolygonF endPolygon = myCandidate->sceneBoundingRect();
 	//QPolygonF endPolygon = myCandidate->boundingRect();
@@ -152,34 +152,34 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 		if (intersectType == QLineF::BoundedIntersection)
 			break;
 		p1 = p2;
-	}*/
+	}
 
-	//setLine(QLineF(intersectPoint, startPoint));
+	setLine(QLineF(intersectPoint, startPoint));
 	//setLine(QLineF(intersectPoint, myDonor->pos()));
 
-	setLine(QLineF(endPoint, startPoint));
+	//setLine(QLineF(endPoint, startPoint));
 
-	//double angle = ::acos(line().dx() / line().length());
-	//if (line().dy() >= 0)
-		//angle = (PI * 2) - angle;
+	double angle = ::acos(line().dx() / line().length());
+	if (line().dy() >= 0)
+		angle = (PI * 2) - angle;
 
-	//QPointF arrowP1 = line().p1() + QPointF(sin(angle + PI / 3) * arrowSize, cos(angle + PI / 3) * arrowSize);
-	//QPointF arrowP2 = line().p1() + QPointF(sin(angle + PI - PI / 3) * arrowSize, cos(angle + PI - PI / 3) * arrowSize);
+	QPointF arrowP1 = line().p1() + QPointF(sin(angle + PI / 3) * arrowSize, cos(angle + PI / 3) * arrowSize);
+	QPointF arrowP2 = line().p1() + QPointF(sin(angle + PI - PI / 3) * arrowSize, cos(angle + PI - PI / 3) * arrowSize);
 
-	//arrowHead.clear();
-	//arrowHead << line().p1() << arrowP1 << arrowP2;
+	arrowHead.clear();
+	arrowHead << line().p1() << arrowP1 << arrowP2;
 
 	painter->drawLine(line());
-	//painter->drawPolygon(arrowHead);
+	painter->drawPolygon(arrowHead);
 	
-	//if (isSelected()) {
-		//painter->setPen(QPen(myColor, myWidth, Qt::DashLine));
-		//QLineF myLine = line();
-		//myLine.translate(0, 4.0);
-		//painter->drawLine(myLine);
-		//myLine.translate(0, -8.0);
-		//painter->drawLine(myLine);
-	//}
+	if (isSelected()) {
+		painter->setPen(QPen(myColor, myWidth, Qt::DashLine));
+		QLineF myLine = line();
+		myLine.translate(0, 4.0);
+		painter->drawLine(myLine);
+		myLine.translate(0, -8.0);
+		painter->drawLine(myLine);
+	}
 
 }
 

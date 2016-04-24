@@ -476,7 +476,7 @@ QPointF KPDGUIDonor::getCenter() {
 
 	//qreal x = boundingRect().x();
 	//qreal y = boundingRect().y();
-	QPointF point = mapToScene(boundingRect().topLeft());
+	QPointF point = scenePos();
 	qreal x = point.x();
 	qreal y = point.y();
 
