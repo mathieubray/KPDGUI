@@ -32,17 +32,28 @@ void KPDGUINodeWrapper::updateSelections(){
 
 void KPDGUINodeWrapper::updateText(){
 	
-	/*setText(0, QString::number(myNode->getNodeID()));
-	setText(1, myNode->getNameString());
-	setText(2, QString::number(myNode->getNumberOfDonors()));
-	setText(3, QString::number(myNode->getPopularityInStructures()));
-	setText(4, QString::number(myNode->getPopularityInSolutions()));
-	setText(5, QString::number(myNode->getNumberOfCompatibleDonors()));
-	setText(6, QString::number(myNode->getNumberOfCompatibleCandidates()));
+	setText(0, QString::number(myNode->getID()));
+	setText(1, KPDFunctions::toString(myNode->getType()));
+	setText(2, myNode->getNodeListString());
+	setText(3, QString::number(myNode->getNumberOfDonors()));
+	
+	QColor textColor;
+	if (myNode->getStatus()) {
+		textColor = QColor(0, 0, 0);
+	}
+	else {
+		textColor = QColor(175, 175, 175);
+	}
 
 	for (int i = 0; i < columnCount(); i++){
-		setTextAlignment(i, Qt::AlignHCenter | Qt::AlignVCenter);
-	}*/
+		setTextColor(i, textColor);
+		if (i == 0 || i == 3) {
+			setTextAlignment(i, Qt::AlignHCenter | Qt::AlignVCenter);
+		}
+		else {
+			setTextAlignment(i, Qt::AlignLeft | Qt::AlignVCenter);
+		}
+	}
 
 }
 
@@ -50,34 +61,47 @@ bool KPDGUINodeWrapper::operator<(const QTreeWidgetItem &other)const {
 	
 	int column = treeWidget()->sortColumn();
 
-	int id = text(0).toInt();
+	int thisID = text(0).toInt();
 	int otherID = other.text(0).toInt();
 
 	if (column == 0){
-		return id < otherID;
+		return thisID < otherID;
 	}
-	else {
-		QString thisText = text(column).toLower();
-		QString otherText = other.text(column).toLower();
+	else if (column == 1) {
+		
+		QString thisType = text(column).toLower();
+		QString otherType = other.text(column).toLower();
 
-		if (column == 1){
-			if (thisText == otherText){
-				return id < otherID;
-			}
-			else {
-				return thisText < otherText;
-			}
+		if (thisType == otherType) {
+			return thisID < otherID;
 		}
 		else {
-			int value = thisText.toInt();
-			int otherValue = otherText.toInt();
+			return thisType < otherType;
+		}
+	}
+	else if (column == 2) {
 
-			if (value == otherValue){
-				return id < otherID;
-			}
-			else {
-				return value < otherValue;
-			}
+		QString thisName = text(column).toLower();
+		QString otherName = other.text(column).toLower();
+
+		if (thisName == otherName) {
+			return thisID < otherID;
+		}
+		else {
+			return thisName < otherName;
+		}
+	}
+
+	else {
+
+		QString thisMatches = text(column).toInt();
+		QString otherMatches = other.text(column).toInt();
+
+		if (thisMatches == otherMatches) {
+			return thisID < otherID;
+		}
+		else {
+			return thisMatches < otherMatches;
 		}
 	}
 }

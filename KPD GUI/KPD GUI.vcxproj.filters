@@ -124,9 +124,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINodeWrapper.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIPairList.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIMatch.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -140,9 +137,6 @@
       <Filter>GUI Components</Filter>
     </ClCompile>
     <ClCompile Include="KPDGUIGraphicsView.cpp">
-      <Filter>GUI Components</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIPairList.cpp">
       <Filter>GUI Components</Filter>
     </ClCompile>
     <ClCompile Include="KPDGUI.cpp">
@@ -226,11 +220,20 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINode.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUINewMatch.cpp">
-      <Filter>Nodes, Matches and Structures</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINewMatch.cpp">
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUINodeList.cpp">
       <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUINodeList.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUINodeList.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIDonorWrapper.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUICandidateWrapper.cpp">
+      <Filter>Wrappers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -285,9 +288,6 @@
     <CustomBuild Include="KPDGUIGraphicsView.h">
       <Filter>GUI Components</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUIPairList.h">
-      <Filter>GUI Components</Filter>
-    </CustomBuild>
     <CustomBuild Include="KPDGUI.h">
       <Filter>GUI Components</Filter>
     </CustomBuild>
@@ -315,8 +315,8 @@
     <CustomBuild Include="KPDGUICandidate.h">
       <Filter>Nodes, Matches and Structures</Filter>
     </CustomBuild>
-    <CustomBuild Include="KPDGUINewMatch.h">
-      <Filter>Nodes, Matches and Structures</Filter>
+    <CustomBuild Include="KPDGUINodeList.h">
+      <Filter>GUI Components</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +355,12 @@
     </ClInclude>
     <ClInclude Include="KPDGUISimulation.h">
       <Filter>KPD Simulation Components</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUIDonorWrapper.h">
+      <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="KPDGUICandidateWrapper.h">
+      <Filter>Wrappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

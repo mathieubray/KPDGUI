@@ -51,6 +51,7 @@ private:
 
 	// Visual
 	QColor candidateBackgroundColor;
+	qreal candidateOpacity;
 	QString candidateLabel;
 	
 
@@ -70,12 +71,13 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent * event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
-	void setVisualProperties();
+	
 
 
 public slots:
 
 	void editCandidate();
+	void updateVisualProperties();
 
 
 public:

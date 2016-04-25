@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1060</width>
-    <height>590</height>
+    <height>760</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -31,176 +31,257 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
-     <widget class="QSplitter" name="rightPanelLayout">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="childrenCollapsible">
-       <bool>false</bool>
-      </property>
-      <widget class="QTreeWidget" name="structureWidget">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::MultiSelection</enum>
-       </property>
-       <column>
-        <property name="text">
-         <string>Structures</string>
-        </property>
-       </column>
-      </widget>
-      <widget class="QTreeWidget" name="solutionWidget">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>250</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="editTriggers">
-        <set>QAbstractItemView::NoEditTriggers</set>
-       </property>
-       <property name="selectionMode">
-        <enum>QAbstractItemView::MultiSelection</enum>
-       </property>
-       <column>
-        <property name="text">
-         <string>Solutions</string>
-        </property>
-       </column>
-      </widget>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <layout class="QVBoxLayout" name="centralPanelLayout">
-      <item>
-       <widget class="KPDGUIGraphicsView" name="graphicsView">
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>300</height>
-         </size>
-        </property>
-        <property name="dragMode">
-         <enum>QGraphicsView::RubberBandDrag</enum>
-        </property>
-        <property name="transformationAnchor">
-         <enum>QGraphicsView::AnchorViewCenter</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="KPDGUIDashboard" name="dashboard">
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>125</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>125</height>
-         </size>
-        </property>
-        <property name="tabPosition">
-         <enum>QTabWidget::South</enum>
-        </property>
-        <property name="tabShape">
-         <enum>QTabWidget::Rounded</enum>
-        </property>
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-        <property name="elideMode">
-         <enum>Qt::ElideNone</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="0">
-     <layout class="QVBoxLayout" name="leftPanelLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="KPDGUIPairList" name="pairWidget">
-        <property name="minimumSize">
-         <size>
-          <width>300</width>
-          <height>0</height>
-         </size>
+       <widget class="QSplitter" name="splitter">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="maximumSize">
-         <size>
-          <width>300</width>
-          <height>16777215</height>
-         </size>
+        <property name="childrenCollapsible">
+         <bool>false</bool>
         </property>
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
+        <widget class="KPDGUINodeList" name="nodeList">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>false</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Node</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Type</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Donors</string>
+          </property>
+         </column>
+        </widget>
+        <widget class="KPDGUINodeList" name="donorList">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>false</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Donor</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Type</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Matches</string>
+          </property>
+         </column>
+        </widget>
+        <widget class="KPDGUINodeList" name="candidateList">
+         <property name="minimumSize">
+          <size>
+           <width>300</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>300</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors">
+          <bool>false</bool>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
+         </property>
+         <property name="sortingEnabled">
+          <bool>true</bool>
+         </property>
+         <column>
+          <property name="text">
+           <string>Candidate</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Name</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Matches</string>
+          </property>
+         </column>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="centralPanelLayout">
+        <item>
+         <widget class="KPDGUIGraphicsView" name="graphicsView">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>300</height>
+           </size>
+          </property>
+          <property name="dragMode">
+           <enum>QGraphicsView::RubberBandDrag</enum>
+          </property>
+          <property name="transformationAnchor">
+           <enum>QGraphicsView::AnchorViewCenter</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="KPDGUIDashboard" name="dashboard">
+          <property name="minimumSize">
+           <size>
+            <width>300</width>
+            <height>125</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>125</height>
+           </size>
+          </property>
+          <property name="tabPosition">
+           <enum>QTabWidget::South</enum>
+          </property>
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="elideMode">
+           <enum>Qt::ElideNone</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QSplitter" name="rightPanelLayout">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
-        <property name="alternatingRowColors">
-         <bool>true</bool>
+        <property name="childrenCollapsible">
+         <bool>false</bool>
         </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::MultiSelection</enum>
-        </property>
-        <property name="sortingEnabled">
-         <bool>true</bool>
-        </property>
-        <column>
-         <property name="text">
-          <string>Pair/AD</string>
+        <widget class="QTreeWidget" name="structureWidget">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>100</height>
+          </size>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Name</string>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>16777215</height>
+          </size>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Structures</string>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Solutions</string>
+         <column>
+          <property name="text">
+           <string>Structures</string>
+          </property>
+         </column>
+        </widget>
+        <widget class="QTreeWidget" name="solutionWidget">
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>100</height>
+          </size>
          </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
+         <property name="maximumSize">
+          <size>
+           <width>250</width>
+           <height>16777215</height>
+          </size>
          </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>Compatibilities</string>
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
          </property>
-         <property name="textAlignment">
-          <set>AlignLeading|AlignVCenter</set>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::MultiSelection</enum>
          </property>
-        </column>
+         <column>
+          <property name="text">
+           <string>Solutions</string>
+          </property>
+         </column>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -567,9 +648,9 @@
    </slots>
   </customwidget>
   <customwidget>
-   <class>KPDGUIPairList</class>
+   <class>KPDGUINodeList</class>
    <extends>QTreeWidget</extends>
-   <header>KPDGUIPairList.h</header>
+   <header>KPDGUINodeList.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

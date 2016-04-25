@@ -27,6 +27,14 @@ KPDGUICandidate::KPDGUICandidate(){
 	candidateHepC = false;
 	
 	candidateComment = "";
+
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+	candidateOpacity = 0.25;
+
+	setRect(QRectF(0, 0, 75, 65));
+
+	updateVisualProperties();
 }
 
 KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
@@ -75,8 +83,14 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 	}
 
 	candidateComment = c->commentTextEdit->toPlainText();
+	
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+	candidateOpacity = 0.25;
 
-	setVisualProperties();
+	setRect(QRectF(0, 0, 75, 65));
+
+	updateVisualProperties();
 
 }
 
@@ -187,26 +201,38 @@ QString KPDGUICandidate::getComment() const{
 
 void KPDGUICandidate::setID(int id){
 	matchingID = id;
+
+	updateVisualProperties();	
 }
 
 void KPDGUICandidate::setName(QString name){
 	candidateName = name;
+
+	updateVisualProperties();
 }
 
 void KPDGUICandidate::setAge(int age){
 	candidateAge = age;
+
+	updateVisualProperties();
 }
 
 void KPDGUICandidate::setPRA(int pra) {
 	candidatePRA = pra;
+
+	updateVisualProperties();
 }
 
 void KPDGUICandidate::setBT(KPDBloodType bt){
 	candidateBT = bt;
+
+	updateVisualProperties();
 }
 
 void KPDGUICandidate::setStatus(bool status) {
 	candidateStatus = status;
+
+	updateVisualProperties();
 }
 
 void KPDGUICandidate::setFailureProbability(double prob) {
@@ -362,17 +388,10 @@ void KPDGUICandidate::setText(const QString &text)
 	update();
 }
 
-void KPDGUICandidate::setBackgroundColor() {
+//void KPDGUICandidate::setBackgroundColor() {
 
-	if (candidateStatus) {
-		candidateBackgroundColor = QColor(255, candidatePRA * 1.5, candidatePRA * 1.5);		
-	}
-	else {
-		candidateBackgroundColor = QColor(100, 100, 100);
-	}
-
-	update();
-}
+	//update();
+//}
 
 QColor KPDGUICandidate::backgroundColor() const
 {
@@ -441,7 +460,7 @@ void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 }
 
 QString KPDGUICandidate::candidateString() {
-	return "";
+	return candidateName + " (" + QString::number(matchingID) + ")";
 }
 
 QString KPDGUICandidate::compatibilitiesString() {
@@ -507,10 +526,18 @@ QVariant KPDGUICandidate::itemChange(GraphicsItemChange change, const QVariant &
 }
 
 void KPDGUICandidate::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+
+	candidateOpacity = 1;
+	updateVisualProperties();
+
 	emit candidateEntered();
 }
 
 void KPDGUICandidate::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+	
+	candidateOpacity = 0.25;
+	updateVisualProperties();
+	
 	emit candidateExited();
 }
 
@@ -528,17 +555,26 @@ void KPDGUICandidate::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 	//QGraphicsObject::mouseDoubleClickEvent(event);
 }
 
-void KPDGUICandidate::setVisualProperties() {
+void KPDGUICandidate::updateVisualProperties() {
 
-	setRect(QRectF(0, 0, 75, 65));
+	if (isSelected()) {
+		setOpacity(1);
+	}
+	else {
+		setOpacity(candidateOpacity);
+	}
 
-	setBackgroundColor();
-	setZValue(0);
-	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-	setAcceptHoverEvents(true);
+	if (candidateStatus) {
+		candidateBackgroundColor = QColor(255, candidatePRA * 1.5, candidatePRA * 1.5);
+	}
+	else {
+		candidateBackgroundColor = QColor(100, 100, 100);
+	}
+	setToolTip(candidateString());
 
-	setToolTip("Candidate " + QString::number(matchingID));
+	setZValue(1);
 
+	update();
 }
 
 void KPDGUICandidate::editCandidate() {

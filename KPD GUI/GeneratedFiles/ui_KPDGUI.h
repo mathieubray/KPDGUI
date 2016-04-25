@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -25,7 +26,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "KPDGUIDashboard.h"
-#include "KPDGUIPairList.h"
+#include "KPDGUINodeList.h"
 #include "kpdguigraphicsview.h"
 
 QT_BEGIN_NAMESPACE
@@ -59,14 +60,17 @@ public:
     QAction *actionView_Structures_Solutions;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QSplitter *rightPanelLayout;
-    QTreeWidget *structureWidget;
-    QTreeWidget *solutionWidget;
+    QHBoxLayout *horizontalLayout;
+    QSplitter *splitter;
+    KPDGUINodeList *nodeList;
+    KPDGUINodeList *donorList;
+    KPDGUINodeList *candidateList;
     QVBoxLayout *centralPanelLayout;
     KPDGUIGraphicsView *graphicsView;
     KPDGUIDashboard *dashboard;
-    QVBoxLayout *leftPanelLayout;
-    KPDGUIPairList *pairWidget;
+    QSplitter *rightPanelLayout;
+    QTreeWidget *structureWidget;
+    QTreeWidget *solutionWidget;
     QMenuBar *menubar;
     QMenu *menuFile;
     QMenu *menuTools;
@@ -80,7 +84,7 @@ public:
     {
         if (KPDGUI->objectName().isEmpty())
             KPDGUI->setObjectName(QStringLiteral("KPDGUI"));
-        KPDGUI->resize(1060, 590);
+        KPDGUI->resize(1060, 760);
         KPDGUI->setMinimumSize(QSize(1060, 590));
         KPDGUI->setMaximumSize(QSize(16777215, 16777215));
         QIcon icon;
@@ -174,26 +178,41 @@ public:
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        rightPanelLayout = new QSplitter(centralwidget);
-        rightPanelLayout->setObjectName(QStringLiteral("rightPanelLayout"));
-        rightPanelLayout->setOrientation(Qt::Vertical);
-        rightPanelLayout->setChildrenCollapsible(false);
-        structureWidget = new QTreeWidget(rightPanelLayout);
-        structureWidget->setObjectName(QStringLiteral("structureWidget"));
-        structureWidget->setMinimumSize(QSize(250, 100));
-        structureWidget->setMaximumSize(QSize(250, 16777215));
-        structureWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        structureWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-        rightPanelLayout->addWidget(structureWidget);
-        solutionWidget = new QTreeWidget(rightPanelLayout);
-        solutionWidget->setObjectName(QStringLiteral("solutionWidget"));
-        solutionWidget->setMinimumSize(QSize(250, 100));
-        solutionWidget->setMaximumSize(QSize(250, 16777215));
-        solutionWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        solutionWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-        rightPanelLayout->addWidget(solutionWidget);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        splitter = new QSplitter(centralwidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setOrientation(Qt::Vertical);
+        splitter->setChildrenCollapsible(false);
+        nodeList = new KPDGUINodeList(splitter);
+        nodeList->setObjectName(QStringLiteral("nodeList"));
+        nodeList->setMinimumSize(QSize(300, 0));
+        nodeList->setMaximumSize(QSize(300, 16777215));
+        nodeList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        nodeList->setAlternatingRowColors(false);
+        nodeList->setSelectionMode(QAbstractItemView::MultiSelection);
+        nodeList->setSortingEnabled(true);
+        splitter->addWidget(nodeList);
+        donorList = new KPDGUINodeList(splitter);
+        donorList->setObjectName(QStringLiteral("donorList"));
+        donorList->setMinimumSize(QSize(300, 0));
+        donorList->setMaximumSize(QSize(300, 16777215));
+        donorList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        donorList->setAlternatingRowColors(false);
+        donorList->setSelectionMode(QAbstractItemView::MultiSelection);
+        donorList->setSortingEnabled(true);
+        splitter->addWidget(donorList);
+        candidateList = new KPDGUINodeList(splitter);
+        candidateList->setObjectName(QStringLiteral("candidateList"));
+        candidateList->setMinimumSize(QSize(300, 0));
+        candidateList->setMaximumSize(QSize(300, 16777215));
+        candidateList->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        candidateList->setAlternatingRowColors(false);
+        candidateList->setSelectionMode(QAbstractItemView::MultiSelection);
+        candidateList->setSortingEnabled(true);
+        splitter->addWidget(candidateList);
 
-        gridLayout->addWidget(rightPanelLayout, 0, 2, 1, 1);
+        horizontalLayout->addWidget(splitter);
 
         centralPanelLayout = new QVBoxLayout();
         centralPanelLayout->setObjectName(QStringLiteral("centralPanelLayout"));
@@ -216,28 +235,31 @@ public:
         centralPanelLayout->addWidget(dashboard);
 
 
-        gridLayout->addLayout(centralPanelLayout, 0, 1, 1, 1);
+        horizontalLayout->addLayout(centralPanelLayout);
 
-        leftPanelLayout = new QVBoxLayout();
-        leftPanelLayout->setObjectName(QStringLiteral("leftPanelLayout"));
-        pairWidget = new KPDGUIPairList(centralwidget);
-        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setTextAlignment(4, Qt::AlignLeading|Qt::AlignVCenter);
-        __qtreewidgetitem->setTextAlignment(3, Qt::AlignLeading|Qt::AlignVCenter);
-        __qtreewidgetitem->setTextAlignment(2, Qt::AlignLeading|Qt::AlignVCenter);
-        pairWidget->setHeaderItem(__qtreewidgetitem);
-        pairWidget->setObjectName(QStringLiteral("pairWidget"));
-        pairWidget->setMinimumSize(QSize(300, 0));
-        pairWidget->setMaximumSize(QSize(300, 16777215));
-        pairWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        pairWidget->setAlternatingRowColors(true);
-        pairWidget->setSelectionMode(QAbstractItemView::MultiSelection);
-        pairWidget->setSortingEnabled(true);
+        rightPanelLayout = new QSplitter(centralwidget);
+        rightPanelLayout->setObjectName(QStringLiteral("rightPanelLayout"));
+        rightPanelLayout->setOrientation(Qt::Vertical);
+        rightPanelLayout->setChildrenCollapsible(false);
+        structureWidget = new QTreeWidget(rightPanelLayout);
+        structureWidget->setObjectName(QStringLiteral("structureWidget"));
+        structureWidget->setMinimumSize(QSize(250, 100));
+        structureWidget->setMaximumSize(QSize(250, 16777215));
+        structureWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        structureWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+        rightPanelLayout->addWidget(structureWidget);
+        solutionWidget = new QTreeWidget(rightPanelLayout);
+        solutionWidget->setObjectName(QStringLiteral("solutionWidget"));
+        solutionWidget->setMinimumSize(QSize(250, 100));
+        solutionWidget->setMaximumSize(QSize(250, 16777215));
+        solutionWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        solutionWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+        rightPanelLayout->addWidget(solutionWidget);
 
-        leftPanelLayout->addWidget(pairWidget);
+        horizontalLayout->addWidget(rightPanelLayout);
 
 
-        gridLayout->addLayout(leftPanelLayout, 0, 0, 1, 1);
+        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
         KPDGUI->setCentralWidget(centralwidget);
         menubar = new QMenuBar(KPDGUI);
@@ -389,16 +411,24 @@ public:
         actionDisplay_Selected_Compatibilities->setText(QApplication::translate("KPDGUI", "Display Selected Compatibilities", 0));
         actionDisplay_Compatibilities_Within_Selection->setText(QApplication::translate("KPDGUI", "Display Compatibilities Within Selection", 0));
         actionView_Structures_Solutions->setText(QApplication::translate("KPDGUI", "View Structures/Solutions", 0));
-        QTreeWidgetItem *___qtreewidgetitem = structureWidget->headerItem();
-        ___qtreewidgetitem->setText(0, QApplication::translate("KPDGUI", "Structures", 0));
-        QTreeWidgetItem *___qtreewidgetitem1 = solutionWidget->headerItem();
-        ___qtreewidgetitem1->setText(0, QApplication::translate("KPDGUI", "Solutions", 0));
-        QTreeWidgetItem *___qtreewidgetitem2 = pairWidget->headerItem();
-        ___qtreewidgetitem2->setText(4, QApplication::translate("KPDGUI", "Compatibilities", 0));
-        ___qtreewidgetitem2->setText(3, QApplication::translate("KPDGUI", "Solutions", 0));
-        ___qtreewidgetitem2->setText(2, QApplication::translate("KPDGUI", "Structures", 0));
+        QTreeWidgetItem *___qtreewidgetitem = nodeList->headerItem();
+        ___qtreewidgetitem->setText(3, QApplication::translate("KPDGUI", "Donors", 0));
+        ___qtreewidgetitem->setText(2, QApplication::translate("KPDGUI", "Name", 0));
+        ___qtreewidgetitem->setText(1, QApplication::translate("KPDGUI", "Type", 0));
+        ___qtreewidgetitem->setText(0, QApplication::translate("KPDGUI", "Node", 0));
+        QTreeWidgetItem *___qtreewidgetitem1 = donorList->headerItem();
+        ___qtreewidgetitem1->setText(3, QApplication::translate("KPDGUI", "Matches", 0));
+        ___qtreewidgetitem1->setText(2, QApplication::translate("KPDGUI", "Name", 0));
+        ___qtreewidgetitem1->setText(1, QApplication::translate("KPDGUI", "Type", 0));
+        ___qtreewidgetitem1->setText(0, QApplication::translate("KPDGUI", "Donor", 0));
+        QTreeWidgetItem *___qtreewidgetitem2 = candidateList->headerItem();
+        ___qtreewidgetitem2->setText(2, QApplication::translate("KPDGUI", "Matches", 0));
         ___qtreewidgetitem2->setText(1, QApplication::translate("KPDGUI", "Name", 0));
-        ___qtreewidgetitem2->setText(0, QApplication::translate("KPDGUI", "Pair/AD", 0));
+        ___qtreewidgetitem2->setText(0, QApplication::translate("KPDGUI", "Candidate", 0));
+        QTreeWidgetItem *___qtreewidgetitem3 = structureWidget->headerItem();
+        ___qtreewidgetitem3->setText(0, QApplication::translate("KPDGUI", "Structures", 0));
+        QTreeWidgetItem *___qtreewidgetitem4 = solutionWidget->headerItem();
+        ___qtreewidgetitem4->setText(0, QApplication::translate("KPDGUI", "Solutions", 0));
         menuFile->setTitle(QApplication::translate("KPDGUI", "&File", 0));
         menuTools->setTitle(QApplication::translate("KPDGUI", "Tools", 0));
         menuHelp->setTitle(QApplication::translate("KPDGUI", "About", 0));

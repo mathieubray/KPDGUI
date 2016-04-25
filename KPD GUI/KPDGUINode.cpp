@@ -268,6 +268,13 @@ void KPDGUINode::updateNodeVisibility(KPDGUIDisplaySettings * displaySettings) {
 	else {
 		setVisible(true);
 	}*/
+
+	foreach(KPDGUIDonor * donor, nodeDonors) {
+		donor->updateVisualProperties();
+	}
+	if (nodeType == PAIR) {
+		nodeCandidate->updateVisualProperties();
+	}
 }
 
 void KPDGUINode::setZValue(int z) {
@@ -279,7 +286,7 @@ void KPDGUINode::setZValue(int z) {
 }
 
 void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings) {
-
+	updateNodeVisibility(displaySettings);
 }
 
 QString KPDGUINode::getNameString() {
@@ -316,7 +323,7 @@ QString KPDGUINode::getNodeListString() {
 	// Should be drawn from Candidate and Donor files
 
 	if (nodeType == AD) {
-		return "AD: " + nodeDonors.first()->getName();
+		return nodeDonors.first()->getName();
 	}
 	else {
 		QString nameString = nodeCandidate->getName() + "/";
@@ -327,7 +334,6 @@ QString KPDGUINode::getNodeListString() {
 
 		return nameString;
 	}
-
 }
 
 

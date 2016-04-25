@@ -30,6 +30,19 @@ KPDGUIDonor::KPDGUIDonor(){
 	donorDR53 = false;
 
 	donorComment = "";
+
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+	donorOpacity = 0.25;
+
+	if (donorIsAltruistic) {
+		setRect(QRectF(0, 0, 45, 40));
+	}
+	else {
+		setRect(QRectF(0, 0, 35, 30));
+	}
+
+	updateVisualProperties();
 }
 
 KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
@@ -120,7 +133,11 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 
 	donorComment = d->commentTextEdit->toPlainText();
 
-	setVisualProperties();
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+	donorOpacity = 0.25;
+
+	updateVisualProperties();
 		
 }
 
@@ -242,36 +259,50 @@ QString KPDGUIDonor::getComment() const {
 
 void KPDGUIDonor::setID(int id) {
 	matchingID = id;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setDonorNumber(int number) {
 	donorNumber = number;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setName(QString name){
 	donorName = name;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setAge(int age){
 	donorAge = age;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setBT(KPDBloodType bt){
 	donorBT = bt;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setAltruistic(bool altruistic) {
 	donorIsAltruistic = altruistic;
 
-	setBackgroundColor();
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setStatus(bool status) {
 	donorStatus = status;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setFailureProbability(double prob) {
 	donorFailureProbability = prob;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setMatches(QSet<KPDGUIMatch *> matches) {
@@ -280,16 +311,22 @@ void KPDGUIDonor::setMatches(QSet<KPDGUIMatch *> matches) {
 	foreach(KPDGUIMatch * match, matches) {
 		donorMatches << match;
 	}
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::addMatchingCandidate(KPDGUIMatch * match) {
 	donorMatches << match;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::removeMatchingCandidate(KPDGUIMatch * match) {
 	if (donorMatches.contains(match)) {
 		donorMatches.remove(match);
 	}
+
+	updateVisualProperties();
 }
 
 KPDGUIMatch * KPDGUIDonor::findMatchingCandidate(KPDGUICandidate * candidate) {
@@ -305,6 +342,7 @@ KPDGUIMatch * KPDGUIDonor::findMatchingCandidate(KPDGUICandidate * candidate) {
 
 void KPDGUIDonor::increasePopularityInStructures() {
 	popularityInStructures++;
+	
 }
 
 void KPDGUIDonor::increasePopularityInSolutions() {
@@ -329,14 +367,20 @@ void KPDGUIDonor::resetPopularityInSolutions() {
 
 void KPDGUIDonor::setMale(bool genderMale){
 	donorMale = genderMale;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setWeight(double weight){
 	donorWeight = weight;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setBMI(double bmi) {
 	donorBMI = bmi;
+
+	updateVisualProperties();
 }
 
 void KPDGUIDonor::setA(QVector<QString> hlaA){
@@ -474,8 +518,6 @@ void KPDGUIDonor::setComment(QString comment){
 
 QPointF KPDGUIDonor::getCenter() {
 
-	//qreal x = boundingRect().x();
-	//qreal y = boundingRect().y();
 	QPointF point = scenePos();
 	qreal x = point.x();
 	qreal y = point.y();
@@ -498,27 +540,10 @@ void KPDGUIDonor::setText(const QString &text)
 	update();
 }
 
-void KPDGUIDonor::setBackgroundColor()
+/*void KPDGUIDonor::setBackgroundColor()
 {
-	if (donorStatus) {
-		if (donorIsAltruistic) {
-			donorBackgroundColor = QColor(0, 255, 0);
-		}
-		else {
-			donorBackgroundColor = QColor(0, 0, 255);
-		}
-	}
-	else {
-		if (donorIsAltruistic) {
-			donorBackgroundColor = QColor(100, 125, 100);
-		}
-		else {
-			donorBackgroundColor = QColor(100, 100, 125);
-		}
-	}
-
 	update();
-}
+}*/
 
 QColor KPDGUIDonor::backgroundColor() const
 {
@@ -713,10 +738,18 @@ QVariant KPDGUIDonor::itemChange(GraphicsItemChange change, const QVariant &valu
 }
 
 void KPDGUIDonor::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+	
+	donorOpacity = 1;
+	updateVisualProperties();
+
 	emit donorEntered();
 }
 
 void KPDGUIDonor::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
+	
+	donorOpacity = 0.25;
+	updateVisualProperties();
+	
 	emit donorExited();
 }
 
@@ -734,22 +767,42 @@ void KPDGUIDonor::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 	//QGraphicsObject::mouseDoubleClickEvent(event);
 }
 
-void KPDGUIDonor::setVisualProperties() {
+void KPDGUIDonor::updateVisualProperties() {
 
-	setRect(QRectF(0, 0, 65, 55));
-	
-	setBackgroundColor();
-	setZValue(0);
-	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-	setAcceptHoverEvents(true);
-	
-	if (donorIsAltruistic) {
-		setToolTip("AD " + QString::number(matchingID));
+	if (isSelected()) {
+		setOpacity(1);
 	}
 	else {
-		setToolTip("Donor " + QString::number(matchingID) + "-" + QString::number(donorNumber));
+		setOpacity(donorOpacity);
+	}
+		
+	if (donorStatus) {
+		if (donorIsAltruistic) {
+			donorBackgroundColor = QColor(0, 255, 255);
+		}
+		else {
+			donorBackgroundColor = QColor(0, 0, 255);
+		}
+	}
+	else {
+		if (donorIsAltruistic) {
+			donorBackgroundColor = QColor(100, 125, 100);
+		}
+		else {
+			donorBackgroundColor = QColor(100, 100, 125);
+		}
+	}	
+	
+	if (donorIsAltruistic) {
+		setToolTip(donorString());
+	}
+	else {
+		setToolTip(donorString());
 	}
 
+	setZValue(0);
+
+	update();
 }
 
 void KPDGUIDonor::editDonor() {

@@ -137,11 +137,8 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	qDebug() << "Painting: " << startPoint << " " << endPoint;
 
 	QLineF centerLine(startPoint, endPoint);
-	//QLineF centerLine(myDonor->pos(), myCandidate->pos());
 	QPolygonF endPolygon = myCandidate->sceneBoundingRect();
-	//QPolygonF endPolygon = myCandidate->boundingRect();
 	QPointF p1 = endPolygon.first();
-	//QPointF p1 = endPolygon.first() + myCandidate->pos();
 	QPointF p2;
 	QPointF intersectPoint;
 	QLineF polyLine;
@@ -154,10 +151,21 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 		p1 = p2;
 	}
 
-	setLine(QLineF(intersectPoint, startPoint));
-	//setLine(QLineF(intersectPoint, myDonor->pos()));
+	QPolygonF startPolygon = myDonor->sceneBoundingRect();
+	QPointF q1 = startPolygon.first();
+	QPointF q2;
+	QPointF intersectPoint2;
+	QLineF polyLine2;
+	for (int i = 1; i < startPolygon.count(); ++i) {
+		q2 = startPolygon.at(i);
+		polyLine2 = QLineF(q1, q2);
+		QLineF::IntersectType intersectType2 = polyLine2.intersect(centerLine, &intersectPoint2);
+		if (intersectType2 == QLineF::BoundedIntersection)
+			break;
+		q1 = q2;
+	}
 
-	//setLine(QLineF(endPoint, startPoint));
+	setLine(QLineF(intersectPoint, intersectPoint2));
 
 	double angle = ::acos(line().dx() / line().length());
 	if (line().dy() >= 0)

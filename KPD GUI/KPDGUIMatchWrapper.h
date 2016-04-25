@@ -7,7 +7,6 @@
 
 class KPDGUIMatchWrapper : public QTreeWidgetItem
 {
-	//Q_OBJECT;
 
 public:
 	KPDGUIMatchWrapper(KPDGUIMatch * match);
@@ -22,6 +21,5 @@ private:
 	bool operator<(const QTreeWidgetItem &other)const;
 
 };
-
 
 #endif

@@ -56,6 +56,7 @@ private:
 
 	// Visual
 	QColor donorBackgroundColor;
+	qreal donorOpacity;
 	QString donorLabel;
 	
 
@@ -75,11 +76,11 @@ protected:
 	void mousePressEvent(QGraphicsSceneMouseEvent * event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 
-	void setVisualProperties();
+	
 
 public slots:
 	void editDonor();
-
+	void updateVisualProperties();
 
 public:
 	KPDGUIDonor();

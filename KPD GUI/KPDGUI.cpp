@@ -15,7 +15,6 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	setUpToolbar();
 	
 	ui->dashboard->appendDashboardText("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
-	
 }
 
 KPDGUI::~KPDGUI()
@@ -56,23 +55,25 @@ void KPDGUI::setUpKPDObjects(){
 
 void KPDGUI::setUpLists(){
 
-	//Table
-	//ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-
-	//Pair List
-	/*ui->pairWidget->header()->resizeSection(0, 50);
-	ui->pairWidget->header()->resizeSection(1, 65);
-	ui->pairWidget->header()->resizeSection(2, 50);
-	ui->pairWidget->header()->resizeSection(3, 65);
-	ui->pairWidget->header()->resizeSection(4, 65);
-	ui->pairWidget->header()->resizeSection(5, 85);
-	ui->pairWidget->header()->resizeSection(6, 100);
-	ui->pairWidget->sortItems(0, Qt::AscendingOrder);
-	ui->pairWidget->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(ui->pairWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
-	connect(ui->pairWidget, SIGNAL(mouseReleased()), this, SLOT(newPairListSelectionActions()));
-	connect(ui->pairWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(pairListCustomMenu(QPoint)));
+	//Node List
+	ui->nodeList->header()->resizeSection(0, 50);
+	ui->nodeList->header()->resizeSection(1, 50);
+	ui->nodeList->header()->resizeSection(2, 120);
+	ui->nodeList->header()->resizeSection(3, 50);
+	ui->nodeList->sortItems(0, Qt::AscendingOrder);
+	ui->nodeList->setContextMenuPolicy(Qt::CustomContextMenu);
+	//connect(ui->nodeList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
+	//connect(ui->nodeList, SIGNAL(mouseReleased()), this, SLOT(newPairListSelectionActions()));
+	//connect(ui->nodeList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(pairListCustomMenu(QPoint)));
 	
+	ui->donorList->header()->resizeSection(0, 50);
+	ui->nodeList->header()->resizeSection(1, 50);
+	ui->nodeList->header()->resizeSection(2, 120);
+	ui->nodeList->header()->resizeSection(3, 50);
+	ui->nodeList->sortItems(0, Qt::AscendingOrder);
+	ui->nodeList->setContextMenuPolicy(Qt::CustomContextMenu);
+
+
 	//Structure Tree
 	ui->structureWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect(ui->structureWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(structureTreeSelectionActions(QTreeWidgetItem*)));
@@ -81,7 +82,7 @@ void KPDGUI::setUpLists(){
 	//Solution Tree
 	ui->solutionWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect(ui->solutionWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(solutionTreeSelectionActions(QTreeWidgetItem*)));
-	connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));*/
+	connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));
 	
 	ui->structureWidget->setVisible(false);
 	ui->solutionWidget->setVisible(false);
@@ -555,8 +556,8 @@ void KPDGUI::aboutKPD()
 //void KPDGUI::newPairListSelectionActions(QTreeWidgetItem* item)
 void KPDGUI::newNodeListSelectionActions()
 {
-	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
-		QTreeWidgetItem * item = ui->pairWidget->topLevelItem(i);
+	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
+		QTreeWidgetItem * item = ui->nodeList->topLevelItem(i);
 		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
 		if (wrapper){
 			bool selected = item->isSelected();
@@ -631,7 +632,7 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 			if (structureSet){
 				kpdguiScene->clearSelection();
 				structureSet->selectStructures();
-				clearTable();
+				//clearTable();
 				updateVisibility();
 				structureSet->highlight();
 
@@ -648,7 +649,7 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 				KPDGUIStructure * structure = structureWrapper->getStructure();
 				kpdguiScene->clearSelection();
 				structure->select();
-				clearTable();
+				//clearTable();
 				updateVisibility();
 				structure->highlight();
 				selectedStructures.push_back(structure);
@@ -689,14 +690,14 @@ void KPDGUI::highlightStructures(QTreeWidgetItem * item){
 				}
 				updateVisibility();
 			}
-			clearTable();
+			//clearTable();
 		}
 
 	}
 	else {
 		kpdguiScene->clearSelection();
 		updateVisibility();
-		clearTable();
+		//clearTable();
 	}
 
 	QApplication::restoreOverrideCursor();
@@ -772,7 +773,7 @@ void KPDGUI::nodeListCustomMenu(QPoint pos){
 
 	//qDebug() << "Pair List Custom Menu";
 
-	QTreeWidgetItem * item = ui->pairWidget->itemAt(pos);
+	QTreeWidgetItem * item = ui->nodeList->itemAt(pos);
 
 	QMenu *menu = new QMenu(this);
 
@@ -797,7 +798,7 @@ void KPDGUI::nodeListCustomMenu(QPoint pos){
 	}
 
 	if (menu->actions().size() > 0){
-		menu->popup(ui->pairWidget->viewport()->mapToGlobal(pos));
+		menu->popup(ui->nodeList->viewport()->mapToGlobal(pos));
 	}
 }
 
@@ -861,8 +862,8 @@ void KPDGUI::solutionTreeCustomMenu(QPoint pos){
 	QSet<KPDGUIStructureWrapper *> structureWrappersToDelete;
 	QSet<KPDGUIStructure *> structuresToDelete; */
 
-/*	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
-		KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->pairWidget->topLevelItem(i));
+/*	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
+		KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->nodeList->topLevelItem(i));
 		if (nodeWrapper){
 			if (nodeWrapper->getNode()->getID() == id){
 				nodeWrappersToDelete.insert(nodeWrapper);
@@ -1036,35 +1037,6 @@ void KPDGUI::checkSelections(){
 	updateVisibility();
 }
 
-void KPDGUI::updateTable(int i)
-{
-	//KPDGUINode * node = kpdguiRecord->getNode(i);
-
-	// FIX
-	/*
-	KPDGUIDonor * donor = node->getDonor(0);
-	KPDGUICandidate * candidate = node->getCandidate();
-
-	ui->tableWidget->item(0, 0)->setData(Qt::EditRole, QString::number(i));
-	ui->tableWidget->item(1, 0)->setData(Qt::EditRole, donor->getName());
-	ui->tableWidget->item(2, 0)->setData(Qt::EditRole, QString::number(donor->getAge()));
-	ui->tableWidget->item(3, 0)->setData(Qt::EditRole, KPDFunctions::toString(donor->getBT()));
-
-	if (node->getType() == PAIR){
-		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, candidate->getName());
-		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, QString::number(candidate->getAge()));
-		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, KPDFunctions::toString(candidate->getBT()));
-		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, QString::number(candidate->getPRA()));
-	}
-	else if (node->getType() == AD){
-		ui->tableWidget->item(4, 0)->setData(Qt::EditRole, " ");
-		ui->tableWidget->item(5, 0)->setData(Qt::EditRole, " ");
-		ui->tableWidget->item(6, 0)->setData(Qt::EditRole, " ");
-		ui->tableWidget->item(7, 0)->setData(Qt::EditRole, " ");
-	}
-	*/
-}
-
 void KPDGUI::updateVisibility(){
 	//qDebug() << "KPDGUI::updateVisibility";
 	emit visibilityChanged(kpdguiDisplaySettings);
@@ -1121,11 +1093,11 @@ bool KPDGUI::loadFile(const QString &fileName)
 	//Clear Screen
 	kpdguiRecord->clearRecord();
 	kpdguiScene->clear();
-	//ui->pairWidget->clear();
+	//ui->nodeList->clear();
 	//matchListWidget->clear();
 	ui->structureWidget->clear();
 	ui->solutionWidget->clear();
-	clearTable();
+	//clearTable();
 
 	QMap<int, KPDGUINode*> nodeMap;
 
@@ -1283,7 +1255,7 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	//qDebug() << "Inserting Node into Record";
 	kpdguiRecord->insertNode(newNode, fromSavedFile);
 	//qDebug() << "Inserted Node into Record";
-	checkNodeMatches(newNode);
+	
 
 	////qDebug() << newNode->getNodePosition();
 
@@ -1294,22 +1266,21 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	foreach(KPDGUIDonor * donor, newNode->getDonors()) {
 		kpdguiScene->addItem(donor);
 	}
-
-	if (newNode->getType() == PAIR) {
-		//qDebug() << newNode->getCandidate()->pos() << " " << newNode->getFirstDonor()->pos();
-	}
 	++nodePlacementSequenceNumber;	
 
+	checkNodeMatches(newNode);
+
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
-	ui->pairWidget->addTopLevelItem(wrapper);
+	ui->nodeList->addTopLevelItem(wrapper);
 	
+	connect(ui->graphicsView, SIGNAL(mouseReleased()), newNode, SLOT(updateVisibility()));
 	//connect(newNode, SIGNAL(nodeEntered(int)), this, SLOT(updateTable(int)));
 	//connect(newNode, SIGNAL(nodeLeft(int)), this, SLOT(clearTable()));
 	//connect(newNode, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
 	
 	//connect(ui->graphicsView, SIGNAL(mouseReleased()), wrapper, SLOT(updateSelections()));
 	//connect(this, SIGNAL(poolChanged()), wrapper, SLOT(updateText()));
-	//connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), newNode, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), newNode, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	////connect(this, SIGNAL(selectAll()), newNode, SLOT(selectIfVisible()));
 }
 
@@ -1319,33 +1290,18 @@ void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
 	candidate->addMatchingDonor(match);
 	donor->addMatchingCandidate(match);
 
-	//connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	//KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(link);
 	//matchListWidget->addTopLevelItem(wrapper);
-	
-
 
 	kpdguiRecord->insertMatch(match);
-	//link->setVisible(false);
-	
-	//qDebug() << "Add Match";
-	
-	//KPDGUINewMatch * link = new KPDGUINewMatch(donor, candidate);
-	//link->setArrowProperties(Qt::red, 5, 0.7, 1);
-	//link->setArrowProperties(Qt::black, 10, 0.25, 1);
-	//kpdguiScene->addItem(link);
-
-
 	kpdguiScene->addItem(match);
-
-
-	//qDebug() << "Is Match Visible? " << match->isVisible();
 
 }
 
 void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 {
-	QVector<QVector<QVector<QString> > > p_rows;
+	QVector<QVector<QVector<QString> > > nodeInfo;
 
 	QFile iFile(fileName);
 	if (!iFile.open(QIODevice::ReadOnly)){}
@@ -1383,7 +1339,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 
 				else{
 					if (token.length()>0){
-						if (token.indexOf("\"") == token.length() - 1){ //if equal to \";
+						if (token.indexOf("\"") == token.length() - 1){
 							field.push_back(token.remove(token.length() - 1, 1));
 							row.push_back(field);
 							field.clear();
@@ -1396,151 +1352,143 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 					}
 				}
 			}
-			p_rows.push_back(row);
+			nodeInfo.push_back(row);
 		}
 		i++;
 	}
 
-	int pairsAdded = (int) p_rows.size();
-	qreal dist = 100 + 10 * pairsAdded;
-	qreal angle = (2 * PI) / pairsAdded;
+	int nodesAdded = (int) nodeInfo.size();
+	
+	qreal dist = 100 + 10 * nodesAdded;
+	qreal angle = (2 * PI) / nodesAdded;
 	qreal nodeAngle = PI;
 
-
-	int max = (int) sqrt(pairsAdded) + 1;
+	int max = (int) sqrt(nodesAdded) + 1;
 	int seq = 0;	
 
-	foreach(QVector<QVector<QString> > row, p_rows){
-		bool hold = false;
+	foreach(QVector<QVector<QString> > line, nodeInfo){
 
-		if (row.at(1).at(0) != "1"){
-			hold = true;
+		KPDGUINode * newNode;
+		
+		bool status = false;
+		if (line.at(1).at(0) != "1"){
+			status = true;
 		}
 
-		KPDGUIDonor d;
+		KPDGUIDonor * newDonor = new KPDGUIDonor();
 		
-		d.setName(row.at(9).at(0));
-		d.setAge(row.at(11).at(0).toInt());
+		qDebug() << "Name: " << line.at(9).at(0);
+
+		newDonor->setName(line.at(9).at(0));
+		newDonor->setAge(line.at(11).at(0).toInt());
 
 		//Donor Crossmatch Information
 		QVector<QString> hlaA;
-		hlaA.push_back(row.at(20).at(0));
-		hlaA.push_back(row.at(21).at(0));
-		d.setA(hlaA);
+		hlaA.push_back(line.at(20).at(0));
+		hlaA.push_back(line.at(21).at(0));
+		newDonor->setA(hlaA);
 
 		QVector<QString> hlaB;
-		hlaB.push_back(row.at(22).at(0));
-		hlaB.push_back(row.at(23).at(0));
-		d.setB(hlaB);
+		hlaB.push_back(line.at(22).at(0));
+		hlaB.push_back(line.at(23).at(0));
+		newDonor->setB(hlaB);
 		
-		d.setBW4(row.at(24).at(0) == "BW4");
-		d.setBW6(row.at(25).at(0) == "BW6");
+		newDonor->setBW4(line.at(24).at(0) == "BW4");
+		newDonor->setBW6(line.at(25).at(0) == "BW6");
 
 		QVector<QString> hlaCW;
-		hlaCW.push_back(row.at(26).at(0));
-		hlaCW.push_back(row.at(27).at(0));
-		d.setCW(hlaCW);
+		hlaCW.push_back(line.at(26).at(0));
+		hlaCW.push_back(line.at(27).at(0));
+		newDonor->setCW(hlaCW);
 
 		QVector<QString> hlaDQ;
-		hlaDQ.push_back(row.at(33).at(0));
-		hlaDQ.push_back(row.at(34).at(0));
-		d.setDQ(hlaDQ);
+		hlaDQ.push_back(line.at(33).at(0));
+		hlaDQ.push_back(line.at(34).at(0));
+		newDonor->setDQ(hlaDQ);
 		
 		QVector<QString> hlaDR;
-		hlaDR.push_back(row.at(28).at(0));
-		hlaDR.push_back(row.at(29).at(0));
-		d.setDR(hlaDR);
+		hlaDR.push_back(line.at(28).at(0));
+		hlaDR.push_back(line.at(29).at(0));
+		newDonor->setDR(hlaDR);
 		
-		d.setDR51(row.at(30).at(0) == "DR51");
-		d.setDR52(row.at(31).at(0) == "DR52");
-		d.setDR53(row.at(32).at(0) == "DR53");
+		newDonor->setDR51(line.at(30).at(0) == "DR51");
+		newDonor->setDR52(line.at(31).at(0) == "DR52");
+		newDonor->setDR53(line.at(32).at(0) == "DR53");
 
-		QString donorBT = row.at(12).at(0);
-		if (donorBT == "O"){ d.setBT(BT_O); }
-		else if (donorBT == "A"){ d.setBT(BT_A); }
-		else if (donorBT == "B"){ d.setBT(BT_B); }
-		else if (donorBT == "AB"){ d.setBT(BT_AB); }
-		
-		KPDGUINode * newNode;
+		QString donorBT = line.at(12).at(0);
+		if (donorBT == "O"){ newDonor->setBT(BT_O); }
+		else if (donorBT == "A"){ newDonor->setBT(BT_A); }
+		else if (donorBT == "B"){ newDonor->setBT(BT_B); }
+		else if (donorBT == "AB"){ newDonor->setBT(BT_AB); }		
 
-		if (row.at(2).at(0).toInt() == 0){
-			KPDGUICandidate c;
-			c.setName(row.at(5).at(0));
-			c.setAge(row.at(7).at(0).toInt());
+		//Pair
+		if (line.at(2).at(0).toInt() == 0){
+			
+			KPDGUICandidate * newCandidate = new KPDGUICandidate();
 
-			QString candidateBT = row.at(8).at(0);
-			if (candidateBT == "O"){ c.setBT(BT_O); }
-			else if (candidateBT == "A"){ c.setBT(BT_A); }
-			else if (candidateBT == "B"){ c.setBT(BT_B); }
-			else if (candidateBT == "AB"){ c.setBT(BT_AB); }
+			newCandidate->setName(line.at(5).at(0));
+			newCandidate->setAge(line.at(7).at(0).toInt());
+
+			QString candidateBT = line.at(8).at(0);
+			if (candidateBT == "O"){ newCandidate->setBT(BT_O); }
+			else if (candidateBT == "A"){ newCandidate->setBT(BT_A); }
+			else if (candidateBT == "B"){ newCandidate->setBT(BT_B); }
+			else if (candidateBT == "AB"){ newCandidate->setBT(BT_AB); }
 
 			int pra = 0;
-			QString pratoken;
-			QString pra1 = row.at(14).at(0);
-			QStringList prass1 = pra1.split('/');
-
-			foreach(QString praToken, prass1){
-				int praInt = praToken.toInt();
-
-				if (praInt > pra){
-					pra = praInt;
-				}
-			}
-
-			QString pra2 = row.at(15).at(0);
-			QStringList prass2 = pra2.split('/');
-
-			foreach(QString praToken, prass2){
-				int praInt = praToken.toInt();
-
-				if (praInt > pra){
-					pra = praInt;
-				}
-			}
-
-			c.setPRA(pra);
 			
-			bool sensitized = false;
-			if ((row.at(3).at(0)).toInt() == 1){
-				sensitized = true;
+			for (int row = 14; row <= 15; row++) {
+				QString praString = line.at(14).at(0);
+				QStringList praList = praString.split('/');
+
+				foreach(QString praToken, praList) {
+					int praInt = praToken.toInt();
+
+					if (praInt > pra) {
+						pra = praInt;
+					}
+				}
 			}
 
+			newCandidate->setPRA(pra);
+			
 			QVector<QString> antibodies;
-
-			if (sensitized == false){
-				foreach(QString antibody, row.at(16)){
-					if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
-						antibodies.push_back(antibody);
-					}
-				}
-				foreach(QString antibody, row.at(17)){
-					if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
-						antibodies.push_back(antibody);
-					}
-				}
-			}
-
-			foreach(QString antibody, row.at(18)){
-				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
-					antibodies.push_back(antibody);
-				}
-			}
-
-			foreach(QString antibody, row.at(19)){
-				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
-					antibodies.push_back(antibody);
-				}
-			}
-
-			c.setHLA(antibodies);
-
-			QVector<KPDGUIDonor *> donors;
-			donors << &d;
+			bool sensitized = (line.at(3).at(0)).toInt() == 1;
 			
-			newNode = new KPDGUINode(donors, &c);
+			if (sensitized == false){
+				foreach(QString antibody, line.at(16)){
+					if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
+						antibodies.push_back(antibody);
+					}
+				}
+				foreach(QString antibody, line.at(17)){
+					if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
+						antibodies.push_back(antibody);
+					}
+				}
+			}
+
+			foreach(QString antibody, line.at(18)){
+				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
+					antibodies.push_back(antibody);
+				}
+			}
+
+			foreach(QString antibody, line.at(19)){
+				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
+					antibodies.push_back(antibody);
+				}
+			}
+
+			newCandidate->setHLA(antibodies);
+
+			QVector<KPDGUIDonor *> newDonors;
+			newDonors << newDonor;
+			
+			newNode = new KPDGUINode(newDonors, newCandidate);
 		}
 		else {
-			newNode = new KPDGUINode(&d);
+			newNode = new KPDGUINode(newDonor);
 		}		
 
 		if (layout == "Circle"){
@@ -1579,14 +1527,6 @@ bool KPDGUI::okToContinue()
 		}
 	}
 	return true;
-}
-
-
-void KPDGUI::clearTable()
-{
-	//for (int i = 0; i < ui->tableWidget->rowCount(); i++){
-		//ui->tableWidget->item(i, 0)->setData(Qt::EditRole, " ");
-	//}
 }
 
 void KPDGUI::changeFocus(KPDGUINode * node){
@@ -1641,7 +1581,7 @@ void KPDGUI::runSimulation(){
 	vector<double> solutionObjectives = g->returnSolutionObjectives();
 
 	int progressBarValue = 0;
-	progress->setRange(0, (int)(2 * solutionSet.size() + allStructures.size())); // +ui->pairWidget->topLevelItemCount())); // + matchListWidget->topLevelItemCount()
+	progress->setRange(0, (int)(2 * solutionSet.size() + allStructures.size())); // +ui->nodeList->topLevelItemCount())); // + matchListWidget->topLevelItemCount()
 	progress->setLabelText("Saving Structures...");
 	progress->setValue(progressBarValue);
 	QApplication::processEvents();
@@ -1727,8 +1667,8 @@ void KPDGUI::runSimulation(){
 	ui->solutionWidget->collapseAll();
 
 	//Reset Popularity Values in The Node List Widget and Edge List Widget
-/*	for (int i = 0; i < ui->pairWidget->topLevelItemCount(); i++){
-		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->pairWidget->topLevelItem(i));
+/*	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
+		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->nodeList->topLevelItem(i));
 		if (wrapper){
 			wrapper->getNode()->resetPopularityInStructures();
 		}
@@ -1737,7 +1677,7 @@ void KPDGUI::runSimulation(){
 		QApplication::processEvents();
 	}*/
 	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
-		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(ui->pairWidget->topLevelItem(i));
+		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(ui->nodeList->topLevelItem(i));
 		if (wrapper){
 			wrapper->getArrow()->resetPopularityInStructures();
 		}

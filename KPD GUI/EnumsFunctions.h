@@ -322,6 +322,18 @@ namespace KPDFunctions {
 		else { return ""; }
 	}
 
+	//Status
+
+	inline QString nodeStatusToString(bool status) {
+		if (status) { return "Participating"; }
+		else { return "Not Participating";  }
+	}
+
+	inline QString donorTypeToString(bool altruistic) {
+		if (altruistic) { return "AD"; }
+		else { return "Pair"; }
+	}
+
 }
 
 #endif

@@ -21,16 +21,13 @@
 #include "KPDGUIDashboard.h"
 #include "KPDGUIDisplaySettings.h"
 #include "KPDGUIGraphicsView.h"
-#include "KPDGUIPairList.h"
+#include "KPDGUINodeList.h"
 
 #include "KPDGUINodeWrapper.h"
 #include "KPDGUIMatchWrapper.h"
 #include "KPDGUIStructureWrapper.h"
 
 #include "EnumsFunctions.h"
-
-#include "KPDGUINewMatch.h"
-
 
 namespace Ui {
 	class KPDGUI;
@@ -126,8 +123,8 @@ public slots:
 	
 	//Updates
 	void checkSelections();
-	void updateTable(int);
-	void clearTable();
+	//void updateTable(int);
+	//void clearTable();
 	void updateVisibility();	
 	void updateStatusBar();
 
@@ -166,7 +163,7 @@ private:
 	//Helper Functions
 	bool okToContinue();
 	void changeFocus(KPDGUINode * node);
-	void sort();
+	//void sort();
 	void highlightStructures(QTreeWidgetItem * item);
 	void updateStatus(QString message);
 
