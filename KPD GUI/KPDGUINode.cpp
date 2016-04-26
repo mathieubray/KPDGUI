@@ -33,6 +33,7 @@ KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidat
 		donor->setParentItem(candidate);
 	}
 
+
 }
 
 KPDGUINode::~KPDGUINode()
@@ -286,6 +287,24 @@ void KPDGUINode::setZValue(int z) {
 
 void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings) {
 	updateNodeVisibility(displaySettings);
+}
+
+void KPDGUINode::highlightNode() {
+	if (nodeType == PAIR) {
+		nodeCandidate->highlight();
+	}
+	else {
+		nodeDonors.first()->highlight();
+	}
+}
+
+void KPDGUINode::clearHighlight() {
+	if (nodeType == PAIR) {
+		nodeCandidate->clearHighlight();
+	}
+	else {
+		nodeDonors.first()->clearHighlight();
+	}
 }
 
 QString KPDGUINode::getNameString() {

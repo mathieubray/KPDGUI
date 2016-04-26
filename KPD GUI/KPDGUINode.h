@@ -35,7 +35,8 @@ public slots:
 
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void clusterNode();
-
+	void highlightNode();
+	void clearHighlight();
 
 public:
 	

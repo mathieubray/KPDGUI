@@ -235,6 +235,27 @@
     <ClCompile Include="KPDGUICandidateWrapper.cpp">
       <Filter>Wrappers</Filter>
     </ClCompile>
+    <ClCompile Include="KPDGUIMatchList.cpp">
+      <Filter>GUI Components</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIMatchList.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogMatch.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DialogMatch.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DialogMatch.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIMatchWrapper.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIMatchWrapper.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="mainwindow.qrc">
@@ -318,6 +339,15 @@
     <CustomBuild Include="KPDGUINodeList.h">
       <Filter>GUI Components</Filter>
     </CustomBuild>
+    <CustomBuild Include="DialogMatch.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KPDGUIMatchList.h">
+      <Filter>GUI Components</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DialogMatch.h">
+      <Filter>Dialog</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_DialogDonor.h">
@@ -361,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="KPDGUICandidateWrapper.h">
       <Filter>Wrappers</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_DialogMatch.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

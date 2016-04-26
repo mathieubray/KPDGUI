@@ -6,7 +6,13 @@ KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node){
 	updateText();
 
 	//connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
-	//connect(node, SIGNAL(nodeEdited(int)), this, SLOT(editActions(int)));
+	
+	if (node->getType() == PAIR) {
+		connect(node->getCandidate(), SIGNAL(candidateEdited()), this, SLOT(editActions()));
+	}
+	foreach(KPDGUIDonor * donor, node->getDonors()) {
+		connect(donor, SIGNAL(donorEdited()), this, SLOT(editActions()));
+	}
 }
 
 KPDGUINodeWrapper::~KPDGUINodeWrapper(){
@@ -19,11 +25,26 @@ KPDGUINode * KPDGUINodeWrapper::getNode(){
 
 /*void KPDGUINodeWrapper::selectionActions(int id, bool selected){
 	setSelected(selected);
+}*/
+
+void KPDGUINodeWrapper::editActions(){
+	updateText();
 }
 
-void KPDGUINodeWrapper::editActions(int id){
-	//updateText(prevMode);
-}*/
+void KPDGUINodeWrapper::highlightNode(QTreeWidgetItem * item) {
+	
+	qDebug() << "Entered";
+
+	KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
+	if (wrapper) {
+		if (this == wrapper) {
+			myNode->highlightNode();
+		}
+		else {
+			myNode->clearHighlight();
+		}
+	}
+}
 
 void KPDGUINodeWrapper::updateSelections(){
 	//qDebug() << "Update Selections";

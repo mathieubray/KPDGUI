@@ -53,6 +53,8 @@ private:
 	QColor candidateBackgroundColor;
 	qreal candidateOpacity;
 	QString candidateLabel;
+
+	void setCandidateAttributes(DialogCandidate * c);
 	
 
 signals:
@@ -78,6 +80,9 @@ public slots:
 
 	void editCandidate();
 	void updateVisualProperties();
+
+	void highlight();
+	void clearHighlight();
 
 
 public:
@@ -173,7 +178,6 @@ public:
 
 	// Comment
 	void setComment(QString comment);
-
 
 	/// Visual Properties ///
 

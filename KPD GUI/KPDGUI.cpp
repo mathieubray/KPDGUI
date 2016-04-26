@@ -49,8 +49,11 @@ void KPDGUI::setUpLists(){
 
 	//Node List
 	nodeList = new KPDGUINodeList();
+	matchList = new KPDGUIMatchList();
+
 
 	ui->nodeAndMatchWidget->insertTab(1, nodeList, "Pairings/ADs");
+	ui->nodeAndMatchWidget->insertTab(2, matchList, "Matches");
 
 	
 	//connect(ui->nodeList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
@@ -665,6 +668,8 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
 	nodeList->addTopLevelItem(wrapper);
+
+	//connect(nodeList, SIGNAL(itemEntered(QTreeWidgetItem*,int)), wrapper, SLOT(highlightNode(QTreeWidgetItem*)));
 	
 	connect(ui->graphicsView, SIGNAL(mouseReleased()), newNode, SLOT(updateVisibility()));
 	//connect(newNode, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
@@ -677,15 +682,22 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 }
 
 void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
-	KPDGUIMatch * match = new KPDGUIMatch(donor, candidate);
+
+
+	double fiveYearSurvival = kpdguiRecord->calculateSurvival(donor, candidate, true);
+	double tenYearSurvival = kpdguiRecord->calculateSurvival(donor, candidate, false);
+
+
+	KPDGUIMatch * match = new KPDGUIMatch(donor, candidate, fiveYearSurvival, tenYearSurvival);
 
 	candidate->addMatchingDonor(match);
 	donor->addMatchingCandidate(match);
 
-	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
-	//KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(link);
-	//matchListWidget->addTopLevelItem(wrapper);
+	KPDGUIMatchWrapper * wrapper = new KPDGUIMatchWrapper(match);
+	matchList->addTopLevelItem(wrapper);
 
+	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), match, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
+	
 	kpdguiRecord->insertMatch(match);
 	kpdguiScene->addItem(match);
 

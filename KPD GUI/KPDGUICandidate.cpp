@@ -41,11 +41,28 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 
 	matchingID = 0;
 	
+	setCandidateAttributes(c);
+	
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
+	candidateOpacity = 0.25;
+
+	setRect(QRectF(0, 0, 75, 65));
+
+	updateVisualProperties();
+
+}
+
+KPDGUICandidate::~KPDGUICandidate(){
+
+}
+
+void KPDGUICandidate::setCandidateAttributes(DialogCandidate * c) {
 	candidateName = c->candidateNameLineEdit->text();
 	candidateAge = c->candidateAgeSpinBox->value();
 	candidatePRA = c->candidatePRASpinBox->value();
 	candidateBT = KPDFunctions::intToBloodType(c->candidateBTComboBox->currentIndex());
-	
+
 	candidateStatus = c->candidateStatusCheckBox->isChecked();
 	candidateFailureProbability = c->candidateFailureProbabilitySpinBox->value();
 
@@ -54,9 +71,9 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 
 	QString gender = c->candidateGenderComboBox->currentText();
 	double height = c->candidateHeightSpinBox->value();
-	double weight = c->candidateWeightSpinBox->value();	
+	double weight = c->candidateWeightSpinBox->value();
 
-	if (gender == "Male"){ candidateMale = true; }
+	if (gender == "Male") { candidateMale = true; }
 	else { candidateMale = false; }
 	candidateRace = KPDFunctions::intToRace(c->candidateRaceComboBox->currentIndex());
 	candidateDiabetes = c->candidateDiabetesCheckBox->isChecked();
@@ -71,30 +88,20 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 	QStringList excludedDonorList = excludedDonors.split(";");
 
 	foreach(QString donor, excludedDonorList){
-		candidateExcludedDonors << donor.toInt();
+	candidateExcludedDonors << donor.toInt();
 	}*/
 
 	QString antibodies = c->candidateHLALineEdit->text();
 	antibodies.replace(" ", "");
 	QStringList antibodyList = antibodies.split(";");
 
-	foreach(QString antibody, antibodyList){
+	foreach(QString antibody, antibodyList) {
 		candidateHLA << antibody;
 	}
 
 	candidateComment = c->commentTextEdit->toPlainText();
-	
-	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-	setAcceptHoverEvents(true);
-	candidateOpacity = 0.25;
 
-	setRect(QRectF(0, 0, 75, 65));
-
-	updateVisualProperties();
-
-}
-
-KPDGUICandidate::~KPDGUICandidate(){
+	emit candidateEdited();
 
 }
 
@@ -535,18 +542,26 @@ QVariant KPDGUICandidate::itemChange(GraphicsItemChange change, const QVariant &
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void KPDGUICandidate::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-
+void KPDGUICandidate::highlight() {
 	candidateOpacity = 1;
 	updateVisualProperties();
+}
+
+void KPDGUICandidate::clearHighlight() {
+	candidateOpacity = 0.25;
+	updateVisualProperties();
+}
+
+void KPDGUICandidate::hoverEnterEvent(QGraphicsSceneHoverEvent * event) {
+
+	highlight();
 
 	emit candidateEntered();
 }
 
 void KPDGUICandidate::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 	
-	candidateOpacity = 0.25;
-	updateVisualProperties();
+	clearHighlight();
 	
 	emit candidateExited();
 }
@@ -562,7 +577,7 @@ void KPDGUICandidate::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
 	editCandidate();
 
-	//QGraphicsObject::mouseDoubleClickEvent(event);
+	QGraphicsItem::mouseDoubleClickEvent(event);
 }
 
 void KPDGUICandidate::updateVisualProperties() {
@@ -589,6 +604,11 @@ void KPDGUICandidate::updateVisualProperties() {
 
 void KPDGUICandidate::editCandidate() {
 
+	DialogCandidate * candidateDialog = new DialogCandidate(this, true, 0);
+
+	if (candidateDialog->exec()) {
+		setCandidateAttributes(candidateDialog);
+	}
 }
 
 QDataStream &operator<<(QDataStream &out, const KPDGUICandidate & candidate)

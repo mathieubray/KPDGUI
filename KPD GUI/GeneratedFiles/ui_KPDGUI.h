@@ -83,7 +83,7 @@ public:
     {
         if (KPDGUI->objectName().isEmpty())
             KPDGUI->setObjectName(QStringLiteral("KPDGUI"));
-        KPDGUI->resize(1060, 760);
+        KPDGUI->resize(1060, 754);
         KPDGUI->setMinimumSize(QSize(1060, 590));
         KPDGUI->setMaximumSize(QSize(16777215, 16777215));
         QIcon icon;

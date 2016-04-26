@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Add New AD</string>
+   <string>Add New Altruistic Donor</string>
   </property>
   <widget class="QGroupBox" name="donorGroupBox">
    <property name="geometry">
@@ -37,7 +37,7 @@
    <property name="title">
     <string>Donor Information</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>

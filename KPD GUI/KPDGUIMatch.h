@@ -48,6 +48,8 @@
 
 #include <math.h>
 
+#include "DialogMatch.h"
+
 #include "KPDGUINode.h"
 #include "KPDGUIDisplaySettings.h"
 
@@ -79,18 +81,23 @@ private:
 	QPolygonF arrowHead;
 
 	//Match Properties
+	double matchFiveYearSurvival;
+	double matchTenYearSurvival;
 	double matchSuccessProbability;
-	double matchUtility;
+	double matchScore;
+	bool includeMatch;
 
 	int myPopularityInStructures;
 	int myPopularityInSolutions;
 
 	bool displayAsPartOfSolution;
 
+	
+
 public:
     enum { Type = UserType + 4 };
 
-	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate);
+	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, double fiveYear, double tenYear);
 	~KPDGUIMatch();
 
 	//Nodes
@@ -121,10 +128,20 @@ public:
 	void decreasePopularity(bool solution);
 	void resetPopularity(bool solution);
 
+	double getMatchFiveYearSurvivalProbability() const { return matchFiveYearSurvival; }
+	double getMatchTenYearSurvivalProbability() const { return matchTenYearSurvival; }
 	double getMatchSuccessProbability() const { return matchSuccessProbability; }
-	double getMatchUtility() const { return matchUtility; }
+	double getMatchScore() const { return matchScore; }
+	bool getIncludeMatchInRun() const { return includeMatch; }
+
+	void setMatchFiveYearSurvivalProbability(double surv)  { matchFiveYearSurvival = surv; }
+	void setMatchTenYearSurvivalProbability(double surv)  { matchTenYearSurvival = surv; }
+	void setMatchSuccessProbability(double prob)  { matchSuccessProbability = prob; }
+	void setMatchScore(double score)  { matchScore = score; }
+	void setIncludeMatchInRun(bool include)  { includeMatch = include; }
 
 signals:
+	void matchEdited();
 	//void selectMatchInList(bool);
 
 protected:
@@ -137,6 +154,8 @@ public slots:
 	void updateSelection(int id, bool selected);
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void endDisplayAsPartOfSolution();
+
+	void editMatch();
 };
 
 #endif
