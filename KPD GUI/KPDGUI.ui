@@ -41,7 +41,7 @@
         <property name="childrenCollapsible">
          <bool>false</bool>
         </property>
-        <widget class="KPDGUINodeList" name="nodeList">
+        <widget class="QTabWidget" name="nodeAndMatchWidget">
          <property name="minimumSize">
           <size>
            <width>300</width>
@@ -54,125 +54,12 @@
            <height>16777215</height>
           </size>
          </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
+         <property name="tabPosition">
+          <enum>QTabWidget::South</enum>
          </property>
-         <property name="alternatingRowColors">
-          <bool>false</bool>
+         <property name="currentIndex">
+          <number>-1</number>
          </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <column>
-          <property name="text">
-           <string>Node</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Type</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Donors</string>
-          </property>
-         </column>
-        </widget>
-        <widget class="KPDGUINodeList" name="donorList">
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>false</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <column>
-          <property name="text">
-           <string>Donor</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Type</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Matches</string>
-          </property>
-         </column>
-        </widget>
-        <widget class="KPDGUINodeList" name="candidateList">
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors">
-          <bool>false</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <column>
-          <property name="text">
-           <string>Candidate</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Name</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Matches</string>
-          </property>
-         </column>
         </widget>
        </widget>
       </item>
@@ -323,7 +210,6 @@
     <addaction name="actionMouse_Tool"/>
     <addaction name="actionHand_Tool"/>
     <addaction name="separator"/>
-    <addaction name="actionView_PairInfo"/>
     <addaction name="actionView_Structures_Solutions"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -646,11 +532,6 @@
     <signal>zoomOut()</signal>
     <signal>mouseReleased()</signal>
    </slots>
-  </customwidget>
-  <customwidget>
-   <class>KPDGUINodeList</class>
-   <extends>QTreeWidget</extends>
-   <header>KPDGUINodeList.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -1014,22 +895,6 @@
   </connection>
   <connection>
    <sender>graphicsView</sender>
-   <signal>customContextMenuRequested(QPoint)</signal>
-   <receiver>KPDGUI</receiver>
-   <slot>screenCustomMenu(QPoint)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>497</x>
-     <y>213</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>275</x>
-     <y>179</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphicsView</sender>
    <signal>zoomIn()</signal>
    <receiver>KPDGUI</receiver>
    <slot>zoomIn()</slot>
@@ -1051,8 +916,8 @@
    <slot>zoomOut()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>784</x>
-     <y>420</y>
+     <x>783</x>
+     <y>489</y>
     </hint>
     <hint type="destinationlabel">
      <x>275</x>

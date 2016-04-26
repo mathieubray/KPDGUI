@@ -10,7 +10,6 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	initializeParameters();	
 	setUpKPDObjects();
 	setUpLists();
-	setUpActions();
 	setUpMenu();
 	setUpToolbar();
 	
@@ -32,13 +31,6 @@ void KPDGUI::initializeParameters(){
 
 void KPDGUI::setUpKPDObjects(){
 
-	// Graphics View
-	//ui->graphicsView->setContextMenuPolicy(Qt::CustomContextMenu);
-	//connect(ui->graphicsView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(screenCustomMenu(QPoint)));
-	//connect(ui->graphicsView, SIGNAL(zoomIn()), this, SLOT(zoomIn()));
-	//connect(ui->graphicsView, SIGNAL(zoomOut()), this, SLOT(zoomOut()));
-	//connect(ui->graphicsView, SIGNAL(mouseReleased()), this, SLOT(updateVisibility()));
-
 	//Graphics Scene
 	kpdguiScene = new QGraphicsScene();
 	ui->graphicsView->setScene(kpdguiScene);
@@ -56,98 +48,30 @@ void KPDGUI::setUpKPDObjects(){
 void KPDGUI::setUpLists(){
 
 	//Node List
-	ui->nodeList->header()->resizeSection(0, 50);
-	ui->nodeList->header()->resizeSection(1, 50);
-	ui->nodeList->header()->resizeSection(2, 120);
-	ui->nodeList->header()->resizeSection(3, 50);
-	ui->nodeList->sortItems(0, Qt::AscendingOrder);
-	ui->nodeList->setContextMenuPolicy(Qt::CustomContextMenu);
+	nodeList = new KPDGUINodeList();
+
+	ui->nodeAndMatchWidget->insertTab(1, nodeList, "Pairings/ADs");
+
+	
 	//connect(ui->nodeList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
 	//connect(ui->nodeList, SIGNAL(mouseReleased()), this, SLOT(newPairListSelectionActions()));
 	//connect(ui->nodeList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(pairListCustomMenu(QPoint)));
 	
-	ui->donorList->header()->resizeSection(0, 50);
-	ui->nodeList->header()->resizeSection(1, 50);
-	ui->nodeList->header()->resizeSection(2, 120);
-	ui->nodeList->header()->resizeSection(3, 50);
-	ui->nodeList->sortItems(0, Qt::AscendingOrder);
-	ui->nodeList->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
 	//Structure Tree
 	ui->structureWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect(ui->structureWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(structureTreeSelectionActions(QTreeWidgetItem*)));
-	connect(ui->structureWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(structureTreeCustomMenu(QPoint)));
+	//connect(ui->structureWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(structureTreeCustomMenu(QPoint)));
 	
 	//Solution Tree
 	ui->solutionWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 	//connect(ui->solutionWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(solutionTreeSelectionActions(QTreeWidgetItem*)));
-	connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));
+	//connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));
 	
 	ui->structureWidget->setVisible(false);
 	ui->solutionWidget->setVisible(false);
 }
-
-
-void KPDGUI::setUpActions(){
-	
-	//Screen Custom Menu
-	/*addAssociatedDonorAction = new QAction(tr("&Add Additional Donor"), this);
-	connect(addAssociatedDonorAction, SIGNAL(triggered()), this, SLOT(addAssociatedDonor()));
-
-	highlightStructuresAction = new QAction(tr("&Highlight Structures"), this);
-	connect(highlightStructuresAction, SIGNAL(triggered()), this, SLOT(highlightRelevantStructures()));
-
-	highlightSolutionsAction = new QAction(tr("&Highlight Solutions"), this);
-	connect(highlightSolutionsAction, SIGNAL(triggered()), this, SLOT(highlightRelevantSolutions()));
-
-	selectAllAction = new QAction(tr("&Select All"), this);
-	connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
-
-	clearHighlightsAction = new QAction(tr("&Clear Highlights"), this);
-	connect(clearHighlightsAction, SIGNAL(triggered()), this, SLOT(clearHighlights()));*/
-
-	/*editDonorAction = new QAction(tr("&Edit Donor"), this);
-	connect(editDonorAction, SIGNAL(triggered()), this, SLOT(editDonor()));
-
-	editCandidateAction = new QAction(tr("&Edit Candidate"), this);
-	connect(editCandidateAction, SIGNAL(triggered()), this, SLOT(editCandidate()));
-
-	holdNodeAction = new QAction(tr("&Hold"), this);
-	connect(holdNodeAction, SIGNAL(triggered()), this, SLOT(holdNode()));
-
-	unholdNodeAction = new QAction(tr("&Unhold"), this);
-	connect(unholdNodeAction, SIGNAL(triggered()), this, SLOT(unholdNode()));
-
-	deleteNodeAction = new QAction(tr("&Delete"), this);
-	connect(deleteNodeAction, SIGNAL(triggered()), this, SLOT(deleteNode()));
-
-	holdMultipleNodesAction = new QAction(tr("&Hold Selected Pairs"), this);
-	connect(holdMultipleNodesAction, SIGNAL(triggered()), this, SLOT(holdMultipleNodes()));
-
-	unholdMultipleNodesAction = new QAction(tr("&Unhold Selected Pairs"), this);
-	connect(unholdMultipleNodesAction, SIGNAL(triggered()), this, SLOT(unholdMultipleNodes()));
-
-	clusterMultipleNodesAction = new QAction(tr("&Cluster Selected Pairs"), this);
-	connect(clusterMultipleNodesAction, SIGNAL(triggered()), this, SLOT(clusterMultipleNodes()));
-
-	deleteMultipleNodesAction = new QAction(tr("&Delete Selected Pairs"), this);
-	connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));*/
-
-
-	//Structures Custom Menu
-	//clusterStructureAction = new QAction("Cluster Structure", this);
-	//connect(clusterStructureAction, SIGNAL(triggered()), this, SLOT(clusterStructure()));
-
-
-	//Solutions Custom Menu
-	//clusterSolutionAction = new QAction("Cluster Solution", this);
-	//connect(clusterSolutionAction, SIGNAL(triggered()), this, SLOT(clusterSolution()));
-
-	//removeSolutionAction = new QAction("Remove Solution", this);
-	//connect(removeSolutionAction, SIGNAL(triggered()), this, SLOT(removeSolution()));
-}
-
 
 void KPDGUI::setUpMenu(){
 	
@@ -220,6 +144,7 @@ void KPDGUI::addNewNode()
 		KPDGUICandidate * candidate = new KPDGUICandidate(dialogCandidate);
 		
 		DialogDonor * dialogDonor = new DialogDonor(this);
+		dialogDonor->setWindowTitle("Add New Donor");
 
 		if (dialogDonor->exec()) {
 
@@ -235,6 +160,7 @@ void KPDGUI::addNewNode()
 			while (additionalDonorMessage == QMessageBox::Yes) {
 
 				DialogDonor * additionalDialogDonor = new DialogDonor(this);
+				additionalDialogDonor->setWindowTitle("Add Additional Donor");
 
 				if (additionalDialogDonor->exec()) {
 
@@ -299,66 +225,6 @@ void KPDGUI::addNewAD()
 		setWindowModified(true);
 	}
 }
-
-/*void KPDGUI::addAssociatedDonor(int i){
-	DialogDonor * dialog = new DialogDonor(this);
-
-	if (dialog->exec()) {
-
-		Donor associatedDonor(dialog);
-
-		Candidate c = kpdguiRecord->getNode(i)->getCandidate();
-		KPDGUINode * newDonor = new KPDGUINode(associatedDonor, c);
-		////connect(newDonor, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
-		////connect(newDonor, SIGNAL(nodeEntered(int)), this, SLOT(updateTable(int)));
-		////connect(newDonor, SIGNAL(nodeLeft(int)), this, SLOT(clearTable()));
-
-		addNode(newDonor, false);
-
-		int pairID = newDonor->getID();
-		//ui->dashboard->addPairInfo(pairID);
-
-		//KPDGUIMatch * link = new KPDGUIMatch(newDonor, kpdguiRecord->getNode(i), false);
-		//QVector<KPDGUINode *> nodes;
-		//nodes.push_back(newDonor);
-		//nodes.push_back(kpdguiRecord->getNode(i));
-
-		kpdguiScene->clearSelection();
-		newDonor->setSelected(true);
-		changeFocus(pairID);
-		//ui->dashboard->focusOnPairScreen(pairID);
-
-		statusBar()->showMessage("Added New Associated Donor", 2000);
-		ui->dashboard->appendDashboardText("> Added New Donor: " + associatedDonor.getName() + " (" + QString::number(pairID) + ")");
-
-		emit visibilityChanged(kpdguiDisplaySettings);
-		setWindowModified(true);
-	}
-}*/
-
-/*void KPDGUI::highlightRelevantStructures(int i){
-	QTreeWidgetItem * item = ui->structureWidget->topLevelItem(0);
-
-	KPDGUINode * node = kpdguiRecord->getNode(i);
-
-	for (int i = 0; i < item->childCount(); i++){
-		for (int j = 0; j < item->child(i)->childCount(); j++){
-			KPDGUIStructureWrapper * structure = dynamic_cast<KPDGUIStructureWrapper *>(item->child(i)->child(j));
-			if (structure){
-				if (structure->getStructure()->contains(node)){
-					structure->getStructure()->select();
-					updateVisibility();
-					structure->getStructure()->highlight();
-					selectedStructures.push_back(structure->getStructure());
-				}
-			}
-		}
-	}
-}*/
-
-//void KPDGUI::highlightRelevantSolutions(int i){
-
-//}
 
 void KPDGUI::loadNodes()
 {
@@ -464,6 +330,8 @@ void KPDGUI::changeNodeViewMode()
 			updateStatus("Display Settings Changed");
 		}
 	}
+
+	updateVisibility();
 }
 
 void KPDGUI::changeMatchViewMode_Within()
@@ -552,493 +420,7 @@ void KPDGUI::aboutKPD()
 		"<p>Author: Mathieu Bray"));
 }
 
-
-//void KPDGUI::newPairListSelectionActions(QTreeWidgetItem* item)
-void KPDGUI::newNodeListSelectionActions()
-{
-	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
-		QTreeWidgetItem * item = ui->nodeList->topLevelItem(i);
-		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
-		if (wrapper){
-			bool selected = item->isSelected();
-			KPDGUINode * node = wrapper->getNode();
-			node->setSelected(selected);
-
-			/*if (selected){
-				ui->graphicsView->centerOn(QPointF(node->x(), node->y()));
-			}*/			
-		}
-	}
-
-	updateVisibility();
-}
-
-/*void KPDGUI::newMatchListSelectionActions(QTreeWidgetItem* item)
-{
-	KPDGUIMatchWrapper * arrow = dynamic_cast<KPDGUIMatchWrapper *>(item);
-	if (arrow){
-		KPDGUIMatch * link = arrow->getArrow();
-
-		bool selected = item->isSelected();
-		link->startItem()->setSelected(selected);
-		link->endItem()->setSelected(selected);
-
-		updateVisibility();
-	}
-}*/
-
-void KPDGUI::structureTreeSelectionActions(QTreeWidgetItem* item)
-{
-	ui->solutionWidget->selectionModel()->clearSelection();
-	highlightStructures(item);
-}
-
-void KPDGUI::solutionTreeSelectionActions(QTreeWidgetItem* item)
-{
-	ui->structureWidget->selectionModel()->clearSelection();
-	highlightStructures(item);
-}
-
-void KPDGUI::highlightStructures(QTreeWidgetItem * item){
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
-
-	bool selected = item->isSelected();
-
-	ui->dashboard->removeSolution();
-	if (selectedStructures.size() > 0){
-		foreach(KPDGUIStructure * structure, selectedStructures){
-			structure->undoHighlights();
-		}
-	}
-	selectedStructures.clear();
-
-	if (selected){
-		int level;
-		if (!item->parent()){
-			level = 0;
-		}
-		else if (!item->parent()->parent()){
-			level = 1;
-		}
-		else if (!item->parent()->parent()->parent()){
-			level = 2;
-		}
-		else {
-			level = 3;
-		}
-		if (level == 0){
-			KPDGUIStructureSet * structureSet = dynamic_cast<KPDGUIStructureSet *>(item);
-			if (structureSet){
-				kpdguiScene->clearSelection();
-				structureSet->selectStructures();
-				//clearTable();
-				updateVisibility();
-				structureSet->highlight();
-
-				foreach(KPDGUIStructure * structure, structureSet->getStructures()){
-					selectedStructures.push_back(structure);
-				}
-				ui->dashboard->showSolution(structureSet->getDashboardString());
-				ui->dashboard->focusOnSolution();
-			}
-		}
-		else if (level == 2) {
-			KPDGUIStructureWrapper * structureWrapper = dynamic_cast<KPDGUIStructureWrapper *>(item);
-			if (structureWrapper){
-				KPDGUIStructure * structure = structureWrapper->getStructure();
-				kpdguiScene->clearSelection();
-				structure->select();
-				//clearTable();
-				updateVisibility();
-				structure->highlight();
-				selectedStructures.push_back(structure);
-				ui->graphicsView->centerOn(QPoint(structure->centerX(), structure->centerY()));
-			}
-		}
-		else if (level == 3){
-			KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
-			if (nodeWrapper){
-				KPDGUINode * node = nodeWrapper->getNode();
-				kpdguiScene->clearSelection();
-				node->setSelected(selected);
-				updateVisibility();
-
-				ui->graphicsView->centerOn(node->getNodePosition());
-
-				int i = node->getID();
-				
-			}
-		}
-		else {
-			kpdguiScene->clearSelection();
-			if (item->childCount() > 0){
-				for (int j = 0; j < item->childCount(); j++){
-					KPDGUIStructureWrapper * childWrapper = dynamic_cast<KPDGUIStructureWrapper *>(item->child(j));
-					if (childWrapper){
-						KPDGUIStructure * child = childWrapper->getStructure();
-
-						child->select();
-						child->highlight();
-
-						if (j == 0){
-							ui->graphicsView->centerOn(QPoint(child->centerX(), child->centerY()));
-						}
-
-						selectedStructures.push_back(child);
-					}
-				}
-				updateVisibility();
-			}
-			//clearTable();
-		}
-
-	}
-	else {
-		kpdguiScene->clearSelection();
-		updateVisibility();
-		//clearTable();
-	}
-
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();
-}
-
-void KPDGUI::newNodeListDoubleClickActions(QTreeWidgetItem * item)
-{
-	KPDGUINodeWrapper * node = dynamic_cast<KPDGUINodeWrapper *>(item);
-	if (node){
-		//qDebug() << "Double Click " << node->getNode()->getID();
-	}
-}
-
-void KPDGUI::screenCustomMenu(QPoint pos){	
-
-	QMenu * menu = new QMenu(this);
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	
-	if (items.size() >= 2){
-		bool allHeld = true;
-		foreach(QGraphicsItem * item, items){
-			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-			if (!node->getStatus()){
-				allHeld = false;
-			}
-		}
-		menu->addAction(clusterMultipleNodesAction);
-		menu->addSeparator();
-		if (allHeld){
-			menu->addAction(unholdMultipleNodesAction);
-		}
-		else {
-			menu->addAction(holdMultipleNodesAction);
-		}
-
-		menu->addAction(deleteMultipleNodesAction);
-	}
-
-	else if (items.size() == 1){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-		if (node){
-			//menu->addAction(addAssociatedDonorAction);
-			//menu->addAction(highlightStructuresAction);
-			//menu->addAction(highlightSolutionsAction);
-			menu->addAction(editDonorAction);
-			if (node->getType() == PAIR){
-				menu->addAction(editCandidateAction);
-			}
-			menu->addSeparator();
-			if (node->getStatus()){
-				menu->addAction(unholdNodeAction);
-			}
-			else {
-				menu->addAction(holdNodeAction);
-			}
-			menu->addAction(deleteNodeAction);
-		}
-	}
-
-	else {
-		//menu->addAction(selectAllAction);
-		//menu->addAction(clearHighlightsAction);
-	}
-
-	if (menu->actions().size() > 0){
-		menu->popup(ui->graphicsView->viewport()->mapToGlobal(pos));
-	}
-
-}
-
-void KPDGUI::nodeListCustomMenu(QPoint pos){
-
-	//qDebug() << "Pair List Custom Menu";
-
-	QTreeWidgetItem * item = ui->nodeList->itemAt(pos);
-
-	QMenu *menu = new QMenu(this);
-
-	KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
-	if (wrapper){
-		KPDGUINode *node = wrapper->getNode();
-		//menu->addAction(addAssociatedDonorAction);
-		//menu->addAction(highlightStructuresAction);
-		//menu->addAction(highlightSolutionsAction);
-		menu->addAction(editDonorAction);
-		if (node->getType() == PAIR){
-			menu->addAction(editCandidateAction);
-		}
-		menu->addSeparator();
-		if (node->getStatus()){
-			menu->addAction(unholdNodeAction);
-		}
-		else {
-			menu->addAction(holdNodeAction);
-		}
-		menu->addAction(deleteNodeAction);
-	}
-
-	if (menu->actions().size() > 0){
-		menu->popup(ui->nodeList->viewport()->mapToGlobal(pos));
-	}
-}
-
-void KPDGUI::structureTreeCustomMenu(QPoint pos){
-	QTreeWidgetItem * item = ui->structureWidget->itemAt(pos);
-
-	QMenu *menu = new QMenu(this);
-
-	KPDGUIStructureWrapper * structureWrapper = dynamic_cast<KPDGUIStructureWrapper *>(item);
-	if (structureWrapper){
-		KPDGUIStructure * structure = structureWrapper->getStructure();
-		menu->addAction(clusterStructureAction);
-
-		rightClickStructure = structure;
-	}
-	if (menu->actions().size() > 0){
-		menu->popup(ui->structureWidget->viewport()->mapToGlobal(pos));
-	}
-
-}
-
-void KPDGUI::solutionTreeCustomMenu(QPoint pos){
-	QTreeWidgetItem * item = ui->solutionWidget->itemAt(pos);
-
-	QMenu *menu = new QMenu(this);
-
-	KPDGUIStructureWrapper * structureWrapper = dynamic_cast<KPDGUIStructureWrapper *>(item);
-	if (structureWrapper){
-		KPDGUIStructure * structure = structureWrapper->getStructure();
-		menu->addAction(clusterStructureAction);
-		rightClickStructure = structure;
-	}
-	else {
-		KPDGUIStructureSet * structureSet = dynamic_cast<KPDGUIStructureSet *>(item);
-		if (structureSet){
-			if (structureSet->structureSetisSolutionSet()){
-				menu->addAction(clusterSolutionAction);
-				menu->addAction(removeSolutionAction);
-				rightClickStructureSet = structureSet;
-			}
-		}
-	}
-	if (menu->actions().size() > 0){
-		menu->popup(ui->solutionWidget->viewport()->mapToGlobal(pos));
-	}
-}
-
-//void KPDGUI::deleteNode(int i)
-//{
-	////qDebug() << "Delete " << i;
-
-	/*KPDGUINode * nodeToDelete = kpdguiRecord->getNode(i);
-	int id = nodeToDelete->getID();
-	nodeToDelete->setSelected(false);
-	
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
-
-	QSet<KPDGUINodeWrapper *> nodeWrappersToDelete;
-	QSet<KPDGUIMatchWrapper *> arrowWrappersToDelete;
-	QSet<KPDGUIStructureWrapper *> structureWrappersToDelete;
-	QSet<KPDGUIStructure *> structuresToDelete; */
-
-/*	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
-		KPDGUINodeWrapper * nodeWrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->nodeList->topLevelItem(i));
-		if (nodeWrapper){
-			if (nodeWrapper->getNode()->getID() == id){
-				nodeWrappersToDelete.insert(nodeWrapper);
-			}
-		}
-	} */
-
-	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
-		KPDGUIMatchWrapper * arrowWrapper = dynamic_cast<KPDGUIMatchWrapper *>(matchListWidget->topLevelItem(i));
-		if (arrowWrapper){
-			if (arrowWrapper->getArrow()->startItem()->getID() == id){
-				arrowWrappersToDelete.insert(arrowWrapper);
-			}
-			else if (arrowWrapper->getArrow()->endItem()->getID() == id){
-				arrowWrappersToDelete.insert(arrowWrapper);
-			}
-		}
-	}*/	
-
-	/*for (int i = 0; i < ui->structureWidget->topLevelItemCount(); i++){
-		KPDGUIStructureSet * structureSet = dynamic_cast<KPDGUIStructureSet *>(ui->structureWidget->topLevelItem(i));
-		if (structureSet){
-			for (int j = structureSet->childCount() - 1; j >= 0; j--){
-				KPDGUIStructureWrapper * structureWrapper = dynamic_cast<KPDGUIStructureWrapper *>(structureSet->child(j));
-				if (structureWrapper){
-					if (structureWrapper->getStructure()->contains(nodeToDelete)){
-						structuresToDelete.insert(structureWrapper->getStructure());
-						structureSet->removeChild(structureSet->child(j));
-						structureSet->removeStructure(structureWrapper->getStructure());
-						structureWrappersToDelete.insert(structureWrapper);
-					}
-				}
-			}
-		}
-	}
-
-	for (int i = 0; i < ui->solutionWidget->topLevelItemCount(); i++){
-		KPDGUIStructureSet * structureSet = dynamic_cast<KPDGUIStructureSet *>(ui->solutionWidget->topLevelItem(i));
-		if (structureSet){
-			for (int j = structureSet->childCount() - 1; j >= 0; j--){
-				KPDGUIStructureWrapper * structureWrapper = dynamic_cast<KPDGUIStructureWrapper *>(structureSet->child(j));
-				if (structureWrapper){
-					if (structureWrapper->getStructure()->contains(nodeToDelete)){
-						structuresToDelete.insert(structureWrapper->getStructure());
-						structureSet->removeChild(structureSet->child(j));
-						structureSet->removeStructure(structureWrapper->getStructure());
-						structureWrappersToDelete.insert(structureWrapper);
-					}
-				}
-			}
-		}
-	}
-
-	foreach(KPDGUINodeWrapper * nodeWrapper, nodeWrappersToDelete){
-		delete nodeWrapper;
-	}
-
-	foreach(KPDGUIMatchWrapper * arrowWrapper, arrowWrappersToDelete){
-		delete arrowWrapper;
-	}
-
-	foreach(KPDGUIStructureWrapper * structureWrapper, structureWrappersToDelete){
-		delete structureWrapper;
-	}
-
-	foreach(KPDGUIStructure * structureToDelete, structuresToDelete){
-		delete structureToDelete;
-	}
-
-	if (nodeToDelete->getType() == KPDPairType::AD){
-		ui->dashboard->appendDashboardText("> Deleted AD: " + nodeToDelete->getDonorName() + " (" + QString::number(id) + ")");
-	}
-	else {
-		ui->dashboard->appendDashboardText("> Deleted Pair: " + nodeToDelete->getDonorName() + ", " + nodeToDelete->getCandidateName() + " (" + QString::number(id) + ")");
-	}
-	//ui->dashboard->deletePairInfo(id);
-
-	kpdguiRecord->deleteNodeFromRecord(id);
-
-	delete nodeToDelete;
-
-	setWindowModified(true);
-
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();*/
-//}
-
-void KPDGUI::clickActions(QTreeWidgetItem * item)
-{
-	KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
-	if (wrapper){
-		changeFocus(wrapper->getNode());
-	}
-}
-
-//void KPDGUI::selectAllVisibleNodes(){
-	//QApplication::setOverrideCursor(Qt::WaitCursor);
-	//QApplication::processEvents();
-	
-	//emit selectAll();
-
-	//QApplication::restoreOverrideCursor();
-	//QApplication::processEvents();
-//}
-
-//void KPDGUI::clearAllHighlights(){
-//	if (selectedStructures.size() > 0){
-//		foreach(KPDGUIStructure * structure, selectedStructures){
-//			structure->undoHighlights();
-//		}
-//	}
-//	selectedStructures.clear();
-//}
-
-void KPDGUI::clusterStructure(){
-
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
-
-	rightClickStructure->cluster();
-	rightClickStructure->select();
-	rightClickStructure->highlight();
-
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();
-
-	ui->graphicsView->centerOn(QPoint(rightClickStructure->centerX(), rightClickStructure->centerY()));
-}
-
-void KPDGUI::clusterSolution(){
-
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
-
-	rightClickStructureSet->cluster();
-	rightClickStructureSet->selectStructures();
-	rightClickStructureSet->highlight();
-
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();
-
-	ui->graphicsView->centerOn(QPoint(rightClickStructureSet->centerX(), rightClickStructureSet->centerY()));
-}
-
-void KPDGUI::removeSolution(){
-	int r = QMessageBox::warning(this, tr("KPD"),
-		tr("Remove Solution?"),
-		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-	if (r == QMessageBox::Yes) {
-		int index = ui->solutionWidget->indexOfTopLevelItem(rightClickStructureSet);
-		QTreeWidgetItem * solutionToDelete = ui->solutionWidget->takeTopLevelItem(index);
-		delete solutionToDelete;
-		kpdguiScene->clearSelection();
-		
-		setWindowModified(true);
-	}
-}
-
-void KPDGUI::checkSelections(){
-	
-	//Bring to front
-	++maxZ;
-
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node)
-			node->setZValue(maxZ);
-	}
-
-	updateVisibility();
-}
-
 void KPDGUI::updateVisibility(){
-	//qDebug() << "KPDGUI::updateVisibility";
 	emit visibilityChanged(kpdguiDisplaySettings);
 }
 
@@ -1266,16 +648,17 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	foreach(KPDGUIDonor * donor, newNode->getDonors()) {
 		kpdguiScene->addItem(donor);
 	}
+
+	newNode->clusterNode();
+
 	++nodePlacementSequenceNumber;	
 
 	checkNodeMatches(newNode);
 
 	KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(newNode);
-	ui->nodeList->addTopLevelItem(wrapper);
+	nodeList->addTopLevelItem(wrapper);
 	
 	connect(ui->graphicsView, SIGNAL(mouseReleased()), newNode, SLOT(updateVisibility()));
-	//connect(newNode, SIGNAL(nodeEntered(int)), this, SLOT(updateTable(int)));
-	//connect(newNode, SIGNAL(nodeLeft(int)), this, SLOT(clearTable()));
 	//connect(newNode, SIGNAL(nodeWasClicked(int, bool)), this, SLOT(clickActions(int, bool)));
 	
 	//connect(ui->graphicsView, SIGNAL(mouseReleased()), wrapper, SLOT(updateSelections()));
@@ -1733,158 +1116,6 @@ void KPDGUI::runSimulation(){
 	delete progress;	
 
 	
-}
-
-
-void KPDGUI::editDonor(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	if (items.size() == 1){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-		if (node){
-
-			DialogDonor * dialogDonor = new DialogDonor(node->getFirstDonor(), true, this);
-
-			if (dialogDonor->exec()) {
-				//qDebug() << "Edit Donor " << node->getID();
-			}			
-		}
-	}
-}
-
-void KPDGUI::editCandidate(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	if (items.size() == 1){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-		if (node){
-
-			DialogCandidate * dialogCandidate = new DialogCandidate(node->getCandidate(), true, this);
-
-			if (dialogCandidate->exec()){
-				//qDebug() << "Edit Candidate " << node->getID();
-			}
-		}
-	}
-}
-
-void KPDGUI::holdNode(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-	if (node){
-		//node->setNodeStatus(true);
-		updateVisibility();
-	}
-}
-
-void KPDGUI::unholdNode(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-	if (node){
-		//node->setNodeStatus(false);
-		updateVisibility();
-	}
-}
-
-void KPDGUI::deleteNode(){
-
-	int r = QMessageBox::warning(0, "KPD", "Clicking 'Yes' will remove selected pair from pool and all previously found solutions permanently.\nAre you sure you want to delete selected pair?",
-		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-	if (r == QMessageBox::Yes) {
-		QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-		if (node){
-			//emit deleteNode(node->getID());
-		}
-	}
-}
-
-void KPDGUI::holdMultipleNodes(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
-			//node->setNodeStatus(true);
-			updateVisibility();
-		}
-	}
-}
-
-void KPDGUI::unholdMultipleNodes(){
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
-			//node->setNodeStatus(false);
-			updateVisibility();
-		}
-	}
-}
-
-void KPDGUI::clusterMultipleNodes(){
-
-	QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-
-	qreal avgx = 0;
-	qreal avgy = 0;
-	qreal dist = 50 + 10 * items.size();
-
-	
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
-			avgx += node->getNodePosition().x();
-			avgy += node->getNodePosition().y();
-		}
-	}
-
-	qreal x = avgx / items.size();
-	qreal y = avgy / items.size();
-
-	qreal angle = (2 * PI) / items.size();
-	qreal nodeAngle = PI;
-
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
-
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
-			//node->setVisible(false);
-			if (!(abs((node->getNodePosition().x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->getNodePosition().y()) - (y + dist*sin(nodeAngle)) < TOL))){
-				node->setNodePosition(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
-			}
-			nodeAngle += angle;
-			//node->setVisible(true);
-			node->setSelected(true);
-		}
-	}
-
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();
-}
-
-void KPDGUI::deleteMultipleNodes(){
-
-	int r = QMessageBox::warning(0, "KPD", "Clicking \"Yes\" will remove selected pairs from pool and all previously found solutions permanently.\nAre you sure you want to delete selected pairs?",
-		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-	if (r == QMessageBox::Yes) {
-		/*QApplication::setOverrideCursor(Qt::WaitCursor);
-		QApplication::processEvents();
-		QList<QGraphicsItem*> items = kpdguiScene->selectedItems();
-		foreach(QGraphicsItem * item, items){
-			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-			if (node){
-				node->setSelected(false);
-			}
-		}
-		foreach(QGraphicsItem * item, items){
-			KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-			if (node){
-				//emit deleteNode(node->getID());
-			}
-		}
-		QApplication::restoreOverrideCursor();
-		QApplication::processEvents();*/
-	}
 }
 
 void KPDGUI::checkNodeMatches(KPDGUINode * node) {

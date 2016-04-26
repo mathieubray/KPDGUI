@@ -33,7 +33,7 @@ DialogDisplaySettings::DialogDisplaySettings(KPDGUIDisplaySettings *displaySetti
 	if (nodeSubsetButton->isChecked()){
 		displaySettingsBox->setEnabled(true);
 
-		showHoldCheckBox->setChecked(displaySettings->getShowNodesOnHold());
+		showExcludedCheckBox->setChecked(displaySettings->getShowExcludedNodes());
 		showIncompatibleCheckBox->setChecked(displaySettings->getShowNodesWithNoCompatibilities());
 		praCheckBox->setChecked(displaySettings->getShowCandidatesInPRARange());
 		praSpinBoxLeft->setValue(displaySettings->getMinPRA());
@@ -42,12 +42,11 @@ DialogDisplaySettings::DialogDisplaySettings(KPDGUIDisplaySettings *displaySetti
 	else {
 		displaySettingsBox->setEnabled(false);
 		
-		showHoldCheckBox->setChecked(true);
+		showExcludedCheckBox->setChecked(true);
 		showIncompatibleCheckBox->setChecked(true);
 		praCheckBox->setChecked(false);
 		praSpinBoxLeft->setValue(0);
 		praSpinBoxRight->setValue(100);
 		
-	}
-	
+	}	
 }

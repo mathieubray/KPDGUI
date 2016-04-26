@@ -14,7 +14,6 @@
 #include "KPDGUINodeWrapper.h"
 #include "KPDGUIMatch.h"
 #include "KPDGUIMatchWrapper.h"
-#include "KPDGUIGraphicsScene.h"
 #include "KPDGUISimParameters.h"
 
 

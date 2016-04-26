@@ -22,79 +22,72 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QToolButton>
-#include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_DialogReadFile
 {
 public:
-    QWidget *layoutWidget;
-    QVBoxLayout *readFileVerticalLayout;
-    QGridLayout *readFileGridLayout;
+    QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout;
     QLabel *pairFileLabel;
     QLineEdit *pairFileLineEdit;
     QToolButton *pairFileToolButton;
-    QSpacerItem *layoutHorizontalSpacer;
     QLabel *layoutLabel;
     QComboBox *layoutComboBox;
+    QSpacerItem *horizontalSpacer;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *DialogReadFile)
     {
         if (DialogReadFile->objectName().isEmpty())
             DialogReadFile->setObjectName(QStringLiteral("DialogReadFile"));
-        DialogReadFile->resize(270, 100);
-        DialogReadFile->setMinimumSize(QSize(270, 100));
-        DialogReadFile->setMaximumSize(QSize(270, 100));
-        layoutWidget = new QWidget(DialogReadFile);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 246, 90));
-        readFileVerticalLayout = new QVBoxLayout(layoutWidget);
-        readFileVerticalLayout->setObjectName(QStringLiteral("readFileVerticalLayout"));
-        readFileVerticalLayout->setContentsMargins(0, 0, 0, 0);
-        readFileGridLayout = new QGridLayout();
-        readFileGridLayout->setObjectName(QStringLiteral("readFileGridLayout"));
-        pairFileLabel = new QLabel(layoutWidget);
+        DialogReadFile->resize(415, 86);
+        DialogReadFile->setMinimumSize(QSize(415, 86));
+        DialogReadFile->setMaximumSize(QSize(415, 86));
+        gridLayout_2 = new QGridLayout(DialogReadFile);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        gridLayout = new QGridLayout();
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        pairFileLabel = new QLabel(DialogReadFile);
         pairFileLabel->setObjectName(QStringLiteral("pairFileLabel"));
 
-        readFileGridLayout->addWidget(pairFileLabel, 0, 0, 1, 1);
+        gridLayout->addWidget(pairFileLabel, 0, 0, 1, 1);
 
-        pairFileLineEdit = new QLineEdit(layoutWidget);
+        pairFileLineEdit = new QLineEdit(DialogReadFile);
         pairFileLineEdit->setObjectName(QStringLiteral("pairFileLineEdit"));
 
-        readFileGridLayout->addWidget(pairFileLineEdit, 0, 1, 1, 2);
+        gridLayout->addWidget(pairFileLineEdit, 0, 1, 1, 3);
 
-        pairFileToolButton = new QToolButton(layoutWidget);
+        pairFileToolButton = new QToolButton(DialogReadFile);
         pairFileToolButton->setObjectName(QStringLiteral("pairFileToolButton"));
 
-        readFileGridLayout->addWidget(pairFileToolButton, 0, 3, 1, 1);
+        gridLayout->addWidget(pairFileToolButton, 0, 4, 1, 1);
 
-        layoutHorizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        readFileGridLayout->addItem(layoutHorizontalSpacer, 1, 3, 1, 1);
-
-        layoutLabel = new QLabel(layoutWidget);
+        layoutLabel = new QLabel(DialogReadFile);
         layoutLabel->setObjectName(QStringLiteral("layoutLabel"));
 
-        readFileGridLayout->addWidget(layoutLabel, 1, 0, 1, 1);
+        gridLayout->addWidget(layoutLabel, 1, 0, 1, 1);
 
-        layoutComboBox = new QComboBox(layoutWidget);
+        layoutComboBox = new QComboBox(DialogReadFile);
         layoutComboBox->setObjectName(QStringLiteral("layoutComboBox"));
 
-        readFileGridLayout->addWidget(layoutComboBox, 1, 1, 1, 2);
+        gridLayout->addWidget(layoutComboBox, 1, 1, 1, 1);
 
+        horizontalSpacer = new QSpacerItem(28, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        readFileVerticalLayout->addLayout(readFileGridLayout);
+        gridLayout->addItem(horizontalSpacer, 1, 2, 1, 1);
 
-        buttonBox = new QDialogButtonBox(layoutWidget);
+        buttonBox = new QDialogButtonBox(DialogReadFile);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setEnabled(true);
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-        readFileVerticalLayout->addWidget(buttonBox);
+        gridLayout->addWidget(buttonBox, 1, 3, 1, 2);
+
+
+        gridLayout_2->addLayout(gridLayout, 0, 0, 1, 1);
 
 
         retranslateUi(DialogReadFile);
@@ -108,7 +101,7 @@ public:
 
     void retranslateUi(QDialog *DialogReadFile)
     {
-        DialogReadFile->setWindowTitle(QApplication::translate("DialogReadFile", "Load Pairs From File", 0));
+        DialogReadFile->setWindowTitle(QApplication::translate("DialogReadFile", "Load Pairings and ADs From File", 0));
         pairFileLabel->setText(QApplication::translate("DialogReadFile", "Pair File", 0));
         pairFileToolButton->setText(QApplication::translate("DialogReadFile", "Browse...", 0));
         layoutLabel->setText(QApplication::translate("DialogReadFile", "Layout", 0));

@@ -9,9 +9,6 @@
 
 #include "KPDGUINode.h"
 
-//#include "DialogPair.h"
-#include "DialogDonor.h"
-
 class KPDGUIGraphicsScene : public QGraphicsScene 
 {
 	Q_OBJECT
@@ -19,31 +16,12 @@ class KPDGUIGraphicsScene : public QGraphicsScene
 public:
 	KPDGUIGraphicsScene();
 	~KPDGUIGraphicsScene();	
-
-	//void changeMode(int i);
-	//void setHLAList(QStringList hla);
-
+	
 protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-	//void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-	//void wheelEvent(QGraphicsSceneWheelEvent *event);
-
-signals:
-	void addAssociatedDonor(int i);
-	void highlightRelevantStructures(int i);
-	void highlightRelevantSolutions(int i);
-	void selectAllVisibleNodes();
-	void clearAllHighlights();
-	void deleteNode(int i);
-	void editNode(int i);
-	void screenChanged();
-	
-	//void zoomIn();
-	//void zoomOut();
-	void mouseReleased();
 
 private slots:
-	void addAssociatedDonor();
+	/*void addAssociatedDonor();
 	void highlightRelevantStructures();
 	void highlightRelevantSolutions();
 	void editNode();
@@ -57,13 +35,13 @@ private slots:
 	void deleteMultipleNodes();
 
 	void selectAll();
-	void clearHighlights();
+	void clearHighlights();*/
 
 private:
 
 	//int mode;
 
-	void createNodeActions();
+	//void createNodeActions();
 	
 	/*QAction * addAssociatedDonorAction;
 	QAction * highlightStructuresAction;

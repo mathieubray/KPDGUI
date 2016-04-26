@@ -1,13 +1,11 @@
 #include "KPDGUIGraphicsScene.h"
 
-//const qreal PI = 3.14159265;
-//const qreal TOL = 3;
 
 KPDGUIGraphicsScene::KPDGUIGraphicsScene() : QGraphicsScene()
 {
-	//setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense7Pattern));
+	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense4Pattern));
 		
-	createNodeActions();
+	//createNodeActions();
 }
 
 KPDGUIGraphicsScene::~KPDGUIGraphicsScene()
@@ -95,6 +93,7 @@ void KPDGUIGraphicsScene::wheelEvent(QGraphicsSceneWheelEvent *event){
 
 }
 */
+/*
 void KPDGUIGraphicsScene::addAssociatedDonor(){
 	QList<QGraphicsItem*> items = selectedItems();
 	if (items.size() == 1){
@@ -303,8 +302,10 @@ void KPDGUIGraphicsScene::createNodeActions(){
 	//connect(clusterMultipleNodesAction, SIGNAL(triggered()), this, SLOT(clusterMultipleNodes()));
 
 	deleteMultipleNodesAction = new QAction(tr("&Delete Selected Pairs"), this);
-	//connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));*/
+	//connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));
 }
+*/
+
 /*
 void KPDGUIGraphicsScene::changeMode(int i){
 	mode = i;

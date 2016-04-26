@@ -15,7 +15,7 @@ private:
 	bool showNodeSubset;
 	bool showNodesInSolutions;
 	bool showNodesInStructures;
-	bool showNodesOnHold;
+	bool showExcludedNodes;
 	bool showNodesWithNoCompatibilities;
 	bool showCandidatesInPRARange;
 
@@ -35,7 +35,7 @@ public:
 	bool getShowNodeSubset() const;
 	bool getShowNodesInStructures() const;
 	bool getShowNodesInSolutions() const;
-	bool getShowNodesOnHold() const;
+	bool getShowExcludedNodes() const;
 	bool getShowNodesWithNoCompatibilities() const;
 	bool getShowCandidatesInPRARange() const;
 
@@ -48,7 +48,7 @@ public:
 	void setShowNodeSubset(bool show);
 	void setShowNodesInStructures(bool show);
 	void setShowNodesInSolutions(bool show);
-	void setShowNodesOnHold(bool show);
+	void setShowExcludedNodes(bool show);
 	void setShowNodesWithNoCompatibilities(bool show);
 	void setShowCandidatesInPRARange(bool show);
 

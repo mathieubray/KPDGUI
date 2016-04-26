@@ -6,105 +6,95 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>270</width>
-    <height>100</height>
+    <width>415</width>
+    <height>86</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>270</width>
-    <height>100</height>
+    <width>415</width>
+    <height>86</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>270</width>
-    <height>100</height>
+    <width>415</width>
+    <height>86</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Load Pairs From File</string>
+   <string>Load Pairings and ADs From File</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>246</width>
-     <height>90</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="readFileVerticalLayout">
-    <item>
-     <layout class="QGridLayout" name="readFileGridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="pairFileLabel">
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="pairFileLabel">
+       <property name="text">
+        <string>Pair File</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" colspan="3">
+      <widget class="QLineEdit" name="pairFileLineEdit"/>
+     </item>
+     <item row="0" column="4">
+      <widget class="QToolButton" name="pairFileToolButton">
+       <property name="text">
+        <string>Browse...</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="layoutLabel">
+       <property name="text">
+        <string>Layout</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="layoutComboBox">
+       <item>
         <property name="text">
-         <string>Pair File</string>
+         <string>Circle</string>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="pairFileLineEdit"/>
-      </item>
-      <item row="0" column="3">
-       <widget class="QToolButton" name="pairFileToolButton">
+       </item>
+       <item>
         <property name="text">
-         <string>Browse...</string>
+         <string>Grid</string>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="3">
-       <spacer name="layoutHorizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="layoutLabel">
-        <property name="text">
-         <string>Layout</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QComboBox" name="layoutComboBox">
-        <item>
-         <property name="text">
-          <string>Circle</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Grid</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-      </property>
-     </widget>
-    </item>
-   </layout>
-  </widget>
+       </item>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>28</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="3" colspan="2">
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

@@ -2,6 +2,7 @@
 #define KPDGUINODELIST_H
 
 #include <QTreeWidget>
+#include <QHeaderView>
 
 
 class KPDGUINodeList : public QTreeWidget

@@ -78,53 +78,6 @@ public slots:
 	//Window-->About
 	void aboutKPD();
 
-	//Custom Menus
-	void screenCustomMenu(QPoint);
-	void nodeListCustomMenu(QPoint);
-	void structureTreeCustomMenu(QPoint);
-	void solutionTreeCustomMenu(QPoint);
-
-	//Pair List Actions
-	//void newPairListSelectionActions(QTreeWidgetItem *);
-	void newNodeListSelectionActions();
-	void newNodeListDoubleClickActions(QTreeWidgetItem *);
-
-	void clusterStructure();
-	void clusterSolution();
-	void removeSolution();
-	
-	//Structure List Actions
-	void structureTreeSelectionActions(QTreeWidgetItem *);
-	
-	//Solution List Actions
-	void solutionTreeSelectionActions(QTreeWidgetItem *);
-	 
-	//Graphics View Actions 
-	void editDonor();
-	void editCandidate();
-	void holdNode();
-	void unholdNode();
-	void deleteNode();
-
-	void holdMultipleNodes();
-	void unholdMultipleNodes();
-	void clusterMultipleNodes();
-	void deleteMultipleNodes();
-
-	//void deleteNode(int);
-	void clickActions(QTreeWidgetItem *);
-	
-
-	//void addAssociatedDonor();
-	//void highlightRelevantStructures();
-	//void highlightRelevantSolutions();
-	//void selectAllVisibleNodes();
-	//void clearAllHighlights();	
-	
-	//Updates
-	void checkSelections();
-	//void updateTable(int);
-	//void clearTable();
 	void updateVisibility();	
 	void updateStatusBar();
 
@@ -137,11 +90,11 @@ protected:
 
 private:
     Ui::KPDGUI *ui;
+
 	void initializeParameters();
 	void setUpGraphicsScene();
 	void setUpLists();
 	void setUpKPDObjects();
-	void setUpActions();
 	void setUpMenu();
 	void setUpToolbar();
 
@@ -163,8 +116,6 @@ private:
 	//Helper Functions
 	bool okToContinue();
 	void changeFocus(KPDGUINode * node);
-	//void sort();
-	void highlightStructures(QTreeWidgetItem * item);
 	void updateStatus(QString message);
 
 	//Simulation
@@ -180,44 +131,20 @@ private:
 	int nodePlacementSequenceNumber;
 	int previousSliderPosition;
 
+	//List Objects
+	KPDGUINodeList * nodeList;
+
 	//KPDGUI Objects
 	QGraphicsScene * kpdguiScene;
 	KPDGUISimParameters * kpdguiParameters;
 	KPDGUIRecord * kpdguiRecord;
 	KPDGUIDisplaySettings * kpdguiDisplaySettings;
 		
-	//Actions
-	QAction * clusterStructureAction;
-	QAction * clusterSolutionAction;
-	QAction * removeSolutionAction;
-
-	QAction * editDonorAction;
-	QAction * editCandidateAction;
-	QAction * holdNodeAction;
-	QAction * unholdNodeAction;
-	QAction * deleteNodeAction;
-
-	QAction * holdMultipleNodesAction;
-	QAction * unholdMultipleNodesAction;
-	QAction * clusterMultipleNodesAction;
-	QAction * deleteMultipleNodesAction;
-
-	//QAction * addAssociatedDonorAction;
-	//QAction * highlightStructuresAction;
-	//QAction * highlightSolutionsAction;
-	//QAction * selectAllAction;
-	//QAction * clearHighlightsAction;
-
 	//Menu Objects
 	QActionGroup * displayArrowsActionGroup;
 	
 	//Toolbar Objects
 	QSlider * zoomSlider;	
-
-	//Recent Structures
-	KPDGUIStructure * rightClickStructure;
-	KPDGUIStructureSet * rightClickStructureSet;
-	QVector<KPDGUIStructure *> selectedStructures;
 
 	static const int MagicNumber = 40930942;
 };

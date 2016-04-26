@@ -49,25 +49,25 @@ public:
     QCheckBox *praCheckBox;
     QSpinBox *praSpinBoxRight;
     QSpinBox *praSpinBoxLeft;
-    QCheckBox *showHoldCheckBox;
+    QCheckBox *showExcludedCheckBox;
     QButtonGroup *buttonGroup;
 
     void setupUi(QDialog *DialogDisplaySettings)
     {
         if (DialogDisplaySettings->objectName().isEmpty())
             DialogDisplaySettings->setObjectName(QStringLiteral("DialogDisplaySettings"));
-        DialogDisplaySettings->resize(380, 222);
+        DialogDisplaySettings->resize(441, 236);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(DialogDisplaySettings->sizePolicy().hasHeightForWidth());
         DialogDisplaySettings->setSizePolicy(sizePolicy);
-        DialogDisplaySettings->setMinimumSize(QSize(380, 222));
-        DialogDisplaySettings->setMaximumSize(QSize(380, 222));
+        DialogDisplaySettings->setMinimumSize(QSize(441, 236));
+        DialogDisplaySettings->setMaximumSize(QSize(441, 236));
         DialogDisplaySettings->setSizeGripEnabled(true);
         layoutWidget = new QWidget(DialogDisplaySettings);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 361, 105));
+        layoutWidget->setGeometry(QRect(10, 10, 421, 105));
         horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -126,14 +126,14 @@ public:
         displaySettingsBox = new QGroupBox(DialogDisplaySettings);
         displaySettingsBox->setObjectName(QStringLiteral("displaySettingsBox"));
         displaySettingsBox->setEnabled(true);
-        displaySettingsBox->setGeometry(QRect(10, 120, 361, 91));
+        displaySettingsBox->setGeometry(QRect(10, 120, 421, 111));
         showIncompatibleCheckBox = new QCheckBox(displaySettingsBox);
         showIncompatibleCheckBox->setObjectName(QStringLiteral("showIncompatibleCheckBox"));
-        showIncompatibleCheckBox->setGeometry(QRect(10, 40, 185, 17));
+        showIncompatibleCheckBox->setGeometry(QRect(10, 53, 311, 17));
         showIncompatibleCheckBox->setChecked(true);
         layoutWidget1 = new QWidget(displaySettingsBox);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 60, 341, 24));
+        layoutWidget1->setGeometry(QRect(10, 73, 392, 24));
         displaySettingsGridLayout = new QGridLayout(layoutWidget1);
         displaySettingsGridLayout->setObjectName(QStringLiteral("displaySettingsGridLayout"));
         displaySettingsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -157,10 +157,10 @@ public:
 
         displaySettingsGridLayout->addWidget(praSpinBoxLeft, 0, 1, 1, 1);
 
-        showHoldCheckBox = new QCheckBox(displaySettingsBox);
-        showHoldCheckBox->setObjectName(QStringLiteral("showHoldCheckBox"));
-        showHoldCheckBox->setGeometry(QRect(10, 17, 211, 17));
-        showHoldCheckBox->setChecked(true);
+        showExcludedCheckBox = new QCheckBox(displaySettingsBox);
+        showExcludedCheckBox->setObjectName(QStringLiteral("showExcludedCheckBox"));
+        showExcludedCheckBox->setGeometry(QRect(10, 30, 291, 17));
+        showExcludedCheckBox->setChecked(true);
 
         retranslateUi(DialogDisplaySettings);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogDisplaySettings, SLOT(accept()));
@@ -182,7 +182,7 @@ public:
         displaySettingsBox->setTitle(QApplication::translate("DialogDisplaySettings", "Node Subset Settings", 0));
         showIncompatibleCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes with No Compatibilities", 0));
         praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Nodes with Candidates in PRA Range", 0));
-        showHoldCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes Excluded From Match Runs", 0));
+        showExcludedCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Nodes Excluded From Match Runs", 0));
     } // retranslateUi
 
 };

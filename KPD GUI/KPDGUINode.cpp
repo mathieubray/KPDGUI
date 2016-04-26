@@ -67,18 +67,24 @@ KPDGUICandidate * KPDGUINode::getCandidate() const {
 
 bool KPDGUINode::getStatus() {
 
-	if (nodeCandidate->getStatus()) {
-		return true;
+	if (nodeType == PAIR){
+		if (nodeCandidate->getStatus()) {
+			return true;
+		}
+		else {
+			foreach(KPDGUIDonor * donor, nodeDonors) {
+				if (!(donor->getStatus())) {
+					return false;
+				}
+			}
+
+			return true;
+		}
 	}
 	else {
-		foreach(KPDGUIDonor * donor, nodeDonors) {
-			if (!(donor->getStatus())) {
-				return false;
-			}
-		}
-
-		return true;
+		return nodeDonors.first()->getStatus();
 	}
+	
 }
 
 QVector<QString> KPDGUINode::getPrograms() const {
@@ -348,17 +354,17 @@ QString KPDGUINode::getDashboardString() {
 	}
 	consoleString += QString::number(nodeID);
 	consoleString += " (";
-	if (nodeCandidate->getStatus()) {
-		consoleString += "Candidate on hold, ";
+	if (!nodeCandidate->getStatus()) {
+		consoleString += "Candidate not particpating in match run, ";
 	}
 
 	int i = 0;
 	foreach(KPDGUIDonor * donor, nodeDonors) {
 		i++;
-		if (donor->getStatus()) {
+		if (!donor->getStatus()) {
 			consoleString += "Donor ";
 			consoleString += i;
-			consoleString += " on hold, ";
+			consoleString += " not participating in match run, ";
 		}
 	}
 	consoleString.chop(2);

@@ -6,7 +6,7 @@ KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
 	showNodeSubset = false;
 	showNodesInSolutions = false;
 	showNodesInStructures = false;
-	showNodesOnHold = true;
+	showExcludedNodes = true;
 	showNodesWithNoCompatibilities = true;
 	showCandidatesInPRARange = false;
 
@@ -26,7 +26,7 @@ bool KPDGUIDisplaySettings::changeDisplaySettings(DialogDisplaySettings * d){
 	showNodeSubset = d->nodeSubsetButton->isChecked();
 	showNodesInStructures = d->showStructuresRadioButton->isChecked();
 	showNodesInSolutions = d->showSolutionsRadioButton->isChecked();
-	showNodesOnHold = d->showHoldCheckBox->isChecked();
+	showExcludedNodes = d->showExcludedCheckBox->isChecked();
 	showNodesWithNoCompatibilities = d->showIncompatibleCheckBox->isChecked();
 	showCandidatesInPRARange = d->praCheckBox->isChecked();
 
@@ -61,8 +61,8 @@ bool KPDGUIDisplaySettings::getShowNodesInSolutions() const {
 	return showNodesInSolutions;
 }
 
-bool KPDGUIDisplaySettings::getShowNodesOnHold() const {
-	return showNodesOnHold;
+bool KPDGUIDisplaySettings::getShowExcludedNodes() const {
+	return showExcludedNodes;
 }
 
 bool KPDGUIDisplaySettings::getShowNodesWithNoCompatibilities() const {
@@ -101,8 +101,8 @@ void KPDGUIDisplaySettings::setShowNodesInSolutions(bool show){
 	showNodesInSolutions = show;
 }
 
-void KPDGUIDisplaySettings::setShowNodesOnHold(bool show){
-	showNodesOnHold = show;
+void KPDGUIDisplaySettings::setShowExcludedNodes(bool show){
+	showExcludedNodes = show;
 }
 
 void KPDGUIDisplaySettings::setShowNodesWithNoCompatibilities(bool show){
@@ -129,7 +129,7 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings
 {
 	out << settings.getShowAllNodes() << settings.getShowNodeSubset()
 		<< settings.getShowNodesInSolutions() << settings.getShowNodesInStructures()
-		<< settings.getShowNodesOnHold() << settings.getShowNodesWithNoCompatibilities()
+		<< settings.getShowExcludedNodes() << settings.getShowNodesWithNoCompatibilities()
 		<< settings.getShowCandidatesInPRARange();
 
 	out << qint32(settings.getMinPRA()) << qint32(settings.getMaxPRA());
@@ -145,7 +145,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 	bool showNodeSubset;
 	bool showNodesInSolutions;
 	bool showNodesInStructures;
-	bool showNodesOnHold;
+	bool showExcludedNodes;
 	bool showNodesWithNoCompatibilities;
 	bool showCandidatesInPRARange;
 
@@ -155,7 +155,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 	int mode;
 	
 	in >> showAllNodes >> showNodeSubset >> showNodesInSolutions >> showNodesInStructures
-		>> showNodesOnHold >> showNodesWithNoCompatibilities >> showCandidatesInPRARange;
+		>> showExcludedNodes >> showNodesWithNoCompatibilities >> showCandidatesInPRARange;
 
 	in >> minPRA >> maxPRA;
 
@@ -165,7 +165,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 	settings.setShowNodeSubset(showNodeSubset);
 	settings.setShowNodesInSolutions(showNodesInSolutions);
 	settings.setShowNodesInStructures(showNodesInStructures);
-	settings.setShowNodesOnHold(showNodesOnHold);
+	settings.setShowExcludedNodes(showExcludedNodes);
 	settings.setShowNodesWithNoCompatibilities(showNodesWithNoCompatibilities);
 	settings.setShowCandidatesInPRARange(showCandidatesInPRARange);
 
