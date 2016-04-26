@@ -177,7 +177,8 @@ public:
 
 	/// Visual Properties ///
 
-	QPointF getCenter();
+	QPointF getCandidatePosition();
+	void setCandidatePosition(QPointF point);
 	QString text() const;
 	void setText(const QString &text);
 	void setBackgroundColor();

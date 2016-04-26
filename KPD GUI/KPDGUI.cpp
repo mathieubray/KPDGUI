@@ -171,6 +171,9 @@ void KPDGUI::addNewNode()
 						"New Pairing Contains " + QString::number(associatedDonors.size()) + " Donors. Add Another Donor to Pairing?",
 						QMessageBox::Yes | QMessageBox::No);
 				}
+				else {
+					break;
+				}
 			}
 
 			//qDebug() << "Creating Node";
@@ -180,6 +183,8 @@ void KPDGUI::addNewNode()
 			//newNode->setNodePosition(QPointF(0, 0));
 
 			//qDebug() << "Add Node to Record";
+			newNode->setNodePosition(QPointF(0,0));
+
 			addNode(newNode, false);
 			//qDebug() << "Node Added to Record" << newNode->getID() << " " << newNode->getFirstDonor()->getID();
 			//kpdguiScene->clearSelection();
@@ -645,11 +650,14 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 		kpdguiScene->addItem(newNode->getCandidate());
 	}
 
-	foreach(KPDGUIDonor * donor, newNode->getDonors()) {
-		kpdguiScene->addItem(donor);
+	else {
+		kpdguiScene->addItem(newNode->getFirstDonor());
 	}
 
-	newNode->clusterNode();
+	//foreach(KPDGUIDonor * donor, newNode->getDonors()) {
+		//kpdguiScene->addItem(donor);
+	//}
+
 
 	++nodePlacementSequenceNumber;	
 
@@ -665,6 +673,7 @@ void KPDGUI::addNode(KPDGUINode * newNode, bool fromSavedFile){
 	//connect(this, SIGNAL(poolChanged()), wrapper, SLOT(updateText()));
 	connect(this, SIGNAL(visibilityChanged(KPDGUIDisplaySettings *)), newNode, SLOT(updateVisibility(KPDGUIDisplaySettings *)));
 	////connect(this, SIGNAL(selectAll()), newNode, SLOT(selectIfVisible()));
+	connect(ui->actionRefresh, SIGNAL(triggered()), newNode, SLOT(clusterNode()));
 }
 
 void KPDGUI::addMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate){
@@ -753,9 +762,9 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 
 		KPDGUINode * newNode;
 		
-		bool status = false;
+		bool status = true;
 		if (line.at(1).at(0) != "1"){
-			status = true;
+			status = false;
 		}
 
 		KPDGUIDonor * newDonor = new KPDGUIDonor();
@@ -802,7 +811,9 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 		if (donorBT == "O"){ newDonor->setBT(BT_O); }
 		else if (donorBT == "A"){ newDonor->setBT(BT_A); }
 		else if (donorBT == "B"){ newDonor->setBT(BT_B); }
-		else if (donorBT == "AB"){ newDonor->setBT(BT_AB); }		
+		else if (donorBT == "AB"){ newDonor->setBT(BT_AB); }	
+
+		newDonor->setStatus(status);
 
 		//Pair
 		if (line.at(2).at(0).toInt() == 0){
@@ -864,6 +875,7 @@ void KPDGUI::readPairsFromFile(QString fileName, QString layout)
 			}
 
 			newCandidate->setHLA(antibodies);
+			newCandidate->setStatus(status);
 
 			QVector<KPDGUIDonor *> newDonors;
 			newDonors << newDonor;

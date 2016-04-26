@@ -34,6 +34,7 @@ private:
 public slots:
 
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
+	void clusterNode();
 
 
 public:
@@ -77,9 +78,8 @@ public:
 
 	// Visual Properties
 
-	void clusterNode();
+	
 	QPointF getNodePosition();
-
 	void setNodePosition(QPointF center);
 	void setSelected(bool selected);
 	void updateNodeVisibility(KPDGUIDisplaySettings * displaySettings);

@@ -33,13 +33,15 @@ KPDGUIDonor::KPDGUIDonor(){
 
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
-	donorOpacity = 0.25;
+	
 
 	if (donorIsAltruistic) {
-		setRect(QRectF(0, 0, 45, 40));
+		setRect(QRectF(0, 0, 55, 50));
+		donorOpacity = 0.25;
 	}
 	else {
 		setRect(QRectF(0, 0, 35, 30));
+		donorOpacity = 1;
 	}
 
 	updateVisualProperties();
@@ -133,9 +135,18 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 
 	donorComment = d->commentTextEdit->toPlainText();
 
+	if (donorIsAltruistic) {
+		donorOpacity = 0.25;
+		setRect(QRectF(0, 0, 45, 40));
+	}
+	else {
+		donorOpacity = 1;
+		setRect(QRectF(0, 0, 35, 30));
+	}
+
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
-	donorOpacity = 0.25;
+	
 
 	updateVisualProperties();
 		
@@ -289,6 +300,15 @@ void KPDGUIDonor::setBT(KPDBloodType bt){
 
 void KPDGUIDonor::setAltruistic(bool altruistic) {
 	donorIsAltruistic = altruistic;
+
+	if (donorIsAltruistic) {
+		donorOpacity = 0.25;
+		setRect(QRectF(0, 0, 55, 50));
+	}
+	else {
+		donorOpacity = 1;
+		setRect(QRectF(0, 0, 35, 30));
+	}
 
 	updateVisualProperties();
 }
@@ -516,7 +536,7 @@ void KPDGUIDonor::setComment(QString comment){
 	donorComment = comment;
 }
 
-QPointF KPDGUIDonor::getCenter() {
+QPointF KPDGUIDonor::getDonorPosition() {
 
 	QPointF point = scenePos();
 	qreal x = point.x();
@@ -526,6 +546,16 @@ QPointF KPDGUIDonor::getCenter() {
 	qreal height = boundingRect().height();
 
 	return QPointF(x + width / 2, y + height / 2);
+}
+
+void KPDGUIDonor::setDonorPosition(QPointF point) {
+
+	qreal width = boundingRect().width();
+	qreal height = boundingRect().height();
+
+	QPointF adjustedPosition(point.x() - width / 2, point.y() - height / 2);
+
+	setPos(adjustedPosition);
 }
 
 QString KPDGUIDonor::text() const
@@ -739,7 +769,9 @@ QVariant KPDGUIDonor::itemChange(GraphicsItemChange change, const QVariant &valu
 
 void KPDGUIDonor::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
 	
-	donorOpacity = 1;
+	if (donorIsAltruistic) {
+		donorOpacity = 1;
+	}
 	updateVisualProperties();
 
 	emit donorEntered();
@@ -747,7 +779,9 @@ void KPDGUIDonor::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
 
 void KPDGUIDonor::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 	
-	donorOpacity = 0.25;
+	if (donorIsAltruistic) {
+		donorOpacity = 0.25;
+	}
 	updateVisualProperties();
 	
 	emit donorExited();
@@ -769,27 +803,32 @@ void KPDGUIDonor::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
 void KPDGUIDonor::updateVisualProperties() {
 
-	if (isSelected()) {
-		setOpacity(1);
+	if (donorIsAltruistic) {
+		if (isSelected()) {
+			setOpacity(1);
+		}
+		else {
+			setOpacity(donorOpacity);
+		}
 	}
 	else {
-		setOpacity(donorOpacity);
+		setOpacity(1);
 	}
 		
 	if (donorStatus) {
 		if (donorIsAltruistic) {
-			donorBackgroundColor = QColor(0, 255, 255);
+			donorBackgroundColor = QColor(200,0,200);
 		}
 		else {
 			donorBackgroundColor = QColor(0, 0, 255);
 		}
 	}
 	else {
-		if (donorIsAltruistic) {
-			donorBackgroundColor = QColor(100, 125, 100);
+		if (donorIsAltruistic) {			
+			donorBackgroundColor = QColor(75, 0, 75);
 		}
 		else {
-			donorBackgroundColor = QColor(100, 100, 125);
+			donorBackgroundColor = QColor(0,0, 100);
 		}
 	}	
 	

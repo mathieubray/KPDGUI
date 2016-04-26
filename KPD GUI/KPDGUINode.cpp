@@ -22,14 +22,17 @@ KPDGUINode::KPDGUINode(KPDGUIDonor * donor)
 KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidate)
 {
 	nodeID = 0;
-	nodeType = PAIR;
-	
+	nodeType = PAIR;	
+
+	nodeCandidate = candidate;
+
 	foreach(KPDGUIDonor * donor, donors) {
 		donor->setAltruistic(false);
 		nodeDonors << donor;
+
+		donor->setParentItem(candidate);
 	}
 
-	nodeCandidate = candidate;
 }
 
 KPDGUINode::~KPDGUINode()
@@ -68,17 +71,16 @@ KPDGUICandidate * KPDGUINode::getCandidate() const {
 bool KPDGUINode::getStatus() {
 
 	if (nodeType == PAIR){
-		if (nodeCandidate->getStatus()) {
-			return true;
+		if (!nodeCandidate->getStatus()) {
+			return false;
 		}
 		else {
 			foreach(KPDGUIDonor * donor, nodeDonors) {
-				if (!(donor->getStatus())) {
-					return false;
+				if (donor->getStatus()) {
+					return true;
 				}
 			}
-
-			return true;
+			return false;
 		}
 	}
 	else {
@@ -97,18 +99,11 @@ int KPDGUINode::getNumberOfPrograms() const {
 
 void KPDGUINode::setID(int id) {
 	nodeID = id;
-
-	//qDebug()() << "Setting ID";
-
+	
 	int i = 1;
 	foreach(KPDGUIDonor * donor, nodeDonors) {
-		
-		//qDebug()() << "Setting ID for Donor " << i;
-
 		donor->setID(id);
 		donor->setDonorNumber(i);
-
-		//qDebug()() << "Donor ID" << donor->getID() << " " << donor->getDonorNumber();
 		i++;
 	}
 
@@ -181,15 +176,14 @@ void KPDGUINode::clusterNode() {
 	if (nodeType == PAIR) {
 		int numberOfDonors = nodeDonors.size();
 
-		qreal dist = 45;
+		qreal dist = 55;
 		qreal donorAngle = -PI / 4;
 
-		qreal x = nodeCandidate->x();
-		qreal y = nodeCandidate->y();
+		qreal x = nodeCandidate->getCandidatePosition().x();
+		qreal y = nodeCandidate->getCandidatePosition().y();
 
 		foreach(KPDGUIDonor * donor, nodeDonors) {
-			donor->setX(x + dist*cos(donorAngle));
-			donor->setY(y + dist*sin(donorAngle));
+			donor->setDonorPosition(QPointF(nodeCandidate->boundingRect().width()/2 + dist*cos(donorAngle), nodeCandidate->boundingRect().height()/2 + dist*sin(donorAngle)));
 			donorAngle += (2 * PI) / numberOfDonors;
 		}
 	}
@@ -198,11 +192,11 @@ void KPDGUINode::clusterNode() {
 QPointF KPDGUINode::getNodePosition() {
 
 	if (nodeType == PAIR) {
-		return nodeCandidate->getCenter();
+		return nodeCandidate->getCandidatePosition();
 	}
 
 	else {
-		return nodeDonors.at(0)->getCenter();
+		return nodeDonors.at(0)->getDonorPosition();
 	}	
 
 }
@@ -218,13 +212,12 @@ void KPDGUINode::setSelected(bool selected) {
 void KPDGUINode::setNodePosition(QPointF center) {
 		
 	if (nodeType == PAIR) {
-		nodeCandidate->setPos(center);
+		nodeCandidate->setCandidatePosition(center);
+		clusterNode();
 	}
 	else {
-		nodeDonors.at(0)->setPos(center);
-	}
-
-	clusterNode();
+		nodeDonors.first()->setDonorPosition(center);
+	}	
 }
 
 void KPDGUINode::updateNodeVisibility(KPDGUIDisplaySettings * displaySettings) {

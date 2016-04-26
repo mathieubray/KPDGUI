@@ -45,7 +45,7 @@ void KPDGUIMatch::updatePosition() {
 	
 	//qDebug() << "Update Position: " << myDonor->getCenter() << " " << myCandidate->getCenter();
 	//QLineF line(mapFromItem(myDonor, 0, 0), mapFromItem(myCandidate, 0, 0));
-	QLineF line(myDonor->getCenter(), myCandidate->getCenter());
+	QLineF line(myDonor->getDonorPosition(), myCandidate->getCandidatePosition());
 	setLine(line);
 }
 
@@ -131,8 +131,8 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	painter->setPen(myPen);
 	painter->setBrush(myColor);
 	
-	QPointF startPoint = myDonor->getCenter();
-	QPointF endPoint = myCandidate->getCenter();	
+	QPointF startPoint = myDonor->getDonorPosition();
+	QPointF endPoint = myCandidate->getCandidatePosition();	
 	
 	qDebug() << "Painting: " << startPoint << " " << endPoint;
 

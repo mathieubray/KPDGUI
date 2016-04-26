@@ -364,7 +364,7 @@ void KPDGUICandidate::setComment(QString comment){
 	candidateComment = comment;
 }
 
-QPointF KPDGUICandidate::getCenter() {
+QPointF KPDGUICandidate::getCandidatePosition() {
 
 	QPointF point = scenePos();
 	qreal x = point.x();
@@ -374,6 +374,16 @@ QPointF KPDGUICandidate::getCenter() {
 	qreal height = boundingRect().height();
 
 	return QPointF(x + width / 2, y + height / 2);
+}
+
+void KPDGUICandidate::setCandidatePosition(QPointF point) {
+
+	qreal width = boundingRect().width();
+	qreal height = boundingRect().height();
+
+	QPointF adjustedPosition(point.x() - width / 2, point.y() - height / 2);
+
+	setPos(adjustedPosition);
 }
 
 QString KPDGUICandidate::text() const

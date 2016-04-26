@@ -237,6 +237,8 @@
     <addaction name="actionDisplay_Selected_Compatibilities"/>
     <addaction name="actionDisplay_All_Compatibilities"/>
     <addaction name="actionDisplay_No_Compatibilities"/>
+    <addaction name="separator"/>
+    <addaction name="actionRefresh"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMatch_Run"/>
@@ -279,9 +281,10 @@
    <addaction name="separator"/>
    <addaction name="actionRun"/>
    <addaction name="separator"/>
+   <addaction name="actionRefresh"/>
+   <addaction name="separator"/>
    <addaction name="actionZoom_Out"/>
    <addaction name="actionZoom_In"/>
-   <addaction name="separator"/>
    <addaction name="actionMouse_Tool"/>
    <addaction name="actionHand_Tool"/>
   </widget>
@@ -513,6 +516,15 @@
    </property>
    <property name="text">
     <string>View Structures/Solutions</string>
+   </property>
+  </action>
+  <action name="actionRefresh">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/refresh.PNG</normaloff>:/images/images/refresh.PNG</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
    </property>
   </action>
  </widget>

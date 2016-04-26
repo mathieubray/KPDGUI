@@ -58,6 +58,7 @@ public:
     QAction *actionDisplay_Selected_Compatibilities;
     QAction *actionDisplay_Compatibilities_Within_Selection;
     QAction *actionView_Structures_Solutions;
+    QAction *actionRefresh;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QHBoxLayout *horizontalLayout;
@@ -172,6 +173,11 @@ public:
         actionView_Structures_Solutions->setObjectName(QStringLiteral("actionView_Structures_Solutions"));
         actionView_Structures_Solutions->setCheckable(true);
         actionView_Structures_Solutions->setEnabled(true);
+        actionRefresh = new QAction(KPDGUI);
+        actionRefresh->setObjectName(QStringLiteral("actionRefresh"));
+        QIcon icon9;
+        icon9.addFile(QStringLiteral(":/images/images/refresh.PNG"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRefresh->setIcon(icon9);
         centralwidget = new QWidget(KPDGUI);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -298,15 +304,18 @@ public:
         menuDisplay->addAction(actionDisplay_Selected_Compatibilities);
         menuDisplay->addAction(actionDisplay_All_Compatibilities);
         menuDisplay->addAction(actionDisplay_No_Compatibilities);
+        menuDisplay->addSeparator();
+        menuDisplay->addAction(actionRefresh);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
         toolBar->addSeparator();
         toolBar->addAction(actionRun);
         toolBar->addSeparator();
+        toolBar->addAction(actionRefresh);
+        toolBar->addSeparator();
         toolBar->addAction(actionZoom_Out);
         toolBar->addAction(actionZoom_In);
-        toolBar->addSeparator();
         toolBar->addAction(actionMouse_Tool);
         toolBar->addAction(actionHand_Tool);
 
@@ -387,6 +396,7 @@ public:
         actionDisplay_Selected_Compatibilities->setText(QApplication::translate("KPDGUI", "Display Selected Compatibilities", 0));
         actionDisplay_Compatibilities_Within_Selection->setText(QApplication::translate("KPDGUI", "Display Compatibilities Within Selection", 0));
         actionView_Structures_Solutions->setText(QApplication::translate("KPDGUI", "View Structures/Solutions", 0));
+        actionRefresh->setText(QApplication::translate("KPDGUI", "Refresh", 0));
         QTreeWidgetItem *___qtreewidgetitem = structureWidget->headerItem();
         ___qtreewidgetitem->setText(0, QApplication::translate("KPDGUI", "Structures", 0));
         QTreeWidgetItem *___qtreewidgetitem1 = solutionWidget->headerItem();
