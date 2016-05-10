@@ -22,7 +22,6 @@
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "KPDGUIConsole.h"
 #include "kpdguigraphicsview.h"
@@ -65,10 +64,9 @@ public:
     QAction *actionDisplay_Compatibilities_Within_Selection;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QVBoxLayout *verticalLayout;
     QTableWidget *tableWidget;
-    QTabWidget *tabWidget;
     KPDGUIGraphicsView *graphicsView;
+    QTabWidget *tabWidget;
     KPDGUIConsole *consoleWidget;
     QMenuBar *menubar;
     QMenu *menuFile;
@@ -83,7 +81,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(843, 560);
+        MainWindow->resize(1146, 777);
         MainWindow->setMinimumSize(QSize(829, 560));
         MainWindow->setMaximumSize(QSize(16777215, 16777215));
         QIcon icon;
@@ -194,8 +192,6 @@ public:
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         tableWidget = new QTableWidget(centralwidget);
         if (tableWidget->columnCount() < 1)
             tableWidget->setColumnCount(1);
@@ -255,8 +251,8 @@ public:
         __qtablewidgetitem16->setFont(font);
         tableWidget->setItem(7, 0, __qtablewidgetitem16);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setMinimumSize(QSize(250, 161));
-        tableWidget->setMaximumSize(QSize(250, 161));
+        tableWidget->setMinimumSize(QSize(250, 263));
+        tableWidget->setMaximumSize(QSize(250, 263));
         tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
@@ -268,11 +264,19 @@ public:
         tableWidget->horizontalHeader()->setVisible(false);
         tableWidget->horizontalHeader()->setDefaultSectionSize(150);
         tableWidget->horizontalHeader()->setMinimumSectionSize(27);
-        tableWidget->verticalHeader()->setDefaultSectionSize(20);
+        tableWidget->verticalHeader()->setDefaultSectionSize(30);
         tableWidget->verticalHeader()->setHighlightSections(false);
-        tableWidget->verticalHeader()->setMinimumSectionSize(16);
+        tableWidget->verticalHeader()->setMinimumSectionSize(20);
 
-        verticalLayout->addWidget(tableWidget);
+        gridLayout->addWidget(tableWidget, 0, 0, 1, 1);
+
+        graphicsView = new KPDGUIGraphicsView(centralwidget);
+        graphicsView->setObjectName(QStringLiteral("graphicsView"));
+        graphicsView->setMinimumSize(QSize(480, 300));
+        graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+        graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
+
+        gridLayout->addWidget(graphicsView, 0, 1, 2, 1);
 
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName(QStringLiteral("tabWidget"));
@@ -281,33 +285,22 @@ public:
         tabWidget->setTabPosition(QTabWidget::West);
         tabWidget->setTabShape(QTabWidget::Triangular);
 
-        verticalLayout->addWidget(tabWidget);
-
-
-        gridLayout->addLayout(verticalLayout, 0, 0, 2, 1);
-
-        graphicsView = new KPDGUIGraphicsView(centralwidget);
-        graphicsView->setObjectName(QStringLiteral("graphicsView"));
-        graphicsView->setMinimumSize(QSize(480, 300));
-        graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
-        graphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
-
-        gridLayout->addWidget(graphicsView, 0, 1, 1, 1);
+        gridLayout->addWidget(tabWidget, 1, 0, 2, 1);
 
         consoleWidget = new KPDGUIConsole(centralwidget);
         consoleWidget->setObjectName(QStringLiteral("consoleWidget"));
-        consoleWidget->setMinimumSize(QSize(480, 125));
-        consoleWidget->setMaximumSize(QSize(16777215, 125));
+        consoleWidget->setMinimumSize(QSize(480, 150));
+        consoleWidget->setMaximumSize(QSize(16777215, 150));
         consoleWidget->setTabPosition(QTabWidget::South);
         consoleWidget->setTabShape(QTabWidget::Rounded);
         consoleWidget->setElideMode(Qt::ElideNone);
 
-        gridLayout->addWidget(consoleWidget, 1, 1, 1, 1);
+        gridLayout->addWidget(consoleWidget, 2, 1, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 843, 21));
+        menubar->setGeometry(QRect(0, 0, 1146, 31));
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QStringLiteral("menuFile"));
         menuTools = new QMenu(menubar);

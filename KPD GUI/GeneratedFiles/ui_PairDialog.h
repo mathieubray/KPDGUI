@@ -138,26 +138,24 @@ public:
     QLabel *recipPRALabel;
     QSpinBox *recipPRASpinBox;
     QSlider *praSlider;
-    QWidget *layoutWidget9;
-    QVBoxLayout *verticalLayout;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *PairDialog)
     {
         if (PairDialog->objectName().isEmpty())
             PairDialog->setObjectName(QStringLiteral("PairDialog"));
-        PairDialog->resize(499, 412);
-        PairDialog->setMinimumSize(QSize(499, 412));
-        PairDialog->setMaximumSize(QSize(499, 412));
+        PairDialog->resize(691, 481);
+        PairDialog->setMinimumSize(QSize(0, 0));
+        PairDialog->setMaximumSize(QSize(687867, 16777215));
         morePairInfo = new QTabWidget(PairDialog);
         morePairInfo->setObjectName(QStringLiteral("morePairInfo"));
         morePairInfo->setEnabled(true);
-        morePairInfo->setGeometry(QRect(10, 160, 471, 231));
+        morePairInfo->setGeometry(QRect(10, 190, 671, 281));
         donorCharacteristicsTab = new QWidget();
         donorCharacteristicsTab->setObjectName(QStringLiteral("donorCharacteristicsTab"));
         layoutWidget_2 = new QWidget(donorCharacteristicsTab);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(10, 10, 124, 74));
+        layoutWidget_2->setGeometry(QRect(10, 10, 211, 95));
         donorCharacteristicsGridLayout = new QGridLayout(layoutWidget_2);
         donorCharacteristicsGridLayout->setObjectName(QStringLiteral("donorCharacteristicsGridLayout"));
         donorCharacteristicsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -200,7 +198,7 @@ public:
         recipCharacteristicsTab->setObjectName(QStringLiteral("recipCharacteristicsTab"));
         layoutWidget = new QWidget(recipCharacteristicsTab);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 167, 126));
+        layoutWidget->setGeometry(QRect(10, 10, 241, 163));
         recipCharacteristicsGridLayout = new QGridLayout(layoutWidget);
         recipCharacteristicsGridLayout->setObjectName(QStringLiteral("recipCharacteristicsGridLayout"));
         recipCharacteristicsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -277,7 +275,7 @@ public:
 
         layoutWidget1 = new QWidget(recipCharacteristicsTab);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(200, 10, 122, 88));
+        layoutWidget1->setGeometry(QRect(300, 10, 176, 89));
         recipVerticalLayout = new QVBoxLayout(layoutWidget1);
         recipVerticalLayout->setObjectName(QStringLiteral("recipVerticalLayout"));
         recipVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -304,10 +302,10 @@ public:
         hlaInfoTab->setObjectName(QStringLiteral("hlaInfoTab"));
         donorHLADRLayout = new QGroupBox(hlaInfoTab);
         donorHLADRLayout->setObjectName(QStringLiteral("donorHLADRLayout"));
-        donorHLADRLayout->setGeometry(QRect(210, 40, 91, 91));
+        donorHLADRLayout->setGeometry(QRect(290, 40, 131, 131));
         layoutWidget2 = new QWidget(donorHLADRLayout);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(20, 20, 51, 65));
+        layoutWidget2->setGeometry(QRect(30, 30, 70, 89));
         donorHLADRVerticalLayout = new QVBoxLayout(layoutWidget2);
         donorHLADRVerticalLayout->setObjectName(QStringLiteral("donorHLADRVerticalLayout"));
         donorHLADRVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -328,10 +326,10 @@ public:
 
         donorHLABWLayout = new QGroupBox(hlaInfoTab);
         donorHLABWLayout->setObjectName(QStringLiteral("donorHLABWLayout"));
-        donorHLABWLayout->setGeometry(QRect(309, 40, 91, 91));
+        donorHLABWLayout->setGeometry(QRect(430, 40, 131, 131));
         layoutWidget_4 = new QWidget(donorHLABWLayout);
         layoutWidget_4->setObjectName(QStringLiteral("layoutWidget_4"));
-        layoutWidget_4->setGeometry(QRect(20, 20, 47, 42));
+        layoutWidget_4->setGeometry(QRect(30, 30, 63, 57));
         donorHLABWVerticalLayout = new QVBoxLayout(layoutWidget_4);
         donorHLABWVerticalLayout->setObjectName(QStringLiteral("donorHLABWVerticalLayout"));
         donorHLABWVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -347,7 +345,7 @@ public:
 
         layoutWidget3 = new QWidget(hlaInfoTab);
         layoutWidget3->setObjectName(QStringLiteral("layoutWidget3"));
-        layoutWidget3->setGeometry(QRect(10, 40, 191, 152));
+        layoutWidget3->setGeometry(QRect(10, 40, 268, 197));
         donorHLAGridLayout = new QGridLayout(layoutWidget3);
         donorHLAGridLayout->setObjectName(QStringLiteral("donorHLAGridLayout"));
         donorHLAGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -443,7 +441,7 @@ public:
 
         layoutWidget4 = new QWidget(hlaInfoTab);
         layoutWidget4->setObjectName(QStringLiteral("layoutWidget4"));
-        layoutWidget4->setGeometry(QRect(10, 10, 391, 22));
+        layoutWidget4->setGeometry(QRect(10, 10, 641, 27));
         recipAdditionalHorizontalLayout = new QHBoxLayout(layoutWidget4);
         recipAdditionalHorizontalLayout->setObjectName(QStringLiteral("recipAdditionalHorizontalLayout"));
         recipAdditionalHorizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -459,7 +457,7 @@ public:
 
         layoutWidget5 = new QWidget(hlaInfoTab);
         layoutWidget5->setObjectName(QStringLiteral("layoutWidget5"));
-        layoutWidget5->setGeometry(QRect(211, 171, 251, 22));
+        layoutWidget5->setGeometry(QRect(290, 210, 361, 27));
         horizontalLayout = new QHBoxLayout(layoutWidget5);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -483,11 +481,11 @@ public:
         commentTab->setObjectName(QStringLiteral("commentTab"));
         commentTextEdit = new QTextEdit(commentTab);
         commentTextEdit->setObjectName(QStringLiteral("commentTextEdit"));
-        commentTextEdit->setGeometry(QRect(10, 10, 441, 181));
+        commentTextEdit->setGeometry(QRect(10, 10, 651, 231));
         morePairInfo->addTab(commentTab, QString());
         layoutWidget6 = new QWidget(PairDialog);
         layoutWidget6->setObjectName(QStringLiteral("layoutWidget6"));
-        layoutWidget6->setGeometry(QRect(10, 10, 391, 141));
+        layoutWidget6->setGeometry(QRect(10, 10, 541, 171));
         mainHorizontalLayout = new QHBoxLayout(layoutWidget6);
         mainHorizontalLayout->setObjectName(QStringLiteral("mainHorizontalLayout"));
         mainHorizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -495,7 +493,7 @@ public:
         donorGroupBox->setObjectName(QStringLiteral("donorGroupBox"));
         layoutWidget7 = new QWidget(donorGroupBox);
         layoutWidget7->setObjectName(QStringLiteral("layoutWidget7"));
-        layoutWidget7->setGeometry(QRect(10, 30, 161, 74));
+        layoutWidget7->setGeometry(QRect(10, 30, 251, 95));
         donorGridLayout = new QGridLayout(layoutWidget7);
         donorGridLayout->setObjectName(QStringLiteral("donorGridLayout"));
         donorGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -546,7 +544,7 @@ public:
         recipGroupBox->setObjectName(QStringLiteral("recipGroupBox"));
         layoutWidget8 = new QWidget(recipGroupBox);
         layoutWidget8->setObjectName(QStringLiteral("layoutWidget8"));
-        layoutWidget8->setGeometry(QRect(10, 30, 161, 100));
+        layoutWidget8->setGeometry(QRect(10, 30, 251, 129));
         recipGridLayout = new QGridLayout(layoutWidget8);
         recipGridLayout->setObjectName(QStringLiteral("recipGridLayout"));
         recipGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -611,22 +609,14 @@ public:
 
         mainHorizontalLayout->addWidget(recipGroupBox);
 
-        layoutWidget9 = new QWidget(PairDialog);
-        layoutWidget9->setObjectName(QStringLiteral("layoutWidget9"));
-        layoutWidget9->setGeometry(QRect(410, 18, 77, 131));
-        verticalLayout = new QVBoxLayout(layoutWidget9);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        buttonBox = new QDialogButtonBox(layoutWidget9);
+        buttonBox = new QDialogButtonBox(PairDialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setGeometry(QRect(560, 10, 112, 81));
         buttonBox->setOrientation(Qt::Vertical);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        verticalLayout->addWidget(buttonBox);
-
-        layoutWidget->raise();
         layoutWidget->raise();
         morePairInfo->raise();
+        buttonBox->raise();
         QWidget::setTabOrder(donorNameLineEdit, donorAgeSpinBox);
         QWidget::setTabOrder(donorAgeSpinBox, donorBTComboBox);
         QWidget::setTabOrder(donorBTComboBox, recipNameLineEdit);

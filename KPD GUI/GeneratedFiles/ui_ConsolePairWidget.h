@@ -39,7 +39,7 @@ public:
     {
         if (KPDGUIConsolePairWidget->objectName().isEmpty())
             KPDGUIConsolePairWidget->setObjectName(QStringLiteral("KPDGUIConsolePairWidget"));
-        KPDGUIConsolePairWidget->resize(389, 127);
+        KPDGUIConsolePairWidget->resize(463, 161);
         QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -68,8 +68,8 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(leftButton->sizePolicy().hasHeightForWidth());
         leftButton->setSizePolicy(sizePolicy1);
-        leftButton->setMinimumSize(QSize(21, 14));
-        leftButton->setMaximumSize(QSize(21, 14));
+        leftButton->setMinimumSize(QSize(21, 24));
+        leftButton->setMaximumSize(QSize(21, 24));
 
         horizontalLayout->addWidget(leftButton);
 
@@ -77,8 +77,8 @@ public:
         rightButton->setObjectName(QStringLiteral("rightButton"));
         sizePolicy1.setHeightForWidth(rightButton->sizePolicy().hasHeightForWidth());
         rightButton->setSizePolicy(sizePolicy1);
-        rightButton->setMinimumSize(QSize(21, 14));
-        rightButton->setMaximumSize(QSize(21, 14));
+        rightButton->setMinimumSize(QSize(21, 24));
+        rightButton->setMaximumSize(QSize(21, 24));
 
         horizontalLayout->addWidget(rightButton);
 

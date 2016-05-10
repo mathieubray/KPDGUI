@@ -38,9 +38,9 @@ public:
     {
         if (ReadFileDialog->objectName().isEmpty())
             ReadFileDialog->setObjectName(QStringLiteral("ReadFileDialog"));
-        ReadFileDialog->resize(283, 75);
-        ReadFileDialog->setMinimumSize(QSize(283, 75));
-        ReadFileDialog->setMaximumSize(QSize(283, 75));
+        ReadFileDialog->resize(417, 100);
+        ReadFileDialog->setMinimumSize(QSize(417, 100));
+        ReadFileDialog->setMaximumSize(QSize(417, 100));
         verticalLayout = new QVBoxLayout(ReadFileDialog);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         horizontalLayout = new QHBoxLayout();

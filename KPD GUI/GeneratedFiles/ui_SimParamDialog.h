@@ -89,12 +89,12 @@ public:
     {
         if (SimParamDialog->objectName().isEmpty())
             SimParamDialog->setObjectName(QStringLiteral("SimParamDialog"));
-        SimParamDialog->resize(278, 386);
-        SimParamDialog->setMinimumSize(QSize(0, 0));
-        SimParamDialog->setMaximumSize(QSize(10000000, 10000000));
+        SimParamDialog->resize(382, 462);
+        SimParamDialog->setMinimumSize(QSize(382, 462));
+        SimParamDialog->setMaximumSize(QSize(382, 462));
         layoutWidget = new QWidget(SimParamDialog);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 261, 371));
+        layoutWidget->setGeometry(QRect(10, 10, 361, 441));
         verticalLayout_3 = new QVBoxLayout(layoutWidget);
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
@@ -162,7 +162,7 @@ public:
         tab->setObjectName(QStringLiteral("tab"));
         layoutWidget1 = new QWidget(tab);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 10, 233, 207));
+        layoutWidget1->setGeometry(QRect(10, 10, 341, 223));
         verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
@@ -296,7 +296,7 @@ public:
         tab_2->setObjectName(QStringLiteral("tab_2"));
         layoutWidget2 = new QWidget(tab_2);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(10, 11, 219, 139));
+        layoutWidget2->setGeometry(QRect(10, 11, 314, 189));
         verticalLayout = new QVBoxLayout(layoutWidget2);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);

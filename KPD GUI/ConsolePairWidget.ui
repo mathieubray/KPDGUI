@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>389</width>
-    <height>127</height>
+    <width>463</width>
+    <height>161</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -78,13 +78,13 @@
          <property name="minimumSize">
           <size>
            <width>21</width>
-           <height>14</height>
+           <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>21</width>
-           <height>14</height>
+           <height>24</height>
           </size>
          </property>
          <property name="text">
@@ -103,13 +103,13 @@
          <property name="minimumSize">
           <size>
            <width>21</width>
-           <height>14</height>
+           <height>24</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>21</width>
-           <height>14</height>
+           <height>24</height>
           </size>
          </property>
          <property name="text">

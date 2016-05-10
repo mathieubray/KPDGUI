@@ -44,10 +44,12 @@ public:
     {
         if (SortDialog->objectName().isEmpty())
             SortDialog->setObjectName(QStringLiteral("SortDialog"));
-        SortDialog->resize(177, 221);
+        SortDialog->resize(257, 265);
+        SortDialog->setMinimumSize(QSize(257, 265));
+        SortDialog->setMaximumSize(QSize(257, 265));
         layoutWidget = new QWidget(SortDialog);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 158, 201));
+        layoutWidget->setGeometry(QRect(10, 10, 235, 242));
         verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);

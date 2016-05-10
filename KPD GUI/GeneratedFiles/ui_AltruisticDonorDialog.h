@@ -103,20 +103,20 @@ public:
     {
         if (AltruisticDonorDialog->objectName().isEmpty())
             AltruisticDonorDialog->setObjectName(QStringLiteral("AltruisticDonorDialog"));
-        AltruisticDonorDialog->resize(346, 436);
-        AltruisticDonorDialog->setMinimumSize(QSize(346, 436));
-        AltruisticDonorDialog->setMaximumSize(QSize(346, 436));
+        AltruisticDonorDialog->resize(479, 510);
+        AltruisticDonorDialog->setMinimumSize(QSize(479, 510));
+        AltruisticDonorDialog->setMaximumSize(QSize(479, 510));
         buttonBox = new QDialogButtonBox(AltruisticDonorDialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(220, 20, 81, 101));
+        buttonBox->setGeometry(QRect(380, 20, 81, 101));
         buttonBox->setOrientation(Qt::Vertical);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         donorGroupBox = new QGroupBox(AltruisticDonorDialog);
         donorGroupBox->setObjectName(QStringLiteral("donorGroupBox"));
-        donorGroupBox->setGeometry(QRect(10, 10, 192, 139));
+        donorGroupBox->setGeometry(QRect(10, 10, 361, 139));
         layoutWidget = new QWidget(donorGroupBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 30, 161, 82));
+        layoutWidget->setGeometry(QRect(10, 30, 341, 95));
         donorGridLayout = new QGridLayout(layoutWidget);
         donorGridLayout->setObjectName(QStringLiteral("donorGridLayout"));
         donorGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -163,12 +163,12 @@ public:
         morePairInfo = new QTabWidget(AltruisticDonorDialog);
         morePairInfo->setObjectName(QStringLiteral("morePairInfo"));
         morePairInfo->setEnabled(true);
-        morePairInfo->setGeometry(QRect(10, 160, 321, 261));
+        morePairInfo->setGeometry(QRect(10, 160, 461, 341));
         donorCharacteristicsTab = new QWidget();
         donorCharacteristicsTab->setObjectName(QStringLiteral("donorCharacteristicsTab"));
         layoutWidget_2 = new QWidget(donorCharacteristicsTab);
         layoutWidget_2->setObjectName(QStringLiteral("layoutWidget_2"));
-        layoutWidget_2->setGeometry(QRect(10, 10, 148, 82));
+        layoutWidget_2->setGeometry(QRect(10, 10, 241, 95));
         donorCharacteristicsGridLayout = new QGridLayout(layoutWidget_2);
         donorCharacteristicsGridLayout->setObjectName(QStringLiteral("donorCharacteristicsGridLayout"));
         donorCharacteristicsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -211,7 +211,7 @@ public:
         hlaInfoTab->setObjectName(QStringLiteral("hlaInfoTab"));
         layoutWidget_7 = new QWidget(hlaInfoTab);
         layoutWidget_7->setObjectName(QStringLiteral("layoutWidget_7"));
-        layoutWidget_7->setGeometry(QRect(10, 10, 226, 169));
+        layoutWidget_7->setGeometry(QRect(20, 10, 268, 197));
         donorHLAGridLayout = new QGridLayout(layoutWidget_7);
         donorHLAGridLayout->setObjectName(QStringLiteral("donorHLAGridLayout"));
         donorHLAGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -307,7 +307,7 @@ public:
 
         layoutWidget_9 = new QWidget(hlaInfoTab);
         layoutWidget_9->setObjectName(QStringLiteral("layoutWidget_9"));
-        layoutWidget_9->setGeometry(QRect(10, 200, 277, 24));
+        layoutWidget_9->setGeometry(QRect(20, 260, 411, 27));
         horizontalLayout = new QHBoxLayout(layoutWidget_9);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
@@ -323,7 +323,7 @@ public:
 
         layoutWidget1 = new QWidget(hlaInfoTab);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(210, 10, 105, 181));
+        layoutWidget1->setGeometry(QRect(300, 10, 130, 241));
         verticalLayout = new QVBoxLayout(layoutWidget1);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -331,7 +331,7 @@ public:
         donorHLADRLayout->setObjectName(QStringLiteral("donorHLADRLayout"));
         layoutWidget_5 = new QWidget(donorHLADRLayout);
         layoutWidget_5->setObjectName(QStringLiteral("layoutWidget_5"));
-        layoutWidget_5->setGeometry(QRect(20, 20, 59, 76));
+        layoutWidget_5->setGeometry(QRect(20, 20, 70, 89));
         donorHLADRVerticalLayout = new QVBoxLayout(layoutWidget_5);
         donorHLADRVerticalLayout->setObjectName(QStringLiteral("donorHLADRVerticalLayout"));
         donorHLADRVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -357,7 +357,7 @@ public:
         donorHLABWLayout->setObjectName(QStringLiteral("donorHLABWLayout"));
         layoutWidget_6 = new QWidget(donorHLABWLayout);
         layoutWidget_6->setObjectName(QStringLiteral("layoutWidget_6"));
-        layoutWidget_6->setGeometry(QRect(20, 20, 55, 49));
+        layoutWidget_6->setGeometry(QRect(20, 30, 63, 57));
         donorHLABWVerticalLayout = new QVBoxLayout(layoutWidget_6);
         donorHLABWVerticalLayout->setObjectName(QStringLiteral("donorHLABWVerticalLayout"));
         donorHLABWVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -382,7 +382,7 @@ public:
         commentTab->setObjectName(QStringLiteral("commentTab"));
         commentTextEdit = new QTextEdit(commentTab);
         commentTextEdit->setObjectName(QStringLiteral("commentTextEdit"));
-        commentTextEdit->setGeometry(QRect(13, 10, 291, 211));
+        commentTextEdit->setGeometry(QRect(10, 10, 441, 291));
         morePairInfo->addTab(commentTab, QString());
 
         retranslateUi(AltruisticDonorDialog);

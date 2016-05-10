@@ -18,9 +18,11 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSlider>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -30,16 +32,22 @@ QT_BEGIN_NAMESPACE
 class Ui_DisplayDialog
 {
 public:
-    QWidget *layoutWidget;
-    QGridLayout *gridLayout_2;
+    QWidget *widget;
     QVBoxLayout *verticalLayout;
     QRadioButton *allPairsButton;
     QRadioButton *showStructuresRadioButton;
     QRadioButton *showSolutionsRadioButton;
     QRadioButton *pairSubsetButton;
+    QDialogButtonBox *buttonBox;
     QGroupBox *displaySettingsBox;
+    QWidget *widget1;
+    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout;
+    QCheckBox *showHoldCheckBox;
+    QSpacerItem *horizontalSpacer;
+    QHBoxLayout *horizontalLayout_2;
     QCheckBox *showIncompatibleCheckBox;
-    QWidget *layoutWidget1;
+    QSpacerItem *horizontalSpacer_2;
     QGridLayout *gridLayout;
     QCheckBox *maxPRACheckBox;
     QSlider *horizontalSlider_2;
@@ -47,30 +55,28 @@ public:
     QSlider *horizontalSlider;
     QSpinBox *minPRASpinBox;
     QCheckBox *minPRACheckBox;
-    QCheckBox *showHoldCheckBox;
-    QDialogButtonBox *buttonBox;
     QButtonGroup *buttonGroup;
 
     void setupUi(QDialog *DisplayDialog)
     {
         if (DisplayDialog->objectName().isEmpty())
             DisplayDialog->setObjectName(QStringLiteral("DisplayDialog"));
-        DisplayDialog->resize(326, 248);
+        DisplayDialog->resize(426, 343);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(DisplayDialog->sizePolicy().hasHeightForWidth());
         DisplayDialog->setSizePolicy(sizePolicy);
+        DisplayDialog->setMinimumSize(QSize(426, 343));
+        DisplayDialog->setMaximumSize(QSize(426, 343));
         DisplayDialog->setSizeGripEnabled(true);
-        layoutWidget = new QWidget(DisplayDialog);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(12, 17, 303, 221));
-        gridLayout_2 = new QGridLayout(layoutWidget);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        verticalLayout = new QVBoxLayout();
+        widget = new QWidget(DisplayDialog);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(13, 18, 271, 121));
+        verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        allPairsButton = new QRadioButton(layoutWidget);
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        allPairsButton = new QRadioButton(widget);
         buttonGroup = new QButtonGroup(DisplayDialog);
         buttonGroup->setObjectName(QStringLiteral("buttonGroup"));
         buttonGroup->addButton(allPairsButton);
@@ -79,48 +85,79 @@ public:
 
         verticalLayout->addWidget(allPairsButton);
 
-        showStructuresRadioButton = new QRadioButton(layoutWidget);
+        showStructuresRadioButton = new QRadioButton(widget);
         buttonGroup->addButton(showStructuresRadioButton);
         showStructuresRadioButton->setObjectName(QStringLiteral("showStructuresRadioButton"));
 
         verticalLayout->addWidget(showStructuresRadioButton);
 
-        showSolutionsRadioButton = new QRadioButton(layoutWidget);
+        showSolutionsRadioButton = new QRadioButton(widget);
         buttonGroup->addButton(showSolutionsRadioButton);
         showSolutionsRadioButton->setObjectName(QStringLiteral("showSolutionsRadioButton"));
 
         verticalLayout->addWidget(showSolutionsRadioButton);
 
-        pairSubsetButton = new QRadioButton(layoutWidget);
+        pairSubsetButton = new QRadioButton(widget);
         buttonGroup->addButton(pairSubsetButton);
         pairSubsetButton->setObjectName(QStringLiteral("pairSubsetButton"));
 
         verticalLayout->addWidget(pairSubsetButton);
 
-
-        gridLayout_2->addLayout(verticalLayout, 0, 0, 1, 1);
-
-        displaySettingsBox = new QGroupBox(layoutWidget);
+        buttonBox = new QDialogButtonBox(DisplayDialog);
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setGeometry(QRect(300, 20, 112, 77));
+        buttonBox->setOrientation(Qt::Vertical);
+        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        displaySettingsBox = new QGroupBox(DisplayDialog);
         displaySettingsBox->setObjectName(QStringLiteral("displaySettingsBox"));
         displaySettingsBox->setEnabled(true);
-        displaySettingsBox->setMinimumSize(QSize(301, 121));
-        displaySettingsBox->setMaximumSize(QSize(301, 121));
-        showIncompatibleCheckBox = new QCheckBox(displaySettingsBox);
+        displaySettingsBox->setGeometry(QRect(10, 160, 401, 171));
+        displaySettingsBox->setMinimumSize(QSize(301, 0));
+        displaySettingsBox->setMaximumSize(QSize(16777215, 9898798));
+        widget1 = new QWidget(displaySettingsBox);
+        widget1->setObjectName(QStringLiteral("widget1"));
+        widget1->setGeometry(QRect(10, 30, 381, 131));
+        verticalLayout_2 = new QVBoxLayout(widget1);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        showHoldCheckBox = new QCheckBox(widget1);
+        showHoldCheckBox->setObjectName(QStringLiteral("showHoldCheckBox"));
+        showHoldCheckBox->setChecked(true);
+
+        horizontalLayout->addWidget(showHoldCheckBox);
+
+        horizontalSpacer = new QSpacerItem(298, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+
+        verticalLayout_2->addLayout(horizontalLayout);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        showIncompatibleCheckBox = new QCheckBox(widget1);
         showIncompatibleCheckBox->setObjectName(QStringLiteral("showIncompatibleCheckBox"));
-        showIncompatibleCheckBox->setGeometry(QRect(10, 40, 185, 17));
         showIncompatibleCheckBox->setChecked(true);
-        layoutWidget1 = new QWidget(displaySettingsBox);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 63, 281, 48));
-        gridLayout = new QGridLayout(layoutWidget1);
+
+        horizontalLayout_2->addWidget(showIncompatibleCheckBox);
+
+        horizontalSpacer_2 = new QSpacerItem(218, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
+
+        gridLayout = new QGridLayout();
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        gridLayout->setContentsMargins(0, 0, 0, 0);
-        maxPRACheckBox = new QCheckBox(layoutWidget1);
+        maxPRACheckBox = new QCheckBox(widget1);
         maxPRACheckBox->setObjectName(QStringLiteral("maxPRACheckBox"));
 
         gridLayout->addWidget(maxPRACheckBox, 1, 0, 1, 1);
 
-        horizontalSlider_2 = new QSlider(layoutWidget1);
+        horizontalSlider_2 = new QSlider(widget1);
         horizontalSlider_2->setObjectName(QStringLiteral("horizontalSlider_2"));
         horizontalSlider_2->setEnabled(false);
         horizontalSlider_2->setMaximum(100);
@@ -129,7 +166,7 @@ public:
 
         gridLayout->addWidget(horizontalSlider_2, 1, 2, 1, 1);
 
-        maxPRASpinBox = new QSpinBox(layoutWidget1);
+        maxPRASpinBox = new QSpinBox(widget1);
         maxPRASpinBox->setObjectName(QStringLiteral("maxPRASpinBox"));
         maxPRASpinBox->setEnabled(false);
         maxPRASpinBox->setMaximum(100);
@@ -137,7 +174,7 @@ public:
 
         gridLayout->addWidget(maxPRASpinBox, 1, 1, 1, 1);
 
-        horizontalSlider = new QSlider(layoutWidget1);
+        horizontalSlider = new QSlider(widget1);
         horizontalSlider->setObjectName(QStringLiteral("horizontalSlider"));
         horizontalSlider->setEnabled(false);
         horizontalSlider->setMaximum(100);
@@ -145,31 +182,20 @@ public:
 
         gridLayout->addWidget(horizontalSlider, 0, 2, 1, 1);
 
-        minPRASpinBox = new QSpinBox(layoutWidget1);
+        minPRASpinBox = new QSpinBox(widget1);
         minPRASpinBox->setObjectName(QStringLiteral("minPRASpinBox"));
         minPRASpinBox->setEnabled(false);
         minPRASpinBox->setMaximum(100);
 
         gridLayout->addWidget(minPRASpinBox, 0, 1, 1, 1);
 
-        minPRACheckBox = new QCheckBox(layoutWidget1);
+        minPRACheckBox = new QCheckBox(widget1);
         minPRACheckBox->setObjectName(QStringLiteral("minPRACheckBox"));
 
         gridLayout->addWidget(minPRACheckBox, 0, 0, 1, 1);
 
-        showHoldCheckBox = new QCheckBox(displaySettingsBox);
-        showHoldCheckBox->setObjectName(QStringLiteral("showHoldCheckBox"));
-        showHoldCheckBox->setGeometry(QRect(10, 17, 114, 17));
-        showHoldCheckBox->setChecked(true);
 
-        gridLayout_2->addWidget(displaySettingsBox, 1, 0, 1, 2);
-
-        buttonBox = new QDialogButtonBox(layoutWidget);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Vertical);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout_2->addWidget(buttonBox, 0, 1, 1, 1);
+        verticalLayout_2->addLayout(gridLayout);
 
 
         retranslateUi(DisplayDialog);
@@ -196,10 +222,10 @@ public:
         showSolutionsRadioButton->setText(QApplication::translate("DisplayDialog", "Display Only Pairs in Solutions", 0));
         pairSubsetButton->setText(QApplication::translate("DisplayDialog", "Display Pair Subset...", 0));
         displaySettingsBox->setTitle(QApplication::translate("DisplayDialog", "Pair Subset Settings", 0));
+        showHoldCheckBox->setText(QApplication::translate("DisplayDialog", "Show Pairs on Hold", 0));
         showIncompatibleCheckBox->setText(QApplication::translate("DisplayDialog", "Show Pairs with No Compatibilities", 0));
         maxPRACheckBox->setText(QApplication::translate("DisplayDialog", "Maximum PRA to Display", 0));
         minPRACheckBox->setText(QApplication::translate("DisplayDialog", "Minimum PRA to Display", 0));
-        showHoldCheckBox->setText(QApplication::translate("DisplayDialog", "Show Pairs on Hold", 0));
     } // retranslateUi
 
 };
