@@ -617,16 +617,17 @@ void MainWindow::changeToHandMode(){
 
 void MainWindow::sortLists(){
 
+
 	SortDialog sortDialog(pairSortMode, pairSortDecreasing, matchSortMode, matchSortDecreasing, this);
 
 	if (sortDialog.exec()) {
 		QApplication::setOverrideCursor(Qt::WaitCursor);
 		QApplication::processEvents();
 
-		int pairSortSetting = sortDialog.pairsComboBox->currentIndex();
-		bool pairDecreasing = sortDialog.pairsDecreasingCheckBox->isChecked();
-		int matchSortSetting = sortDialog.matchesComboBox->currentIndex();
-		bool matchDecreasing = sortDialog.matchesDecreasingCheckBox->isChecked();
+		pairSortMode = sortDialog.pairsComboBox->currentIndex();
+		pairSortDecreasing = sortDialog.pairsDecreasingCheckBox->isChecked();
+		matchSortMode = sortDialog.matchesComboBox->currentIndex();
+		matchSortDecreasing = sortDialog.matchesDecreasingCheckBox->isChecked();
 
 		sort();
 
@@ -1736,8 +1737,17 @@ void MainWindow::runSimulation(){
 	paramInfo.excludeABDonorsFromSimulation = kpdguiParameters->getExcludeABDonorsFromSimulation();
 	paramInfo.allowABBridgeDonors = kpdguiParameters->getAllowABbridgeDonors();
 
+
+	QProgressDialog * progress = new QProgressDialog("Setting Up Simulation...", QString(), 0, 100);
+	progress->setWindowModality(Qt::WindowModal);
+	progress->setWindowTitle("Simulation Progress");
+	progress->setAutoClose(false);
+	progress->show();
+	QApplication::processEvents();
+
+
 	//Generate Matrices for Simulation
-	kpdguiRecord->generateMatrices(paramInfo);
+	kpdguiRecord->generateMatrices(paramInfo, progress);
 
 	//Build New Simulation
 	KPDGUISimulation *g = new KPDGUISimulation(kpdguiRecord, paramInfo);
@@ -1747,25 +1757,31 @@ void MainWindow::runSimulation(){
 
 	vector<vector<int> > allStructures;
 	if (optScheme == KPDOptimizationScheme::SCC){
-		allStructures = g->getCurrentMatchRunComponents();
+		allStructures = g->getCurrentMatchRunComponents(progress);
 	}
 	else {
-		allStructures = g->getCurrentMatchRunCyclesAndChains();
+		allStructures = g->getCurrentMatchRunCyclesAndChains(progress);
 	}
 
 	//Calculate and Collect Utility Values
 	vector<double> utilValues;
-	if (optScheme == KPDOptimizationScheme::MUC){ utilValues = g->getUtilityForCurrentMatchRunCyclesAndChains(); }
-	else if (optScheme == KPDOptimizationScheme::MEUC){ utilValues = g->getExpectedUtilityForCurrentMatchRunCyclesAndChains(); }
-	else if (optScheme == KPDOptimizationScheme::MEUS){ utilValues = g->getExpectedUtilityForCurrentMatchRunSets(); }
-	else if (optScheme == KPDOptimizationScheme::SCC){ utilValues = g->getExpectedUtilityForCurrentMatchRunComponents(); }
+	if (optScheme == KPDOptimizationScheme::MUC){ utilValues = g->getUtilityForCurrentMatchRunCyclesAndChains(progress); }
+	else if (optScheme == KPDOptimizationScheme::MEUC){ utilValues = g->getExpectedUtilityForCurrentMatchRunCyclesAndChains(progress); }
+	else if (optScheme == KPDOptimizationScheme::MEUS){ utilValues = g->getExpectedUtilityForCurrentMatchRunSets(progress); }
+	else if (optScheme == KPDOptimizationScheme::SCC){ utilValues = g->getExpectedUtilityForCurrentMatchRunComponents(progress); }
 
 	//Run Simulation
-	g->getOptimalSolution();
+	g->getOptimalSolution(progress);
 
 	//Collect Solution Set and Solution Objectives
 	vector<vector<int> > solutionSet = g->returnSolutionSet();
 	vector<double> solutionObjectives = g->returnSolutionObjectives();
+
+	int progressBarValue = 0;
+	progress->setRange(0, (int)(2 * solutionSet.size() + allStructures.size())); // +ui->nodeList->topLevelItemCount())); // + matchListWidget->topLevelItemCount()
+	progress->setLabelText("Saving Structures...");
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
 
 	//Create Timestamp
 	QString timestamp = QDate::currentDate().toString() + " " + QTime::currentTime().toString();
@@ -1780,6 +1796,10 @@ void MainWindow::runSimulation(){
 	for (vector<vector<int> >::iterator it = solutionSet.begin(); it != solutionSet.end(); ++it){
 		sol++;
 		solutionLists.push_back(new KPDGUIStructureSet(paramInfo, timestamp, simLog, true, sol));
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 
 	//Count Cycles, Chains, Components
@@ -1834,6 +1854,10 @@ void MainWindow::runSimulation(){
 				solutionLists[itSolution]->push_back(newStructure);
 			}
 		}
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 
 	//Collapse all Current Solutions Shown In the Widget
@@ -1845,12 +1869,18 @@ void MainWindow::runSimulation(){
 		if (wrapper){
 			wrapper->getNode()->resetPopularityInStructures();
 		}
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 	for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
 		KPDGUIArrowWrapper * wrapper = dynamic_cast<KPDGUIArrowWrapper *>(pairListWidget->topLevelItem(i));
 		if (wrapper){
 			wrapper->getArrow()->resetPopularityInStructures();
 		}
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 	//Update Popularity of Structure
 	structureList->updatePopularity();
@@ -1865,6 +1895,12 @@ void MainWindow::runSimulation(){
 		solutionTreeWidget->insertTopLevelItem(level, structureSet);
 		structureSet->setExpanded(true);
 		level++;
+
+		//structureSet->sort();
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 
 	//Parameters Have Not Been Set For Next Simulation
@@ -1876,10 +1912,15 @@ void MainWindow::runSimulation(){
 	//Sort Matches Based on Solution Popularity
 	setMatchSortMode(0, true);
 
-	delete g;
 
 	QApplication::restoreOverrideCursor();
 	QApplication::processEvents();
+	progress->close();
+	QApplication::processEvents();
+
+
+	delete g;
+	delete progress;
 }
 
 void MainWindow::readSettings()

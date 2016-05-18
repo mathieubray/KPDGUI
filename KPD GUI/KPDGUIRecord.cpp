@@ -56,7 +56,7 @@ void KPDGUIRecord::setBaselineIDCode(int code){
 }
 
 // Generate master matrices for selected pairs
-void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
+void KPDGUIRecord::generateMatrices(ParamInfoStruct params, QProgressDialog * progress){
 
 	clearMatrices();
 
@@ -78,6 +78,10 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 	}
 
 	int nVertices = availablePairs.size();
+
+	progress->setRange(0, nVertices+nVertices*nVertices);
+	progress->setValue(0);
+	int progressBarValue = 0;
 
 	viableTransplantMatrix.assign(1 + nVertices, std::vector<int>(1 + nVertices, 0));
 	scoreMatrix.assign(1 + nVertices, std::vector<double>(1 + nVertices, 0.0));
@@ -111,7 +115,11 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 		}
 
 		//Donor Blood Type
-		pairInfoVector[i].donorBT=availablePairs.at(i - 1)->getDonorBT();		
+		pairInfoVector[i].donorBT=availablePairs.at(i - 1)->getDonorBT();	
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
 	}
 
 	for (int i = 1; i <= nVertices; i++){
@@ -157,6 +165,10 @@ void KPDGUIRecord::generateMatrices(ParamInfoStruct params){
 					}
 				}
 			}
+
+			progressBarValue++;
+			progress->setValue(progressBarValue);
+			QApplication::processEvents();
 		}		
 	}
 }

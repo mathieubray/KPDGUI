@@ -19,15 +19,15 @@ public:
 	KPDGUISimulation(KPDGUIRecord * record, ParamInfoStruct params);
 	~KPDGUISimulation();	
 
-	vector<vector<int> > & getCurrentMatchRunCyclesAndChains();
-	vector<vector<int> > & getCurrentMatchRunComponents();
+	vector<vector<int> > & getCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar);
+	vector<vector<int> > & getCurrentMatchRunComponents(QProgressDialog * progressBar);
 
-	vector<double> & getUtilityForCurrentMatchRunCyclesAndChains();
-	vector<double> & getExpectedUtilityForCurrentMatchRunCyclesAndChains();
-	vector<double> & getExpectedUtilityForCurrentMatchRunSets();
-	vector<double> & getExpectedUtilityForCurrentMatchRunComponents();
+	vector<double> & getUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar);
+	vector<double> & getExpectedUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar);
+	vector<double> & getExpectedUtilityForCurrentMatchRunSets(QProgressDialog * progressBar);
+	vector<double> & getExpectedUtilityForCurrentMatchRunComponents(QProgressDialog * progressBar);
 		
-	void getOptimalSolution();
+	void getOptimalSolution(QProgressDialog * progressBar);
 	
 	vector<vector<int> > & returnSolutionSet();
 	vector<double> & returnSolutionObjectives();

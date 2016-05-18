@@ -16,7 +16,6 @@ public:
 
 private:
 	KPDGUIStructure * myStructure;
-
 };
 
 #endif

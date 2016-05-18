@@ -11,7 +11,7 @@ KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node){
 		setText(0, QString::number(node->getInternalID()) + ": (" + node->getDonorName() + ")");
 	}
 
-	//connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
+	connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
 	connect(node, SIGNAL(nodeEdited(int)), this, SLOT(editActions(int)));
 }
 

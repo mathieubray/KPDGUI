@@ -41,7 +41,7 @@ public:
 	QList<KPDGUINode *> getPairs();
 
 	//Matrices
-	void generateMatrices(ParamInfoStruct params);
+	void generateMatrices(ParamInfoStruct params, QProgressDialog * progress);
 	
 	std::vector<std::vector<int> > viableTransplantMatrix;
 	std::vector<std::vector<double > > scoreMatrix;

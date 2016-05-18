@@ -43,7 +43,7 @@ KPDGUISimulation::~KPDGUISimulation(){
 	SolutionObjectives.clear();
 }
 
-vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(){
+vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
 
 	//Parameters
 	int maxChainLength = kpdguiParameters.maxChainLength;
@@ -59,8 +59,14 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(){
 	vector<int> visitedVector(nVertices + 1, 0);
 	vector<int> stack_vec;
 
+	progressBar->setLabelText("Discovering Cycles and Chains...");
+	progressBar->setRange(0, nVertices);
+	progressBar->setValue(0);
+
 	//Depth-first search of graph
 	while (start <= nVertices){
+		progressBar->setValue(start);
+
 		visitedVector[start] = 1;
 		stack_vec.push_back(start);
 		int v = getChild(start, start, visitedVector, kpdguiRecord->incidenceMatrix);
@@ -162,7 +168,7 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunCyclesAndChains(){
 
 // Searches graphs for connected components
 
-vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
+vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(QProgressDialog * progressBar){
 
 	//Parameters
 	int maxChainLength = kpdguiParameters.maxChainLength;
@@ -172,6 +178,12 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 
 	vector<vector<int> > storedComponents;
 	int nVertices = kpdguiRecord->getNumberOfVertices();
+
+	progressBar->setLabelText("Discovering Locally Relevant Subgraphs...");
+	progressBar->setRange(0, (nVertices-1)*(nVertices-1) + (nVertices - 2)*(nVertices-2)*(nVertices - 2) + (nVertices - 3)*(nVertices - 3)*(nVertices - 3)*(nVertices - 3));
+	progressBar->setValue(0);
+
+	int q = 0;
 
 	//Size 2 components
 	for (int i = 1; i <= nVertices - 1; i++){
@@ -189,6 +201,8 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 					currentMatchRunStructureNodeLists.push_back(temp);
 				}
 			}
+			q++;
+			progressBar->setValue(q);
 		}
 	}
 
@@ -225,6 +239,8 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 				else {
 					currentMatchRunStructureNodeLists.push_back(temp);
 				}
+				q++;
+				progressBar->setValue(q);
 			}
 		}
 	}
@@ -318,6 +334,8 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 						else {
 							currentMatchRunStructureNodeLists.push_back(temp);
 						}
+						q++;
+						progressBar->setValue(q);
 					}
 				}
 			}
@@ -329,9 +347,14 @@ vector<vector<int> > & KPDGUISimulation::getCurrentMatchRunComponents(){
 
 //Utility values for all chains/cycles
 
-vector<double> & KPDGUISimulation::getUtilityForCurrentMatchRunCyclesAndChains(){
+vector<double> & KPDGUISimulation::getUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
 
 	utilityOfCurrentMatchRunCyclesAndChains.clear();
+
+	progressBar->setLabelText("Calculating Utility...");
+	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
+	progressBar->setValue(0);
+	int i = 0;
 
 	//Parameters
 	KPDUtilityScheme utilityScheme = kpdguiParameters.utilityScheme;
@@ -387,16 +410,28 @@ vector<double> & KPDGUISimulation::getUtilityForCurrentMatchRunCyclesAndChains()
 	}
 	
 	return utilityOfCurrentMatchRunCyclesAndChains;
+
+	i++;
+	progressBar->setValue(i);
 }
 
 //Expected utility values for all chains/cycles
 
-vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunCyclesAndChains(){
+vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunCyclesAndChains(QProgressDialog * progressBar){
 	expectedUtilityOfCurrentMatchRunCyclesAndChains.clear();
 
+	progressBar->setLabelText("Calculating Utility...");
+	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
+	progressBar->setValue(0);
+
+	int i = 0;
 	for (vector<vector<int> >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
 		double eu = calculateExpectedUtility(*it);
 		expectedUtilityOfCurrentMatchRunCyclesAndChains.push_back(eu);
+
+		i++;
+		progressBar->setValue(i);
+		QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunCyclesAndChains;
@@ -404,13 +439,22 @@ vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunCyclesAnd
 
 //Expected utility values for all sets
 
-vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunSets(){
+vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunSets(QProgressDialog * progressBar){
 
 	expectedUtilityOfCurrentMatchRunSets.clear();
 
+	progressBar->setLabelText("Calculating Utility...");
+	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
+	progressBar->setValue(0);
+
+	int i = 0;
 	for (vector<vector<int> >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
 		double eu = calculateExpectedUtilityWithFB(*it);
 		expectedUtilityOfCurrentMatchRunSets.push_back(eu);
+
+		i++;
+		progressBar->setValue(i);
+		QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunSets;
@@ -418,13 +462,22 @@ vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunSets(){
 
 //Expected utility values for all components
 
-vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunComponents(){
+vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunComponents(QProgressDialog * progressBar){
 
 	expectedUtilityOfCurrentMatchRunComponents.clear();
+	progressBar->setLabelText("Calculating Utility...");
+	progressBar->setRange(0, currentMatchRunStructureNodeLists.size());
+	progressBar->setValue(0);
+
+	int i = 0;
 
 	for (vector<vector<int > >::iterator it = currentMatchRunStructureNodeLists.begin(); it != currentMatchRunStructureNodeLists.end(); it++){
 		double eu = calculateExpectedUtilityWithFB(*it);
 		expectedUtilityOfCurrentMatchRunComponents.push_back(eu);
+
+		i++;
+		progressBar->setValue(i);
+		QApplication::processEvents();
 	}
 
 	return expectedUtilityOfCurrentMatchRunComponents;
@@ -432,10 +485,15 @@ vector<double> & KPDGUISimulation::getExpectedUtilityForCurrentMatchRunComponent
 
 //Optimize
 
-void KPDGUISimulation::getOptimalSolution(){
+void KPDGUISimulation::getOptimalSolution(QProgressDialog * progressBar){
 
 	KPDOptimizationScheme optScheme = kpdguiParameters.optScheme;
 	int numberOfSolutions = kpdguiParameters.numberOfSolutions;
+
+	progressBar->setLabelText("Finding Optimal Solutions...");
+	progressBar->setRange(0, numberOfSolutions);
+	progressBar->setValue(0);
+
 
 	SelectedSolutions.clear();
 	SelectedStructures.clear();
@@ -549,6 +607,9 @@ void KPDGUISimulation::getOptimalSolution(){
 		SelectedSolutions.push_back(candidateSolution);
 		SolutionObjectives.push_back(objval);
 
+		progressBar->setValue(iteration);
+		QApplication::processEvents();
+
 		while (iteration < numberOfSolutions){
 			iteration++;
 			GRBLinExpr expr = 0;
@@ -608,6 +669,9 @@ void KPDGUISimulation::getOptimalSolution(){
 
 			SelectedSolutions.push_back(candidateSolution);
 			SolutionObjectives.push_back(objval);
+
+			progressBar->setValue(iteration);
+			QApplication::processEvents();
 		}
 
 	}
