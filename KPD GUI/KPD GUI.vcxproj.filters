@@ -232,12 +232,6 @@
     <ClCompile Include="KPDGUIDonorWrapper.cpp">
       <Filter>Wrappers</Filter>
     </ClCompile>
-    <ClCompile Include="KPDGUICandidateWrapper.cpp">
-      <Filter>Wrappers</Filter>
-    </ClCompile>
-    <ClCompile Include="KPDGUIMatchList.cpp">
-      <Filter>GUI Components</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIMatchList.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -255,6 +249,12 @@
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIMatchWrapper.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUICandidateWrapper.cpp">
+      <Filter>Wrappers</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIMatchList.cpp">
+      <Filter>GUI Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -437,6 +437,9 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\images\zoomout.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\refresh.PNG">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
