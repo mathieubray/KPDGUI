@@ -1,6 +1,6 @@
 #include "KPDGUIMatch.h"
 
-KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, double fiveYear, double tenYear)
+KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate)
 {
 	myDonor = donor;
     myCandidate = candidate;
@@ -17,30 +17,6 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, doubl
 	myPopularityInStructures = 0;
 	myPopularityInSolutions = 0;
 
-	matchFiveYearSurvival = fiveYear;
-	matchTenYearSurvival = tenYear;
-	includeMatch = true;
-	
-	if (candidate->getPRA() == 100 || candidate->getHLA().size() >= 10 || candidate->getBT() == BT_AB) {
-		matchScore = 1;
-	}
-	else {
-		matchScore = 0.0001;
-	}
-
-	if (candidate->getPRA() >= 75) {
-		matchSuccessProbability = 0.5;
-	}
-	else if (candidate->getPRA() >= 50) {
-		matchSuccessProbability = 0.65;
-	}
-	else if (candidate->getPRA() >= 25) {
-		matchSuccessProbability = 0.8;
-	}
-	else {
-		matchSuccessProbability = 0.95;
-	}
-
 	displayAsPartOfSolution = false;
 }
 
@@ -48,20 +24,6 @@ KPDGUIMatch::~KPDGUIMatch()
 {
     //myDonor->removeCandidateMatch(this, associatedDonor);
     //myCandidate->removeDonorMatch(this);
-}
-
-void KPDGUIMatch::editMatch() {
-
-	DialogMatch * m = new DialogMatch(this, false, 0);
-
-	if (m->exec()) {
-		matchScore = m->scoreSpinBox->value();
-		matchSuccessProbability = 1 - m->failureProbabilitySpinBox->value();
-		includeMatch = m->includeCheckBox->isChecked();
-
-
-		emit matchEdited();
-	}
 }
 
 QRectF KPDGUIMatch::boundingRect() const

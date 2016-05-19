@@ -18,9 +18,7 @@ public:
 
 public slots:
 	//void selectionActions(int, bool);
-	void editActions();
-
-	void highlightNode(QTreeWidgetItem *);
+	//void editActions(int);
 
 	void updateSelections();
 	void updateText();

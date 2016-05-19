@@ -7,7 +7,6 @@
 
 #include "DialogDonor.h"
 #include "DialogCandidate.h"
-#include "DialogMatch.h"
 #include "DialogDisplaySettings.h"
 #include "DialogReadFile.h"
 #include "DialogSimParameters.h"
@@ -22,9 +21,7 @@
 #include "KPDGUIDashboard.h"
 #include "KPDGUIDisplaySettings.h"
 #include "KPDGUIGraphicsView.h"
-
 #include "KPDGUINodeList.h"
-#include "KPDGUIMatchList.h"
 
 #include "KPDGUINodeWrapper.h"
 #include "KPDGUIMatchWrapper.h"
@@ -136,7 +133,6 @@ private:
 
 	//List Objects
 	KPDGUINodeList * nodeList;
-	KPDGUIMatchList * matchList;
 
 	//KPDGUI Objects
 	QGraphicsScene * kpdguiScene;

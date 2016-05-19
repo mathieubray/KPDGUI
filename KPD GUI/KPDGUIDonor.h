@@ -58,8 +58,6 @@ private:
 	QColor donorBackgroundColor;
 	qreal donorOpacity;
 	QString donorLabel;
-
-	void setDonorAttributes(DialogDonor * d);
 	
 
 signals:
@@ -83,9 +81,6 @@ protected:
 public slots:
 	void editDonor();
 	void updateVisualProperties();
-
-	void highlight();
-	void clearHighlight();
 
 public:
 	KPDGUIDonor();

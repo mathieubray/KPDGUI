@@ -5,23 +5,15 @@
 
 #include "KPDGUIMatch.h"
 
-class KPDGUIMatchWrapper : public QObject, public QTreeWidgetItem
+class KPDGUIMatchWrapper : public QTreeWidgetItem
 {
-	Q_OBJECT;
 
 public:
 	KPDGUIMatchWrapper(KPDGUIMatch * match);
 	~KPDGUIMatchWrapper();
 
 	KPDGUIMatch * getMatch();
-	
-
-public slots:
-
-	void editActions();
-
 	void updateText();
-
 	
 private:
 	KPDGUIMatch * myMatch;

@@ -4,8 +4,6 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-#include "KPDGUINode.h"
-#include "KPDGUINodeWrapper.h"
 
 class KPDGUINodeList : public QTreeWidget
 {
@@ -17,12 +15,10 @@ public:
 
 protected:
 	void mouseReleaseEvent(QMouseEvent * event);
-	void mouseMoveEvent(QMouseEvent * event);
+	void mouseHoverEvent(QMouseEvent * event);
 
 signals:
 	void mouseReleased();
-
-public slots:
 
 private:
 

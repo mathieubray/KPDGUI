@@ -1,34 +1,30 @@
 #include "KPDGUIMatchWrapper.h"
 
-KPDGUIMatchWrapper::KPDGUIMatchWrapper(KPDGUIMatch * match) {
+KPDGUIMatchWrapper::KPDGUIMatchWrapper(KPDGUIMatch * match){
 	myMatch = match;
 
 	updateText();
 
 	//connect(match, SIGNAL(selectArrowInMatchList(bool)), this, SLOT(changeArrowSelection(bool)));
-
-	connect(match, SIGNAL(matchEdited()), this, SLOT(editActions()));
 }
 
-KPDGUIMatchWrapper::~KPDGUIMatchWrapper() {
+KPDGUIMatchWrapper::~KPDGUIMatchWrapper(){
 
 }
 
-KPDGUIMatch * KPDGUIMatchWrapper::getMatch() {
+KPDGUIMatch * KPDGUIMatchWrapper::getMatch(){
 	return myMatch;
 }
 
-void KPDGUIMatchWrapper::updateText() {
-
+void KPDGUIMatchWrapper::updateText(){
+	
 	setText(0, QString::number(myMatch->getDonor()->getID()));
 	setText(1, QString::number(myMatch->getCandidate()->getID()));
-	setText(2, QString::number(myMatch->getMatchScore()));
+	setText(2, QString::number(myMatch->getPopularityInStructures()));
+	setText(3, QString::number(myMatch->getPopularityInSolutions()));
 
 }
 
-void KPDGUIMatchWrapper::editActions(){
-	updateText();
-}
 
 bool KPDGUIMatchWrapper::operator<(const QTreeWidgetItem &other)const {
 

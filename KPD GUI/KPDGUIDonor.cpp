@@ -52,7 +52,88 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 	matchingID = 0;
 	donorNumber = 0;
 
-	setDonorAttributes(d);
+	donorName = d->donorNameLineEdit->text();
+	donorAge = d->donorAgeSpinBox->value();	
+	donorBT = KPDFunctions::intToBloodType(d->donorBTComboBox->currentIndex());
+
+	//donorIsAltruistic
+	donorStatus = d->donorStatusCheckBox->isChecked();
+	donorFailureProbability = d->donorFailureProbabilitySpinBox->value();
+
+	popularityInStructures = 0;
+	popularityInSolutions = 0;
+
+	QString gender = d->donorGenderComboBox->currentText();
+	double height = d->donorHeightSpinBox->value();
+	double weight = d->donorWeightSpinBox->value();	
+
+	if (gender == "Male") { donorMale = true; }
+	else { donorMale = false; }
+	donorWeight = weight;
+	donorBMI = weight / height / height;
+	
+	QString hlaA1 = d->donorHLAA1ComboBox->currentText();
+	QString hlaA2 = d->donorHLAA2ComboBox->currentText();
+	if (hlaA1 != ""){
+		donorA << hlaA1;
+	}
+	if (hlaA2 != hlaA1 && hlaA2 != ""){
+		donorA << hlaA2;
+	}
+
+	QString hlaB1 = d->donorHLAB1ComboBox->currentText();
+	QString hlaB2 = d->donorHLAB2ComboBox->currentText();
+	if (hlaB1 != ""){
+		donorB << hlaB1;
+	}
+	if (hlaB2 != hlaB1 && hlaB2 != ""){
+		donorB << hlaB2;
+	}
+
+	QString hlaCW1 = d->donorHLACW1ComboBox->currentText();
+	QString hlaCW2 = d->donorHLACW2ComboBox->currentText();
+	if (hlaCW1 != ""){
+		donorCW << hlaCW1;
+	}
+	if (hlaCW2 != hlaCW1 && hlaCW2 != ""){
+		donorCW << hlaCW2;
+	}
+
+	QString hlaDQ1 = d->donorHLADQ1ComboBox->currentText();
+	QString hlaDQ2 = d->donorHLADQ2ComboBox->currentText();
+	if (hlaDQ1 != ""){
+		donorDQ << hlaDQ1;
+	}
+	if (hlaDQ2 != hlaDQ1 && hlaDQ2 != ""){
+		donorDQ << hlaDQ2;
+	}
+
+	QString hlaDR1 = d->donorHLADR1ComboBox->currentText();
+	QString hlaDR2 = d->donorHLADR2ComboBox->currentText();
+	if (hlaDR1 != ""){
+		donorDR << hlaDR1;
+	}
+	if (hlaDR2 != hlaDR1 && hlaDR2 != ""){
+		donorDR << hlaDR2;
+	}
+
+	donorBW4 = d->donorBW4CheckBox->isChecked();
+	donorBW6 = d->donorBW6CheckBox->isChecked();
+	donorDR51 = d->donorDR51CheckBox->isChecked();
+	donorDR52 = d->donorDR52CheckBox->isChecked();
+	donorDR53 = d->donorDR53CheckBox->isChecked();
+
+	QString additionalHLA = d->donorHLALineEdit->text();
+	additionalHLA.replace(" ", "");
+	QStringList additionalHLAList = additionalHLA.split(";");
+
+	foreach(QString antibody, additionalHLAList){
+		additionalDonorHLA << antibody;
+	}
+
+	donorFailureProbability = 0.1;
+
+	donorComment = d->commentTextEdit->toPlainText();
 
 	if (donorIsAltruistic) {
 		donorOpacity = 0.25;
@@ -73,92 +154,6 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 
 KPDGUIDonor::~KPDGUIDonor(){
 
-}
-
-void KPDGUIDonor::setDonorAttributes(DialogDonor * d) {
-
-	donorName = d->donorNameLineEdit->text();
-	donorAge = d->donorAgeSpinBox->value();
-	donorBT = KPDFunctions::intToBloodType(d->donorBTComboBox->currentIndex());
-
-	//donorIsAltruistic
-	donorStatus = d->donorStatusCheckBox->isChecked();
-	donorFailureProbability = d->donorFailureProbabilitySpinBox->value();
-
-	popularityInStructures = 0;
-	popularityInSolutions = 0;
-
-	QString gender = d->donorGenderComboBox->currentText();
-	double height = d->donorHeightSpinBox->value();
-	double weight = d->donorWeightSpinBox->value();
-
-	if (gender == "Male") { donorMale = true; }
-	else { donorMale = false; }
-	donorWeight = weight;
-	donorBMI = weight / height / height;
-
-	QString hlaA1 = d->donorHLAA1ComboBox->currentText();
-	QString hlaA2 = d->donorHLAA2ComboBox->currentText();
-	if (hlaA1 != "") {
-		donorA << hlaA1;
-	}
-	if (hlaA2 != hlaA1 && hlaA2 != "") {
-		donorA << hlaA2;
-	}
-
-	QString hlaB1 = d->donorHLAB1ComboBox->currentText();
-	QString hlaB2 = d->donorHLAB2ComboBox->currentText();
-	if (hlaB1 != "") {
-		donorB << hlaB1;
-	}
-	if (hlaB2 != hlaB1 && hlaB2 != "") {
-		donorB << hlaB2;
-	}
-
-	QString hlaCW1 = d->donorHLACW1ComboBox->currentText();
-	QString hlaCW2 = d->donorHLACW2ComboBox->currentText();
-	if (hlaCW1 != "") {
-		donorCW << hlaCW1;
-	}
-	if (hlaCW2 != hlaCW1 && hlaCW2 != "") {
-		donorCW << hlaCW2;
-	}
-
-	QString hlaDQ1 = d->donorHLADQ1ComboBox->currentText();
-	QString hlaDQ2 = d->donorHLADQ2ComboBox->currentText();
-	if (hlaDQ1 != "") {
-		donorDQ << hlaDQ1;
-	}
-	if (hlaDQ2 != hlaDQ1 && hlaDQ2 != "") {
-		donorDQ << hlaDQ2;
-	}
-
-	QString hlaDR1 = d->donorHLADR1ComboBox->currentText();
-	QString hlaDR2 = d->donorHLADR2ComboBox->currentText();
-	if (hlaDR1 != "") {
-		donorDR << hlaDR1;
-	}
-	if (hlaDR2 != hlaDR1 && hlaDR2 != "") {
-		donorDR << hlaDR2;
-	}
-
-	donorBW4 = d->donorBW4CheckBox->isChecked();
-	donorBW6 = d->donorBW6CheckBox->isChecked();
-	donorDR51 = d->donorDR51CheckBox->isChecked();
-	donorDR52 = d->donorDR52CheckBox->isChecked();
-	donorDR53 = d->donorDR53CheckBox->isChecked();
-
-	QString additionalHLA = d->donorHLALineEdit->text();
-	additionalHLA.replace(" ", "");
-	QStringList additionalHLAList = additionalHLA.split(";");
-
-	foreach(QString antibody, additionalHLAList) {
-		additionalDonorHLA << antibody;
-	}
-
-	donorComment = d->commentTextEdit->toPlainText();
-
-	emit donorEdited();
 }
 
 int KPDGUIDonor::getID() const {
@@ -772,31 +767,22 @@ QVariant KPDGUIDonor::itemChange(GraphicsItemChange change, const QVariant &valu
 	return QGraphicsItem::itemChange(change, value);
 }
 
-void KPDGUIDonor::highlight() {
+void KPDGUIDonor::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
+	
 	if (donorIsAltruistic) {
 		donorOpacity = 1;
 	}
 	updateVisualProperties();
-}
-
-void KPDGUIDonor::clearHighlight() {
-	if (donorIsAltruistic) {
-		donorOpacity = 0.25;
-	}
-	updateVisualProperties();
-}
-
-
-void KPDGUIDonor::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-	
-	highlight();
 
 	emit donorEntered();
 }
 
 void KPDGUIDonor::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 	
-	clearHighlight();
+	if (donorIsAltruistic) {
+		donorOpacity = 0.25;
+	}
+	updateVisualProperties();
 	
 	emit donorExited();
 }
@@ -812,7 +798,7 @@ void KPDGUIDonor::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
 	editDonor();
 
-	QGraphicsItem::mouseDoubleClickEvent(event);
+	//QGraphicsObject::mouseDoubleClickEvent(event);
 }
 
 void KPDGUIDonor::updateVisualProperties() {
@@ -860,11 +846,6 @@ void KPDGUIDonor::updateVisualProperties() {
 
 void KPDGUIDonor::editDonor() {
 
-	DialogDonor * donorDialog = new DialogDonor(this, true, 0);
-		
-	if (donorDialog->exec()) {
-		setDonorAttributes(donorDialog);
-	}
 }
 
 
