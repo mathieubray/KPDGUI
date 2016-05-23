@@ -16,7 +16,7 @@ build/
 [Oo]bj/
 KPD\ GUI/x64/Debug/
 KPD\ GUI/x64/Release/
-KPD\ GUI/examples
+KPD\ GUI/Tutorials/
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
