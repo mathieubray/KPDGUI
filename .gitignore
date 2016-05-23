@@ -10,13 +10,19 @@
 
 [Dd]ebug/
 [Rr]elease/
-x64/
+#x64/
 build/
 [Bb]in/
 [Oo]bj/
+KPD\ GUI/x64/Debug/
+KPD\ GUI/x64/Release/
+KPD\ GUI/examples
 
 # Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
 !packages/*/build/
+
+# Enable "release/" folder in the X64 folder, this is the .exe
+!x64/Release/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
