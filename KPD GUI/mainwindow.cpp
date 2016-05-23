@@ -95,6 +95,8 @@ void MainWindow::setUpLists(){
 	//Structure Tree
 	structureTreeWidget = new QTreeWidget();
 	structureTreeWidget->setHeaderHidden(true);
+	structureTreeWidget->header()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	structureTreeWidget->header()->setStretchLastSection(false);
 	structureTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 	structureTreeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	structureTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -105,6 +107,10 @@ void MainWindow::setUpLists(){
 	//Solution Tree
 	solutionTreeWidget = new QTreeWidget();
 	solutionTreeWidget->setHeaderHidden(true);
+	solutionTreeWidget->header()->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+	solutionTreeWidget->header()->setMinimumSectionSize(250);
+	solutionTreeWidget->header()->setDefaultSectionSize(500);
+	solutionTreeWidget->header()->setStretchLastSection(false);
 	solutionTreeWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 	solutionTreeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	solutionTreeWidget->setContextMenuPolicy(Qt::CustomContextMenu);
