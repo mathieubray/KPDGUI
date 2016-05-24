@@ -1186,14 +1186,14 @@ bool MainWindow::loadFile(const QString &fileName)
 
 	qint32 zoom;
 	in >> zoom;
-	qDebug() << "LOAD: Zoom" << zoom;
+	//qDebug() << "LOAD: Zoom" << zoom;
 
 
 	zoomSlider->setValue(zoom);
 
 	qint32 solutions;
 	in >> solutions;
-	qDebug() << "LOAD: Solutions" << solutions;
+	//qDebug() << "LOAD: Solutions" << solutions;
 
 	QList<QTreeWidgetItem *> solutionItems;
 	for (int i = 0; i < solutions; i++){
@@ -1201,18 +1201,18 @@ bool MainWindow::loadFile(const QString &fileName)
 		in >> *solution;
 		int numberOfStructures;
 		in >> numberOfStructures;
-		qDebug() << "LOAD: # Structures" << numberOfStructures;
+		//qDebug() << "LOAD: # Structures" << numberOfStructures;
 		for (int j = 0; j < numberOfStructures; j++){
 			int structureID;
 			double utility;
 			int numberOfNodes;
 			in >> structureID >> utility >> numberOfNodes;
-			qDebug() << "LOAD: Structure Info" << structureID << utility << numberOfNodes;
+			//qDebug() << "LOAD: Structure Info" << structureID << utility << numberOfNodes;
 			QVector<KPDGUINode *> nodeList;
 			for (int k = 0; k < numberOfNodes; k++){
 				int id;
 				in >> id;
-				qDebug() << "LOAD: ID" << id;
+				//qDebug() << "LOAD: ID" << id;
 				nodeList.push_back(nodeMap[id]);
 			}
 			KPDGUIStructure * structure = new KPDGUIStructure(nodeList, solution->getOptScheme(), utility, structureID);
@@ -1297,11 +1297,11 @@ bool MainWindow::saveFile(const QString &fileName)
 	out << showPairsOfMinPRA << qint32(minPRA) << showPairsOfMaxPRA << qint32(maxPRA) << qint32(KPDFunctions::arrowDisplayModeToInt(arrowDisplayMode));
 
 	int zoom = zoomSlider->value();
-	qDebug() << "SAVE: Zoom" << qint32(zoom);
+	//qDebug() << "SAVE: Zoom" << qint32(zoom);
 	out << qint32(zoom);
 
 	int solutions = solutionTreeWidget->topLevelItemCount();
-	qDebug() << "SAVE: Solutions" << qint32(solutions);
+	//qDebug() << "SAVE: Solutions" << qint32(solutions);
 	out << qint32(solutions);
 
 	for (int i = 0; i < solutions; i++){
@@ -1309,21 +1309,21 @@ bool MainWindow::saveFile(const QString &fileName)
 		if (solutionPtr){
 			KPDGUIStructureSet const& solution = *solutionPtr;
 			out << solution;
-			qDebug() << "SAVE: Size" << qint32(solutionPtr->size());
+			//qDebug() << "SAVE: Size" << qint32(solutionPtr->size());
 			out << qint32(solutionPtr->size());
 			for (int j = 0; j < solutionPtr->childCount(); j++){
 				QTreeWidgetItem * item = solutionPtr->child(j);
 				for (int k = 0; k < item->childCount(); k++){
 					KPDGUIStructureWrapper * structure = dynamic_cast<KPDGUIStructureWrapper *>(item->child(k));
 					if (structure){
-						qDebug() << "SAVE: Structure ID, Utility, Children" << qint32(structure->getStructure()->getID()) << qreal(structure->getStructure()->getUtility()) << qint32(structure->childCount());
+						//qDebug() << "SAVE: Structure ID, Utility, Children" << qint32(structure->getStructure()->getID()) << qreal(structure->getStructure()->getUtility()) << qint32(structure->childCount());
 						out << qint32(structure->getStructure()->getID());
 						out << qreal(structure->getStructure()->getUtility());
 						out << qint32(structure->childCount());
 						for (int l = 0; l < structure->childCount(); l++){
 							KPDGUINodeWrapper* node = dynamic_cast<KPDGUINodeWrapper*>(structure->child(l));
 							if (node){
-								qDebug() << "SAVE: ID" << qint32(node->getNode()->getInternalID());
+								//qDebug() << "SAVE: ID" << qint32(node->getNode()->getInternalID());
 								out << qint32(node->getNode()->getInternalID());
 							}
 						}
@@ -1475,44 +1475,69 @@ void MainWindow::readPairsFromFile(QString fileName)
 		else if (pairType == 1){
 			d.type = KPDPairType::AD;
 		}
-		d.name = row.at(9).at(0);
+		d.name = row.at(7).at(0);
 		//d.donorid = row.at(10).at(0).toInt();
-		d.age = row.at(11).at(0).toInt();
+		d.age = row.at(8).at(0).toInt();
 
 		//Donor Crossmatch Information
-		d.donorA.push_back(row.at(20).at(0)); d.donorA.push_back(row.at(21).at(0));
-		d.donorB.push_back(row.at(22).at(0)); d.donorB.push_back(row.at(23).at(0));
+		if (row.at(13).at(0) != "NONE" && row.at(13).at(0) != "NULL" && row.at(13).at(0) != "NP") {
+			d.donorA.push_back(row.at(13).at(0));
+		}
+		if (row.at(14).at(0) != "NONE" && row.at(14).at(0) != "NULL" && row.at(14).at(0) != "NP") {
+			d.donorA.push_back(row.at(14).at(0));
+		}
+		if (row.at(15).at(0) != "NONE" && row.at(15).at(0) != "NULL" && row.at(15).at(0) != "NP") {
+			d.donorB.push_back(row.at(15).at(0));
+		}
+		if (row.at(16).at(0) != "NONE" && row.at(16).at(0) != "NULL" && row.at(16).at(0) != "NP") {
+			d.donorB.push_back(row.at(16).at(0));
+		}
 
-		if (row.at(24).at(0) == "BW4"){ d.donorBW4 = true; }
+		if (row.at(17).at(0) == "BW4"){ d.donorBW4 = true; }
 		else { d.donorBW4 = false; }
-		if (row.at(25).at(0) == "BW6"){ d.donorBW6 = true; }
+		if (row.at(18).at(0) == "BW6"){ d.donorBW6 = true; }
 		else { d.donorBW6 = false; }
 
-		d.donorCW.push_back(row.at(26).at(0)); d.donorCW.push_back(row.at(27).at(0));
-		d.donorDQ.push_back(row.at(33).at(0)); d.donorDQ.push_back(row.at(34).at(0)); //d.donorDQ.push_back(row.at(23).at(0)); d.donorDQ.push_back(row.at(24).at(0));
-		d.donorDR.push_back(row.at(28).at(0)); d.donorDR.push_back(row.at(29).at(0));
+		if (row.at(19).at(0) != "NONE" && row.at(19).at(0) != "NULL" && row.at(19).at(0) != "NP") {
+			d.donorCW.push_back(row.at(19).at(0));
+		}
+		if (row.at(20).at(0) != "NONE" && row.at(20).at(0) != "NULL" && row.at(20).at(0) != "NP") {
+			d.donorCW.push_back(row.at(20).at(0));
+		}
+		if (row.at(21).at(0) != "NONE" && row.at(21).at(0) != "NULL" && row.at(21).at(0) != "NP") {
+			d.donorDR.push_back(row.at(21).at(0));
+		}
+		if (row.at(22).at(0) != "NONE" && row.at(22).at(0) != "NULL" && row.at(22).at(0) != "NP") {
+			d.donorDR.push_back(row.at(22).at(0));
+		}
+		if (row.at(26).at(0) != "NONE" && row.at(26).at(0) != "NULL" && row.at(26).at(0) != "NP") {
+			d.donorDQ.push_back(row.at(26).at(0));
+		}
+		if (row.at(27).at(0) != "NONE" && row.at(27).at(0) != "NULL" && row.at(27).at(0) != "NP") {
+			d.donorDQ.push_back(row.at(27).at(0));
+		}
 
-		if (row.at(30).at(0) == "DR51"){ d.donorDR51 = true; }
+		if (row.at(23).at(0) == "DR51"){ d.donorDR51 = true; }
 		else { d.donorDR51 = false; }
-		if (row.at(31).at(0) == "DR52"){ d.donorDR52 = true; }
+		if (row.at(24).at(0) == "DR52"){ d.donorDR52 = true; }
 		else { d.donorDR52 = false; }
-		if (row.at(32).at(0) == "DR53"){ d.donorDR53 = true; }
+		if (row.at(25).at(0) == "DR53"){ d.donorDR53 = true; }
 		else { d.donorDR53 = false; }
 
-		d.BT = row.at(12).at(0);
+		d.BT = row.at(9).at(0);
 
 		Candidate c;
 		//c.id = (row.at(0).at(0)).toInt();
-		c.name = row.at(5).at(0);
+		c.name = row.at(4).at(0);
 		//c.recipid = (row.at(6).at(0)).toInt();
-		c.age = row.at(7).at(0).toInt();
+		c.age = row.at(5).at(0).toInt();
 
-		c.BT = row.at(8).at(0);
+		c.BT = row.at(6).at(0);
 		if (d.type == KPDPairType::AD && c.BT != "AB"){
 			d.type = KPDPairType::PAIR;
 		}
 
-		int pra = 0;
+		/*int pra = 0;
 		QString pratoken;
 		QString pra1 = row.at(14).at(0);
 		QStringList prass1 = pra1.split('/');
@@ -1536,7 +1561,9 @@ void MainWindow::readPairsFromFile(QString fileName)
 			}
 		}
 
-		c.pra = pra;
+		c.pra = pra;*/
+
+		c.pra = row.at(10).at(0).toInt();
 
 		/*foreach(QString donorToExclude, row.at(4)){
 		if (!donorToExclude.isNull()){
@@ -1550,42 +1577,76 @@ void MainWindow::readPairsFromFile(QString fileName)
 		}
 
 		if (sensitized == false){
-			foreach(QString antibody, row.at(16)){
+			foreach(QString antibody, row.at(11)){
 				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
 					c.antibodies.push_back(antibody);
 				}
 			}
-			foreach(QString antibody, row.at(17)){
+			/*foreach(QString antibody, row.at(17)){
 				if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
 					c.antibodies.push_back(antibody);
 				}
-			}
+			}*/
 		}
 
-		foreach(QString antibody, row.at(18)){
+		foreach(QString antibody, row.at(12)){
 			if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
 				c.antibodies.push_back(antibody);
 			}
 		}
 
-		foreach(QString antibody, row.at(19)){
+		/*foreach(QString antibody, row.at(19)){
 			if (!antibody.isNull() && antibody != "NONE" && antibody != "NULL" && antibody != "NP"){
 				c.antibodies.push_back(antibody);
 			}
+		}*/
+
+		if (row.at(28).at(0) == "M") {
+			c.genderMale = true;
+		}
+		else {
+			c.genderMale = false;
 		}
 
-		c.genderMale = true;
-		c.BMI = 25;
-		c.weight = 60;
-		c.diabetes = false;
-		c.race = "White";
-		c.prevTrans = false;
-		c.TOD = 1.5;
-		c.hepC = false;
+		c.BMI = row.at(29).at(0).toDouble();
 
-		d.genderMale = false;
-		d.BMI = 25;
-		d.weight = 60;
+		c.weight = row.at(30).at(0).toDouble();
+		
+		if (row.at(31).at(0) == "Y") {
+			c.diabetes = true;
+		}
+		else {
+			c.diabetes = false;
+		}
+
+		c.race = row.at(32).at(0);
+
+		if (row.at(33).at(0) == "Y") {
+			c.prevTrans = true;
+		}
+		else {
+			c.prevTrans = false;
+		}
+
+		c.TOD = row.at(34).at(0).toDouble();
+
+		if (row.at(35).at(0) == "Y") {
+			c.hepC = true;
+		}
+		else {
+			c.hepC = false;
+		}
+
+		if (row.at(36).at(0) == "M") {
+			d.genderMale = true;
+		}
+		else {
+			d.genderMale = false;
+		}
+
+		d.BMI = row.at(37).at(0).toDouble();
+		
+		d.weight = row.at(38).at(0).toDouble();
 
 		QString comment = "";
 

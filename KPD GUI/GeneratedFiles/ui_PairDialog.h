@@ -685,7 +685,7 @@ public:
          << QApplication::translate("PairDialog", "Male", 0)
          << QApplication::translate("PairDialog", "Female", 0)
         );
-        recipHeightLabel->setText(QApplication::translate("PairDialog", "Height (kg)", 0));
+        recipHeightLabel->setText(QApplication::translate("PairDialog", "Height (m)", 0));
         recipWeightLabel->setText(QApplication::translate("PairDialog", "Weight (kg)", 0));
         recipRaceLabel->setText(QApplication::translate("PairDialog", "Race", 0));
         recipRaceComboBox->clear();

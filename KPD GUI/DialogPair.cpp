@@ -49,17 +49,20 @@ PairDialog::PairDialog(int id, Donor * donor, Candidate * candidate, QString com
 	}
 
 	//Donor Gender
+	//qDebug() << donor->genderMale;
 	if (donor->genderMale == true){
 		int genderIndex = donorGenderComboBox->findText("Male");
 		if (genderIndex >= 0){
 			donorGenderComboBox->setCurrentIndex(genderIndex);
 		}
+		//qDebug() << "MALE " << genderIndex;
 	}
 	else {
 		int genderIndex = donorGenderComboBox->findText("Female");
 		if (genderIndex >= 0){
 			donorGenderComboBox->setCurrentIndex(genderIndex);
 		}
+		//qDebug() << "FEMALE " << genderIndex;
 	}
 
 	//Donor Height
@@ -146,15 +149,15 @@ PairDialog::PairDialog(int id, Donor * donor, Candidate * candidate, QString com
 
 	//Recipient Gender
 	if (candidate->genderMale == true){
-		int genderIndex = donorGenderComboBox->findText("Male");
+		int genderIndex = recipGenderComboBox->findText("Male");
 		if (genderIndex >= 0){
-			donorGenderComboBox->setCurrentIndex(genderIndex);
+			recipGenderComboBox->setCurrentIndex(genderIndex);
 		}
 	}
 	else {
-		int genderIndex = donorGenderComboBox->findText("Female");
+		int genderIndex = recipGenderComboBox->findText("Female");
 		if (genderIndex >= 0){
-			donorGenderComboBox->setCurrentIndex(genderIndex);
+			recipGenderComboBox->setCurrentIndex(genderIndex);
 		}
 	}
 
