@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include "Structs.h"
+#include "MultiSelectCompleter.h"
 #include "ui_AltruisticDonorDialog.h"
 
 class AltruisticDonorDialog : public QDialog, public Ui_AltruisticDonorDialog
@@ -13,6 +14,8 @@ class AltruisticDonorDialog : public QDialog, public Ui_AltruisticDonorDialog
 public:
 	AltruisticDonorDialog(QWidget *parent = 0);
 	AltruisticDonorDialog(int id, Donor *donor, QString comment, bool disableMajorEdits, QWidget *parent = 0);
+
+	void additionalSetup();
 };
 
 #endif

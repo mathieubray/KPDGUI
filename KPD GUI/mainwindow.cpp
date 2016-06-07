@@ -16,7 +16,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 	setUpMenu();
 	setUpToolbar();
 	
-	ui->consoleWidget->addConsoleInfo("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");	
+	//ui->consoleWidget->addConsoleInfo("Welcome to KPDGUI - " + QDate::currentDate().toString() + " " + QTime::currentTime().toString() + "\n");
+	ui->consoleWidget->addConsoleInfo("Welcome to KPDGUI!");
 }
 
 MainWindow::~MainWindow()
@@ -173,8 +174,10 @@ void MainWindow::open()
 		if (!fileName.isEmpty()){
 			loadFile(fileName);
 
-			statusBar()->showMessage("Opened File: " + fileName, 2000);
-			ui->consoleWidget->addConsoleInfo("> Opened File: " + fileName + "\n");			
+			QString shortName = QFileInfo(fileName).fileName();
+
+			statusBar()->showMessage("Opened File: " + shortName, 2000);
+			ui->consoleWidget->addConsoleInfo("> Opened File: " + shortName + "\n");			
 		}
     }
 }
@@ -375,9 +378,12 @@ void MainWindow::loadPairs()
 		QApplication::restoreOverrideCursor();
 		QApplication::processEvents();
 
-		QStringList splitstr = str.split("\\");
-		statusBar()->showMessage("Loaded Pairs From File: " + splitstr.last(), 2000);
-		ui->consoleWidget->addConsoleInfo("> Loaded Pairs From " + splitstr.last());
+
+		QString shortName = QFileInfo(str).fileName();
+
+		//QStringList splitstr = str.split("\\");
+		statusBar()->showMessage("Loaded Pairs From File: " + shortName, 2000);
+		ui->consoleWidget->addConsoleInfo("> Loaded Pairs From " + shortName);
 
 		setWindowModified(true);
 		emit visibilityChanged(&displaySettings);
@@ -1231,7 +1237,9 @@ bool MainWindow::loadFile(const QString &fileName)
 	setCurrentFile(fileName);
 	statusBar()->showMessage(tr("File loaded"), 2000);
 
-	ui->consoleWidget->addConsoleInfo("> " + fileName + " Loaded");
+	QString shortName = QFileInfo(fileName).fileName();
+
+	ui->consoleWidget->addConsoleInfo("> " + shortName + " Loaded");
 
 	setDisplaySettings(&newDisplaySettings);
 	setWindowModified(false);
@@ -1333,9 +1341,11 @@ bool MainWindow::saveFile(const QString &fileName)
 		}
 	}
 
+	QString shortName = QFileInfo(fileName).fileName();
+
 	setCurrentFile(fileName);
 	statusBar()->showMessage(tr("File saved"), 2000);
-	ui->consoleWidget->addConsoleInfo("> " + fileName + " Saved");
+	ui->consoleWidget->addConsoleInfo("> " + shortName + " Saved");
 
 	return true;
 }
