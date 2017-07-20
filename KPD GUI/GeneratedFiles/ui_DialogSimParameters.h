@@ -34,51 +34,48 @@ QT_BEGIN_NAMESPACE
 class Ui_DialogSimParameters
 {
 public:
-    QWidget *widget;
+    QWidget *layoutWidget;
     QGridLayout *gridLayout;
-    QLabel *optLabel;
-    QLabel *utilLabel;
-    QHBoxLayout *chainLengthLayout;
-    QSpinBox *chainLengthSpinBox;
-    QSlider *chainLengthSlider;
-    QHBoxLayout *componentSizeLayout;
-    QSpinBox *componentSizeSpinBox;
-    QSlider *componentSizeSlider;
-    QLabel *componentSizeLabel;
     QComboBox *optComboBox;
-    QLabel *chainLengthLabel;
-    QComboBox *utilComboBox;
-    QLabel *cycleSizeLabel;
+    QLabel *optLabel;
+    QLabel *componentSizeLabel;
     QHBoxLayout *cycleSizeLayout;
     QSpinBox *cycleSizeSpinBox;
     QSlider *cycleSizeSlider;
+    QHBoxLayout *chainLengthLayout;
+    QSpinBox *chainLengthSpinBox;
+    QSlider *chainLengthSlider;
+    QHBoxLayout *lrsSizeLayout;
+    QSpinBox *lrsSizeSpinBox;
+    QSlider *lrsSizeSlider;
+    QLabel *chainLengthLabel;
+    QLabel *cycleSizeLabel;
+    QLabel *utilLabel;
+    QComboBox *utilComboBox;
     QDialogButtonBox *buttonBox;
     QTabWidget *additionalParametersTabWidget;
     QWidget *numericalParametersTab;
-    QWidget *widget1;
-    QVBoxLayout *verticalLayout;
+    QWidget *layoutWidget1;
+    QVBoxLayout *numericalParametersLayout;
     QCheckBox *praCheckBox;
     QHBoxLayout *praLayout;
     QSpinBox *praCutoffSpinBox;
     QLabel *praCutoffLabel;
     QDoubleSpinBox *praAdvantageSpinBox;
     QLabel *praAdvantageLabel;
-    QSpacerItem *verticalSpacer2;
+    QSpacerItem *spacer1;
     QHBoxLayout *solutionsLayout;
     QLabel *solutionsLabel;
     QSpinBox *solutionsSpinBox;
     QSlider *solutionsSlider;
-    QSpacerItem *verticalSpacer3;
+    QSpacerItem *spacer2;
     QCheckBox *estimateEUCheckBox;
     QHBoxLayout *estimateEULayout;
     QSpinBox *numberOfEUSimSpinBox;
     QLabel *numberOfEUSimLabel;
     QWidget *additionalOptionsTab;
-    QWidget *layoutWidget;
+    QWidget *layoutWidget2;
     QVBoxLayout *additionalOptionsLayout;
-    QHBoxLayout *chainStorageLayout;
-    QLabel *chainStorageLabel;
-    QComboBox *chainStorageComboBox;
     QCheckBox *reserveOtoOBox;
     QCheckBox *checkAdditionalHLABox;
     QCheckBox *compatibleBox;
@@ -89,108 +86,40 @@ public:
     {
         if (DialogSimParameters->objectName().isEmpty())
             DialogSimParameters->setObjectName(QStringLiteral("DialogSimParameters"));
-        DialogSimParameters->resize(318, 468);
-        DialogSimParameters->setMinimumSize(QSize(0, 0));
-        DialogSimParameters->setMaximumSize(QSize(10000000, 16777215));
-        widget = new QWidget(DialogSimParameters);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 10, 299, 161));
-        gridLayout = new QGridLayout(widget);
+        DialogSimParameters->resize(388, 444);
+        DialogSimParameters->setMinimumSize(QSize(388, 444));
+        DialogSimParameters->setMaximumSize(QSize(388, 444));
+        layoutWidget = new QWidget(DialogSimParameters);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 10, 370, 161));
+        gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        optLabel = new QLabel(widget);
-        optLabel->setObjectName(QStringLiteral("optLabel"));
-
-        gridLayout->addWidget(optLabel, 0, 0, 1, 1);
-
-        utilLabel = new QLabel(widget);
-        utilLabel->setObjectName(QStringLiteral("utilLabel"));
-
-        gridLayout->addWidget(utilLabel, 1, 0, 1, 1);
-
-        chainLengthLayout = new QHBoxLayout();
-        chainLengthLayout->setObjectName(QStringLiteral("chainLengthLayout"));
-        chainLengthSpinBox = new QSpinBox(widget);
-        chainLengthSpinBox->setObjectName(QStringLiteral("chainLengthSpinBox"));
-        chainLengthSpinBox->setMinimum(2);
-        chainLengthSpinBox->setMaximum(6);
-
-        chainLengthLayout->addWidget(chainLengthSpinBox);
-
-        chainLengthSlider = new QSlider(widget);
-        chainLengthSlider->setObjectName(QStringLiteral("chainLengthSlider"));
-        chainLengthSlider->setMinimum(2);
-        chainLengthSlider->setMaximum(6);
-        chainLengthSlider->setPageStep(2);
-        chainLengthSlider->setOrientation(Qt::Horizontal);
-        chainLengthSlider->setTickPosition(QSlider::TicksBelow);
-        chainLengthSlider->setTickInterval(1);
-
-        chainLengthLayout->addWidget(chainLengthSlider);
-
-
-        gridLayout->addLayout(chainLengthLayout, 3, 2, 1, 1);
-
-        componentSizeLayout = new QHBoxLayout();
-        componentSizeLayout->setObjectName(QStringLiteral("componentSizeLayout"));
-        componentSizeSpinBox = new QSpinBox(widget);
-        componentSizeSpinBox->setObjectName(QStringLiteral("componentSizeSpinBox"));
-        componentSizeSpinBox->setEnabled(false);
-        componentSizeSpinBox->setMinimum(2);
-        componentSizeSpinBox->setMaximum(6);
-
-        componentSizeLayout->addWidget(componentSizeSpinBox);
-
-        componentSizeSlider = new QSlider(widget);
-        componentSizeSlider->setObjectName(QStringLiteral("componentSizeSlider"));
-        componentSizeSlider->setEnabled(false);
-        componentSizeSlider->setMinimum(2);
-        componentSizeSlider->setMaximum(6);
-        componentSizeSlider->setPageStep(2);
-        componentSizeSlider->setOrientation(Qt::Horizontal);
-        componentSizeSlider->setTickPosition(QSlider::TicksBelow);
-        componentSizeSlider->setTickInterval(1);
-
-        componentSizeLayout->addWidget(componentSizeSlider);
-
-
-        gridLayout->addLayout(componentSizeLayout, 4, 2, 1, 1);
-
-        componentSizeLabel = new QLabel(widget);
-        componentSizeLabel->setObjectName(QStringLiteral("componentSizeLabel"));
-
-        gridLayout->addWidget(componentSizeLabel, 4, 0, 1, 2);
-
-        optComboBox = new QComboBox(widget);
+        optComboBox = new QComboBox(layoutWidget);
         optComboBox->setObjectName(QStringLiteral("optComboBox"));
 
         gridLayout->addWidget(optComboBox, 0, 2, 1, 1);
 
-        chainLengthLabel = new QLabel(widget);
-        chainLengthLabel->setObjectName(QStringLiteral("chainLengthLabel"));
+        optLabel = new QLabel(layoutWidget);
+        optLabel->setObjectName(QStringLiteral("optLabel"));
 
-        gridLayout->addWidget(chainLengthLabel, 3, 0, 1, 1);
+        gridLayout->addWidget(optLabel, 0, 0, 1, 1);
 
-        utilComboBox = new QComboBox(widget);
-        utilComboBox->setObjectName(QStringLiteral("utilComboBox"));
+        componentSizeLabel = new QLabel(layoutWidget);
+        componentSizeLabel->setObjectName(QStringLiteral("componentSizeLabel"));
 
-        gridLayout->addWidget(utilComboBox, 1, 2, 1, 1);
-
-        cycleSizeLabel = new QLabel(widget);
-        cycleSizeLabel->setObjectName(QStringLiteral("cycleSizeLabel"));
-
-        gridLayout->addWidget(cycleSizeLabel, 2, 0, 1, 1);
+        gridLayout->addWidget(componentSizeLabel, 4, 0, 1, 2);
 
         cycleSizeLayout = new QHBoxLayout();
         cycleSizeLayout->setObjectName(QStringLiteral("cycleSizeLayout"));
-        cycleSizeSpinBox = new QSpinBox(widget);
+        cycleSizeSpinBox = new QSpinBox(layoutWidget);
         cycleSizeSpinBox->setObjectName(QStringLiteral("cycleSizeSpinBox"));
         cycleSizeSpinBox->setMinimum(2);
         cycleSizeSpinBox->setMaximum(6);
 
         cycleSizeLayout->addWidget(cycleSizeSpinBox);
 
-        cycleSizeSlider = new QSlider(widget);
+        cycleSizeSlider = new QSlider(layoutWidget);
         cycleSizeSlider->setObjectName(QStringLiteral("cycleSizeSlider"));
         cycleSizeSlider->setMinimum(2);
         cycleSizeSlider->setMaximum(6);
@@ -204,31 +133,101 @@ public:
 
         gridLayout->addLayout(cycleSizeLayout, 2, 2, 1, 1);
 
+        chainLengthLayout = new QHBoxLayout();
+        chainLengthLayout->setObjectName(QStringLiteral("chainLengthLayout"));
+        chainLengthSpinBox = new QSpinBox(layoutWidget);
+        chainLengthSpinBox->setObjectName(QStringLiteral("chainLengthSpinBox"));
+        chainLengthSpinBox->setMinimum(2);
+        chainLengthSpinBox->setMaximum(6);
+
+        chainLengthLayout->addWidget(chainLengthSpinBox);
+
+        chainLengthSlider = new QSlider(layoutWidget);
+        chainLengthSlider->setObjectName(QStringLiteral("chainLengthSlider"));
+        chainLengthSlider->setMinimum(2);
+        chainLengthSlider->setMaximum(6);
+        chainLengthSlider->setPageStep(2);
+        chainLengthSlider->setOrientation(Qt::Horizontal);
+        chainLengthSlider->setTickPosition(QSlider::TicksBelow);
+        chainLengthSlider->setTickInterval(1);
+
+        chainLengthLayout->addWidget(chainLengthSlider);
+
+
+        gridLayout->addLayout(chainLengthLayout, 3, 2, 1, 1);
+
+        lrsSizeLayout = new QHBoxLayout();
+        lrsSizeLayout->setObjectName(QStringLiteral("lrsSizeLayout"));
+        lrsSizeSpinBox = new QSpinBox(layoutWidget);
+        lrsSizeSpinBox->setObjectName(QStringLiteral("lrsSizeSpinBox"));
+        lrsSizeSpinBox->setEnabled(false);
+        lrsSizeSpinBox->setMinimum(2);
+        lrsSizeSpinBox->setMaximum(6);
+
+        lrsSizeLayout->addWidget(lrsSizeSpinBox);
+
+        lrsSizeSlider = new QSlider(layoutWidget);
+        lrsSizeSlider->setObjectName(QStringLiteral("lrsSizeSlider"));
+        lrsSizeSlider->setEnabled(false);
+        lrsSizeSlider->setMinimum(2);
+        lrsSizeSlider->setMaximum(6);
+        lrsSizeSlider->setPageStep(2);
+        lrsSizeSlider->setOrientation(Qt::Horizontal);
+        lrsSizeSlider->setTickPosition(QSlider::TicksBelow);
+        lrsSizeSlider->setTickInterval(1);
+
+        lrsSizeLayout->addWidget(lrsSizeSlider);
+
+
+        gridLayout->addLayout(lrsSizeLayout, 4, 2, 1, 1);
+
+        chainLengthLabel = new QLabel(layoutWidget);
+        chainLengthLabel->setObjectName(QStringLiteral("chainLengthLabel"));
+
+        gridLayout->addWidget(chainLengthLabel, 3, 0, 1, 1);
+
+        cycleSizeLabel = new QLabel(layoutWidget);
+        cycleSizeLabel->setObjectName(QStringLiteral("cycleSizeLabel"));
+
+        gridLayout->addWidget(cycleSizeLabel, 2, 0, 1, 1);
+
+        utilLabel = new QLabel(layoutWidget);
+        utilLabel->setObjectName(QStringLiteral("utilLabel"));
+
+        gridLayout->addWidget(utilLabel, 1, 0, 1, 1);
+
+        utilComboBox = new QComboBox(layoutWidget);
+        utilComboBox->setObjectName(QStringLiteral("utilComboBox"));
+
+        gridLayout->addWidget(utilComboBox, 1, 2, 1, 1);
+
         buttonBox = new QDialogButtonBox(DialogSimParameters);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setGeometry(QRect(110, 430, 193, 28));
+        buttonBox->setGeometry(QRect(180, 410, 193, 28));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         additionalParametersTabWidget = new QTabWidget(DialogSimParameters);
         additionalParametersTabWidget->setObjectName(QStringLiteral("additionalParametersTabWidget"));
-        additionalParametersTabWidget->setGeometry(QRect(10, 180, 301, 241));
+        additionalParametersTabWidget->setGeometry(QRect(10, 180, 371, 221));
+        additionalParametersTabWidget->setMinimumSize(QSize(371, 221));
+        additionalParametersTabWidget->setMaximumSize(QSize(371, 221));
         additionalParametersTabWidget->setUsesScrollButtons(false);
         numericalParametersTab = new QWidget();
         numericalParametersTab->setObjectName(QStringLiteral("numericalParametersTab"));
-        widget1 = new QWidget(numericalParametersTab);
-        widget1->setObjectName(QStringLiteral("widget1"));
-        widget1->setGeometry(QRect(10, 10, 261, 194));
-        verticalLayout = new QVBoxLayout(widget1);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        praCheckBox = new QCheckBox(widget1);
+        layoutWidget1 = new QWidget(numericalParametersTab);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 10, 341, 171));
+        numericalParametersLayout = new QVBoxLayout(layoutWidget1);
+        numericalParametersLayout->setObjectName(QStringLiteral("numericalParametersLayout"));
+        numericalParametersLayout->setContentsMargins(0, 0, 0, 0);
+        praCheckBox = new QCheckBox(layoutWidget1);
         praCheckBox->setObjectName(QStringLiteral("praCheckBox"));
 
-        verticalLayout->addWidget(praCheckBox);
+        numericalParametersLayout->addWidget(praCheckBox);
 
         praLayout = new QHBoxLayout();
         praLayout->setObjectName(QStringLiteral("praLayout"));
-        praCutoffSpinBox = new QSpinBox(widget1);
+        praCutoffSpinBox = new QSpinBox(layoutWidget1);
         praCutoffSpinBox->setObjectName(QStringLiteral("praCutoffSpinBox"));
         praCutoffSpinBox->setEnabled(false);
         praCutoffSpinBox->setMaximum(100);
@@ -236,38 +235,38 @@ public:
 
         praLayout->addWidget(praCutoffSpinBox);
 
-        praCutoffLabel = new QLabel(widget1);
+        praCutoffLabel = new QLabel(layoutWidget1);
         praCutoffLabel->setObjectName(QStringLiteral("praCutoffLabel"));
 
         praLayout->addWidget(praCutoffLabel);
 
-        praAdvantageSpinBox = new QDoubleSpinBox(widget1);
+        praAdvantageSpinBox = new QDoubleSpinBox(layoutWidget1);
         praAdvantageSpinBox->setObjectName(QStringLiteral("praAdvantageSpinBox"));
         praAdvantageSpinBox->setEnabled(false);
         praAdvantageSpinBox->setMaximum(10);
 
         praLayout->addWidget(praAdvantageSpinBox);
 
-        praAdvantageLabel = new QLabel(widget1);
+        praAdvantageLabel = new QLabel(layoutWidget1);
         praAdvantageLabel->setObjectName(QStringLiteral("praAdvantageLabel"));
 
         praLayout->addWidget(praAdvantageLabel);
 
 
-        verticalLayout->addLayout(praLayout);
+        numericalParametersLayout->addLayout(praLayout);
 
-        verticalSpacer2 = new QSpacerItem(18, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        spacer1 = new QSpacerItem(18, 18, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout->addItem(verticalSpacer2);
+        numericalParametersLayout->addItem(spacer1);
 
         solutionsLayout = new QHBoxLayout();
         solutionsLayout->setObjectName(QStringLiteral("solutionsLayout"));
-        solutionsLabel = new QLabel(widget1);
+        solutionsLabel = new QLabel(layoutWidget1);
         solutionsLabel->setObjectName(QStringLiteral("solutionsLabel"));
 
         solutionsLayout->addWidget(solutionsLabel);
 
-        solutionsSpinBox = new QSpinBox(widget1);
+        solutionsSpinBox = new QSpinBox(layoutWidget1);
         solutionsSpinBox->setObjectName(QStringLiteral("solutionsSpinBox"));
         solutionsSpinBox->setMinimum(1);
         solutionsSpinBox->setMaximum(25);
@@ -275,7 +274,7 @@ public:
 
         solutionsLayout->addWidget(solutionsSpinBox);
 
-        solutionsSlider = new QSlider(widget1);
+        solutionsSlider = new QSlider(layoutWidget1);
         solutionsSlider->setObjectName(QStringLiteral("solutionsSlider"));
         solutionsSlider->setMinimum(1);
         solutionsSlider->setMaximum(25);
@@ -286,21 +285,21 @@ public:
         solutionsLayout->addWidget(solutionsSlider);
 
 
-        verticalLayout->addLayout(solutionsLayout);
+        numericalParametersLayout->addLayout(solutionsLayout);
 
-        verticalSpacer3 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        spacer2 = new QSpacerItem(20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        verticalLayout->addItem(verticalSpacer3);
+        numericalParametersLayout->addItem(spacer2);
 
-        estimateEUCheckBox = new QCheckBox(widget1);
+        estimateEUCheckBox = new QCheckBox(layoutWidget1);
         estimateEUCheckBox->setObjectName(QStringLiteral("estimateEUCheckBox"));
         estimateEUCheckBox->setEnabled(false);
 
-        verticalLayout->addWidget(estimateEUCheckBox);
+        numericalParametersLayout->addWidget(estimateEUCheckBox);
 
         estimateEULayout = new QHBoxLayout();
         estimateEULayout->setObjectName(QStringLiteral("estimateEULayout"));
-        numberOfEUSimSpinBox = new QSpinBox(widget1);
+        numberOfEUSimSpinBox = new QSpinBox(layoutWidget1);
         numberOfEUSimSpinBox->setObjectName(QStringLiteral("numberOfEUSimSpinBox"));
         numberOfEUSimSpinBox->setEnabled(false);
         numberOfEUSimSpinBox->setMinimum(100);
@@ -308,59 +307,44 @@ public:
 
         estimateEULayout->addWidget(numberOfEUSimSpinBox);
 
-        numberOfEUSimLabel = new QLabel(widget1);
+        numberOfEUSimLabel = new QLabel(layoutWidget1);
         numberOfEUSimLabel->setObjectName(QStringLiteral("numberOfEUSimLabel"));
 
         estimateEULayout->addWidget(numberOfEUSimLabel);
 
 
-        verticalLayout->addLayout(estimateEULayout);
+        numericalParametersLayout->addLayout(estimateEULayout);
 
         additionalParametersTabWidget->addTab(numericalParametersTab, QString());
         additionalOptionsTab = new QWidget();
         additionalOptionsTab->setObjectName(QStringLiteral("additionalOptionsTab"));
-        layoutWidget = new QWidget(additionalOptionsTab);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 259, 161));
-        additionalOptionsLayout = new QVBoxLayout(layoutWidget);
+        layoutWidget2 = new QWidget(additionalOptionsTab);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 10, 311, 130));
+        additionalOptionsLayout = new QVBoxLayout(layoutWidget2);
         additionalOptionsLayout->setObjectName(QStringLiteral("additionalOptionsLayout"));
         additionalOptionsLayout->setContentsMargins(0, 0, 0, 0);
-        chainStorageLayout = new QHBoxLayout();
-        chainStorageLayout->setObjectName(QStringLiteral("chainStorageLayout"));
-        chainStorageLabel = new QLabel(layoutWidget);
-        chainStorageLabel->setObjectName(QStringLiteral("chainStorageLabel"));
-
-        chainStorageLayout->addWidget(chainStorageLabel);
-
-        chainStorageComboBox = new QComboBox(layoutWidget);
-        chainStorageComboBox->setObjectName(QStringLiteral("chainStorageComboBox"));
-
-        chainStorageLayout->addWidget(chainStorageComboBox);
-
-
-        additionalOptionsLayout->addLayout(chainStorageLayout);
-
-        reserveOtoOBox = new QCheckBox(layoutWidget);
+        reserveOtoOBox = new QCheckBox(layoutWidget2);
         reserveOtoOBox->setObjectName(QStringLiteral("reserveOtoOBox"));
 
         additionalOptionsLayout->addWidget(reserveOtoOBox);
 
-        checkAdditionalHLABox = new QCheckBox(layoutWidget);
+        checkAdditionalHLABox = new QCheckBox(layoutWidget2);
         checkAdditionalHLABox->setObjectName(QStringLiteral("checkAdditionalHLABox"));
 
         additionalOptionsLayout->addWidget(checkAdditionalHLABox);
 
-        compatibleBox = new QCheckBox(layoutWidget);
+        compatibleBox = new QCheckBox(layoutWidget2);
         compatibleBox->setObjectName(QStringLiteral("compatibleBox"));
 
         additionalOptionsLayout->addWidget(compatibleBox);
 
-        excludeABDonorsBox = new QCheckBox(layoutWidget);
+        excludeABDonorsBox = new QCheckBox(layoutWidget2);
         excludeABDonorsBox->setObjectName(QStringLiteral("excludeABDonorsBox"));
 
         additionalOptionsLayout->addWidget(excludeABDonorsBox);
 
-        allowABBridgeBox = new QCheckBox(layoutWidget);
+        allowABBridgeBox = new QCheckBox(layoutWidget2);
         allowABBridgeBox->setObjectName(QStringLiteral("allowABBridgeBox"));
 
         additionalOptionsLayout->addWidget(allowABBridgeBox);
@@ -368,10 +352,10 @@ public:
         additionalParametersTabWidget->addTab(additionalOptionsTab, QString());
 #ifndef QT_NO_SHORTCUT
         optLabel->setBuddy(optComboBox);
-        utilLabel->setBuddy(utilComboBox);
         componentSizeLabel->setBuddy(cycleSizeSpinBox);
         chainLengthLabel->setBuddy(cycleSizeSpinBox);
         cycleSizeLabel->setBuddy(cycleSizeSpinBox);
+        utilLabel->setBuddy(utilComboBox);
         solutionsLabel->setBuddy(solutionsSpinBox);
 #endif // QT_NO_SHORTCUT
         QWidget::setTabOrder(cycleSizeSpinBox, cycleSizeSlider);
@@ -394,9 +378,10 @@ public:
         QObject::connect(praCheckBox, SIGNAL(toggled(bool)), DialogSimParameters, SLOT(enablePRAOptions(bool)));
         QObject::connect(chainLengthSpinBox, SIGNAL(valueChanged(int)), chainLengthSlider, SLOT(setValue(int)));
         QObject::connect(chainLengthSlider, SIGNAL(sliderMoved(int)), chainLengthSpinBox, SLOT(setValue(int)));
-        QObject::connect(componentSizeSpinBox, SIGNAL(valueChanged(int)), componentSizeSlider, SLOT(setValue(int)));
-        QObject::connect(componentSizeSlider, SIGNAL(valueChanged(int)), componentSizeSpinBox, SLOT(setValue(int)));
-        QObject::connect(optComboBox, SIGNAL(currentIndexChanged(int)), DialogSimParameters, SLOT(enableComponentOptions(int)));
+        QObject::connect(lrsSizeSpinBox, SIGNAL(valueChanged(int)), lrsSizeSlider, SLOT(setValue(int)));
+        QObject::connect(lrsSizeSlider, SIGNAL(valueChanged(int)), lrsSizeSpinBox, SLOT(setValue(int)));
+        QObject::connect(optComboBox, SIGNAL(currentIndexChanged(int)), DialogSimParameters, SLOT(enableOptimizationOptions(int)));
+        QObject::connect(estimateEUCheckBox, SIGNAL(toggled(bool)), DialogSimParameters, SLOT(enableEstimateEUOptions(bool)));
 
         additionalParametersTabWidget->setCurrentIndex(0);
 
@@ -407,25 +392,25 @@ public:
     void retranslateUi(QDialog *DialogSimParameters)
     {
         DialogSimParameters->setWindowTitle(QApplication::translate("DialogSimParameters", "Set Parameters", 0));
-        optLabel->setText(QApplication::translate("DialogSimParameters", "Optimization Scheme", 0));
-        utilLabel->setText(QApplication::translate("DialogSimParameters", "Utility Scheme", 0));
-        componentSizeLabel->setText(QApplication::translate("DialogSimParameters", "Maximum Component Size", 0));
         optComboBox->clear();
         optComboBox->insertItems(0, QStringList()
-         << QApplication::translate("DialogSimParameters", "Utility", 0)
-         << QApplication::translate("DialogSimParameters", "Expected Utility", 0)
-         << QApplication::translate("DialogSimParameters", "Fallbacks", 0)
-         << QApplication::translate("DialogSimParameters", "Extended Fallbacks", 0)
+         << QApplication::translate("DialogSimParameters", "Cycles and Chains", 0)
+         << QApplication::translate("DialogSimParameters", "Cycles and Chains With Fallbacks", 0)
+         << QApplication::translate("DialogSimParameters", "Locally Relevant Subgraphs", 0)
         );
+        optLabel->setText(QApplication::translate("DialogSimParameters", "Optimization Scheme", 0));
+        componentSizeLabel->setText(QApplication::translate("DialogSimParameters", "Maximum Subgraph Size", 0));
         chainLengthLabel->setText(QApplication::translate("DialogSimParameters", "Maximum Chain Length", 0));
+        cycleSizeLabel->setText(QApplication::translate("DialogSimParameters", "Maximum Cycle Size", 0));
+        utilLabel->setText(QApplication::translate("DialogSimParameters", "Utility Scheme", 0));
         utilComboBox->clear();
         utilComboBox->insertItems(0, QStringList()
          << QApplication::translate("DialogSimParameters", "Transplants", 0)
          << QApplication::translate("DialogSimParameters", "5 Year Survival", 0)
          << QApplication::translate("DialogSimParameters", "10 Year Survival", 0)
-         << QApplication::translate("DialogSimParameters", "Score", 0)
+         << QApplication::translate("DialogSimParameters", "Difficult-to-Transplant", 0)
+         << QApplication::translate("DialogSimParameters", "Assigned Score", 0)
         );
-        cycleSizeLabel->setText(QApplication::translate("DialogSimParameters", "Maximum Cycle Size", 0));
         praCheckBox->setText(QApplication::translate("DialogSimParameters", "Add Advantage to High PRA Candidates", 0));
         praCutoffLabel->setText(QApplication::translate("DialogSimParameters", "Cutoff", 0));
         praAdvantageLabel->setText(QApplication::translate("DialogSimParameters", "Value", 0));
@@ -433,13 +418,6 @@ public:
         estimateEUCheckBox->setText(QApplication::translate("DialogSimParameters", "Estimate Expected Utility", 0));
         numberOfEUSimLabel->setText(QApplication::translate("DialogSimParameters", "Number of Expected Utility Simulations", 0));
         additionalParametersTabWidget->setTabText(additionalParametersTabWidget->indexOf(numericalParametersTab), QApplication::translate("DialogSimParameters", "Numerical Parameters", 0));
-        chainStorageLabel->setText(QApplication::translate("DialogSimParameters", "Chains Are Stored:", 0));
-        chainStorageComboBox->clear();
-        chainStorageComboBox->insertItems(0, QStringList()
-         << QApplication::translate("DialogSimParameters", "As They Are Found", 0)
-         << QApplication::translate("DialogSimParameters", "First", 0)
-         << QApplication::translate("DialogSimParameters", "Last", 0)
-        );
         reserveOtoOBox->setText(QApplication::translate("DialogSimParameters", "Reserve O Donors for O Recipients", 0));
         checkAdditionalHLABox->setText(QApplication::translate("DialogSimParameters", "Check Additional HLA Information", 0));
         compatibleBox->setText(QApplication::translate("DialogSimParameters", "Include Compatible Pairs in Match Run", 0));

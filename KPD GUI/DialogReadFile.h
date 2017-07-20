@@ -1,9 +1,8 @@
 #ifndef DIALOGREADFILE_H
 #define DIALOGREADFILE_H
 
-#include <QDialog>
-#include <QFileDialog>
-#include <QFileInfo>
+#include <QtGui>
+#include <QtWidgets>
 
 #include "ui_DialogReadFile.h"
 

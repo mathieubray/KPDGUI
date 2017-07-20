@@ -1,4 +1,3 @@
-#include <QtGui>
 
 #include "DialogReadFile.h"
 
@@ -17,6 +16,7 @@ void ReadFileDialog::browse(){
 	pairFileLineEdit->setText(fileName);
 }
 
+//Check whether file exists and is a 'csv'
 void ReadFileDialog::checkValidFile(QString file){
 	QFileInfo fileInfo(file);
 

@@ -16,50 +16,40 @@ class KPDGUIGraphicsScene : public QGraphicsScene
 public:
 	KPDGUIGraphicsScene();
 	~KPDGUIGraphicsScene();	
+
+	void addNode(KPDGUINode * node);
+	void addNodes(QVector<KPDGUINode *> nodes, QString layout);
+	
+	void raiseZValue();
+
 	
 protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
-private slots:
-	/*void addAssociatedDonor();
-	void highlightRelevantStructures();
-	void highlightRelevantSolutions();
-	void editNode();
-	void holdNode();
-	void unholdNode();
-	void deleteNode();
 
-	void holdMultipleNodes();
-	void unholdMultipleNodes();
-	void clusterMultipleNodes();
-	void deleteMultipleNodes();
+private slots:
+
+	void edit();
+	void changeStatus();
+
+	void cluster();
 
 	void selectAll();
-	void clearHighlights();*/
+
 
 private:
 
-	//int mode;
+	int zValue;
+	int nodePlacementSequenceNumber;
 
-	//void createNodeActions();
+	void createActions();
 	
-	/*QAction * addAssociatedDonorAction;
-	QAction * highlightStructuresAction;
-	QAction * highlightSolutionsAction;
-	QAction * editNodeAction;
-	QAction * holdNodeAction;
-	QAction * unholdNodeAction;
-	QAction * deleteNodeAction;
+	QAction * editAction;
+	QAction * changeStatusAction;
 
-	QAction * holdMultipleNodesAction;
-	QAction * unholdMultipleNodesAction;
-	QAction * clusterMultipleNodesAction;
-	QAction * deleteMultipleNodesAction;
+	QAction * clusterAction;
 
 	QAction * selectAllAction;
-	QAction * clearHighlightsAction;*/
-
-	//QStringList hlaList;
 
 };
 

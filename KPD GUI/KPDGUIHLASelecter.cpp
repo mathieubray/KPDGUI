@@ -1,16 +1,15 @@
-#include "MultiSelectCompleter.h"
+#include "KPDGUIHLASelecter.h"
 
-MultiSelectCompleter::MultiSelectCompleter(const QStringList& items, QObject* parent)
-	: QCompleter(items, parent)
-{
+KPDGUIHLASelecter::KPDGUIHLASelecter(const QStringList &hlaList, QObject * parent) : QCompleter(hlaList, parent) {
+
 }
 
-MultiSelectCompleter::~MultiSelectCompleter()
-{
+KPDGUIHLASelecter::~KPDGUIHLASelecter() {
+
 }
 
-QString MultiSelectCompleter::pathFromIndex(const QModelIndex& index) const
-{
+QString KPDGUIHLASelecter::pathFromIndex(const QModelIndex &index) const {
+	
 	QString path = QCompleter::pathFromIndex(index);
 
 	QString text = static_cast<QLineEdit*>(widget())->text();
@@ -22,8 +21,8 @@ QString MultiSelectCompleter::pathFromIndex(const QModelIndex& index) const
 	return path;
 }
 
-QStringList MultiSelectCompleter::splitPath(const QString& path) const
-{
+QStringList KPDGUIHLASelecter::splitPath(const QString &path) const {
+	
 	int pos = path.lastIndexOf(';') + 1;
 
 	while (pos < path.length() && path.at(pos) == QLatin1Char(' '))

@@ -1,12 +1,13 @@
 #ifndef DIALOGSIMPARAM_H
 #define DIALOGSIMPARAM_H
 
-#include <QDialog>
+#include <QtGui>
+#include <QtWidgets>
 
 #include "ui_DialogSimParameters.h"
 
 
-class KPDGUISimParameters;
+class KPDGUIParameters;
 
 class DialogSimParameters : public QDialog, public Ui_DialogSimParameters
 {
@@ -14,14 +15,13 @@ class DialogSimParameters : public QDialog, public Ui_DialogSimParameters
 
 public:
 	DialogSimParameters(QWidget *parent = 0);
-	DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget *parent = 0);
+	DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *parent = 0);
 
 public slots:
-	void enableComponentOptions(int index);
+	void enableOptimizationOptions(int index);
 	void enablePRAOptions(bool enabled);
 	void enableBridgeDonorOptions(bool enabled);
-	
-	//void changeLabel(int index);
+	void enableEstimateEUOptions(bool enabled);
 
 };
 

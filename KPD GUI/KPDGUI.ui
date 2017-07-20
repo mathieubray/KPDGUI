@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1060</width>
-    <height>760</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -34,141 +34,53 @@
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QSplitter" name="splitter">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+       <widget class="KPDGUIGraphicsView" name="kpdGraphicsView">
+        <property name="minimumSize">
+         <size>
+          <width>500</width>
+          <height>300</height>
+         </size>
         </property>
-        <property name="childrenCollapsible">
-         <bool>false</bool>
+        <property name="dragMode">
+         <enum>QGraphicsView::RubberBandDrag</enum>
         </property>
-        <widget class="QTabWidget" name="nodeAndMatchWidget">
-         <property name="minimumSize">
-          <size>
-           <width>300</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>300</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="tabPosition">
-          <enum>QTabWidget::South</enum>
-         </property>
-         <property name="currentIndex">
-          <number>-1</number>
-         </property>
-        </widget>
+        <property name="transformationAnchor">
+         <enum>QGraphicsView::AnchorViewCenter</enum>
+        </property>
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="centralPanelLayout">
-        <item>
-         <widget class="KPDGUIGraphicsView" name="graphicsView">
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>300</height>
-           </size>
-          </property>
-          <property name="dragMode">
-           <enum>QGraphicsView::RubberBandDrag</enum>
-          </property>
-          <property name="transformationAnchor">
-           <enum>QGraphicsView::AnchorViewCenter</enum>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="KPDGUIDashboard" name="dashboard">
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>125</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>125</height>
-           </size>
-          </property>
-          <property name="tabPosition">
-           <enum>QTabWidget::South</enum>
-          </property>
-          <property name="tabShape">
-           <enum>QTabWidget::Rounded</enum>
-          </property>
-          <property name="currentIndex">
-           <number>-1</number>
-          </property>
-          <property name="elideMode">
-           <enum>Qt::ElideNone</enum>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QSplitter" name="rightPanelLayout">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+       <widget class="QTabWidget" name="kpdListView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="childrenCollapsible">
-         <bool>false</bool>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
         </property>
-        <widget class="QTreeWidget" name="structureWidget">
-         <property name="minimumSize">
-          <size>
-           <width>250</width>
-           <height>100</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string>Structures</string>
-          </property>
-         </column>
-        </widget>
-        <widget class="QTreeWidget" name="solutionWidget">
-         <property name="minimumSize">
-          <size>
-           <width>250</width>
-           <height>100</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>250</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="editTriggers">
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::MultiSelection</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string>Solutions</string>
-          </property>
-         </column>
-        </widget>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="tabPosition">
+         <enum>QTabWidget::South</enum>
+        </property>
+        <property name="currentIndex">
+         <number>-1</number>
+        </property>
        </widget>
       </item>
      </layout>
@@ -191,12 +103,12 @@
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSave_As"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="actionAdd_Pair"/>
-    <addaction name="actionAdd_AD"/>
-    <addaction name="actionLoad_Pairs_from_File"/>
+    <addaction name="actionAddPairing"/>
+    <addaction name="actionAddNDD"/>
+    <addaction name="actionLoadPairings"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -204,13 +116,13 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionZoom_In"/>
-    <addaction name="actionZoom_Out"/>
+    <addaction name="actionSurvival_Calculator"/>
     <addaction name="separator"/>
-    <addaction name="actionMouse_Tool"/>
-    <addaction name="actionHand_Tool"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
     <addaction name="separator"/>
-    <addaction name="actionView_Structures_Solutions"/>
+    <addaction name="actionMouseTool"/>
+    <addaction name="actionHandTool"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -222,23 +134,22 @@
     <property name="title">
      <string>Match Run</string>
     </property>
-    <addaction name="actionRun"/>
-    <addaction name="actionParameters"/>
+    <addaction name="actionPerformMatchRun"/>
+    <addaction name="actionSetParameters"/>
     <addaction name="separator"/>
-    <addaction name="actionClear_Solutions"/>
+    <addaction name="actionClearArrangements"/>
+    <addaction name="actionClearSolutions"/>
    </widget>
    <widget class="QMenu" name="menuDisplay">
     <property name="title">
      <string>Display</string>
     </property>
-    <addaction name="actionPair_AD_Settings"/>
+    <addaction name="actionNodeDisplaySettings"/>
     <addaction name="separator"/>
-    <addaction name="actionDisplay_Compatibilities_Within_Selection"/>
-    <addaction name="actionDisplay_Selected_Compatibilities"/>
-    <addaction name="actionDisplay_All_Compatibilities"/>
-    <addaction name="actionDisplay_No_Compatibilities"/>
-    <addaction name="separator"/>
-    <addaction name="actionRefresh"/>
+    <addaction name="actionDisplayCompatibilitiesWithinSelection"/>
+    <addaction name="actionDisplaySelectedCompatibilities"/>
+    <addaction name="actionDisplayAllCompatibilities"/>
+    <addaction name="actionDisplayNoCompatibilities"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMatch_Run"/>
@@ -279,14 +190,12 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
-   <addaction name="actionRun"/>
+   <addaction name="actionPerformMatchRun"/>
    <addaction name="separator"/>
-   <addaction name="actionRefresh"/>
-   <addaction name="separator"/>
-   <addaction name="actionZoom_Out"/>
-   <addaction name="actionZoom_In"/>
-   <addaction name="actionMouse_Tool"/>
-   <addaction name="actionHand_Tool"/>
+   <addaction name="actionZoomOut"/>
+   <addaction name="actionZoomIn"/>
+   <addaction name="actionMouseTool"/>
+   <addaction name="actionHandTool"/>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -320,7 +229,7 @@
     <string>Ctrl+Q</string>
    </property>
   </action>
-  <action name="actionAdd_Pair">
+  <action name="actionAddPairing">
    <property name="text">
     <string>Add &amp;Donor-Candidate Pairing</string>
    </property>
@@ -328,17 +237,23 @@
     <string>Ctrl+P</string>
    </property>
   </action>
-  <action name="actionAdd_AD">
+  <action name="actionAddNDD">
    <property name="text">
-    <string>Add Altruistic Donor</string>
+    <string>Add Non-Directed (Altruistic) Donor</string>
+   </property>
+   <property name="toolTip">
+    <string>Add NDD</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+P</string>
    </property>
   </action>
-  <action name="actionLoad_Pairs_from_File">
+  <action name="actionLoadPairings">
    <property name="text">
     <string>&amp;Load Pairings from File</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Pairings</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+L</string>
@@ -349,12 +264,15 @@
     <string>&amp;Exit</string>
    </property>
   </action>
-  <action name="actionRun">
+  <action name="actionPerformMatchRun">
    <property name="icon">
     <iconset resource="mainwindow.qrc">
      <normaloff>:/images/images/run.png</normaloff>:/images/images/run.png</iconset>
    </property>
    <property name="text">
+    <string>Perform Match Run</string>
+   </property>
+   <property name="toolTip">
     <string>Perform Match Run</string>
    </property>
    <property name="shortcut">
@@ -363,10 +281,10 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
-  <action name="actionParameters">
+  <action name="actionSetParameters">
    <property name="text">
     <string>Set Parameters</string>
    </property>
@@ -383,7 +301,7 @@
     <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSave_As">
+  <action name="actionSaveAs">
    <property name="text">
     <string>&amp;Save As</string>
    </property>
@@ -391,23 +309,12 @@
     <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionView_PairInfo">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="checked">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>View Node Info</string>
-   </property>
-  </action>
-  <action name="actionClear_Solutions">
+  <action name="actionClearSolutions">
    <property name="text">
     <string>Clear Solutions</string>
    </property>
   </action>
-  <action name="actionZoom_Out">
+  <action name="actionZoomOut">
    <property name="icon">
     <iconset resource="mainwindow.qrc">
      <normaloff>:/images/images/zoomout.png</normaloff>:/images/images/zoomout.png</iconset>
@@ -419,7 +326,7 @@
     <string>Ctrl+-</string>
    </property>
   </action>
-  <action name="actionZoom_In">
+  <action name="actionZoomIn">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -434,7 +341,7 @@
     <string>Ctrl+=</string>
    </property>
   </action>
-  <action name="actionHand_Tool">
+  <action name="actionHandTool">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -449,7 +356,7 @@
     <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionMouse_Tool">
+  <action name="actionMouseTool">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -464,7 +371,7 @@
     <string>Ctrl+M</string>
    </property>
   </action>
-  <action name="actionPair_AD_Settings">
+  <action name="actionNodeDisplaySettings">
    <property name="text">
     <string>Node Display Settings...</string>
    </property>
@@ -472,7 +379,7 @@
     <string>Ctrl+D</string>
    </property>
   </action>
-  <action name="actionDisplay_No_Compatibilities">
+  <action name="actionDisplayNoCompatibilities">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -480,7 +387,7 @@
     <string>Display No Compatibilities</string>
    </property>
   </action>
-  <action name="actionDisplay_All_Compatibilities">
+  <action name="actionDisplayAllCompatibilities">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -488,7 +395,7 @@
     <string>Display All Compatibilities</string>
    </property>
   </action>
-  <action name="actionDisplay_Selected_Compatibilities">
+  <action name="actionDisplaySelectedCompatibilities">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -496,7 +403,7 @@
     <string>Display Selected Compatibilities</string>
    </property>
   </action>
-  <action name="actionDisplay_Compatibilities_Within_Selection">
+  <action name="actionDisplayCompatibilitiesWithinSelection">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -505,17 +412,6 @@
    </property>
    <property name="text">
     <string>Display Compatibilities Within Selection</string>
-   </property>
-  </action>
-  <action name="actionView_Structures_Solutions">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>View Structures/Solutions</string>
    </property>
   </action>
   <action name="actionRefresh">
@@ -527,14 +423,18 @@
     <string>Refresh</string>
    </property>
   </action>
+  <action name="actionSurvival_Calculator">
+   <property name="text">
+    <string>Survival Calculator</string>
+   </property>
+  </action>
+  <action name="actionClearArrangements">
+   <property name="text">
+    <string>Clear Arrangements</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KPDGUIDashboard</class>
-   <extends>QTabWidget</extends>
-   <header>KPDGUIDashboard.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KPDGUIGraphicsView</class>
    <extends>QGraphicsView</extends>
@@ -547,7 +447,7 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>graphicsView</tabstop>
+  <tabstop>kpdGraphicsView</tabstop>
  </tabstops>
  <resources>
   <include location="mainwindow.qrc"/>
@@ -634,7 +534,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionSave_As</sender>
+   <sender>actionSaveAs</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>saveKPDAs()</slot>
@@ -650,7 +550,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionAdd_Pair</sender>
+   <sender>actionAddPairing</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>addNewNode()</slot>
@@ -666,7 +566,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionParameters</sender>
+   <sender>actionSetParameters</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>setSimParameters()</slot>
@@ -682,7 +582,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionLoad_Pairs_from_File</sender>
+   <sender>actionLoadPairings</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>loadNodes()</slot>
@@ -698,10 +598,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionAdd_AD</sender>
+   <sender>actionAddNDD</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
-   <slot>addNewAD()</slot>
+   <slot>addNewNDD()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -714,7 +614,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionRun</sender>
+   <sender>actionPerformMatchRun</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>performMatchRun()</slot>
@@ -730,7 +630,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionClear_Solutions</sender>
+   <sender>actionClearSolutions</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>clearSolutions()</slot>
@@ -746,7 +646,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionZoom_In</sender>
+   <sender>actionZoomIn</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>zoomIn()</slot>
@@ -762,7 +662,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionZoom_Out</sender>
+   <sender>actionZoomOut</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>zoomOut()</slot>
@@ -778,7 +678,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionHand_Tool</sender>
+   <sender>actionHandTool</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeToHandMode()</slot>
@@ -794,7 +694,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionMouse_Tool</sender>
+   <sender>actionMouseTool</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeToMouseMode()</slot>
@@ -810,7 +710,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionDisplay_All_Compatibilities</sender>
+   <sender>actionDisplayAllCompatibilities</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeMatchViewMode_All()</slot>
@@ -826,7 +726,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionDisplay_Compatibilities_Within_Selection</sender>
+   <sender>actionDisplayCompatibilitiesWithinSelection</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeMatchViewMode_Within()</slot>
@@ -842,7 +742,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionDisplay_No_Compatibilities</sender>
+   <sender>actionDisplayNoCompatibilities</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeMatchViewMode_None()</slot>
@@ -858,7 +758,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionDisplay_Selected_Compatibilities</sender>
+   <sender>actionDisplaySelectedCompatibilities</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
@@ -870,86 +770,6 @@
     <hint type="destinationlabel">
      <x>421</x>
      <y>279</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionView_Structures_Solutions</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>structureWidget</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>822</x>
-     <y>183</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionView_Structures_Solutions</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>solutionWidget</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>822</x>
-     <y>436</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphicsView</sender>
-   <signal>zoomIn()</signal>
-   <receiver>KPDGUI</receiver>
-   <slot>zoomIn()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>752</x>
-     <y>338</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>277</x>
-     <y>335</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphicsView</sender>
-   <signal>zoomOut()</signal>
-   <receiver>KPDGUI</receiver>
-   <slot>zoomOut()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>783</x>
-     <y>489</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>275</x>
-     <y>429</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>graphicsView</sender>
-   <signal>mouseReleased()</signal>
-   <receiver>KPDGUI</receiver>
-   <slot>updateVisibility()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>551</x>
-     <y>327</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>130</y>
     </hint>
    </hints>
   </connection>
@@ -970,7 +790,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionPair_AD_Settings</sender>
+   <sender>actionNodeDisplaySettings</sender>
    <signal>triggered()</signal>
    <receiver>KPDGUI</receiver>
    <slot>changeNodeViewMode()</slot>
@@ -985,6 +805,70 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>kpdGraphicsView</sender>
+   <signal>zoomIn()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kpdGraphicsView</sender>
+   <signal>zoomOut()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>429</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSurvival_Calculator</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>runSurvivalCalculator()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClearArrangements</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>clearArrangements()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>newKPD()</slot>
@@ -996,7 +880,7 @@
   <slot>addNewNode()</slot>
   <slot>setSimParameters()</slot>
   <slot>loadNodes()</slot>
-  <slot>addNewAD()</slot>
+  <slot>addNewNDD()</slot>
   <slot>updateViews()</slot>
   <slot>toggleArrows(bool)</slot>
   <slot>performMatchRun()</slot>
@@ -1006,7 +890,7 @@
   <slot>zoom(int)</slot>
   <slot>changeMatchViewMode_All()</slot>
   <slot>changeNodeViewMode()</slot>
-  <slot>newPairListSelectionActions(QTreeWidgetItem*)</slot>
+  <slot>newNodeListSelectionActions(QTreeWidgetItem*)</slot>
   <slot>solutionTreeCustomMenu(QPoint)</slot>
   <slot>cycleTreeCustomMenu(QPoint)</slot>
   <slot>sortLists()</slot>
@@ -1018,5 +902,8 @@
   <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
   <slot>screenCustomMenu(QPoint)</slot>
   <slot>updateVisibility()</slot>
+  <slot>refresh()</slot>
+  <slot>runSurvivalCalculator()</slot>
+  <slot>clearArrangements()</slot>
  </slots>
 </ui>

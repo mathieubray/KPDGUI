@@ -102,7 +102,7 @@ public:
     void retranslateUi(QDialog *DialogReadFile)
     {
         DialogReadFile->setWindowTitle(QApplication::translate("DialogReadFile", "Load Pairings and ADs From File", 0));
-        pairFileLabel->setText(QApplication::translate("DialogReadFile", "Pair File", 0));
+        pairFileLabel->setText(QApplication::translate("DialogReadFile", "File", 0));
         pairFileToolButton->setText(QApplication::translate("DialogReadFile", "Browse...", 0));
         layoutLabel->setText(QApplication::translate("DialogReadFile", "Layout", 0));
         layoutComboBox->clear();

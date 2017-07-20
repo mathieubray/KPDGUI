@@ -1,9 +1,7 @@
-#include <QtGui>
 
 #include "DialogDisplaySettings.h"
 
 #include "KPDGUIDisplaySettings.h"
-
 
 //Basic Display Dialog Constructor
 DialogDisplaySettings::DialogDisplaySettings(QWidget *parent) : QDialog(parent)
@@ -17,11 +15,13 @@ DialogDisplaySettings::DialogDisplaySettings(KPDGUIDisplaySettings *displaySetti
 {
 	setupUi(this);
 
+	nodeDisplayModeComboBox->setCurrentIndex(KPDFunctions::nodeDisplayModeToInt(displaySettings->getNodeDisplayMode()));
+
 	//Display All Nodes
 	allNodesButton->setChecked(displaySettings->getShowAllNodes());
 	
-	//Display Nodes in Structures
-	showStructuresRadioButton->setChecked(displaySettings->getShowNodesInStructures());
+	//Display Nodes in Arrangements
+	showArrangementsRadioButton->setChecked(displaySettings->getShowNodesInArrangements());
 	
 	//Display Nodes in Solutions
 	showSolutionsRadioButton->setChecked(displaySettings->getShowNodesInSolutions());

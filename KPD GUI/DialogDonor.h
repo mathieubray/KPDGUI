@@ -1,12 +1,14 @@
-#ifndef DIALOGAD_H
-#define DIALOGAD_H
+#ifndef DIALOGDONOR_H
+#define DIALOGDONOR_H
 
-#include <QDialog>
+#include <QtGui>
 #include <QtWidgets>
 
 #include "ui_DialogDonor.h"
 
-#include "EnumsFunctions.h"
+#include "KPDGUIHLASelecter.h"
+
+#include "KPDGUIEnumsFunctions.h"
 
 class KPDGUIDonor;
 
@@ -15,13 +17,20 @@ class DialogDonor : public QDialog, public Ui_DialogDonor
 	Q_OBJECT
 
 public:
-	DialogDonor(QWidget * parent = 0);
-	DialogDonor(KPDGUIDonor * donor, bool disableMajorEdits, QWidget *parent = 0);
+	DialogDonor(bool showAdditionalDonorButton = false, QWidget * parent = 0);
+	DialogDonor(KPDGUIDonor * donor, bool showAdditionalDonorButton = false, QWidget *parent = 0);
 
 	QTextEdit * commentTextEdit;
 
+	bool getAdditionalDonor();
+
+public slots:
+	void setAdditionalDonor();
+
 private:
 	void additionalSetup();
+
+	bool additionalDonor;
 };
 
 #endif

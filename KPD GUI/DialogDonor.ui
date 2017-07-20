@@ -6,24 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
-    <height>500</height>
+    <width>410</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>411</width>
-    <height>500</height>
+    <width>410</width>
+    <height>559</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>411</width>
-    <height>500</height>
+    <width>410</width>
+    <height>559</height>
    </size>
   </property>
   <property name="windowTitle">
-   <string>Add New AD</string>
+   <string>Add New NDD</string>
   </property>
   <widget class="QGroupBox" name="donorGroupBox">
    <property name="geometry">
@@ -31,19 +31,19 @@
      <x>10</x>
      <y>10</y>
      <width>391</width>
-     <height>141</height>
+     <height>201</height>
     </rect>
    </property>
    <property name="title">
     <string>Donor Information</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>21</y>
       <width>371</width>
-      <height>111</height>
+      <height>167</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -54,39 +54,6 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="donorNameLineEdit">
-       <property name="text">
-        <string>Donor Name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <spacer name="horizontalSpacer_4">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>17</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="3" colspan="2">
-      <widget class="QCheckBox" name="donorStatusCheckBox">
-       <property name="layoutDirection">
-        <enum>Qt::RightToLeft</enum>
-       </property>
-       <property name="text">
-        <string>Include in Match Run</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="donorAgeLabel">
        <property name="text">
@@ -94,7 +61,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="1" column="2">
       <widget class="QSpinBox" name="donorAgeSpinBox">
        <property name="maximum">
         <number>130</number>
@@ -104,7 +71,7 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="1" column="3">
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -117,14 +84,14 @@
        </property>
       </spacer>
      </item>
-     <item row="1" column="3">
+     <item row="1" column="4">
       <widget class="QLabel" name="donorGenderLabel">
        <property name="text">
         <string>Gender</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="4">
+     <item row="1" column="5">
       <widget class="QComboBox" name="donorGenderComboBox">
        <item>
         <property name="text">
@@ -145,7 +112,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="2" column="2">
       <widget class="QComboBox" name="donorBTComboBox">
        <item>
         <property name="text">
@@ -169,7 +136,7 @@
        </item>
       </widget>
      </item>
-     <item row="2" column="2">
+     <item row="2" column="3">
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -182,14 +149,14 @@
        </property>
       </spacer>
      </item>
-     <item row="2" column="3">
+     <item row="2" column="4">
       <widget class="QLabel" name="donorWeightLabel">
        <property name="text">
         <string>Weight (kg)</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="4">
+     <item row="2" column="5">
       <widget class="QDoubleSpinBox" name="donorWeightSpinBox">
        <property name="maximum">
         <double>400.000000000000000</double>
@@ -199,17 +166,17 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="3" column="0" colspan="2">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Failure Probability</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="3" column="2">
       <widget class="QDoubleSpinBox" name="donorFailureProbabilitySpinBox"/>
      </item>
-     <item row="3" column="2">
+     <item row="3" column="3">
       <spacer name="horizontalSpacer_3">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -222,20 +189,94 @@
        </property>
       </spacer>
      </item>
-     <item row="3" column="3">
+     <item row="3" column="4">
       <widget class="QLabel" name="donorHeightLabel">
        <property name="text">
         <string>Height (m)</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="4">
+     <item row="3" column="5">
       <widget class="QDoubleSpinBox" name="donorHeightSpinBox">
        <property name="maximum">
         <double>3.000000000000000</double>
        </property>
        <property name="value">
         <double>1.500000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Race</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="2">
+      <widget class="QComboBox" name="donorRaceComboBox">
+       <item>
+        <property name="text">
+         <string>White</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Black</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Hispanic</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Other</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="4" column="3">
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>17</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="4" column="4" colspan="2">
+      <widget class="QCheckBox" name="donorCigaretteCheckBox">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>Cigarette User</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="4" colspan="2">
+      <widget class="QCheckBox" name="donorStatusCheckBox">
+       <property name="layoutDirection">
+        <enum>Qt::RightToLeft</enum>
+       </property>
+       <property name="text">
+        <string>Include in Match Run</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" colspan="4">
+      <widget class="QLineEdit" name="donorNameLineEdit">
+       <property name="text">
+        <string>Donor Name</string>
        </property>
       </widget>
      </item>
@@ -246,7 +287,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>160</y>
+     <y>220</y>
      <width>391</width>
      <height>331</height>
     </rect>
@@ -463,7 +504,14 @@
     <item>
      <layout class="QHBoxLayout" name="buttonLayout">
       <item>
-       <spacer name="buttonSpacer">
+       <widget class="QPushButton" name="additionalDonorButton">
+        <property name="text">
+         <string>Save and Add Donor</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_5">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -499,8 +547,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>220</x>
-     <y>120</y>
+     <x>398</x>
+     <y>521</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -515,8 +563,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>246</x>
-     <y>120</y>
+     <x>398</x>
+     <y>521</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -524,5 +572,40 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>additionalDonorButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDonor</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>111</x>
+     <y>540</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>172</x>
+     <y>526</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>additionalDonorButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDonor</receiver>
+   <slot>setAdditionalDonor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>56</x>
+     <y>529</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>249</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>setAdditionalDonor()</slot>
+ </slots>
 </ui>

@@ -3,18 +3,17 @@
 KPDGUINodeList::KPDGUINodeList(QWidget *parent) : QTreeWidget(parent){
 	
 	QStringList headers;
-	headers << "Node" << "Type" << "Name" << "Donors";
+	headers << "Node" << "Type" << "Name" << "Donors" << "";
 	setHeaderLabels(headers);
 	
-	header()->resizeSection(0, 50);
-	header()->resizeSection(1, 50);
-	header()->resizeSection(2, 120);
-	header()->resizeSection(3, 50);
-	
+	header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+			
 	setSortingEnabled(true);
+	setMouseTracking(true);
 	
 	sortItems(0, Qt::AscendingOrder);
 	setContextMenuPolicy(Qt::CustomContextMenu);
+	setSelectionMode(QAbstractItemView::NoSelection);
 
 }
 
@@ -22,10 +21,18 @@ KPDGUINodeList::~KPDGUINodeList(){
 
 }
 
-void KPDGUINodeList::mouseReleaseEvent(QMouseEvent *event)
-{
-	QTreeWidget::mouseReleaseEvent(event);
+void KPDGUINodeList::updateText() {
 
-	emit mouseReleased();
+	for (int i = 0; i < topLevelItemCount(); i++) {
+		QTreeWidgetItem * item = topLevelItem(0);
+
+		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
+		if (wrapper) {
+			wrapper->updateText();
+		}
+	}
+
+
 }
+
 

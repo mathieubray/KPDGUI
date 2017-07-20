@@ -2,10 +2,13 @@
 #include "KPDGUIDisplaySettings.h"
 
 KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
+
+	nodeDisplayMode = SEPARATE_DONOR_CANDIDATE;
+
 	showAllNodes = true;
 	showNodeSubset = false;
+	showNodesInArrangements = false;
 	showNodesInSolutions = false;
-	showNodesInStructures = false;
 	showExcludedNodes = true;
 	showNodesWithNoCompatibilities = true;
 	showCandidatesInPRARange = false;
@@ -22,9 +25,11 @@ KPDGUIDisplaySettings::~KPDGUIDisplaySettings(){
 
 bool KPDGUIDisplaySettings::changeDisplaySettings(DialogDisplaySettings * d){
 
+	nodeDisplayMode = KPDFunctions::intToNodeDisplayMode(d->nodeDisplayModeComboBox->currentIndex());
+
 	showAllNodes = d->allNodesButton->isChecked();
 	showNodeSubset = d->nodeSubsetButton->isChecked();
-	showNodesInStructures = d->showStructuresRadioButton->isChecked();
+	showNodesInArrangements = d->showArrangementsRadioButton->isChecked();
 	showNodesInSolutions = d->showSolutionsRadioButton->isChecked();
 	showExcludedNodes = d->showExcludedCheckBox->isChecked();
 	showNodesWithNoCompatibilities = d->showIncompatibleCheckBox->isChecked();
@@ -45,6 +50,10 @@ bool KPDGUIDisplaySettings::changeDisplaySettings(DialogDisplaySettings * d){
 	return true;
 }
 
+KPDNodeDisplayMode KPDGUIDisplaySettings::getNodeDisplayMode() const {
+	return nodeDisplayMode;
+}
+
 bool KPDGUIDisplaySettings::getShowAllNodes() const {
 	return showAllNodes;
 }
@@ -53,8 +62,8 @@ bool KPDGUIDisplaySettings::getShowNodeSubset() const {
 	return showNodeSubset;
 }
 
-bool KPDGUIDisplaySettings::getShowNodesInStructures() const {
-	return showNodesInStructures;
+bool KPDGUIDisplaySettings::getShowNodesInArrangements() const {
+	return showNodesInArrangements;
 }
 
 bool KPDGUIDisplaySettings::getShowNodesInSolutions() const {
@@ -85,6 +94,10 @@ KPDMatchDisplayMode KPDGUIDisplaySettings::getMatchDisplayMode() const {
 	return matchDisplayMode;
 }
 
+void KPDGUIDisplaySettings::setNodeDisplayMode(KPDNodeDisplayMode mode) {
+	nodeDisplayMode = mode;
+}
+
 void KPDGUIDisplaySettings::setShowAllNodes(bool show){
 	showAllNodes = show;
 }
@@ -93,8 +106,8 @@ void KPDGUIDisplaySettings::setShowNodeSubset(bool show){
 	showNodeSubset = show;
 }
 
-void KPDGUIDisplaySettings::setShowNodesInStructures(bool show){
-	showNodesInStructures = show;
+void KPDGUIDisplaySettings::setShowNodesInArrangements(bool show){
+	showNodesInArrangements = show;
 }
 
 void KPDGUIDisplaySettings::setShowNodesInSolutions(bool show){
@@ -125,10 +138,12 @@ void KPDGUIDisplaySettings::setMatchDisplayMode(KPDMatchDisplayMode mode){
 	matchDisplayMode = mode;
 }
 
-QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings)
+QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings)
 {
+	out << qint32(KPDFunctions::nodeDisplayModeToInt(settings.getNodeDisplayMode()));
+
 	out << settings.getShowAllNodes() << settings.getShowNodeSubset()
-		<< settings.getShowNodesInSolutions() << settings.getShowNodesInStructures()
+		<< settings.getShowNodesInSolutions() << settings.getShowNodesInArrangements()
 		<< settings.getShowExcludedNodes() << settings.getShowNodesWithNoCompatibilities()
 		<< settings.getShowCandidatesInPRARange();
 
@@ -139,12 +154,14 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings
 	return out;
 }
 
-QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
+QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 {
+	int nodeDisplayMode;
+
 	bool showAllNodes;
 	bool showNodeSubset;
+	bool showNodesInArrangements;
 	bool showNodesInSolutions;
-	bool showNodesInStructures;
 	bool showExcludedNodes;
 	bool showNodesWithNoCompatibilities;
 	bool showCandidatesInPRARange;
@@ -152,19 +169,23 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 	int minPRA;
 	int maxPRA;
 
-	int mode;
+	int matchDisplayMode;
 	
-	in >> showAllNodes >> showNodeSubset >> showNodesInSolutions >> showNodesInStructures
+	in >> nodeDisplayMode;
+
+	in >> showAllNodes >> showNodeSubset  >> showNodesInArrangements >> showNodesInSolutions
 		>> showExcludedNodes >> showNodesWithNoCompatibilities >> showCandidatesInPRARange;
 
 	in >> minPRA >> maxPRA;
 
-	in >> mode;
+	in >> matchDisplayMode;
+
+	settings.setNodeDisplayMode(KPDFunctions::intToNodeDisplayMode(nodeDisplayMode));
 
 	settings.setShowAllNodes(showAllNodes);
 	settings.setShowNodeSubset(showNodeSubset);
+	settings.setShowNodesInArrangements(showNodesInArrangements);
 	settings.setShowNodesInSolutions(showNodesInSolutions);
-	settings.setShowNodesInStructures(showNodesInStructures);
 	settings.setShowExcludedNodes(showExcludedNodes);
 	settings.setShowNodesWithNoCompatibilities(showNodesWithNoCompatibilities);
 	settings.setShowCandidatesInPRARange(showCandidatesInPRARange);
@@ -172,7 +193,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings)
 	settings.setMinPRA(minPRA);
 	settings.setMaxPRA(maxPRA);
 
-	settings.setMatchDisplayMode(KPDFunctions::intToMatchDisplayMode(mode));
+	settings.setMatchDisplayMode(KPDFunctions::intToMatchDisplayMode(matchDisplayMode));
 
 	return in;
 

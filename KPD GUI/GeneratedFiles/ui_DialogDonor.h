@@ -24,6 +24,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QTabWidget>
@@ -36,12 +37,9 @@ class Ui_DialogDonor
 {
 public:
     QGroupBox *donorGroupBox;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QGridLayout *gridLayout;
     QLabel *donorNameLabel;
-    QLineEdit *donorNameLineEdit;
-    QSpacerItem *horizontalSpacer_4;
-    QCheckBox *donorStatusCheckBox;
     QLabel *donorAgeLabel;
     QSpinBox *donorAgeSpinBox;
     QSpacerItem *horizontalSpacer;
@@ -57,11 +55,17 @@ public:
     QSpacerItem *horizontalSpacer_3;
     QLabel *donorHeightLabel;
     QDoubleSpinBox *donorHeightSpinBox;
-    QWidget *layoutWidget;
+    QLabel *label_2;
+    QComboBox *donorRaceComboBox;
+    QSpacerItem *horizontalSpacer_4;
+    QCheckBox *donorCigaretteCheckBox;
+    QCheckBox *donorStatusCheckBox;
+    QLineEdit *donorNameLineEdit;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout;
     QTabWidget *donorInfoTabWidget;
     QWidget *donorHLAInfoTab;
-    QWidget *layoutWidget1;
+    QWidget *layoutWidget2;
     QVBoxLayout *donorHLAInfoVerticalLayout;
     QHBoxLayout *donorHLAInfoHorizontalLayout;
     QVBoxLayout *donorMajorHLAVerticalLayout;
@@ -98,139 +102,156 @@ public:
     QLabel *donorHLAAdditionalLabel;
     QLineEdit *donorHLALineEdit;
     QHBoxLayout *buttonLayout;
-    QSpacerItem *buttonSpacer;
+    QPushButton *additionalDonorButton;
+    QSpacerItem *horizontalSpacer_5;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *DialogDonor)
     {
         if (DialogDonor->objectName().isEmpty())
             DialogDonor->setObjectName(QStringLiteral("DialogDonor"));
-        DialogDonor->resize(411, 500);
-        DialogDonor->setMinimumSize(QSize(411, 500));
-        DialogDonor->setMaximumSize(QSize(411, 500));
+        DialogDonor->resize(410, 559);
+        DialogDonor->setMinimumSize(QSize(410, 559));
+        DialogDonor->setMaximumSize(QSize(410, 559));
         donorGroupBox = new QGroupBox(DialogDonor);
         donorGroupBox->setObjectName(QStringLiteral("donorGroupBox"));
-        donorGroupBox->setGeometry(QRect(10, 10, 391, 141));
-        widget = new QWidget(donorGroupBox);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 20, 371, 111));
-        gridLayout = new QGridLayout(widget);
+        donorGroupBox->setGeometry(QRect(10, 10, 391, 201));
+        layoutWidget = new QWidget(donorGroupBox);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 21, 371, 167));
+        gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        donorNameLabel = new QLabel(widget);
+        donorNameLabel = new QLabel(layoutWidget);
         donorNameLabel->setObjectName(QStringLiteral("donorNameLabel"));
 
         gridLayout->addWidget(donorNameLabel, 0, 0, 1, 1);
 
-        donorNameLineEdit = new QLineEdit(widget);
-        donorNameLineEdit->setObjectName(QStringLiteral("donorNameLineEdit"));
-
-        gridLayout->addWidget(donorNameLineEdit, 0, 1, 1, 1);
-
-        horizontalSpacer_4 = new QSpacerItem(17, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout->addItem(horizontalSpacer_4, 0, 2, 1, 1);
-
-        donorStatusCheckBox = new QCheckBox(widget);
-        donorStatusCheckBox->setObjectName(QStringLiteral("donorStatusCheckBox"));
-        donorStatusCheckBox->setLayoutDirection(Qt::RightToLeft);
-        donorStatusCheckBox->setChecked(true);
-
-        gridLayout->addWidget(donorStatusCheckBox, 0, 3, 1, 2);
-
-        donorAgeLabel = new QLabel(widget);
+        donorAgeLabel = new QLabel(layoutWidget);
         donorAgeLabel->setObjectName(QStringLiteral("donorAgeLabel"));
 
         gridLayout->addWidget(donorAgeLabel, 1, 0, 1, 1);
 
-        donorAgeSpinBox = new QSpinBox(widget);
+        donorAgeSpinBox = new QSpinBox(layoutWidget);
         donorAgeSpinBox->setObjectName(QStringLiteral("donorAgeSpinBox"));
         donorAgeSpinBox->setMaximum(130);
         donorAgeSpinBox->setValue(40);
 
-        gridLayout->addWidget(donorAgeSpinBox, 1, 1, 1, 1);
+        gridLayout->addWidget(donorAgeSpinBox, 1, 2, 1, 1);
 
         horizontalSpacer = new QSpacerItem(17, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer, 1, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer, 1, 3, 1, 1);
 
-        donorGenderLabel = new QLabel(widget);
+        donorGenderLabel = new QLabel(layoutWidget);
         donorGenderLabel->setObjectName(QStringLiteral("donorGenderLabel"));
 
-        gridLayout->addWidget(donorGenderLabel, 1, 3, 1, 1);
+        gridLayout->addWidget(donorGenderLabel, 1, 4, 1, 1);
 
-        donorGenderComboBox = new QComboBox(widget);
+        donorGenderComboBox = new QComboBox(layoutWidget);
         donorGenderComboBox->setObjectName(QStringLiteral("donorGenderComboBox"));
 
-        gridLayout->addWidget(donorGenderComboBox, 1, 4, 1, 1);
+        gridLayout->addWidget(donorGenderComboBox, 1, 5, 1, 1);
 
-        donorBTLabel = new QLabel(widget);
+        donorBTLabel = new QLabel(layoutWidget);
         donorBTLabel->setObjectName(QStringLiteral("donorBTLabel"));
 
         gridLayout->addWidget(donorBTLabel, 2, 0, 1, 1);
 
-        donorBTComboBox = new QComboBox(widget);
+        donorBTComboBox = new QComboBox(layoutWidget);
         donorBTComboBox->setObjectName(QStringLiteral("donorBTComboBox"));
 
-        gridLayout->addWidget(donorBTComboBox, 2, 1, 1, 1);
+        gridLayout->addWidget(donorBTComboBox, 2, 2, 1, 1);
 
         horizontalSpacer_2 = new QSpacerItem(17, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_2, 2, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer_2, 2, 3, 1, 1);
 
-        donorWeightLabel = new QLabel(widget);
+        donorWeightLabel = new QLabel(layoutWidget);
         donorWeightLabel->setObjectName(QStringLiteral("donorWeightLabel"));
 
-        gridLayout->addWidget(donorWeightLabel, 2, 3, 1, 1);
+        gridLayout->addWidget(donorWeightLabel, 2, 4, 1, 1);
 
-        donorWeightSpinBox = new QDoubleSpinBox(widget);
+        donorWeightSpinBox = new QDoubleSpinBox(layoutWidget);
         donorWeightSpinBox->setObjectName(QStringLiteral("donorWeightSpinBox"));
         donorWeightSpinBox->setMaximum(400);
         donorWeightSpinBox->setValue(60);
 
-        gridLayout->addWidget(donorWeightSpinBox, 2, 4, 1, 1);
+        gridLayout->addWidget(donorWeightSpinBox, 2, 5, 1, 1);
 
-        label = new QLabel(widget);
+        label = new QLabel(layoutWidget);
         label->setObjectName(QStringLiteral("label"));
 
-        gridLayout->addWidget(label, 3, 0, 1, 1);
+        gridLayout->addWidget(label, 3, 0, 1, 2);
 
-        donorFailureProbabilitySpinBox = new QDoubleSpinBox(widget);
+        donorFailureProbabilitySpinBox = new QDoubleSpinBox(layoutWidget);
         donorFailureProbabilitySpinBox->setObjectName(QStringLiteral("donorFailureProbabilitySpinBox"));
 
-        gridLayout->addWidget(donorFailureProbabilitySpinBox, 3, 1, 1, 1);
+        gridLayout->addWidget(donorFailureProbabilitySpinBox, 3, 2, 1, 1);
 
         horizontalSpacer_3 = new QSpacerItem(17, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addItem(horizontalSpacer_3, 3, 2, 1, 1);
+        gridLayout->addItem(horizontalSpacer_3, 3, 3, 1, 1);
 
-        donorHeightLabel = new QLabel(widget);
+        donorHeightLabel = new QLabel(layoutWidget);
         donorHeightLabel->setObjectName(QStringLiteral("donorHeightLabel"));
 
-        gridLayout->addWidget(donorHeightLabel, 3, 3, 1, 1);
+        gridLayout->addWidget(donorHeightLabel, 3, 4, 1, 1);
 
-        donorHeightSpinBox = new QDoubleSpinBox(widget);
+        donorHeightSpinBox = new QDoubleSpinBox(layoutWidget);
         donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
         donorHeightSpinBox->setMaximum(3);
         donorHeightSpinBox->setValue(1.5);
 
-        gridLayout->addWidget(donorHeightSpinBox, 3, 4, 1, 1);
+        gridLayout->addWidget(donorHeightSpinBox, 3, 5, 1, 1);
 
-        layoutWidget = new QWidget(DialogDonor);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 160, 391, 331));
-        verticalLayout = new QVBoxLayout(layoutWidget);
+        label_2 = new QLabel(layoutWidget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        gridLayout->addWidget(label_2, 4, 0, 1, 1);
+
+        donorRaceComboBox = new QComboBox(layoutWidget);
+        donorRaceComboBox->setObjectName(QStringLiteral("donorRaceComboBox"));
+
+        gridLayout->addWidget(donorRaceComboBox, 4, 1, 1, 2);
+
+        horizontalSpacer_4 = new QSpacerItem(17, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_4, 4, 3, 1, 1);
+
+        donorCigaretteCheckBox = new QCheckBox(layoutWidget);
+        donorCigaretteCheckBox->setObjectName(QStringLiteral("donorCigaretteCheckBox"));
+        donorCigaretteCheckBox->setLayoutDirection(Qt::RightToLeft);
+
+        gridLayout->addWidget(donorCigaretteCheckBox, 4, 4, 1, 2);
+
+        donorStatusCheckBox = new QCheckBox(layoutWidget);
+        donorStatusCheckBox->setObjectName(QStringLiteral("donorStatusCheckBox"));
+        donorStatusCheckBox->setLayoutDirection(Qt::RightToLeft);
+        donorStatusCheckBox->setChecked(true);
+
+        gridLayout->addWidget(donorStatusCheckBox, 5, 4, 1, 2);
+
+        donorNameLineEdit = new QLineEdit(layoutWidget);
+        donorNameLineEdit->setObjectName(QStringLiteral("donorNameLineEdit"));
+
+        gridLayout->addWidget(donorNameLineEdit, 0, 2, 1, 4);
+
+        layoutWidget1 = new QWidget(DialogDonor);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(10, 220, 391, 331));
+        verticalLayout = new QVBoxLayout(layoutWidget1);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        donorInfoTabWidget = new QTabWidget(layoutWidget);
+        donorInfoTabWidget = new QTabWidget(layoutWidget1);
         donorInfoTabWidget->setObjectName(QStringLiteral("donorInfoTabWidget"));
         donorInfoTabWidget->setEnabled(true);
         donorHLAInfoTab = new QWidget();
         donorHLAInfoTab->setObjectName(QStringLiteral("donorHLAInfoTab"));
-        layoutWidget1 = new QWidget(donorHLAInfoTab);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 10, 364, 251));
-        donorHLAInfoVerticalLayout = new QVBoxLayout(layoutWidget1);
+        layoutWidget2 = new QWidget(donorHLAInfoTab);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 10, 364, 251));
+        donorHLAInfoVerticalLayout = new QVBoxLayout(layoutWidget2);
         donorHLAInfoVerticalLayout->setObjectName(QStringLiteral("donorHLAInfoVerticalLayout"));
         donorHLAInfoVerticalLayout->setContentsMargins(0, 0, 0, 0);
         donorHLAInfoHorizontalLayout = new QHBoxLayout();
@@ -239,77 +260,77 @@ public:
         donorMajorHLAVerticalLayout->setObjectName(QStringLiteral("donorMajorHLAVerticalLayout"));
         donorHLAGridLayout = new QGridLayout();
         donorHLAGridLayout->setObjectName(QStringLiteral("donorHLAGridLayout"));
-        donorCWLabel = new QLabel(layoutWidget1);
+        donorCWLabel = new QLabel(layoutWidget2);
         donorCWLabel->setObjectName(QStringLiteral("donorCWLabel"));
 
         donorHLAGridLayout->addWidget(donorCWLabel, 2, 0, 1, 1);
 
-        donorALabel = new QLabel(layoutWidget1);
+        donorALabel = new QLabel(layoutWidget2);
         donorALabel->setObjectName(QStringLiteral("donorALabel"));
 
         donorHLAGridLayout->addWidget(donorALabel, 0, 0, 1, 1);
 
-        donorBLabel = new QLabel(layoutWidget1);
+        donorBLabel = new QLabel(layoutWidget2);
         donorBLabel->setObjectName(QStringLiteral("donorBLabel"));
 
         donorHLAGridLayout->addWidget(donorBLabel, 1, 0, 1, 1);
 
-        donorDRLabel = new QLabel(layoutWidget1);
+        donorDRLabel = new QLabel(layoutWidget2);
         donorDRLabel->setObjectName(QStringLiteral("donorDRLabel"));
 
         donorHLAGridLayout->addWidget(donorDRLabel, 4, 0, 1, 1);
 
-        donorDQLabel = new QLabel(layoutWidget1);
+        donorDQLabel = new QLabel(layoutWidget2);
         donorDQLabel->setObjectName(QStringLiteral("donorDQLabel"));
 
         donorHLAGridLayout->addWidget(donorDQLabel, 3, 0, 1, 1);
 
-        donorHLAA1ComboBox = new QComboBox(layoutWidget1);
+        donorHLAA1ComboBox = new QComboBox(layoutWidget2);
         donorHLAA1ComboBox->setObjectName(QStringLiteral("donorHLAA1ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLAA1ComboBox, 0, 1, 1, 1);
 
-        donorHLAA2ComboBox = new QComboBox(layoutWidget1);
+        donorHLAA2ComboBox = new QComboBox(layoutWidget2);
         donorHLAA2ComboBox->setObjectName(QStringLiteral("donorHLAA2ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLAA2ComboBox, 0, 2, 1, 1);
 
-        donorHLACW2ComboBox = new QComboBox(layoutWidget1);
+        donorHLACW2ComboBox = new QComboBox(layoutWidget2);
         donorHLACW2ComboBox->setObjectName(QStringLiteral("donorHLACW2ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLACW2ComboBox, 2, 2, 1, 1);
 
-        donorHLAB1ComboBox = new QComboBox(layoutWidget1);
+        donorHLAB1ComboBox = new QComboBox(layoutWidget2);
         donorHLAB1ComboBox->setObjectName(QStringLiteral("donorHLAB1ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLAB1ComboBox, 1, 1, 1, 1);
 
-        donorHLACW1ComboBox = new QComboBox(layoutWidget1);
+        donorHLACW1ComboBox = new QComboBox(layoutWidget2);
         donorHLACW1ComboBox->setObjectName(QStringLiteral("donorHLACW1ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLACW1ComboBox, 2, 1, 1, 1);
 
-        donorHLAB2ComboBox = new QComboBox(layoutWidget1);
+        donorHLAB2ComboBox = new QComboBox(layoutWidget2);
         donorHLAB2ComboBox->setObjectName(QStringLiteral("donorHLAB2ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLAB2ComboBox, 1, 2, 1, 1);
 
-        donorHLADQ1ComboBox = new QComboBox(layoutWidget1);
+        donorHLADQ1ComboBox = new QComboBox(layoutWidget2);
         donorHLADQ1ComboBox->setObjectName(QStringLiteral("donorHLADQ1ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLADQ1ComboBox, 3, 1, 1, 1);
 
-        donorHLADR1ComboBox = new QComboBox(layoutWidget1);
+        donorHLADR1ComboBox = new QComboBox(layoutWidget2);
         donorHLADR1ComboBox->setObjectName(QStringLiteral("donorHLADR1ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLADR1ComboBox, 4, 1, 1, 1);
 
-        donorHLADQ2ComboBox = new QComboBox(layoutWidget1);
+        donorHLADQ2ComboBox = new QComboBox(layoutWidget2);
         donorHLADQ2ComboBox->setObjectName(QStringLiteral("donorHLADQ2ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLADQ2ComboBox, 3, 2, 1, 1);
 
-        donorHLADR2ComboBox = new QComboBox(layoutWidget1);
+        donorHLADR2ComboBox = new QComboBox(layoutWidget2);
         donorHLADR2ComboBox->setObjectName(QStringLiteral("donorHLADR2ComboBox"));
 
         donorHLAGridLayout->addWidget(donorHLADR2ComboBox, 4, 2, 1, 1);
@@ -326,7 +347,7 @@ public:
 
         donorHLAVerticalLayout = new QVBoxLayout();
         donorHLAVerticalLayout->setObjectName(QStringLiteral("donorHLAVerticalLayout"));
-        donorHLADRLayout = new QGroupBox(layoutWidget1);
+        donorHLADRLayout = new QGroupBox(layoutWidget2);
         donorHLADRLayout->setObjectName(QStringLiteral("donorHLADRLayout"));
         layoutWidget_5 = new QWidget(donorHLADRLayout);
         layoutWidget_5->setObjectName(QStringLiteral("layoutWidget_5"));
@@ -352,7 +373,7 @@ public:
 
         donorHLAVerticalLayout->addWidget(donorHLADRLayout);
 
-        donorHLABWLayout = new QGroupBox(layoutWidget1);
+        donorHLABWLayout = new QGroupBox(layoutWidget2);
         donorHLABWLayout->setObjectName(QStringLiteral("donorHLABWLayout"));
         layoutWidget_6 = new QWidget(donorHLABWLayout);
         layoutWidget_6->setObjectName(QStringLiteral("layoutWidget_6"));
@@ -381,12 +402,12 @@ public:
 
         donorHLAAdditionalHorizontalLayout = new QHBoxLayout();
         donorHLAAdditionalHorizontalLayout->setObjectName(QStringLiteral("donorHLAAdditionalHorizontalLayout"));
-        donorHLAAdditionalLabel = new QLabel(layoutWidget1);
+        donorHLAAdditionalLabel = new QLabel(layoutWidget2);
         donorHLAAdditionalLabel->setObjectName(QStringLiteral("donorHLAAdditionalLabel"));
 
         donorHLAAdditionalHorizontalLayout->addWidget(donorHLAAdditionalLabel);
 
-        donorHLALineEdit = new QLineEdit(layoutWidget1);
+        donorHLALineEdit = new QLineEdit(layoutWidget2);
         donorHLALineEdit->setObjectName(QStringLiteral("donorHLALineEdit"));
 
         donorHLAAdditionalHorizontalLayout->addWidget(donorHLALineEdit);
@@ -400,11 +421,16 @@ public:
 
         buttonLayout = new QHBoxLayout();
         buttonLayout->setObjectName(QStringLiteral("buttonLayout"));
-        buttonSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        additionalDonorButton = new QPushButton(layoutWidget1);
+        additionalDonorButton->setObjectName(QStringLiteral("additionalDonorButton"));
 
-        buttonLayout->addItem(buttonSpacer);
+        buttonLayout->addWidget(additionalDonorButton);
 
-        buttonBox = new QDialogButtonBox(layoutWidget);
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        buttonLayout->addItem(horizontalSpacer_5);
+
+        buttonBox = new QDialogButtonBox(layoutWidget1);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
@@ -418,6 +444,8 @@ public:
         retranslateUi(DialogDonor);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogDonor, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogDonor, SLOT(reject()));
+        QObject::connect(additionalDonorButton, SIGNAL(clicked()), DialogDonor, SLOT(accept()));
+        QObject::connect(additionalDonorButton, SIGNAL(clicked()), DialogDonor, SLOT(setAdditionalDonor()));
 
         donorInfoTabWidget->setCurrentIndex(0);
 
@@ -427,11 +455,9 @@ public:
 
     void retranslateUi(QDialog *DialogDonor)
     {
-        DialogDonor->setWindowTitle(QApplication::translate("DialogDonor", "Add New AD", 0));
+        DialogDonor->setWindowTitle(QApplication::translate("DialogDonor", "Add New NDD", 0));
         donorGroupBox->setTitle(QApplication::translate("DialogDonor", "Donor Information", 0));
         donorNameLabel->setText(QApplication::translate("DialogDonor", "Name", 0));
-        donorNameLineEdit->setText(QApplication::translate("DialogDonor", "Donor Name", 0));
-        donorStatusCheckBox->setText(QApplication::translate("DialogDonor", "Include in Match Run", 0));
         donorAgeLabel->setText(QApplication::translate("DialogDonor", "Age", 0));
         donorGenderLabel->setText(QApplication::translate("DialogDonor", "Gender", 0));
         donorGenderComboBox->clear();
@@ -450,6 +476,17 @@ public:
         donorWeightLabel->setText(QApplication::translate("DialogDonor", "Weight (kg)", 0));
         label->setText(QApplication::translate("DialogDonor", "Failure Probability", 0));
         donorHeightLabel->setText(QApplication::translate("DialogDonor", "Height (m)", 0));
+        label_2->setText(QApplication::translate("DialogDonor", "Race", 0));
+        donorRaceComboBox->clear();
+        donorRaceComboBox->insertItems(0, QStringList()
+         << QApplication::translate("DialogDonor", "White", 0)
+         << QApplication::translate("DialogDonor", "Black", 0)
+         << QApplication::translate("DialogDonor", "Hispanic", 0)
+         << QApplication::translate("DialogDonor", "Other", 0)
+        );
+        donorCigaretteCheckBox->setText(QApplication::translate("DialogDonor", "Cigarette User", 0));
+        donorStatusCheckBox->setText(QApplication::translate("DialogDonor", "Include in Match Run", 0));
+        donorNameLineEdit->setText(QApplication::translate("DialogDonor", "Donor Name", 0));
         donorCWLabel->setText(QApplication::translate("DialogDonor", "Donor HLA CW", 0));
         donorALabel->setText(QApplication::translate("DialogDonor", "Donor HLA A", 0));
         donorBLabel->setText(QApplication::translate("DialogDonor", "Donor HLA B", 0));
@@ -464,6 +501,7 @@ public:
         donorBW6CheckBox->setText(QApplication::translate("DialogDonor", "BW6", 0));
         donorHLAAdditionalLabel->setText(QApplication::translate("DialogDonor", "Additional Donor Antigens", 0));
         donorInfoTabWidget->setTabText(donorInfoTabWidget->indexOf(donorHLAInfoTab), QApplication::translate("DialogDonor", "HLA Information", 0));
+        additionalDonorButton->setText(QApplication::translate("DialogDonor", "Save and Add Donor", 0));
     } // retranslateUi
 
 };

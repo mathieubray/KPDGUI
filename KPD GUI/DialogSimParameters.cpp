@@ -1,8 +1,7 @@
-#include <QtGui>
 
 #include "DialogSimParameters.h"
 
-#include "KPDGUISimParameters.h"
+#include "KPDGUIParameters.h"
 
 
 //Basic Simulation Parameter Dialog Constructor
@@ -12,18 +11,14 @@ DialogSimParameters::DialogSimParameters(QWidget *parent) : QDialog(parent)
 }
 
 //Saved Parameters Dialog Constructor
-DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget *parent) : QDialog(parent)
+DialogSimParameters::DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
 
 	//Optimization Scheme
 	optComboBox->setCurrentIndex(KPDFunctions::optSchemeToInt(paramInfo->getOptimizationScheme()));
-	if (paramInfo->getOptimizationScheme() == SCC){
-		componentSizeSpinBox->setEnabled(true);
-		componentSizeSlider->setEnabled(true);
-		estimateEUCheckBox->setEnabled(true);
-		numberOfEUSimSpinBox->setEnabled(true);
-	}
+	
+	enableOptimizationOptions(optComboBox->currentIndex());
 
 	//Utility Scheme
 	utilComboBox->setCurrentIndex(KPDFunctions::utilSchemeToInt(paramInfo->getUtilityScheme()));
@@ -31,11 +26,11 @@ DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget
 	//Max Chain Length
 	cycleSizeSpinBox->setValue(paramInfo->getMaxCycleSize());
 	chainLengthSpinBox->setValue(paramInfo->getMaxChainLength());
-	componentSizeSpinBox->setValue(paramInfo->getMaxComponentSize());
+	lrsSizeSpinBox->setValue(paramInfo->getMaxLRSSize());
 	
 	//Numerical Parameters
-	praCheckBox->setChecked(paramInfo->getAddAdvantageToHighPRACandidates());
-	if (paramInfo->getAddAdvantageToHighPRACandidates()){
+	praCheckBox->setChecked(paramInfo->addAdvantageToHighPRACandidates());
+	if (paramInfo->addAdvantageToHighPRACandidates()){
 		praCutoffSpinBox->setValue(paramInfo->getPRAAdvantageCutoff());
 		praAdvantageSpinBox->setValue(paramInfo->getPRAAdvantageValue());
 	}
@@ -43,45 +38,65 @@ DialogSimParameters::DialogSimParameters(KPDGUISimParameters *paramInfo, QWidget
 		praCutoffSpinBox->setValue(100);
 		praAdvantageSpinBox->setValue(0);
 	}
+	
+	enablePRAOptions(praCheckBox->isChecked());
 
 	solutionsSpinBox->setValue(paramInfo->getNumberOfSolutions());
 
-	estimateEUCheckBox->setChecked(paramInfo->getEstimateExpectedUtility());
+	estimateEUCheckBox->setChecked(paramInfo->estimateExpectedUtility());
 	numberOfEUSimSpinBox->setValue(paramInfo->getNumberOfExpectedUtilityIterations());
+	
+	enableEstimateEUOptions(estimateEUCheckBox->isChecked());
 
 	//Additional Options
-	chainStorageComboBox->setCurrentIndex(KPDFunctions::chainStorageToInt(paramInfo->getChainStorage()));	
-	reserveOtoOBox->setChecked(paramInfo->getReserveODonorsForOCandidates());
-	checkAdditionalHLABox->setChecked(paramInfo->getCheckAdditionalHLA());
-	compatibleBox->setChecked(paramInfo->getIncludeCompatiblePairs());
-	excludeABDonorsBox->setChecked(paramInfo->getExcludeABDonorsFromSimulation());
-	allowABBridgeBox->setChecked(paramInfo->getAllowABBridgeDonors());
+	reserveOtoOBox->setChecked(paramInfo->reserveODonorsForOCandidates());
+	checkAdditionalHLABox->setChecked(paramInfo->checkAdditionalHLA());
+	compatibleBox->setChecked(paramInfo->includeCompatiblePairs());
+	excludeABDonorsBox->setChecked(paramInfo->excludeABDonorsFromSimulation());
+	allowABBridgeBox->setChecked(paramInfo->allowABBridgeDonors());
+	
+	enableBridgeDonorOptions(excludeABDonorsBox->isChecked());
 	
 }
 
-void DialogSimParameters::enableComponentOptions(int index) {
-	if (index == 3) {
-		componentSizeSpinBox->setEnabled(true);
-		componentSizeSlider->setEnabled(true);
-		estimateEUCheckBox->setEnabled(true);
-		numberOfEUSimSpinBox->setEnabled(true);
+// Change settings based on optimization scheme
+void DialogSimParameters::enableOptimizationOptions(int index) {	
 
-	}
-	else {
-		componentSizeSpinBox->setEnabled(false);
-		componentSizeSlider->setEnabled(false);
+	if (index==0) {
+		lrsSizeSpinBox->setEnabled(false);
+		lrsSizeSlider->setEnabled(false);
 		estimateEUCheckBox->setEnabled(false);
-		numberOfEUSimSpinBox->setEnabled(false);
 	}
+
+	if (index == 1) {
+		lrsSizeSpinBox->setEnabled(false);
+		lrsSizeSlider->setEnabled(false);
+		estimateEUCheckBox->setEnabled(true);
+	}
+	
+	if (index == 2) {
+		lrsSizeSpinBox->setEnabled(true);
+		lrsSizeSlider->setEnabled(true);
+		estimateEUCheckBox->setEnabled(true);
+	}
+
+	enableEstimateEUOptions(estimateEUCheckBox->isEnabled() && estimateEUCheckBox->isChecked());
 }
 
+// Change settings based on whether PRA advantage is specified
 void DialogSimParameters::enablePRAOptions(bool enabled){
 	praCutoffSpinBox->setEnabled(enabled);
 	praAdvantageSpinBox->setEnabled(enabled);
 }
 
+// Change settings based on whether AB donors are allowed in the match run
 void DialogSimParameters::enableBridgeDonorOptions(bool enabled){
 	allowABBridgeBox->setEnabled(!enabled);
+}
+
+// Change settings based on whether expected utility estimation is specified
+void DialogSimParameters::enableEstimateEUOptions(bool enabled) {
+	numberOfEUSimSpinBox->setEnabled(enabled);
 }
 
 

@@ -41,8 +41,7 @@ public:
     QTabWidget *moreRecipInfo;
     QWidget *donorCharacteristicsTab;
     QWidget *layoutWidget1;
-    QVBoxLayout *donorCharacteristicsVerticalLayout;
-    QHBoxLayout *donorMajorInfoHorizontalLayout;
+    QGridLayout *gridLayout_2;
     QGridLayout *candidateCharacteristicsGridLayout;
     QSpacerItem *candidateGenderSpacer;
     QComboBox *candidateGenderComboBox;
@@ -58,20 +57,16 @@ public:
     QLabel *candidateTODLabel;
     QDoubleSpinBox *candidateHeightSpinBox;
     QDoubleSpinBox *candidateWeightSpinBox;
-    QVBoxLayout *donorMinorInfoVerticalLayout;
-    QVBoxLayout *checkBoxesVerticalLayout;
     QCheckBox *candidateHepCCheckBox;
     QCheckBox *candidateDiabetesCheckBox;
     QCheckBox *candidatePrevTransCheckBox;
-    QSpacerItem *verticalSpacer;
     QHBoxLayout *excludedDonorsHorizontalLayout;
-    QLabel *exccludedDonorsLabel;
-    QLineEdit *excludedDonorLineEdit;
+    QSpacerItem *verticalSpacer;
     QHBoxLayout *buttonBoxHorizontalLayout;
     QSpacerItem *buttonHorizontalSpacer;
     QDialogButtonBox *buttonBox;
     QGroupBox *candidateGroupBox;
-    QWidget *widget;
+    QWidget *layoutWidget2;
     QGridLayout *gridLayout;
     QLabel *candidateNameLabel;
     QLineEdit *candidateNameLineEdit;
@@ -85,21 +80,23 @@ public:
     QSpinBox *candidatePRASpinBox;
     QSlider *praSlider;
     QLabel *candidateAdditionalLabel;
-    QLineEdit *candidateHLALineEdit;
+    QLabel *label;
+    QComboBox *candidateInsuranceComboBox;
     QLabel *candidateFailureProbabilityLabel;
     QDoubleSpinBox *candidateFailureProbabilitySpinBox;
     QCheckBox *candidateStatusCheckBox;
+    QLineEdit *candidateHLALineEdit;
 
     void setupUi(QDialog *DialogCandidate)
     {
         if (DialogCandidate->objectName().isEmpty())
             DialogCandidate->setObjectName(QStringLiteral("DialogCandidate"));
-        DialogCandidate->resize(391, 480);
-        DialogCandidate->setMinimumSize(QSize(391, 480));
-        DialogCandidate->setMaximumSize(QSize(391, 480));
+        DialogCandidate->resize(387, 588);
+        DialogCandidate->setMinimumSize(QSize(387, 588));
+        DialogCandidate->setMaximumSize(QSize(387, 588));
         layoutWidget = new QWidget(DialogCandidate);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 210, 371, 261));
+        layoutWidget->setGeometry(QRect(10, 310, 371, 261));
         candidateVerticalLayout = new QVBoxLayout(layoutWidget);
         candidateVerticalLayout->setObjectName(QStringLiteral("candidateVerticalLayout"));
         candidateVerticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -110,12 +107,10 @@ public:
         donorCharacteristicsTab->setObjectName(QStringLiteral("donorCharacteristicsTab"));
         layoutWidget1 = new QWidget(donorCharacteristicsTab);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 10, 352, 175));
-        donorCharacteristicsVerticalLayout = new QVBoxLayout(layoutWidget1);
-        donorCharacteristicsVerticalLayout->setObjectName(QStringLiteral("donorCharacteristicsVerticalLayout"));
-        donorCharacteristicsVerticalLayout->setContentsMargins(0, 0, 0, 0);
-        donorMajorInfoHorizontalLayout = new QHBoxLayout();
-        donorMajorInfoHorizontalLayout->setObjectName(QStringLiteral("donorMajorInfoHorizontalLayout"));
+        layoutWidget1->setGeometry(QRect(11, 12, 346, 173));
+        gridLayout_2 = new QGridLayout(layoutWidget1);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
         candidateCharacteristicsGridLayout = new QGridLayout();
         candidateCharacteristicsGridLayout->setObjectName(QStringLiteral("candidateCharacteristicsGridLayout"));
         candidateGenderSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -190,57 +185,34 @@ public:
         candidateCharacteristicsGridLayout->addWidget(candidateWeightSpinBox, 3, 2, 1, 1);
 
 
-        donorMajorInfoHorizontalLayout->addLayout(candidateCharacteristicsGridLayout);
+        gridLayout_2->addLayout(candidateCharacteristicsGridLayout, 0, 0, 4, 1);
 
-        donorMinorInfoVerticalLayout = new QVBoxLayout();
-        donorMinorInfoVerticalLayout->setObjectName(QStringLiteral("donorMinorInfoVerticalLayout"));
-        checkBoxesVerticalLayout = new QVBoxLayout();
-        checkBoxesVerticalLayout->setObjectName(QStringLiteral("checkBoxesVerticalLayout"));
         candidateHepCCheckBox = new QCheckBox(layoutWidget1);
         candidateHepCCheckBox->setObjectName(QStringLiteral("candidateHepCCheckBox"));
         candidateHepCCheckBox->setLayoutDirection(Qt::LeftToRight);
 
-        checkBoxesVerticalLayout->addWidget(candidateHepCCheckBox);
+        gridLayout_2->addWidget(candidateHepCCheckBox, 0, 1, 1, 2);
 
         candidateDiabetesCheckBox = new QCheckBox(layoutWidget1);
         candidateDiabetesCheckBox->setObjectName(QStringLiteral("candidateDiabetesCheckBox"));
         candidateDiabetesCheckBox->setLayoutDirection(Qt::LeftToRight);
 
-        checkBoxesVerticalLayout->addWidget(candidateDiabetesCheckBox);
+        gridLayout_2->addWidget(candidateDiabetesCheckBox, 1, 1, 1, 2);
 
         candidatePrevTransCheckBox = new QCheckBox(layoutWidget1);
         candidatePrevTransCheckBox->setObjectName(QStringLiteral("candidatePrevTransCheckBox"));
         candidatePrevTransCheckBox->setLayoutDirection(Qt::LeftToRight);
 
-        checkBoxesVerticalLayout->addWidget(candidatePrevTransCheckBox);
-
-
-        donorMinorInfoVerticalLayout->addLayout(checkBoxesVerticalLayout);
-
-        verticalSpacer = new QSpacerItem(20, 28, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        donorMinorInfoVerticalLayout->addItem(verticalSpacer);
-
-
-        donorMajorInfoHorizontalLayout->addLayout(donorMinorInfoVerticalLayout);
-
-
-        donorCharacteristicsVerticalLayout->addLayout(donorMajorInfoHorizontalLayout);
+        gridLayout_2->addWidget(candidatePrevTransCheckBox, 2, 1, 1, 2);
 
         excludedDonorsHorizontalLayout = new QHBoxLayout();
         excludedDonorsHorizontalLayout->setObjectName(QStringLiteral("excludedDonorsHorizontalLayout"));
-        exccludedDonorsLabel = new QLabel(layoutWidget1);
-        exccludedDonorsLabel->setObjectName(QStringLiteral("exccludedDonorsLabel"));
 
-        excludedDonorsHorizontalLayout->addWidget(exccludedDonorsLabel);
+        gridLayout_2->addLayout(excludedDonorsHorizontalLayout, 4, 0, 1, 2);
 
-        excludedDonorLineEdit = new QLineEdit(layoutWidget1);
-        excludedDonorLineEdit->setObjectName(QStringLiteral("excludedDonorLineEdit"));
+        verticalSpacer = new QSpacerItem(20, 28, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        excludedDonorsHorizontalLayout->addWidget(excludedDonorLineEdit);
-
-
-        donorCharacteristicsVerticalLayout->addLayout(excludedDonorsHorizontalLayout);
+        gridLayout_2->addItem(verticalSpacer, 3, 1, 1, 1);
 
         moreRecipInfo->addTab(donorCharacteristicsTab, QString());
 
@@ -264,29 +236,29 @@ public:
 
         candidateGroupBox = new QGroupBox(DialogCandidate);
         candidateGroupBox->setObjectName(QStringLiteral("candidateGroupBox"));
-        candidateGroupBox->setGeometry(QRect(10, 10, 371, 191));
-        widget = new QWidget(candidateGroupBox);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 21, 351, 167));
-        gridLayout = new QGridLayout(widget);
+        candidateGroupBox->setGeometry(QRect(10, 10, 371, 291));
+        layoutWidget2 = new QWidget(candidateGroupBox);
+        layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
+        layoutWidget2->setGeometry(QRect(10, 22, 351, 263));
+        gridLayout = new QGridLayout(layoutWidget2);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        candidateNameLabel = new QLabel(widget);
+        candidateNameLabel = new QLabel(layoutWidget2);
         candidateNameLabel->setObjectName(QStringLiteral("candidateNameLabel"));
 
         gridLayout->addWidget(candidateNameLabel, 0, 0, 1, 1);
 
-        candidateNameLineEdit = new QLineEdit(widget);
+        candidateNameLineEdit = new QLineEdit(layoutWidget2);
         candidateNameLineEdit->setObjectName(QStringLiteral("candidateNameLineEdit"));
 
         gridLayout->addWidget(candidateNameLineEdit, 0, 2, 1, 3);
 
-        candidateAgeLabel = new QLabel(widget);
+        candidateAgeLabel = new QLabel(layoutWidget2);
         candidateAgeLabel->setObjectName(QStringLiteral("candidateAgeLabel"));
 
         gridLayout->addWidget(candidateAgeLabel, 1, 0, 1, 1);
 
-        candidateAgeSpinBox = new QSpinBox(widget);
+        candidateAgeSpinBox = new QSpinBox(layoutWidget2);
         candidateAgeSpinBox->setObjectName(QStringLiteral("candidateAgeSpinBox"));
         candidateAgeSpinBox->setMaximum(130);
         candidateAgeSpinBox->setValue(40);
@@ -297,12 +269,12 @@ public:
 
         gridLayout->addItem(candidateAgeSpacer, 1, 4, 1, 1);
 
-        candidateBTLabel = new QLabel(widget);
+        candidateBTLabel = new QLabel(layoutWidget2);
         candidateBTLabel->setObjectName(QStringLiteral("candidateBTLabel"));
 
         gridLayout->addWidget(candidateBTLabel, 2, 0, 1, 1);
 
-        candidateBTComboBox = new QComboBox(widget);
+        candidateBTComboBox = new QComboBox(layoutWidget2);
         candidateBTComboBox->setObjectName(QStringLiteral("candidateBTComboBox"));
 
         gridLayout->addWidget(candidateBTComboBox, 2, 2, 1, 2);
@@ -311,58 +283,64 @@ public:
 
         gridLayout->addItem(candidateBTSpacer, 2, 4, 1, 1);
 
-        candidatePRALabel = new QLabel(widget);
+        candidatePRALabel = new QLabel(layoutWidget2);
         candidatePRALabel->setObjectName(QStringLiteral("candidatePRALabel"));
 
         gridLayout->addWidget(candidatePRALabel, 3, 0, 1, 1);
 
-        candidatePRASpinBox = new QSpinBox(widget);
+        candidatePRASpinBox = new QSpinBox(layoutWidget2);
         candidatePRASpinBox->setObjectName(QStringLiteral("candidatePRASpinBox"));
         candidatePRASpinBox->setMaximum(100);
 
         gridLayout->addWidget(candidatePRASpinBox, 3, 2, 1, 2);
 
-        praSlider = new QSlider(widget);
+        praSlider = new QSlider(layoutWidget2);
         praSlider->setObjectName(QStringLiteral("praSlider"));
         praSlider->setMaximum(100);
         praSlider->setOrientation(Qt::Horizontal);
 
         gridLayout->addWidget(praSlider, 3, 4, 1, 1);
 
-        candidateAdditionalLabel = new QLabel(widget);
+        candidateAdditionalLabel = new QLabel(layoutWidget2);
         candidateAdditionalLabel->setObjectName(QStringLiteral("candidateAdditionalLabel"));
 
         gridLayout->addWidget(candidateAdditionalLabel, 4, 0, 1, 2);
 
-        candidateHLALineEdit = new QLineEdit(widget);
-        candidateHLALineEdit->setObjectName(QStringLiteral("candidateHLALineEdit"));
+        label = new QLabel(layoutWidget2);
+        label->setObjectName(QStringLiteral("label"));
 
-        gridLayout->addWidget(candidateHLALineEdit, 4, 2, 1, 3);
+        gridLayout->addWidget(label, 5, 0, 1, 1);
 
-        candidateFailureProbabilityLabel = new QLabel(widget);
+        candidateInsuranceComboBox = new QComboBox(layoutWidget2);
+        candidateInsuranceComboBox->setObjectName(QStringLiteral("candidateInsuranceComboBox"));
+
+        gridLayout->addWidget(candidateInsuranceComboBox, 5, 2, 1, 3);
+
+        candidateFailureProbabilityLabel = new QLabel(layoutWidget2);
         candidateFailureProbabilityLabel->setObjectName(QStringLiteral("candidateFailureProbabilityLabel"));
 
-        gridLayout->addWidget(candidateFailureProbabilityLabel, 5, 0, 1, 1);
+        gridLayout->addWidget(candidateFailureProbabilityLabel, 6, 0, 1, 1);
 
-        candidateFailureProbabilitySpinBox = new QDoubleSpinBox(widget);
+        candidateFailureProbabilitySpinBox = new QDoubleSpinBox(layoutWidget2);
         candidateFailureProbabilitySpinBox->setObjectName(QStringLiteral("candidateFailureProbabilitySpinBox"));
         candidateFailureProbabilitySpinBox->setMaximum(1);
         candidateFailureProbabilitySpinBox->setSingleStep(0.1);
         candidateFailureProbabilitySpinBox->setValue(0.1);
 
-        gridLayout->addWidget(candidateFailureProbabilitySpinBox, 5, 1, 1, 2);
+        gridLayout->addWidget(candidateFailureProbabilitySpinBox, 6, 1, 1, 2);
 
-        candidateStatusCheckBox = new QCheckBox(widget);
+        candidateStatusCheckBox = new QCheckBox(layoutWidget2);
         candidateStatusCheckBox->setObjectName(QStringLiteral("candidateStatusCheckBox"));
         candidateStatusCheckBox->setLayoutDirection(Qt::RightToLeft);
         candidateStatusCheckBox->setChecked(true);
 
-        gridLayout->addWidget(candidateStatusCheckBox, 5, 3, 1, 2);
+        gridLayout->addWidget(candidateStatusCheckBox, 6, 3, 1, 2);
 
-        layoutWidget->raise();
-        layoutWidget->raise();
-        candidateGroupBox->raise();
-        moreRecipInfo->raise();
+        candidateHLALineEdit = new QLineEdit(layoutWidget2);
+        candidateHLALineEdit->setObjectName(QStringLiteral("candidateHLALineEdit"));
+
+        gridLayout->addWidget(candidateHLALineEdit, 4, 2, 1, 3);
+
 
         retranslateUi(DialogCandidate);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogCandidate, SLOT(accept()));
@@ -384,7 +362,7 @@ public:
          << QApplication::translate("DialogCandidate", "Male", 0)
          << QApplication::translate("DialogCandidate", "Female", 0)
         );
-        candidateHeightLabel->setText(QApplication::translate("DialogCandidate", "Height (kg)", 0));
+        candidateHeightLabel->setText(QApplication::translate("DialogCandidate", "Height (m)", 0));
         candidateWeightLabel->setText(QApplication::translate("DialogCandidate", "Weight (kg)", 0));
         candidateRaceLabel->setText(QApplication::translate("DialogCandidate", "Race", 0));
         candidateRaceComboBox->clear();
@@ -399,7 +377,6 @@ public:
         candidateHepCCheckBox->setText(QApplication::translate("DialogCandidate", "Hepatitis C", 0));
         candidateDiabetesCheckBox->setText(QApplication::translate("DialogCandidate", "Diabetes", 0));
         candidatePrevTransCheckBox->setText(QApplication::translate("DialogCandidate", "Previous Transplant ", 0));
-        exccludedDonorsLabel->setText(QApplication::translate("DialogCandidate", "Excluded Donors", 0));
         moreRecipInfo->setTabText(moreRecipInfo->indexOf(donorCharacteristicsTab), QApplication::translate("DialogCandidate", "Candidate Characteristics", 0));
         candidateGroupBox->setTitle(QApplication::translate("DialogCandidate", "Candidate Information", 0));
         candidateNameLabel->setText(QApplication::translate("DialogCandidate", "Name", 0));
@@ -416,6 +393,13 @@ public:
         );
         candidatePRALabel->setText(QApplication::translate("DialogCandidate", "PRA", 0));
         candidateAdditionalLabel->setText(QApplication::translate("DialogCandidate", "Candidate Antibodies", 0));
+        label->setText(QApplication::translate("DialogCandidate", "Insurance", 0));
+        candidateInsuranceComboBox->clear();
+        candidateInsuranceComboBox->insertItems(0, QStringList()
+         << QApplication::translate("DialogCandidate", "Public Primary Payer", 0)
+         << QApplication::translate("DialogCandidate", "Private Primary Payer", 0)
+         << QApplication::translate("DialogCandidate", "Other", 0)
+        );
         candidateFailureProbabilityLabel->setText(QApplication::translate("DialogCandidate", "Failure Probability", 0));
         candidateStatusCheckBox->setText(QApplication::translate("DialogCandidate", "Include in Match Runs", 0));
     } // retranslateUi

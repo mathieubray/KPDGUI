@@ -1,10 +1,10 @@
 #ifndef DIALOGDISPLAY_H
 #define DIALOGDISPLAY_H
 
-#include <QDialog>
+#include <QtGui>
+#include <QtWidgets>
 
 #include "ui_DialogDisplaySettings.h"
-
 
 class KPDGUIDisplaySettings;
 

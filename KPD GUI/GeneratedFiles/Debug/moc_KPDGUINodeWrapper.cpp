@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUINodeWrapper_t {
-    QByteArrayData data[4];
-    char stringdata0[47];
+    QByteArrayData data[6];
+    char stringdata0[82];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -30,13 +30,16 @@ struct qt_meta_stringdata_KPDGUINodeWrapper_t {
 static const qt_meta_stringdata_KPDGUINodeWrapper_t qt_meta_stringdata_KPDGUINodeWrapper = {
     {
 QT_MOC_LITERAL(0, 0, 17), // "KPDGUINodeWrapper"
-QT_MOC_LITERAL(1, 18, 16), // "updateSelections"
-QT_MOC_LITERAL(2, 35, 0), // ""
-QT_MOC_LITERAL(3, 36, 10) // "updateText"
+QT_MOC_LITERAL(1, 18, 10), // "updateText"
+QT_MOC_LITERAL(2, 29, 0), // ""
+QT_MOC_LITERAL(3, 30, 29), // "nodeWrapperDoubleClickActions"
+QT_MOC_LITERAL(4, 60, 16), // "QTreeWidgetItem*"
+QT_MOC_LITERAL(5, 77, 4) // "item"
 
     },
-    "KPDGUINodeWrapper\0updateSelections\0\0"
-    "updateText"
+    "KPDGUINodeWrapper\0updateText\0\0"
+    "nodeWrapperDoubleClickActions\0"
+    "QTreeWidgetItem*\0item"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,11 +58,11 @@ static const uint qt_meta_data_KPDGUINodeWrapper[] = {
 
  // slots: name, argc, parameters, tag, flags
        1,    0,   24,    2, 0x0a /* Public */,
-       3,    0,   25,    2, 0x0a /* Public */,
+       3,    1,   25,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
-    QMetaType::Void,
+    QMetaType::Void, 0x80000000 | 4,    5,
 
        0        // eod
 };
@@ -70,12 +73,11 @@ void KPDGUINodeWrapper::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         KPDGUINodeWrapper *_t = static_cast<KPDGUINodeWrapper *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->updateSelections(); break;
-        case 1: _t->updateText(); break;
+        case 0: _t->updateText(); break;
+        case 1: _t->nodeWrapperDoubleClickActions((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
         default: ;
         }
     }
-    Q_UNUSED(_a);
 }
 
 const QMetaObject KPDGUINodeWrapper::staticMetaObject = {

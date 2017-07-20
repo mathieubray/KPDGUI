@@ -51,6 +51,8 @@
 #include "KPDGUINode.h"
 #include "KPDGUIDisplaySettings.h"
 
+#include "DialogMatch.h"
+
 QT_BEGIN_NAMESPACE
 class QGraphicsPolygonItem;
 class QGraphicsLineItem;
@@ -73,16 +75,25 @@ private:
 	//Visual Arrow Properties
 	QColor myColor;	
 	int myWidth;
+	Qt::PenStyle myPenStyle;
 	qreal myOpacity;
-	int myZValue;
+	int myZValue;	
 
 	QPolygonF arrowHead;
 
 	//Match Properties
-	double matchSuccessProbability;
-	double matchUtility;
 
-	int myPopularityInStructures;
+	bool includeMatch;
+	KPDCrossmatchResult matchResult;
+
+	double matchFailureProbability;
+
+	double matchFiveYearSurvival;
+	double matchTenYearSurvival;
+	double matchTransplantScore;
+	double matchAssignedUtility;
+
+	int myPopularityInArrangements;
 	int myPopularityInSolutions;
 
 	bool displayAsPartOfSolution;
@@ -90,7 +101,7 @@ private:
 public:
     enum { Type = UserType + 4 };
 
-	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate);
+	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCrossmatchResult result, double fiveYearSurvival, double tenYearSurvival);
 	~KPDGUIMatch();
 
 	//Nodes
@@ -103,8 +114,12 @@ public:
 	void updatePosition();
    	int type() const { return Type; }
 
+	QColor determineArrowColor();
+	Qt::PenStyle determineArrowPenStyle();
+
 	void setArrowColor(const QColor &color) { myColor = color; }
 	void setArrowWidth(int width) { myWidth = width; }
+	void setArrowPenStyle(Qt::PenStyle penStyle) { myPenStyle = penStyle; }
 	void setArrowOpacity(qreal opacity) { myOpacity = opacity; }
 	void setArrowZValue(int zValue) { myZValue = zValue; }
 	
@@ -114,29 +129,57 @@ public:
 	void clearHighlight();
 
 	//Match Properties
-	int getPopularityInStructures() const { return myPopularityInStructures; }
+
+	bool getInclude() const { return includeMatch; }
+	KPDCrossmatchResult getCrossmatchResult() const { return matchResult; }
+
+	int getPopularityInArrangements() const { return myPopularityInArrangements; }
 	int getPopularityInSolutions() const { return myPopularityInSolutions; }
+	
+	double getFailureProbability() const { return matchFailureProbability; }
+
+	double getFiveYearSurvival() const { return matchFiveYearSurvival; }
+	double getTenYearSurvival() const { return matchTenYearSurvival; }
+	double getTransplantScore() const { return matchTransplantScore; }
+	double getAssignedUtility() const { return matchAssignedUtility; }
+	
+	void setInclude(bool include);
+	void setCrossmatchResult(KPDCrossmatchResult result);
 
 	void increasePopularity(bool solution);
 	void decreasePopularity(bool solution);
 	void resetPopularity(bool solution);
 
-	double getMatchSuccessProbability() const { return matchSuccessProbability; }
-	double getMatchUtility() const { return matchUtility; }
+	void setFailureProbability(double probability);
+
+	void setFiveYearSurvival(double fiveYearSurvival);
+	void setTenYearSurvival(double tenYearSurvival);
+	void setTransplantScore(double transplantScore);
+	void setAssignedUtility(double assignedUtility);
+
+public slots:
+	void updateSelection(int id, bool selected);
+	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
+	void endDisplayAsPartOfSolution();
+
+	void editMatch(DialogMatch * dialog);
 
 signals:
-	//void selectMatchInList(bool);
+	void matchWasEdited();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 	bool checkVisibility(KPDGUIDisplaySettings * displaySettings);
 
-	void setArrowProperties(QColor color, int width, qreal opacity, int zValue);
+	void setArrowProperties(QColor color, int width, Qt::PenStyle penStyle, qreal opacity, int zValue);
+
+	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 	
-public slots:
-	void updateSelection(int id, bool selected);
-	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
-	void endDisplayAsPartOfSolution();
+
 };
+
+QDataStream &operator<<(QDataStream &out, const KPDGUIMatch & match);
+
+QDataStream &operator>>(QDataStream &in, KPDGUIMatch & match);
 
 #endif

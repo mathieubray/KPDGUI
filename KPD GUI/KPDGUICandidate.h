@@ -23,67 +23,80 @@ private:
 	int candidatePRA;
 	KPDBloodType candidateBT;
 
-	bool candidateStatus;
-	double candidateFailureProbability;
-
-	QSet<KPDGUIMatch *> candidateMatches;
-
-	// Popularity
-	int popularityInStructures;
-	int popularityInSolutions;
+	// HLA Information
+	QVector<QString> candidateHLA;
 	
 	// Characteristics
 	bool candidateMale;
 	KPDRace candidateRace;
 	bool candidateDiabetes;
+	double candidateHeight;
 	double candidateWeight;
-	double candidateBMI;	
 	bool candidatePrevTrans;
 	double candidateTOD;
 	bool candidateHepC;
+	KPDInsurance candidateInsurance;
 
-	// Compatibilities
+	// Additional Parameters
+	bool candidateStatus;
+	double candidateFailureProbability;
+
 	QVector<int> candidateExcludedDonors;
-	QVector<QString> candidateHLA;
+
+	QSet<KPDGUIMatch *> candidateMatches;
+	
+	int popularityInArrangements;
+	int popularityInSolutions;
 
 	// Comment
-	QString candidateComment;
-
-	// Visual
-	QColor candidateBackgroundColor;
-	qreal candidateOpacity;
-	QString candidateLabel;
-	
+	QString candidateComment;	
 
 signals:
-	void candidateClicked(bool selected);
-	void candidateSelectionChanged(bool selected);
-	void candidatetatusChanged(bool status);
-	void candidateEdited();
-	void candidateEntered();
-	void candidateExited();
 
+	void candidateSelectionChanged(int id, bool selected);
+	void candidateEntered(int id);
+	void candidateExited(int id);
+	void candidateEdited();
 
 protected:
+
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 	void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
 	void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
-	void mousePressEvent(QGraphicsSceneMouseEvent * event);
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
-
 	
-
-
 public slots:
 
-	void editCandidate();
+	void editCandidate(DialogCandidate * dialog);
 	void updateVisualProperties();
 
-
 public:
+
 	KPDGUICandidate();
 	KPDGUICandidate(DialogCandidate * c);
 	~KPDGUICandidate();
+	
+	bool checkWithinBounds(int minPRA, int maxPRA);
+	
+	void addHLA(QString hla);
+	void removeHLA(QString hla);
+
+	void addExcludedDonor(int donor);
+	void removeExcludedDonor(int donor);
+
+	bool hasNoMatches();
+	int getNumberOfMatches();
+	void addMatchingDonor(KPDGUIMatch * match);
+	void removeMatchingDonor(KPDGUIMatch * match);
+	KPDGUIMatch * findMatchingDonor(KPDGUIDonor * donor);
+
+	void increasePopularityInArrangements();
+	void increasePopularityInSolutions();
+	void decreasePopularityInArrangements();
+	void decreasePopularityInSolutions();
+	void resetPopularityInArrangements();
+	void resetPopularityInSolutions();
+	
 
 	/// Getters ///
 
@@ -95,33 +108,32 @@ public:
 	int getPRA() const;
 	KPDBloodType getBT() const;
 
-	bool checkWithinBounds(int minPRA, int maxPRA);
-
-	bool getStatus() const;
-	double getFailureProbability() const;
-
-	QSet<KPDGUIMatch *> getMatches() const;
-	bool hasNoMatches();
-	int getNumberOfMatches();
-
-	// Popularity
-	int getPopularityInStructures();
-	int getPopularityInSolutions();
-
+	// HLA Information
+	QVector<QString> getHLA() const;
+	
 	// Characteristics
 	bool getMale() const;
 	KPDRace getRace() const;
 	bool getDiabetes() const;
+	double getHeight() const;
 	double getWeight() const;
 	double getBMI() const;	
 	bool getPrevTrans() const;
 	double getTOD() const;
 	bool getHepC() const;
+	KPDInsurance getInsurance() const;
 
-	// Compatibilities
+	// Additional Parameters
+	bool getStatus() const;
+	double getFailureProbability() const;
+
 	QVector<int> getExcludedDonors() const;
-	QVector<QString> getHLA() const;	
 
+	QSet<KPDGUIMatch *> getMatches() const;
+
+	int getPopularityInArrangements();
+	int getPopularityInSolutions();
+	
 	// Comment
 	QString getComment() const;
 		
@@ -136,40 +148,27 @@ public:
 	void setPRA(int pra);
 	void setBT(KPDBloodType bt);
 
-	void setStatus(bool status);
-	void setFailureProbability(double prob);
-
-	void setMatches(QSet<KPDGUIMatch *> matches);
-	void addMatchingDonor(KPDGUIMatch * match);
-	void removeMatchingDonor(KPDGUIMatch * match);
-	KPDGUIMatch * findMatchingDonor(KPDGUIDonor * donor);
+	// HLA Information
+	void setHLA(QVector<QString> hla);
 	
-	// Popularity
-	void increasePopularityInStructures();
-	void increasePopularityInSolutions();
-	void decreasePopularityInStructures();
-	void decreasePopularityInSolutions();
-	void resetPopularityInStructures();
-	void resetPopularityInSolutions();
-
 	// Characteristics
 	void setMale(bool genderMale);
 	void setRace(KPDRace race);
-	void setDiabetes(bool diabetes);	
+	void setDiabetes(bool diabetes);
+	void setHeight(double height);
 	void setWeight(double weight);
-	void setBMI(double bmi);
 	void setPrevTrans(bool prevTrans);
 	void setTOD(double tod);
 	void setHepC(bool hepC);
+	void setInsurance(KPDInsurance insurance);
 
 	// Compatibilities
-	void setExcludedDonors(QVector<int> donors);
-	void addExcludedDonor(int donor);
-	void removeExcludedDonor(int donor);
+	void setStatus(bool status);
+	void setFailureProbability(double prob);
 
-	void setHLA(QVector<QString> hla);
-	void addHLA(QString hla);
-	void removeHLA(QString hla);	
+	void setExcludedDonors(QVector<int> donors);
+
+	void setMatches(QSet<KPDGUIMatch *> matches);
 
 	// Comment
 	void setComment(QString comment);
@@ -179,17 +178,12 @@ public:
 
 	QPointF getCandidatePosition();
 	void setCandidatePosition(QPointF point);
-	QString text() const;
-	void setText(const QString &text);
-	void setBackgroundColor();
-	QColor backgroundColor() const;
-	//QRectF boundingRect() const;
-	//QPainterPath shape() const;
+	
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	//QVariant data(int column) const;
 	
 
 	/// Strings ///
+
 	QString candidateString();
 	QString compatibilitiesString();
 	QString excludedDonorString();

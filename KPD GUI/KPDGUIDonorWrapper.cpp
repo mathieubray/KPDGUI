@@ -1,7 +1,9 @@
 #include "KPDGUIDonorWrapper.h"
 
-KPDGUIDonorWrapper::KPDGUIDonorWrapper(KPDGUIDonor * Donor) {
-	myDonor = Donor;
+KPDGUIDonorWrapper::KPDGUIDonorWrapper(KPDGUIDonor * donor) {
+	myDonor = donor;
+
+	QObject::connect(donor, SIGNAL(donorEdited()), this, SLOT(updateText()));
 
 	updateText();
 }
@@ -21,10 +23,40 @@ void KPDGUIDonorWrapper::updateText() {
 	setText(2, myDonor->getName());
 	setText(3, QString::number(myDonor->getNumberOfMatches()));
 
+	QColor textColor;
+	if (myDonor->getStatus()) {
+		textColor = QColor(0, 0, 0);
+	}
+	else {
+		textColor = QColor(175, 175, 175);
+	}
+
+	for (int i = 0; i < columnCount(); i++) {
+		setTextColor(i, textColor);
+		if (i == 0 || i == 3) {
+			setTextAlignment(i, Qt::AlignRight | Qt::AlignVCenter);
+		}
+		else {
+			setTextAlignment(i, Qt::AlignLeft | Qt::AlignVCenter);
+		}
+	}
+}
+
+void KPDGUIDonorWrapper::donorWrapperDoubleClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		DialogDonor * dialogDonor = new DialogDonor(myDonor);
+
+		if (dialogDonor->exec()) {
+			myDonor->editDonor(dialogDonor);
+		}
+	}
+
 }
 
 
-bool KPDGUIDonorWrapper::operator<(const QTreeWidgetItem &other)const {
+bool KPDGUIDonorWrapper::operator<(const QTreeWidgetItem &other) const {
 
 	int column = treeWidget()->sortColumn();
 

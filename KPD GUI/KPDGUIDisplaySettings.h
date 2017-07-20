@@ -1,20 +1,23 @@
 #ifndef KPDGUIDISPLAYSETTINGS_H
 #define KPDGUIDISPLAYSETTINGS_H
 
-#include <qstring.h>
-#include <qvector.h>
-#include <qdatastream.h>
+#include <QtGui>
+#include <QtWidgets>
 
 #include "DialogDisplaySettings.h"
-#include "EnumsFunctions.h"
+
+#include "KPDGUIEnumsFunctions.h"
 
 class KPDGUIDisplaySettings {
 	
 private:
+
+	KPDNodeDisplayMode nodeDisplayMode;
+
 	bool showAllNodes;
 	bool showNodeSubset;
+	bool showNodesInArrangements;
 	bool showNodesInSolutions;
-	bool showNodesInStructures;
 	bool showExcludedNodes;
 	bool showNodesWithNoCompatibilities;
 	bool showCandidatesInPRARange;
@@ -31,9 +34,12 @@ public:
 
 	bool changeDisplaySettings(DialogDisplaySettings * d);
 
+	// Getters
+	KPDNodeDisplayMode getNodeDisplayMode() const;
+
 	bool getShowAllNodes() const;
 	bool getShowNodeSubset() const;
-	bool getShowNodesInStructures() const;
+	bool getShowNodesInArrangements() const;
 	bool getShowNodesInSolutions() const;
 	bool getShowExcludedNodes() const;
 	bool getShowNodesWithNoCompatibilities() const;
@@ -44,9 +50,12 @@ public:
 
 	KPDMatchDisplayMode getMatchDisplayMode() const;
 
+	// Setters
+	void setNodeDisplayMode(KPDNodeDisplayMode mode);
+
 	void setShowAllNodes(bool show);
 	void setShowNodeSubset(bool show);
-	void setShowNodesInStructures(bool show);
+	void setShowNodesInArrangements(bool show);
 	void setShowNodesInSolutions(bool show);
 	void setShowExcludedNodes(bool show);
 	void setShowNodesWithNoCompatibilities(bool show);
@@ -59,8 +68,8 @@ public:
 
 };
 
-QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings & settings);
+QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings);
 
-QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings & settings);
+QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings);
 
 #endif

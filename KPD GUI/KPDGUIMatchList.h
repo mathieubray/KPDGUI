@@ -4,7 +4,6 @@
 #include <QTreeWidget>
 #include <QHeaderView>
 
-#include "KPDGUIMatch.h"
 #include "KPDGUIMatchWrapper.h"
 
 
@@ -16,13 +15,12 @@ public:
 	KPDGUIMatchList(QWidget *parent = 0);
 	~KPDGUIMatchList();
 
+public slots:
+	void updateText();
+
 protected:
-	void mouseReleaseEvent(QMouseEvent * event);
-	//void mouseDoubleClickEvent(QMouseEvent * event);
-	void mouseMoveEvent(QMouseEvent * event);
 
 signals:
-	void mouseReleased();
 
 private:
 

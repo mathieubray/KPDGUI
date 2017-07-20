@@ -4,6 +4,7 @@
 #include "KPDGUICandidate.h"
 
 KPDGUICandidate::KPDGUICandidate(){
+
 	matchingID = 0;
 
 	candidateName = "Candidate Name";
@@ -14,104 +15,45 @@ KPDGUICandidate::KPDGUICandidate(){
 	candidateStatus = true;
 	candidateFailureProbability = 0.0;
 
-	popularityInStructures = 0;
+	popularityInArrangements = 0;
 	popularityInSolutions = 0;
 
 	candidateMale = false;
 	candidateRace = RACE_WHITE;
 	candidateDiabetes = false;
-	candidateWeight = 75.0;
-	candidateBMI = 25.0;		
+	candidateHeight = 1.5;
+	candidateWeight = 60.0;	
 	candidatePrevTrans = false;
 	candidateTOD = 0.0;
 	candidateHepC = false;
+	candidateInsurance = PUBLIC;
 	
 	candidateComment = "";
 
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
-	candidateOpacity = 0.25;
 
-	setRect(QRectF(0, 0, 75, 65));
-
-	updateVisualProperties();
+	setRect(QRectF(0, 0, 75, 65));	
 }
 
 KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 
 	matchingID = 0;
-	
-	candidateName = c->candidateNameLineEdit->text();
-	candidateAge = c->candidateAgeSpinBox->value();
-	candidatePRA = c->candidatePRASpinBox->value();
-	candidateBT = KPDFunctions::intToBloodType(c->candidateBTComboBox->currentIndex());
-	
-	candidateStatus = c->candidateStatusCheckBox->isChecked();
-	candidateFailureProbability = c->candidateFailureProbabilitySpinBox->value();
 
-	popularityInStructures = 0;
+	popularityInArrangements = 0;
 	popularityInSolutions = 0;
+	
+	editCandidate(c);
 
-	QString gender = c->candidateGenderComboBox->currentText();
-	double height = c->candidateHeightSpinBox->value();
-	double weight = c->candidateWeightSpinBox->value();	
-
-	if (gender == "Male"){ candidateMale = true; }
-	else { candidateMale = false; }
-	candidateRace = KPDFunctions::intToRace(c->candidateRaceComboBox->currentIndex());
-	candidateDiabetes = c->candidateDiabetesCheckBox->isChecked();
-	candidateWeight = weight;
-	candidateBMI = weight / height / height;
-	candidatePrevTrans = c->candidatePrevTransCheckBox->isChecked();
-	candidateTOD = c->candidateTODSpinBox->value();
-	candidateHepC = c->candidateHepCCheckBox->isChecked();
-
-	/*QString excludedDonors = c->excludedDonorLineEdit->text();
-	excludedDonors.replace(" ", "");
-	QStringList excludedDonorList = excludedDonors.split(";");
-
-	foreach(QString donor, excludedDonorList){
-		candidateExcludedDonors << donor.toInt();
-	}*/
-
-	QString antibodies = c->candidateHLALineEdit->text();
-	antibodies.replace(" ", "");
-	QStringList antibodyList = antibodies.split(";");
-
-	foreach(QString antibody, antibodyList){
-		candidateHLA << antibody;
-	}
-
-	candidateComment = c->commentTextEdit->toPlainText();
+	setRect(QRectF(0, 0, 75, 65));
 	
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
-	candidateOpacity = 0.25;
-
-	setRect(QRectF(0, 0, 75, 65));
-
-	updateVisualProperties();
 
 }
 
 KPDGUICandidate::~KPDGUICandidate(){
 
-}
-
-int KPDGUICandidate::getID() const {
-	return matchingID;
-}
-
-QString KPDGUICandidate::getName() const {
-	return candidateName;
-}
-
-int KPDGUICandidate::getAge() const {
-	return candidateAge;
-}
-
-int KPDGUICandidate::getPRA() const {
-	return candidatePRA;
 }
 
 bool KPDGUICandidate::checkWithinBounds(int minPRA, int maxPRA) {
@@ -123,20 +65,26 @@ bool KPDGUICandidate::checkWithinBounds(int minPRA, int maxPRA) {
 	return false;
 }
 
-KPDBloodType KPDGUICandidate::getBT() const {
-	return candidateBT;
+void KPDGUICandidate::addHLA(QString hla) {
+	candidateHLA << hla;
 }
 
-bool KPDGUICandidate::getStatus() const {
-	return candidateStatus;
+void KPDGUICandidate::removeHLA(QString hla) {
+	int hlaIndex = candidateHLA.indexOf(hla);
+	if (hlaIndex >= 0) {
+		candidateHLA.remove(hlaIndex);
+	}
 }
 
-double KPDGUICandidate::getFailureProbability() const {
-	return candidateFailureProbability;
+void KPDGUICandidate::addExcludedDonor(int donor) {
+	candidateExcludedDonors << donor;
 }
 
-QSet<KPDGUIMatch *> KPDGUICandidate::getMatches() const {
-	return candidateMatches;
+void KPDGUICandidate::removeExcludedDonor(int donor) {
+	int hlaIndex = candidateExcludedDonors.indexOf(donor);
+	if (hlaIndex >= 0) {
+		candidateExcludedDonors.remove(hlaIndex);
+	}
 }
 
 bool KPDGUICandidate::hasNoMatches() {
@@ -145,106 +93,6 @@ bool KPDGUICandidate::hasNoMatches() {
 
 int KPDGUICandidate::getNumberOfMatches() {
 	return candidateMatches.size();
-}
-
-int KPDGUICandidate::getPopularityInStructures() {
-	return popularityInStructures;
-}
-
-int KPDGUICandidate::getPopularityInSolutions() {
-	return popularityInSolutions;
-}
-
-bool KPDGUICandidate::getMale() const{
-	return candidateMale;
-}
-
-KPDRace KPDGUICandidate::getRace() const {
-	return candidateRace;
-}
-
-bool KPDGUICandidate::getDiabetes() const {
-	return candidateDiabetes;
-}
-
-double KPDGUICandidate::getWeight() const {
-	return candidateWeight;
-}
-
-double KPDGUICandidate::getBMI() const{
-	return candidateBMI;
-}
-
-bool KPDGUICandidate::getPrevTrans() const{
-	return candidatePrevTrans;
-}
-
-double KPDGUICandidate::getTOD() const{
-	return candidateTOD;
-}
-
-bool KPDGUICandidate::getHepC() const{
-	return candidateHepC;
-}
-
-QVector<int> KPDGUICandidate::getExcludedDonors() const{
-	return candidateExcludedDonors;
-}
-
-QVector<QString> KPDGUICandidate::getHLA() const {
-	return candidateHLA;
-}
-
-QString KPDGUICandidate::getComment() const{
-	return candidateComment;
-}
-
-void KPDGUICandidate::setID(int id){
-	matchingID = id;
-
-	updateVisualProperties();	
-}
-
-void KPDGUICandidate::setName(QString name){
-	candidateName = name;
-
-	updateVisualProperties();
-}
-
-void KPDGUICandidate::setAge(int age){
-	candidateAge = age;
-
-	updateVisualProperties();
-}
-
-void KPDGUICandidate::setPRA(int pra) {
-	candidatePRA = pra;
-
-	updateVisualProperties();
-}
-
-void KPDGUICandidate::setBT(KPDBloodType bt){
-	candidateBT = bt;
-
-	updateVisualProperties();
-}
-
-void KPDGUICandidate::setStatus(bool status) {
-	candidateStatus = status;
-
-	updateVisualProperties();
-}
-
-void KPDGUICandidate::setFailureProbability(double prob) {
-	candidateFailureProbability = prob;
-}
-
-void KPDGUICandidate::setMatches(QSet<KPDGUIMatch *> matches) {
-	candidateMatches.clear();
-
-	foreach(KPDGUIMatch * match, matches) {
-		candidateMatches << match;
-	}
 }
 
 void KPDGUICandidate::addMatchingDonor(KPDGUIMatch * match) {
@@ -268,28 +116,147 @@ KPDGUIMatch * KPDGUICandidate::findMatchingDonor(KPDGUIDonor * donor) {
 	return NULL;
 }
 
-void KPDGUICandidate::increasePopularityInStructures() {
-	popularityInStructures++;
+void KPDGUICandidate::increasePopularityInArrangements() {
+	popularityInArrangements++;
 }
 
 void KPDGUICandidate::increasePopularityInSolutions() {
 	popularityInSolutions++;
 }
 
-void KPDGUICandidate::decreasePopularityInStructures() {
-	popularityInStructures--;
+void KPDGUICandidate::decreasePopularityInArrangements() {
+	popularityInArrangements--;
 }
 
 void KPDGUICandidate::decreasePopularityInSolutions() {
 	popularityInSolutions--;
 }
 
-void KPDGUICandidate::resetPopularityInStructures() {
-	popularityInStructures = 0;
+void KPDGUICandidate::resetPopularityInArrangements() {
+	popularityInArrangements = 0;
 }
 
 void KPDGUICandidate::resetPopularityInSolutions() {
 	popularityInSolutions = 0;
+}
+
+int KPDGUICandidate::getID() const {
+	return matchingID;
+}
+
+QString KPDGUICandidate::getName() const {
+	return candidateName;
+}
+
+int KPDGUICandidate::getAge() const {
+	return candidateAge;
+}
+
+int KPDGUICandidate::getPRA() const {
+	return candidatePRA;
+}
+
+KPDBloodType KPDGUICandidate::getBT() const {
+	return candidateBT;
+}
+
+QVector<QString> KPDGUICandidate::getHLA() const {
+	return candidateHLA;
+}
+
+bool KPDGUICandidate::getMale() const{
+	return candidateMale;
+}
+
+KPDRace KPDGUICandidate::getRace() const {
+	return candidateRace;
+}
+
+bool KPDGUICandidate::getDiabetes() const {
+	return candidateDiabetes;
+}
+
+double KPDGUICandidate::getHeight() const {
+	return candidateHeight;
+}
+
+double KPDGUICandidate::getWeight() const {
+	return candidateWeight;
+}
+
+double KPDGUICandidate::getBMI() const{
+	return (candidateWeight / candidateHeight) / candidateHeight;
+}
+
+bool KPDGUICandidate::getPrevTrans() const{
+	return candidatePrevTrans;
+}
+
+double KPDGUICandidate::getTOD() const{
+	return candidateTOD;
+}
+
+bool KPDGUICandidate::getHepC() const{
+	return candidateHepC;
+}
+
+KPDInsurance KPDGUICandidate::getInsurance() const {
+	return candidateInsurance;
+}
+
+bool KPDGUICandidate::getStatus() const {
+	return candidateStatus;
+}
+
+double KPDGUICandidate::getFailureProbability() const {
+	return candidateFailureProbability;
+}
+
+QVector<int> KPDGUICandidate::getExcludedDonors() const {
+	return candidateExcludedDonors;
+}
+
+QSet<KPDGUIMatch *> KPDGUICandidate::getMatches() const {
+	return candidateMatches;
+}
+
+int KPDGUICandidate::getPopularityInArrangements() {
+	return popularityInArrangements;
+}
+
+int KPDGUICandidate::getPopularityInSolutions() {
+	return popularityInSolutions;
+}
+
+QString KPDGUICandidate::getComment() const{
+	return candidateComment;
+}
+
+void KPDGUICandidate::setID(int id){
+	matchingID = id;		
+}
+
+void KPDGUICandidate::setName(QString name){
+	candidateName = name;	
+}
+
+void KPDGUICandidate::setAge(int age){
+	candidateAge = age;	
+}
+
+void KPDGUICandidate::setPRA(int pra) {
+	candidatePRA = pra;	
+}
+
+void KPDGUICandidate::setBT(KPDBloodType bt){
+	candidateBT = bt;	
+}
+
+void KPDGUICandidate::setHLA(QVector<QString> antibodies) {
+	candidateHLA.clear();
+	foreach(QString antibody, antibodies) {
+		candidateHLA << antibody;
+	}
 }
 
 void KPDGUICandidate::setMale(bool genderMale){
@@ -304,12 +271,12 @@ void KPDGUICandidate::setDiabetes(bool diabetes) {
 	candidateDiabetes = diabetes;
 }
 
-void KPDGUICandidate::setWeight(double weight) {
-	candidateWeight = weight;
+void KPDGUICandidate::setHeight(double height) {
+	candidateHeight = height;
 }
 
-void KPDGUICandidate::setBMI(double bmi){
-	candidateBMI = bmi;
+void KPDGUICandidate::setWeight(double weight) {
+	candidateWeight = weight;
 }
 
 void KPDGUICandidate::setPrevTrans(bool prevTrans){
@@ -324,39 +291,30 @@ void KPDGUICandidate::setHepC(bool hepC){
 	candidateHepC = hepC;
 }
 
-void KPDGUICandidate::setExcludedDonors(QVector<int> donors){
+void KPDGUICandidate::setInsurance(KPDInsurance insurance) {
+	candidateInsurance = insurance;
+}
+
+void KPDGUICandidate::setStatus(bool status) {
+	candidateStatus = status;
+}
+
+void KPDGUICandidate::setFailureProbability(double prob) {
+	candidateFailureProbability = prob;
+}
+
+void KPDGUICandidate::setExcludedDonors(QVector<int> donors) {
 	candidateExcludedDonors.clear();
-	foreach(int donor, donors){
+	foreach(int donor, donors) {
 		candidateExcludedDonors << donor;
 	}
 }
 
-void KPDGUICandidate::addExcludedDonor(int donor){
-	candidateExcludedDonors << donor;
-}
+void KPDGUICandidate::setMatches(QSet<KPDGUIMatch *> matches) {
+	candidateMatches.clear();
 
-void KPDGUICandidate::removeExcludedDonor(int donor) {
-	int position = candidateExcludedDonors.indexOf(donor);
-	if (position >= 0) {
-		candidateExcludedDonors.remove(position);
-	}
-}
-
-void KPDGUICandidate::setHLA(QVector<QString> antibodies){
-	candidateHLA.clear();
-	foreach(QString antibody, antibodies){
-		candidateHLA << antibody;
-	}
-}
-
-void KPDGUICandidate::addHLA(QString hla){
-	candidateHLA << hla;
-}
-
-void KPDGUICandidate::removeHLA(QString hla) {
-	int position = candidateHLA.indexOf(hla);
-	if (position >= 0) {
-		candidateHLA.remove(position);
+	foreach(KPDGUIMatch * match, matches) {
+		candidateMatches << match;
 	}
 }
 
@@ -386,86 +344,50 @@ void KPDGUICandidate::setCandidatePosition(QPointF point) {
 	setPos(adjustedPosition);
 }
 
-QString KPDGUICandidate::text() const
-{
-	return candidateLabel;
-}
-
-void KPDGUICandidate::setText(const QString &text)
-{
-	prepareGeometryChange();
-	candidateLabel = text;
-	update();
-}
-
-//void KPDGUICandidate::setBackgroundColor() {
-
-	//update();
-//}
-
-QColor KPDGUICandidate::backgroundColor() const
-{
-	return candidateBackgroundColor;
-}
-
-//QRectF KPDGUICandidate::boundingRect() const
-//{
-//const int Margin = 1;
-//return outlineRect().adjusted(-Margin, -Margin, +Margin, +Margin);
-//}
-
-//QRectF KPDGUICandidate::outlineRect() const
-//{
-/*qreal x1; qreal x2; qreal y1; qreal y2;
-
-int Padding = 12;
-QFont * font = new QFont();
-font->setBold(true);
-font->setPointSize(8);
-QFontMetricsF * metrics = new QFontMetricsF(*font);
-QRectF rect = metrics->boundingRect(myText);
-rect.getCoords(&x1, &y1, &x2, &y2);
-rect.adjust(-(2.5*Padding - x1), -(Padding - y1), (2.5*Padding - x2), (Padding - y2));
-rect.translate(-rect.center());
-return rect; */
-//}
-
-//QPainterPath KPDGUICandidate::shape() const
-//{
-//QRectF rect = outlineRect();
-
-//QPainterPath path;
-//path.addEllipse(rect);
-//return path;
-//}
-
 void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * /* widget */)
 {
-	QColor myOutlineColor = Qt::black;
-	QColor myTextColor = Qt::white;
+	QColor myBackgroundColor;
+	if (candidateStatus) {
+		myBackgroundColor = QColor(255, candidatePRA * 1.5, candidatePRA * 1.5);
+	}
+	else {
+		myBackgroundColor = QColor(100, 100, 100);
+	}
+
+	if (isSelected()) {
+		setOpacity(1);
+	}
+	else {
+		setOpacity(0.5);
+	}
+
+	setToolTip(candidateString());
+
+	/// Node ///
 
 	//Outline
-	QPen pen(myOutlineColor);
+	QPen pen(Qt::black);
 
 	if (option->state & QStyle::State_Selected) {
-		pen.setStyle(Qt::DotLine);
 		pen.setWidth(2);
+		pen.setStyle(Qt::DotLine);
 	}
 
 	painter->setPen(pen);
-	painter->setBrush(QBrush(candidateBackgroundColor, Qt::SolidPattern));
+	painter->setBrush(QBrush(myBackgroundColor, Qt::SolidPattern));
 
 	QRectF donorRect = boundingRect();
 	painter->drawEllipse(donorRect);
 
-	painter->setPen(QPen(myTextColor, 16, Qt::SolidLine, Qt::RoundCap));
+	//Text
+	painter->setPen(QPen(Qt::white, 16, Qt::SolidLine, Qt::RoundCap));
 
 	QFont * font = new QFont();
 	font->setBold(true);
 	font->setPointSize(8);
 	painter->setFont(*font);
 
-	painter->drawText(donorRect, Qt::AlignCenter, candidateLabel);
+	painter->drawText(donorRect, Qt::AlignCenter, QString::number(matchingID));
 
 }
 
@@ -529,66 +451,71 @@ QVariant KPDGUICandidate::itemChange(GraphicsItemChange change, const QVariant &
 	}
 
 	if (change == ItemSelectedHasChanged) {
-		emit candidateSelectionChanged(value.toBool());
+		emit candidateSelectionChanged(matchingID, value.toBool());
 	}
 
 	return QGraphicsItem::itemChange(change, value);
 }
 
 void KPDGUICandidate::hoverEnterEvent(QGraphicsSceneHoverEvent *event) {
-
-	candidateOpacity = 1;
-	updateVisualProperties();
-
-	emit candidateEntered();
+	
+	emit candidateEntered(matchingID);
 }
 
 void KPDGUICandidate::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
-	
-	candidateOpacity = 0.25;
-	updateVisualProperties();
-	
-	emit candidateExited();
-}
-
-void KPDGUICandidate::mousePressEvent(QGraphicsSceneMouseEvent *event) {
-
-	setSelected(true);
-
-	emit candidateClicked(isSelected());
+		
+	emit candidateExited(matchingID);
 }
 
 void KPDGUICandidate::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
-	editCandidate();
+	DialogCandidate * candidateDialog = new DialogCandidate(this, false);
+	if (candidateDialog->exec()) {
+		editCandidate(candidateDialog);
+	}
+	
+}
 
-	//QGraphicsObject::mouseDoubleClickEvent(event);
+void KPDGUICandidate::editCandidate(DialogCandidate * dialog) {
+
+	candidateName = dialog->candidateNameLineEdit->text();
+	candidateAge = dialog->candidateAgeSpinBox->value();
+	candidatePRA = dialog->candidatePRASpinBox->value();
+	candidateBT = KPDFunctions::intToBloodType(dialog->candidateBTComboBox->currentIndex());
+
+	candidateStatus = dialog->candidateStatusCheckBox->isChecked();
+	candidateFailureProbability = dialog->candidateFailureProbabilitySpinBox->value();
+
+	QString gender = dialog->candidateGenderComboBox->currentText();
+	if (gender == "Male") { candidateMale = true; }
+	else { candidateMale = false; }
+	candidateRace = KPDFunctions::intToRace(dialog->candidateRaceComboBox->currentIndex());
+	candidateDiabetes = dialog->candidateDiabetesCheckBox->isChecked();
+	candidateHeight = dialog->candidateHeightSpinBox->value();
+	candidateWeight = dialog->candidateWeightSpinBox->value();
+	candidatePrevTrans = dialog->candidatePrevTransCheckBox->isChecked();
+	candidateTOD = dialog->candidateTODSpinBox->value();
+	candidateHepC = dialog->candidateHepCCheckBox->isChecked();
+	candidateInsurance = KPDFunctions::intToInsurance(dialog->candidateInsuranceComboBox->currentIndex());
+	
+	QString antibodies = dialog->candidateHLALineEdit->text();
+	antibodies.replace(" ", "");
+	QStringList antibodyList = antibodies.split(";");
+
+	foreach(QString antibody, antibodyList) {
+		candidateHLA << antibody;
+	}
+
+	candidateComment = dialog->commentTextEdit->toPlainText();
+
+	emit candidateEdited();
+	
 }
 
 void KPDGUICandidate::updateVisualProperties() {
 
-	if (isSelected()) {
-		setOpacity(1);
-	}
-	else {
-		setOpacity(candidateOpacity);
-	}
-
-	if (candidateStatus) {
-		candidateBackgroundColor = QColor(255, candidatePRA * 1.5, candidatePRA * 1.5);
-	}
-	else {
-		candidateBackgroundColor = QColor(100, 100, 100);
-	}
-	setToolTip(candidateString());
-
-	setZValue(1);
-
+	prepareGeometryChange();
 	update();
-}
-
-void KPDGUICandidate::editCandidate() {
-
 }
 
 QDataStream &operator<<(QDataStream &out, const KPDGUICandidate & candidate)
@@ -608,11 +535,12 @@ QDataStream &operator<<(QDataStream &out, const KPDGUICandidate & candidate)
 	out << candidate.getMale();
 	out << qint32(KPDFunctions::raceToInt(candidate.getRace()));
 	out << candidate.getDiabetes();
+	out << candidate.getHeight();
 	out << candidate.getWeight();
-	out << candidate.getBMI();	
 	out << candidate.getPrevTrans();
 	out << candidate.getTOD();
 	out << candidate.getHepC();
+	out << qint32(KPDFunctions::insuranceToInt(candidate.getInsurance()));
 
 	out << candidate.getExcludedDonors();
 	out << candidate.getHLA();
@@ -639,11 +567,12 @@ QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 	bool male;
 	int race;
 	bool diabetes;
-	double weight;
-	double BMI;			
+	double height;
+	double weight;			
 	bool prevTrans;
 	double TOD;
 	bool hepC;
+	int insurance;
 
 	QVector<int> excludedDonors;
 	QVector<QString> hla;
@@ -658,8 +587,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 
 	//in >> matches;
 
-	in >> male >> race >> diabetes >> weight;
-	in >> BMI >> prevTrans >> TOD >> hepC;
+	in >> male >> race >> diabetes >> height >> weight;
+	in >> prevTrans >> TOD >> hepC >> insurance;
 	
 	in >> excludedDonors >> hla;
 	
@@ -680,11 +609,12 @@ QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 	candidate.setMale(male);
 	candidate.setRace(KPDFunctions::intToRace(race));
 	candidate.setDiabetes(diabetes);
+	candidate.setHeight(height);
 	candidate.setWeight(weight);
-	candidate.setBMI(BMI);	
 	candidate.setPrevTrans(prevTrans);
 	candidate.setTOD(TOD);
 	candidate.setHepC(hepC);
+	candidate.setInsurance(KPDFunctions::intToInsurance(insurance));
 
 	candidate.setExcludedDonors(excludedDonors);
 	candidate.setHLA(hla);

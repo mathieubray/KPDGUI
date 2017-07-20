@@ -13,15 +13,12 @@ public:
 	KPDGUINodeWrapper(KPDGUINode * node);
 	~KPDGUINodeWrapper();
 
-	KPDGUINode * getNode();
-	
+	KPDGUINode * getNode();	
 
 public slots:
-	//void selectionActions(int, bool);
-	//void editActions(int);
-
-	void updateSelections();
 	void updateText();
+
+	void nodeWrapperDoubleClickActions(QTreeWidgetItem * item);
 
 private:
 	KPDGUINode * myNode;
@@ -29,5 +26,6 @@ private:
 	bool operator<(const QTreeWidgetItem &other)const;
 	
 };
+
 
 #endif

@@ -8,9 +8,8 @@
 #include "KPDGUICandidate.h"
 
 #include "KPDGUIDisplaySettings.h"
-#include "KPDGUIPairModelItem.h"
 
-#include "EnumsFunctions.h"
+#include "KPDGUIEnumsFunctions.h"
 
 class KPDGUIMatch;
 class DialogDonor;
@@ -27,27 +26,32 @@ private:
 
 	QVector<KPDGUIDonor *> nodeDonors;
 	KPDGUICandidate * nodeCandidate;
-	
-	QVector<QString> nodePrograms;
+
+	QVector<KPDCrossmatchResult> crossmatchResults;
 	
 
 public slots:
 
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void clusterNode();
+	void editActions();
 
+signals:
+
+	void nodeEdited();
 
 public:
 	
 	KPDGUINode();
 	KPDGUINode(KPDGUIDonor* donor);
-	KPDGUINode(QVector<KPDGUIDonor*> donors, KPDGUICandidate * candidate);
+	KPDGUINode(QVector<KPDGUIDonor*> donors, KPDGUICandidate * candidate, QVector<KPDCrossmatchResult> results);
 	~KPDGUINode();
 		
 	//Getters
 	int getID() const;
 	KPDNodeType getType() const;
 
+	KPDGUIDonor * getDonor(int k) const;
 	QVector<KPDGUIDonor *> getDonors() const;
 	KPDGUIDonor * getFirstDonor() const;
 	int getNumberOfDonors() const;
@@ -55,9 +59,9 @@ public:
 	KPDGUICandidate * getCandidate() const;
 	
 	bool getStatus();
+	int getNumberOfCompatibilities();
 
-	QVector<QString> getPrograms() const;
-	int getNumberOfPrograms() const;
+	QVector<KPDCrossmatchResult> getCrossmatchResults() const;
 
 
 	//Setters
@@ -69,20 +73,17 @@ public:
 	void removeDonor(KPDGUIDonor * donor);
 	
 	void setCandidate(KPDGUICandidate * candidate);
-	
-	void setPrograms(QVector<QString> programs);
-	void addProgram(QString program);
-	void removeProgram(QString program);
-		
+
+	void setCrossmatchResults(QVector<KPDCrossmatchResult> results);		
 
 
 	// Visual Properties
 
-	
+	QPolygonF getRect();
+
 	QPointF getNodePosition();
 	void setNodePosition(QPointF center);
 	void setSelected(bool selected);
-	void updateNodeVisibility(KPDGUIDisplaySettings * displaySettings);
 
 	void setZValue(int z);
 

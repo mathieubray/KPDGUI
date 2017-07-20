@@ -1,3 +1,4 @@
+
 #include "KPDGUIGraphicsView.h"
 
 KPDGUIGraphicsView::KPDGUIGraphicsView(QWidget *parent) : QGraphicsView(parent)
@@ -11,13 +12,7 @@ KPDGUIGraphicsView::~KPDGUIGraphicsView()
 
 }
 
-void KPDGUIGraphicsView::mouseReleaseEvent(QMouseEvent *event)
-{
-	QGraphicsView::mouseReleaseEvent(event);
-
-	emit mouseReleased();
-}
-
+// Needed to get mouse wheel events to work
 void KPDGUIGraphicsView::wheelEvent(QWheelEvent *event){
 	if (mode == 0){
 		QGraphicsView::wheelEvent(event);
