@@ -22,6 +22,7 @@ void KPDGUIDonorWrapper::updateText() {
 	setText(1, KPDFunctions::donorTypeToString(myDonor->isAltruistic()));
 	setText(2, myDonor->getName());
 	setText(3, QString::number(myDonor->getNumberOfMatches()));
+	setText(4, KPDFunctions::toString(myDonor->getCompatibilityWithPairedCandidate()));
 
 	QColor textColor;
 	if (myDonor->getStatus()) {
@@ -42,15 +43,40 @@ void KPDGUIDonorWrapper::updateText() {
 	}
 }
 
+void KPDGUIDonorWrapper::donorWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool isSelected = false;
+
+		if (myDonor->isAltruistic()) {
+			isSelected = myDonor->isSelected();
+		}
+		else {
+			isSelected = myDonor->getParentNode()->getCandidate()->isSelected();
+		}
+
+		myDonor->setSelected(!isSelected);
+		
+		if (!myDonor->isAltruistic()) {
+			myDonor->getParentNode()->setSelected(!isSelected);
+		}
+		
+		emit updateVisibilitySignal();
+	}
+}
+
 void KPDGUIDonorWrapper::donorWrapperDoubleClickActions(QTreeWidgetItem * item) {
 
 	if (item == this) {
 
-		DialogDonor * dialogDonor = new DialogDonor(myDonor);
+		//DialogDonor * dialogDonor = new DialogDonor(myDonor);
 
-		if (dialogDonor->exec()) {
-			myDonor->editDonor(dialogDonor);
-		}
+		//if (dialogDonor->exec()) {
+			//myDonor->editDonor(dialogDonor);
+		//}
+
+		myDonor->edit();
 	}
 
 }

@@ -51,8 +51,8 @@ public:
 	QList<KPDGUINode *> getNodes();
 	QVector<KPDGUIMatch *> getMatches(int id);
 
-	void insertNode(KPDGUINode * node);
-	void insertMatch(KPDGUIMatch * match);
+	void insertNode(KPDGUINode * node, bool loadedFromKPDFile = false);
+	void insertMatch(KPDGUIMatch * match, bool loadedFromKPDFile = false);
 
 public slots:
 	
@@ -64,8 +64,11 @@ public slots:
 
 	void addNewNode();
 	void addNewNDD();
+	void addNewDonor();
+
 	void loadNodes();
-	
+	void loadAPD();
+
 	void exitProgram();
 		
 	//Window -> Match Run
@@ -80,8 +83,13 @@ public slots:
 	void changeMatchViewMode_SelectedCompatibilities();
 	void changeMatchViewMode_All();
 	void changeMatchViewMode_None();
+	void filterMatchesSuccessful(bool show);
+	void filterMatchesOtoNonO(bool show);
+	void filterMatchesFailedAdditionalHLA(bool show);
+	void filterMatchesFailedCrossmatch(bool show);
 	
 	//Window -> Tools
+	void runSurvivalCalculator(KPDGUIMatch *);
 	void runSurvivalCalculator();
 
 	void zoomIn();
@@ -94,19 +102,22 @@ public slots:
 	//Window -> About
 	void aboutKPD();
 
-	//void updateStatusBar();
-
 	/////// Actions ///////
 
-	void donorSelectionActions(int nodeID, int donorID, bool seleted);
-	void candidateSelectionActions(int id, bool selected);
+	//void donorSelectionActions(int nodeID, int donorID, bool seleted);
+	//void candidateSelectionActions(int id, bool selected);
+	void updateScene();
 
-	//void nodeWrapperClickActions();
+	//void arrangementListSelectionActions();
 	void arrangementListClickActions(QTreeWidgetItem * item);
 	void arrangementListDoubleClickActions(QTreeWidgetItem * item);
+	void arrangementListRightClickActions(QPoint point);
 
 	void solutionListClickActions(QTreeWidgetItem * item);
 	void solutionListDoubleClickActions(QTreeWidgetItem * item);
+	void solutionListRightClickActions(QPoint point);
+
+	void updateMatches();
 
 	
 signals:
@@ -117,6 +128,9 @@ signals:
 	void matchRunCompleted();
 
 	void clearHighlights();
+
+	void updateDonorHueSignal(int, double, double);
+	void updateCandidateHueSignal(int, double, double);
 
 protected:
 	void closeEvent(QCloseEvent *event);
@@ -142,36 +156,38 @@ private:
 	QMap<int, KPDGUINode *> nodes;
 	QMap<int, QVector<KPDGUIMatch *> > candidateMatches;
 	QMap<int, QVector<KPDGUIMatch *> > donorMatches;
-	QMap<KPDGUINode *, KPDGUINodeWrapper *> nodeWrapperMap;
-	QMap<KPDGUIMatch *, KPDGUIMatchWrapper *> matchWrapperMap;
 
+	QMap<int, KPDGUIArrangementSet *> storedMatchRunResults;
+	QMap<int, QVector<KPDGUIArrangementSet *> > storedMatchRunSolutions;
+	
+	int nMatches;
+	int nNodes;
+	int nDonors;
+	int nCandidates;
+	
+	void updateHueValues();
 	void updateStatus(QString message);
 	
 	//Saving and Loading
 	bool loadFile(const QString &fileName);
 	bool saveFile(const QString &fileName);
 	void setCurrentFile(const QString &fileName);
-
-	//Read and Write (Needed for some reason)
-	//void readSettings();
-	//void writeSettings();
-	
+		
 	//Parameters
 	QString currentFile;
 	int previousSliderPosition;	
 	int baselineID;
+	int matchRunID;
 		
 	//Menu and Toolbar Objects
 	QActionGroup * displayMatchesActionGroup;
 	QSlider * zoomSlider;
 
 	//Recent Arrangements
-	KPDGUIArrangement * rightClickArrangement;
-	KPDGUIArrangementSet * rightClickArrangementSet;
 	QVector<KPDGUIArrangement *> selectedArrangements;
 
 	static const int MagicNumber = 40930942;
 };
 
-#endif // MAINWINDOW_H
+#endif
 

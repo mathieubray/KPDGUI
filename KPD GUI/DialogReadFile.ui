@@ -29,17 +29,17 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="pairFileLabel">
+      <widget class="QLabel" name="loadLabel">
        <property name="text">
         <string>File</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1" colspan="3">
-      <widget class="QLineEdit" name="pairFileLineEdit"/>
+      <widget class="QLineEdit" name="loadLineEdit"/>
      </item>
      <item row="0" column="4">
-      <widget class="QToolButton" name="pairFileToolButton">
+      <widget class="QToolButton" name="loadToolButton">
        <property name="text">
         <string>Browse...</string>
        </property>
@@ -105,8 +105,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>98</y>
+     <x>402</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -121,8 +121,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>251</x>
-     <y>98</y>
+     <x>402</x>
+     <y>70</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -131,14 +131,14 @@
    </hints>
   </connection>
   <connection>
-   <sender>pairFileToolButton</sender>
+   <sender>loadToolButton</sender>
    <signal>clicked()</signal>
    <receiver>DialogReadFile</receiver>
    <slot>browse()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>253</x>
-     <y>31</y>
+     <x>402</x>
+     <y>34</y>
     </hint>
     <hint type="destinationlabel">
      <x>266</x>
@@ -147,18 +147,18 @@
    </hints>
   </connection>
   <connection>
-   <sender>pairFileLineEdit</sender>
+   <sender>loadLineEdit</sender>
    <signal>textChanged(QString)</signal>
    <receiver>DialogReadFile</receiver>
-   <slot>checkValidFile(QString)</slot>
+   <slot>checkValid(QString)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>130</x>
-     <y>18</y>
+     <x>89</x>
+     <y>26</y>
     </hint>
     <hint type="destinationlabel">
-     <x>172</x>
-     <y>6</y>
+     <x>171</x>
+     <y>55</y>
     </hint>
    </hints>
   </connection>
@@ -167,5 +167,6 @@
   <slot>browse()</slot>
   <slot>changeSelectionStatus(int)</slot>
   <slot>checkValidFile(QString)</slot>
+  <slot>checkValid(QString)</slot>
  </slots>
 </ui>

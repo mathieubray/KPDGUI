@@ -22,14 +22,23 @@ public:
 	
 	void raiseZValue();
 
+signals:
+	void updateVisibilitySignal();
+
+	void addNewDonorSignal(KPDGUICandidate * candidate);
+
+	void selectionClustered(int x, int y);
 	
 protected:
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
 
 
 private slots:
 
 	void edit();
+	void addAdditionalDonor();
 	void changeStatus();
 
 	void cluster();
@@ -41,15 +50,6 @@ private:
 
 	int zValue;
 	int nodePlacementSequenceNumber;
-
-	void createActions();
-	
-	QAction * editAction;
-	QAction * changeStatusAction;
-
-	QAction * clusterAction;
-
-	QAction * selectAllAction;
 
 };
 

@@ -30,9 +30,9 @@ class Ui_DialogReadFile
 public:
     QGridLayout *gridLayout_2;
     QGridLayout *gridLayout;
-    QLabel *pairFileLabel;
-    QLineEdit *pairFileLineEdit;
-    QToolButton *pairFileToolButton;
+    QLabel *loadLabel;
+    QLineEdit *loadLineEdit;
+    QToolButton *loadToolButton;
     QLabel *layoutLabel;
     QComboBox *layoutComboBox;
     QSpacerItem *horizontalSpacer;
@@ -49,20 +49,20 @@ public:
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         gridLayout = new QGridLayout();
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        pairFileLabel = new QLabel(DialogReadFile);
-        pairFileLabel->setObjectName(QStringLiteral("pairFileLabel"));
+        loadLabel = new QLabel(DialogReadFile);
+        loadLabel->setObjectName(QStringLiteral("loadLabel"));
 
-        gridLayout->addWidget(pairFileLabel, 0, 0, 1, 1);
+        gridLayout->addWidget(loadLabel, 0, 0, 1, 1);
 
-        pairFileLineEdit = new QLineEdit(DialogReadFile);
-        pairFileLineEdit->setObjectName(QStringLiteral("pairFileLineEdit"));
+        loadLineEdit = new QLineEdit(DialogReadFile);
+        loadLineEdit->setObjectName(QStringLiteral("loadLineEdit"));
 
-        gridLayout->addWidget(pairFileLineEdit, 0, 1, 1, 3);
+        gridLayout->addWidget(loadLineEdit, 0, 1, 1, 3);
 
-        pairFileToolButton = new QToolButton(DialogReadFile);
-        pairFileToolButton->setObjectName(QStringLiteral("pairFileToolButton"));
+        loadToolButton = new QToolButton(DialogReadFile);
+        loadToolButton->setObjectName(QStringLiteral("loadToolButton"));
 
-        gridLayout->addWidget(pairFileToolButton, 0, 4, 1, 1);
+        gridLayout->addWidget(loadToolButton, 0, 4, 1, 1);
 
         layoutLabel = new QLabel(DialogReadFile);
         layoutLabel->setObjectName(QStringLiteral("layoutLabel"));
@@ -93,8 +93,8 @@ public:
         retranslateUi(DialogReadFile);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogReadFile, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogReadFile, SLOT(reject()));
-        QObject::connect(pairFileToolButton, SIGNAL(clicked()), DialogReadFile, SLOT(browse()));
-        QObject::connect(pairFileLineEdit, SIGNAL(textChanged(QString)), DialogReadFile, SLOT(checkValidFile(QString)));
+        QObject::connect(loadToolButton, SIGNAL(clicked()), DialogReadFile, SLOT(browse()));
+        QObject::connect(loadLineEdit, SIGNAL(textChanged(QString)), DialogReadFile, SLOT(checkValid(QString)));
 
         QMetaObject::connectSlotsByName(DialogReadFile);
     } // setupUi
@@ -102,8 +102,8 @@ public:
     void retranslateUi(QDialog *DialogReadFile)
     {
         DialogReadFile->setWindowTitle(QApplication::translate("DialogReadFile", "Load Pairings and ADs From File", 0));
-        pairFileLabel->setText(QApplication::translate("DialogReadFile", "File", 0));
-        pairFileToolButton->setText(QApplication::translate("DialogReadFile", "Browse...", 0));
+        loadLabel->setText(QApplication::translate("DialogReadFile", "File", 0));
+        loadToolButton->setText(QApplication::translate("DialogReadFile", "Browse...", 0));
         layoutLabel->setText(QApplication::translate("DialogReadFile", "Layout", 0));
         layoutComboBox->clear();
         layoutComboBox->insertItems(0, QStringList()

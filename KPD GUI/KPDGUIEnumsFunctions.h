@@ -129,6 +129,15 @@ namespace KPDFunctions {
 		return type;
 	}
 
+	inline KPDBloodType stringToBloodType(QString bt) {
+		KPDBloodType bloodtype = BT_O;
+		if (bt == "A") { bloodtype = BT_A; }
+		else if (bt == "B") { bloodtype = BT_B; }
+		else if (bt == "AB") { bloodtype = BT_AB; }
+
+		return bloodtype;
+	}
+
 	inline int bloodTypeToInt(KPDBloodType type){
 
 		int i = 0;

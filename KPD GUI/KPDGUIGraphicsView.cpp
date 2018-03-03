@@ -31,3 +31,9 @@ void KPDGUIGraphicsView::wheelEvent(QWheelEvent *event){
 void KPDGUIGraphicsView::changeMode(int i){
 	mode = i;
 }
+
+void KPDGUIGraphicsView::centerView(int x, int y) {
+	centerOn(x, y);
+
+	//qDebug() << "CHILL";
+}

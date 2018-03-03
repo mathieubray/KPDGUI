@@ -15,17 +15,17 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_DialogMessage
 {
 public:
-    QWidget *layoutWidget;
+    QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout;
     QTextEdit *messageBox;
     QDialogButtonBox *buttonBox;
@@ -34,27 +34,31 @@ public:
     {
         if (DialogMessage->objectName().isEmpty())
             DialogMessage->setObjectName(QStringLiteral("DialogMessage"));
-        DialogMessage->resize(400, 514);
-        DialogMessage->setMinimumSize(QSize(400, 514));
-        DialogMessage->setMaximumSize(QSize(400, 514));
-        layoutWidget = new QWidget(DialogMessage);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 381, 501));
-        verticalLayout = new QVBoxLayout(layoutWidget);
+        DialogMessage->resize(500, 514);
+        DialogMessage->setMinimumSize(QSize(500, 514));
+        DialogMessage->setMaximumSize(QSize(16777215, 514));
+        QIcon icon;
+        icon.addFile(QStringLiteral("images/logo.png"), QSize(), QIcon::Normal, QIcon::Off);
+        DialogMessage->setWindowIcon(icon);
+        gridLayout = new QGridLayout(DialogMessage);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        messageBox = new QTextEdit(layoutWidget);
+        messageBox = new QTextEdit(DialogMessage);
         messageBox->setObjectName(QStringLiteral("messageBox"));
 
         verticalLayout->addWidget(messageBox);
 
-        buttonBox = new QDialogButtonBox(layoutWidget);
+        buttonBox = new QDialogButtonBox(DialogMessage);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Ok);
         buttonBox->setCenterButtons(true);
 
         verticalLayout->addWidget(buttonBox);
+
+
+        gridLayout->addLayout(verticalLayout, 0, 0, 1, 1);
 
 
         retranslateUi(DialogMessage);

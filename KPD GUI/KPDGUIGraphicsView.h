@@ -3,6 +3,7 @@
 
 #include <QWheelEvent>
 #include <QGraphicsView>
+#include <QDebug>
 
 class KPDGUIGraphicsView : public QGraphicsView
 {
@@ -16,6 +17,9 @@ public:
 
 protected:
 	void wheelEvent(QWheelEvent *event);
+
+public slots:
+	void centerView(int x, int y);
 
 signals:
 	void zoomIn();

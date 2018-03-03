@@ -173,6 +173,7 @@ public:
         candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget1);
         candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
         candidateHeightSpinBox->setMaximum(3);
+        candidateHeightSpinBox->setSingleStep(0.1);
         candidateHeightSpinBox->setValue(1.5);
 
         candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);

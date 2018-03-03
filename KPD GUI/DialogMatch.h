@@ -18,6 +18,16 @@ public:
 	DialogMatch(QWidget * parent = 0);
 	DialogMatch(KPDGUIMatch * match, QWidget *parent = 0);
 
+	bool getAdditionalInformation();
+
+public slots:
+	
+	void setAdditionalInformation();
+
+private:
+
+	bool additionalInformation;
+
 };
 
 #endif

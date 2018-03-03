@@ -16,6 +16,7 @@ public:
 	KPDCrossmatchResult performCrossmatch(KPDGUIDonor * donor, KPDGUICandidate * candidate);
 	QVector<int> countHLAMismatches(KPDGUIDonor * donor, KPDGUICandidate * candidate);
 	double calculateSurvival(KPDGUIDonor * donor, KPDGUICandidate * candidate, int fiveyear);
+	bool determineDifficultMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate);
 
 private:
 	QMap<QString, QVector<QString> > hlaDictionary;

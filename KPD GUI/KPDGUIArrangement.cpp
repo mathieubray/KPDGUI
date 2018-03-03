@@ -3,16 +3,16 @@
 
 KPDGUIArrangement::KPDGUIArrangement() {
 
-	arrangementUtility = 0.0;
 	arrangementID = -1;
+	arrangementUtility = 0.0;
 
 	arrangementHasAnNDD = false;
 }
 
-KPDGUIArrangement::KPDGUIArrangement(double utility, QString id){
-	
-	arrangementUtility = utility;
+KPDGUIArrangement::KPDGUIArrangement(int id, double utility){
+
 	arrangementID = id;
+	arrangementUtility = utility;
 
 	arrangementHasAnNDD = false;	
 }
@@ -21,7 +21,7 @@ KPDGUIArrangement::~KPDGUIArrangement(){
 	
 }
 
-void KPDGUIArrangement::setID(QString id) {
+void KPDGUIArrangement::setID(int id) {
 	arrangementID = id;
 }
 
@@ -70,7 +70,7 @@ QList<KPDGUIMatch *> KPDGUIArrangement::getMatches() {
 	return arrangementMatchesCopy;
 }
 
-QString KPDGUIArrangement::getID() const {
+int KPDGUIArrangement::getID() const {
 	return arrangementID;
 }
 
@@ -137,12 +137,22 @@ void KPDGUIArrangement::select(){
 }
 
 void KPDGUIArrangement::highlight(){	
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		node->setSelected(true);
+	}
+
 	foreach(KPDGUIMatch * arrow, arrangementMatches){
 		arrow->highlightMatch(2);
 	}
 }
 
 void KPDGUIArrangement::undoHighlights(){
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		node->setSelected(false);
+	}
+
 	foreach(KPDGUIMatch * arrow, arrangementMatches){
 		arrow->endDisplayAsPartOfSolution();
 	}
@@ -191,6 +201,9 @@ void KPDGUIArrangement::cluster(qreal x, qreal y){
 		nodeAngle += angle;
 		//node->setVisible(true);
 	}
+
+	emit arrangementClustered(x, y);
+
 }
 
 void KPDGUIArrangement::increasePopularity(bool solution) {
@@ -213,19 +226,6 @@ void KPDGUIArrangement::resetPopularity(bool solution) {
 	}
 }
 
-/*QList<QTreeWidgetItem *> KPDGUIArrangement::getItemList() {
-	
-	QList<QTreeWidgetItem *> newList;
-	
-	foreach(KPDGUINode * node, arrangementNodes) {
-		KPDGUINodeWrapper * wrapper = new KPDGUINodeWrapper(node);
-		newList.push_back(wrapper);
-	}
-
-	return newList;
-}*/
-
-
 QString KPDGUIArrangement::arrangementLabel(){
 	
 	QString label = "";
@@ -236,14 +236,19 @@ QString KPDGUIArrangement::arrangementLabel(){
 
 	label.chop(2);
 
-	label += " (" + QString::number(arrangementUtility) + ")";
+	if (arrangementUtility == floor(arrangementUtility)) {
+		label += " (" + QString::number(arrangementUtility) + ")";
+	}
+	else {
+		label += " (" + QString::number(floor(arrangementUtility * 1000 + 0.5) / 1000) + ")";
+	}	
 
 	return label;
 }
 
 QString KPDGUIArrangement::arrangementDashboardString(){
 	
-	QString arrangementString = arrangementID + ": <";
+	QString arrangementString = QString::number(arrangementID) + ": <";
 	
 	foreach(KPDGUINode * node, arrangementNodes){
 		arrangementString += QString::number(node->getID());
@@ -260,8 +265,12 @@ QString KPDGUIArrangement::arrangementDashboardString(){
 	}
 	arrangementString.chop(2);
 	
-
-	arrangementString += "}, [" + QString::number(arrangementUtility) + "]";
+	if (floor(arrangementUtility) == arrangementUtility) {
+		arrangementString += "}, [" + QString::number(arrangementUtility) + "]";
+	}
+	else {
+		arrangementString += "}, [" + QString::number(floor(arrangementUtility * 1000 + 0.5) / 1000) + "]";
+	}
 
 	return arrangementString;
 }

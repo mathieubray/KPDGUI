@@ -13,6 +13,9 @@ KPDGUIParameters::KPDGUIParameters(){
 	maxCycleSize = 3;
 	maxChainLength = 3;
 	maxLRSSize = 4;
+
+	collectArrangements = true;
+	collectArrangementsCutoff = 200;
 	
 	//Numerical Parameters		
 	addAdvantage = false;
@@ -49,6 +52,9 @@ void KPDGUIParameters::changeParameters(DialogSimParameters * d){
 	maxChainLength = d->chainLengthSpinBox->value();
 	maxLRSSize = d->lrsSizeSpinBox->value();
 
+	collectArrangements = d->collectArrangementsCheckBox->isChecked();
+	collectArrangementsCutoff = d->collectArrangementsSpinBox->value();
+
 	addAdvantage = d->praCheckBox->isChecked();
 	advantageCutoff = d->praCutoffSpinBox->value();
 	advantageValue = d->praAdvantageSpinBox->value();
@@ -74,6 +80,9 @@ void KPDGUIParameters::copyParameters(KPDGUIParameters * d){
 	maxCycleSize = d->getMaxCycleSize();
 	maxChainLength = d->getMaxChainLength();
 	maxLRSSize = d->getMaxLRSSize();
+
+	collectArrangements = d->getCollectArrangements();
+	collectArrangementsCutoff = d->getCollectArrangementsCutoff();
 	
 	addAdvantage = d->addAdvantageToHighPRACandidates();
 	advantageCutoff = d->getPRAAdvantageCutoff();
@@ -98,7 +107,7 @@ bool KPDGUIParameters::parametersHaveBeenUpdated(){
 
 void KPDGUIParameters::setParametersHaveBeenUpdatedFlag(bool flag){
 
-		parametersUpdated = flag;
+	parametersUpdated = flag;
 }
 
 QString KPDGUIParameters::toString(){
@@ -116,6 +125,13 @@ QString KPDGUIParameters::toString(){
 		parameterString.append("Maximum Locally Relevant Subgraph Size: " + QString::number(maxLRSSize) + "\n");
 		parameterString.append("Maximum Sub-Cycle Size: " + QString::number(maxCycleSize) + "\n");
 		parameterString.append("Maximum Sub-Chain Length: " + QString::number(maxChainLength) + "\n");
+	}
+
+	if (collectArrangements) {
+		parameterString.append("Collecting a Maximum of " + QString::number(collectArrangementsCutoff) + " Arrangements For Display\n");
+	}
+	else {
+		parameterString.append("Not Collecting Arrangemetns for Display");
 	}
 
 	if (numberOfSolutions > 1){
@@ -189,6 +205,14 @@ int KPDGUIParameters::getMaxLRSSize() const {
 	return maxLRSSize;
 }
 
+bool KPDGUIParameters::getCollectArrangements() const {
+	return collectArrangements;
+}
+
+int KPDGUIParameters::getCollectArrangementsCutoff() const {
+	return collectArrangementsCutoff;
+}
+
 bool KPDGUIParameters::addAdvantageToHighPRACandidates() const {
 	return addAdvantage;
 }
@@ -253,6 +277,14 @@ void KPDGUIParameters::setMaxLRSSize(int size) {
 	maxLRSSize = size;
 }
 
+void KPDGUIParameters::setCollectArrangements(bool collect) {
+	collectArrangements = collect;
+}
+
+void KPDGUIParameters::setCollectArrangementsCutoff(int cutoff) {
+	collectArrangementsCutoff = cutoff;
+}
+
 void KPDGUIParameters::setAddAdvantagetoHighPRACandidatesFlag(bool flag){
 	addAdvantage = flag;
 }
@@ -307,14 +339,17 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIParameters & parameters)
 	out << qint32(parameters.getMaxChainLength());
 	out << qint32(parameters.getMaxLRSSize());
 
-	out << parameters.addAdvantageToHighPRACandidates();
-	out << qint32(parameters.getPRAAdvantageCutoff());
-	out << qreal(parameters.getPRAAdvantageValue());
-
+	out << parameters.getCollectArrangements();
+	out << qint32(parameters.getCollectArrangementsCutoff());
+	
 	out << qint32(parameters.getNumberOfSolutions());
 
 	out << parameters.estimateExpectedUtility();
 	out << qint32(parameters.getNumberOfExpectedUtilityIterations());
+
+	out << parameters.addAdvantageToHighPRACandidates();
+	out << qint32(parameters.getPRAAdvantageCutoff());
+	out << qreal(parameters.getPRAAdvantageValue());
 
 	out << parameters.reserveODonorsForOCandidates();
 	out << parameters.checkAdditionalHLA();
@@ -334,6 +369,9 @@ QDataStream &operator>>(QDataStream &in, KPDGUIParameters & parameters)
 	int chainLength;
 	int lrsSize;
 
+	bool collect;
+	int collectCutoff;
+
 	int numberOfSolutions;
 
 	bool estimateEU;
@@ -351,18 +389,21 @@ QDataStream &operator>>(QDataStream &in, KPDGUIParameters & parameters)
 	
 	in >> opt >> util >> cycleSize >> chainLength >> lrsSize;
 
+	in >> collect >> collectCutoff;
+
 	in >> numberOfSolutions >> estimateEU >> numberOfEUIterations;
 
 	in >> addAdvantage >> advantageCutoff >> advantageValue;
 
 	in >> reserveOforO >> checkHLA >> includeCompatible >> excludeABDonors >> allowABBridge;
 
-
 	parameters.setOptimizationScheme(KPDFunctions::intToOptScheme(opt));
 	parameters.setUtilityScheme(KPDFunctions::intToUtilScheme(util));
 	parameters.setMaxCycleSize(cycleSize);
 	parameters.setMaxChainLength(chainLength);
 	parameters.setMaxLRSSize(lrsSize);
+	parameters.setCollectArrangements(collect);
+	parameters.setCollectArrangementsCutoff(collectCutoff);
 	parameters.setNumberOfSolutions(numberOfSolutions);
 	parameters.setEstimateExpectedUtilityFlag(estimateEU);
 	parameters.setNumberOfExpectedUtilityIterations(numberOfEUIterations);

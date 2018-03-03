@@ -1,15 +1,9 @@
 #include "KPDGUIMatchRun.h"
 
-KPDGUIMatchRun::KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * params){
+KPDGUIMatchRun::KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * params, QProgressDialog * progress){
 
 	//Create progress bar
-	progressBar = new QProgressDialog("Setting Up Simulation...", QString(), 0, 100);
-	progressBar->setWindowModality(Qt::WindowModal);
-	progressBar->setWindowTitle("Simulation Progress");
-	progressBar->setAutoClose(false);
-	progressBar->show();
-	QApplication::setOverrideCursor(Qt::WaitCursor);
-	QApplication::processEvents();
+	progressBar = progress;
 	
 
 	//Retrieve Relevant Parameters
@@ -61,12 +55,7 @@ KPDGUIMatchRun::KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * par
 		getOptimalSolutionForCurrentMatchRun(params->getOptimizationScheme(), params->getNumberOfSolutions());
 	}
 	
-	// Close Progress Bar
-	progressBar->close();
-	QApplication::restoreOverrideCursor();
-	QApplication::processEvents();
-
-	delete progressBar;
+	
 }
 
 KPDGUIMatchRun::~KPDGUIMatchRun(){
@@ -122,6 +111,8 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 				matchRunNodeTypeVector.push_back(NDD);
 				//currentMatchRunNodes.push_back(node->getID());
 
+				matchRunNodeList = matchRunNodeList + node->getDashboardString() + "\n";
+
 				matchRunNumberOfNDDs++;
 				
 				//qDebug() << QString::number(node->getID()) + "(" + node->getNameString() + ")";
@@ -138,6 +129,8 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 					tempNodeVector.push_back(node);
 					tempNodeTypeVector.push_back(PAIR);
 					//tempNodes.push_back(node->getID());
+
+					matchRunNodeList = matchRunNodeList + node->getDashboardString() + "\n";
 
 					matchRunNumberOfPairs++;
 
@@ -216,10 +209,22 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 				// Note that these are all donor -> candidate matches
 				foreach(KPDGUIMatch * match, donor->getMatches()) {
 
+					if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+						//qDebug() << "FOUND " << k;
+					}
+
 					KPDCrossmatchResult result = match->getCrossmatchResult();
+
+					if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+						//qDebug() << KPDFunctions::toString(result);
+					}
 
 					// If match is available
 					if (match->getInclude()){
+
+						if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+							//qDebug() << "Included";
+						}
 						
 						// Seek out candidate based on ID
 						int candidateNodeID = match->getCandidate()->getID();
@@ -232,9 +237,15 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 							}
 						}
 
+						if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+							//qDebug() << j;
+						}
+
 						// If candidate is found, and thus available for the match run
 						if (j != -1) {
 
+							matchRunMatchList = matchRunMatchList + QString::number(match->getDonor()->getID()) + "(" + QString::number(match->getDonor()->getDonorNumber()) + ") -> " + QString::number(match->getCandidate()->getID()) + "\n";
+							
 							// Finally, check crossmatch result based on match run options
 							bool successful = true;
 
@@ -255,6 +266,10 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 							}
 							if (result == FAILED_CROSSMATCH_BT || result == FAILED_CROSSMATCH_HLA) {
 								successful = false;
+							}
+
+							if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+								//qDebug() << successful;
 							}
 
 							if (successful) {
@@ -282,6 +297,10 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 
 								matchRunIncidenceMatrix[i][j] = true;
 								matchRunIncidenceMatrixReduced[i][j] = true;
+
+								if (match->getDonor()->getID() == 3 && match->getCandidate()->getID() == 5) {
+									//qDebug() << matchRunIncidenceMatrix[i][j] << "-" << matchRunUtilityMatrix[i][j][k];
+								}
 							}
 						}
 					}
@@ -298,8 +317,8 @@ void KPDGUIMatchRun::generateMatrices(QList<KPDGUINode *> nodes) {
 
 			for (int k = 1; k <= donors; k++) {
 
-				//qDebug() << "(" << i << "," << j << "," << k << ")";
-				//qDebug() << matchRunDonorIncidenceMatrix[i][j][k] << "," << QString::number(matchRunSuccessProbabilitiesMatrix[i][j][k]) << "," << QString::number(matchRunUtilityMatrix[i][j][k]) << "," << KPDFunctions::toString(matchRunCrossmatchMatrix[i][j][k]);
+				qDebug() << "(" << i << "," << j << "," << k << ")";
+				qDebug() << matchRunDonorIncidenceMatrix[i][j][k] << "," << QString::number(matchRunSuccessProbabilitiesMatrix[i][j][k]) << "," << QString::number(matchRunUtilityMatrix[i][j][k]) << "," << KPDFunctions::toString(matchRunCrossmatchMatrix[i][j][k]);
 
 			}
 		}
@@ -322,6 +341,7 @@ void KPDGUIMatchRun::collectCyclesAndChainsForCurrentMatchRun(){
 	while (start <= matchRunNumberOfNodes){
 
 		progressBar->setValue(start);
+		QApplication::processEvents();
 
 		visitedVector[start] = 1;
 		stack_vec.push_back(start);
@@ -504,6 +524,7 @@ void KPDGUIMatchRun::assignUtilitiesForCurrentMatchRun(){
 
 		assignedValueOfMatchRunArrangements.push_back(util);
 		progressBar->setValue(i);
+		QApplication::processEvents();
 	}
 }
 
@@ -517,6 +538,8 @@ void KPDGUIMatchRun::assignExpectedUtilitiesForCurrentMatchRun() {
 	// Iterating through arrangements...
 	int i = 0;
 	for (std::vector<std::vector<int> >::iterator itArrangements = matchRunArrangements.begin(); itArrangements != matchRunArrangements.end(); itArrangements++) {
+
+		i++;
 		
 		double eu = 0;
 
@@ -531,6 +554,7 @@ void KPDGUIMatchRun::assignExpectedUtilitiesForCurrentMatchRun() {
 		assignedValueOfMatchRunArrangements.push_back(eu);
 
 		progressBar->setValue(i);
+		QApplication::processEvents();
 	}
 
 }
@@ -641,6 +665,7 @@ void KPDGUIMatchRun::getOptimalSolutionForCurrentMatchRun(KPDOptimizationScheme 
 		//qDebug() << solutionString;
 
 		progressBar->setValue(iteration);
+		QApplication::processEvents();
 
 		while (iteration < numberOfSolutions){
 			
@@ -723,7 +748,7 @@ void KPDGUIMatchRun::getOptimalSolutionForCurrentMatchRun(KPDOptimizationScheme 
 			//qDebug() << solutionString;
 			
 			progressBar->setValue(iteration);
-			//QApplication::processEvents();
+			QApplication::processEvents();
 		}
 
 	}
@@ -783,9 +808,17 @@ int KPDGUIMatchRun::selectDonor(int donorNodeID, int candidateNodeID) {
 	double maxUtil = 0.0;
 	int maxDonorID = -1; // -1 means no donor is selected
 
+	//qDebug() << "# of Donors: " << matchRunNodeVector[donorNodeID]->getNumberOfDonors();
+
 	//Iterate through donors
 	for (int donorID = 1; donorID <= matchRunNodeVector[donorNodeID]->getNumberOfDonors(); donorID++) {
 
+		if (donorNodeID == 3 && candidateNodeID == 5) {
+			//qDebug() << donorNodeID << " " << candidateNodeID << " (" << donorID << ") [" << matchRunUtilityMatrix[donorNodeID][candidateNodeID][donorID] << "] " << matchRunDonorIncidenceMatrix[donorNodeID][candidateNodeID][donorID];
+
+		}
+
+		
 		//Only consider donors that match between the donor node and the candidate node
 		if (matchRunDonorIncidenceMatrix[donorNodeID][candidateNodeID][donorID]) {
 
@@ -793,10 +826,9 @@ int KPDGUIMatchRun::selectDonor(int donorNodeID, int candidateNodeID) {
 			if (matchRunUtilityMatrix[donorNodeID][candidateNodeID][donorID] > maxUtil) {
 				maxDonorID = donorID;
 				maxUtil = matchRunUtilityMatrix[donorNodeID][candidateNodeID][donorID];
+
 			}
 		}
-
-		donorID++;
 	}
 
 	return maxDonorID;
@@ -847,6 +879,10 @@ void KPDGUIMatchRun::getLRSPairsOnly(){
 
 	//Iterate Through Pairs	
 	for (int i = 1; i <= numberOfPairs; i++) {
+		
+		progressBar->setValue(matchRunNumberOfNDDs + i);
+		QApplication::processEvents();
+
 		//Start the with the first pair
 		bfsTree.push_back(i);
 		bfsLevel.push_back(0);
@@ -987,6 +1023,9 @@ void KPDGUIMatchRun::getLRSWithNDDs(){
 
 	for (int i = 0; i < matchRunNumberOfNDDs; i++) {
 
+		progressBar->setValue(i);
+		QApplication::processEvents();
+
 		vector<int> newBFSTree;
 		newBFSTree.push_back(i);
 		listOfBFSTrees.push_back(newBFSTree);
@@ -1016,7 +1055,7 @@ void KPDGUIMatchRun::getLRSWithNDDs(){
 			child = getChildLRSWithNDDs(childIsAdjacentToLowerLevels, listOfBFSTrees, listOfBFSLevels, inducedBFSLevel,
 				visited, next, nextNDD, childLevel, childLevelNDD, childCanBeNDD);
 
-			if (treeSize == maxChainLength || (child == matchRunNumberOfNodes && listOfBFSLevels.back().back() + 1 == childLevel)) {
+			if (treeSize == maxLRSSize || (child == matchRunNumberOfNodes && listOfBFSLevels.back().back() + 1 == childLevel)) {
 				if (listOfBFSTrees.back().back() < matchRunNumberOfNDDs) {
 					if (listOfBFSTrees.size() > 1) {
 						//If previous super tree level is one higher than the super tree level before it
@@ -2075,6 +2114,14 @@ QVector<double> KPDGUIMatchRun::getAssignedValueOfMatchRunSolutions() {
 
 	return values;
 
+}
+
+QString KPDGUIMatchRun::getNodeListString() {
+	return matchRunNodeList;
+}
+
+QString KPDGUIMatchRun::getMatchListString() {
+	return matchRunMatchList;
 }
 
 QString KPDGUIMatchRun::printLog() {

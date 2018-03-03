@@ -34,6 +34,8 @@ KPDGUICandidate::KPDGUICandidate(){
 	setAcceptHoverEvents(true);
 
 	setRect(QRectF(0, 0, 75, 65));	
+
+	hue = 80;
 }
 
 KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
@@ -49,7 +51,8 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 	
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
-
+	
+	hue = 80;
 }
 
 KPDGUICandidate::~KPDGUICandidate(){
@@ -138,6 +141,10 @@ void KPDGUICandidate::resetPopularityInArrangements() {
 
 void KPDGUICandidate::resetPopularityInSolutions() {
 	popularityInSolutions = 0;
+}
+
+KPDGUINode * KPDGUICandidate::getParentNode() const {
+	return parentNode;
 }
 
 int KPDGUICandidate::getID() const {
@@ -230,6 +237,10 @@ int KPDGUICandidate::getPopularityInSolutions() {
 
 QString KPDGUICandidate::getComment() const{
 	return candidateComment;
+}
+
+void KPDGUICandidate::setParentNode(KPDGUINode * node) {
+	parentNode = node;
 }
 
 void KPDGUICandidate::setID(int id){
@@ -347,8 +358,9 @@ void KPDGUICandidate::setCandidatePosition(QPointF point) {
 void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * /* widget */)
 {
 	QColor myBackgroundColor;
-	if (candidateStatus) {
-		myBackgroundColor = QColor(255, candidatePRA * 1.5, candidatePRA * 1.5);
+
+	if (candidateStatus) {		
+		myBackgroundColor = QColor(255, hue, hue);
 	}
 	else {
 		myBackgroundColor = QColor(100, 100, 100);
@@ -369,8 +381,8 @@ void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	QPen pen(Qt::black);
 
 	if (option->state & QStyle::State_Selected) {
-		pen.setWidth(2);
-		pen.setStyle(Qt::DotLine);
+		pen.setWidth(1.5);
+		//pen.setStyle(Qt::DotLine);
 	}
 
 	painter->setPen(pen);
@@ -451,7 +463,11 @@ QVariant KPDGUICandidate::itemChange(GraphicsItemChange change, const QVariant &
 	}
 
 	if (change == ItemSelectedHasChanged) {
-		emit candidateSelectionChanged(matchingID, value.toBool());
+		//emit candidateSelectionChanged(matchingID, value.toBool());
+
+		parentNode->setSelected(value.toBool());
+
+		emit candidateSelectionChanged();
 	}
 
 	return QGraphicsItem::itemChange(change, value);
@@ -468,12 +484,16 @@ void KPDGUICandidate::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 }
 
 void KPDGUICandidate::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
+	edit();	
+}
+
+void KPDGUICandidate::edit() {
 
 	DialogCandidate * candidateDialog = new DialogCandidate(this, false);
 	if (candidateDialog->exec()) {
 		editCandidate(candidateDialog);
 	}
-	
+
 }
 
 void KPDGUICandidate::editCandidate(DialogCandidate * dialog) {
@@ -512,38 +532,65 @@ void KPDGUICandidate::editCandidate(DialogCandidate * dialog) {
 	
 }
 
+void KPDGUICandidate::addAdditionalDonor() {
+
+	emit addAdditionalDonorSignal();
+
+}
+
 void KPDGUICandidate::updateVisualProperties() {
 
 	prepareGeometryChange();
 	update();
 }
 
+void KPDGUICandidate::updateHue(int n, double mu, double sigma) {
+
+	double pivot = (getNumberOfMatches() - mu) / (sigma / sqrt(n));
+
+	if (pivot < -2) {
+		pivot = -2;
+	}
+
+	if (pivot > 2) {
+		pivot = 2;
+	}
+
+	//hue = 200 - 50 * (pivot + 2);
+
+	hue = 0;
+
+}
+
 QDataStream &operator<<(QDataStream &out, const KPDGUICandidate & candidate)
 {
 	out << candidate.getID();
 
+	// Major Fields
 	out << candidate.getName();
 	out << qint32(candidate.getAge());
 	out << qint32(candidate.getPRA());
 	out << qint32(KPDFunctions::bloodTypeToInt(candidate.getBT()));
 
-	out << candidate.getStatus();
-	out << candidate.getFailureProbability();
-	
-	//out << candidate.getMatches();
+	// HLA Information
+	out << candidate.getHLA();
 
+	// Characteristics
 	out << candidate.getMale();
 	out << qint32(KPDFunctions::raceToInt(candidate.getRace()));
 	out << candidate.getDiabetes();
-	out << candidate.getHeight();
-	out << candidate.getWeight();
+	out << qreal(candidate.getHeight());
+	out << qreal(candidate.getWeight());
 	out << candidate.getPrevTrans();
-	out << candidate.getTOD();
+	out << qreal(candidate.getTOD());
 	out << candidate.getHepC();
 	out << qint32(KPDFunctions::insuranceToInt(candidate.getInsurance()));
-
+	
+	// Additional Parameters
+	out << candidate.getStatus();
+	out << qreal(candidate.getFailureProbability());
+	
 	out << candidate.getExcludedDonors();
-	out << candidate.getHLA();
 	
 	out << candidate.getComment();
 
@@ -552,18 +599,27 @@ QDataStream &operator<<(QDataStream &out, const KPDGUICandidate & candidate)
 
 QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 {
-	int uniqueID;
+	int matchingID;
+	in >> matchingID;
+	candidate.setID(matchingID);
 
+	// Major Fields
 	QString name;
 	int age;
 	int pra;
 	int BT;
+	in >> name >> age >> pra >> BT;
+	candidate.setName(name);
+	candidate.setAge(age);
+	candidate.setBT(KPDFunctions::intToBloodType(BT));
+	candidate.setPRA(pra);
 
-	bool status;
-	double prob;
-
-	//QSet<KPDGUIMatch *> matches;
-	
+	// HLA Information
+	QVector<QString> hla;
+	in >> hla;
+	candidate.setHLA(hla);
+		
+	// Characteristics
 	bool male;
 	int race;
 	bool diabetes;
@@ -573,39 +629,7 @@ QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 	double TOD;
 	bool hepC;
 	int insurance;
-
-	QVector<int> excludedDonors;
-	QVector<QString> hla;
-
-	QString comment;
-
-	in >> uniqueID;
-
-	in >> name >> age >> pra >> BT;	
-
-	in >> status >> prob;
-
-	//in >> matches;
-
-	in >> male >> race >> diabetes >> height >> weight;
-	in >> prevTrans >> TOD >> hepC >> insurance;
-	
-	in >> excludedDonors >> hla;
-	
-	in >> comment;
-
-	candidate.setID(uniqueID);
-
-	candidate.setName(name);
-	candidate.setAge(age);
-	candidate.setBT(KPDFunctions::intToBloodType(BT));
-	candidate.setPRA(pra);
-
-	candidate.setStatus(status);
-	candidate.setFailureProbability(prob);
-
-	//candidate.setMatches(matches);
-
+	in >> male >> race >> diabetes >> height >> weight >> prevTrans >> TOD >> hepC >> insurance;
 	candidate.setMale(male);
 	candidate.setRace(KPDFunctions::intToRace(race));
 	candidate.setDiabetes(diabetes);
@@ -616,9 +640,19 @@ QDataStream &operator>>(QDataStream &in, KPDGUICandidate & candidate)
 	candidate.setHepC(hepC);
 	candidate.setInsurance(KPDFunctions::intToInsurance(insurance));
 
-	candidate.setExcludedDonors(excludedDonors);
-	candidate.setHLA(hla);
+	// Additional Parameters
+	bool status;
+	double prob;
+	in >> status >> prob;
+	candidate.setStatus(status);
+	candidate.setFailureProbability(prob);
 
+	QVector<int> excludedDonors;
+	in >> excludedDonors;
+	candidate.setExcludedDonors(excludedDonors);
+
+	QString comment;	
+	in >> comment;
 	candidate.setComment(comment);
 
 	return in;

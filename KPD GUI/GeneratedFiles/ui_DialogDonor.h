@@ -186,6 +186,9 @@ public:
 
         donorFailureProbabilitySpinBox = new QDoubleSpinBox(layoutWidget);
         donorFailureProbabilitySpinBox->setObjectName(QStringLiteral("donorFailureProbabilitySpinBox"));
+        donorFailureProbabilitySpinBox->setMaximum(1);
+        donorFailureProbabilitySpinBox->setSingleStep(0.1);
+        donorFailureProbabilitySpinBox->setValue(0.1);
 
         gridLayout->addWidget(donorFailureProbabilitySpinBox, 3, 2, 1, 1);
 
@@ -201,6 +204,7 @@ public:
         donorHeightSpinBox = new QDoubleSpinBox(layoutWidget);
         donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
         donorHeightSpinBox->setMaximum(3);
+        donorHeightSpinBox->setSingleStep(0.1);
         donorHeightSpinBox->setValue(1.5);
 
         gridLayout->addWidget(donorHeightSpinBox, 3, 5, 1, 1);
@@ -501,7 +505,7 @@ public:
         donorBW6CheckBox->setText(QApplication::translate("DialogDonor", "BW6", 0));
         donorHLAAdditionalLabel->setText(QApplication::translate("DialogDonor", "Additional Donor Antigens", 0));
         donorInfoTabWidget->setTabText(donorInfoTabWidget->indexOf(donorHLAInfoTab), QApplication::translate("DialogDonor", "HLA Information", 0));
-        additionalDonorButton->setText(QApplication::translate("DialogDonor", "Save and Add Donor", 0));
+        additionalDonorButton->setText(QApplication::translate("DialogDonor", "OK and Add Aditional Donor", 0));
     } // retranslateUi
 
 };

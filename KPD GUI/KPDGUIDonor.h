@@ -16,13 +16,14 @@ class KPDGUIDonor : public QObject, public QGraphicsEllipseItem
 
 private:
 
+	KPDGUINode * parentNode;
+
 	int matchingID;
 	int donorNumber;
 
 	bool donorIsAltruistic;
-
-	KPDGUINode * parentNode;
-
+	KPDCrossmatchResult donorCompatibilityWithPairedCandidate;
+	
 	// Major Fields
 	QString donorName;
 	int donorAge;
@@ -57,14 +58,17 @@ private:
 	int popularityInArrangements;
 	int popularityInSolutions;
 
-	KPDNodeDisplayMode currentDisplayMode;
-	
 	// Comment
-	QString donorComment;		
+	QString donorComment;
+
+	// Display
+	KPDNodeDisplayMode currentDisplayMode;
+	double hue;
 
 signals:
 
-	void donorSelectionChanged(int matchingID, int donorID, bool selected);
+	void donorSelectionChanged();
+
 	void donorEntered(int matchingID, int donorID);
 	void donorExited(int matchingID, int donorID);
 	void donorEdited();
@@ -78,8 +82,11 @@ protected:
 
 public slots:
 
+	void edit();
 	void editDonor(DialogDonor * dialog);
 	void updateVisualProperties();
+
+	void updateHue(int n, double mu, double sigma);
 
 public:
 
@@ -116,11 +123,14 @@ public:
 
 
 	/// Getters ///
+
+	KPDGUINode * getParentNode() const;
 	
 	int getID() const;
 	int getDonorNumber() const;
 
 	bool isAltruistic() const;
+	KPDCrossmatchResult getCompatibilityWithPairedCandidate() const;
 
 	// Major Fields
 	QString getName() const;
@@ -169,6 +179,7 @@ public:
 	void setDonorNumber(int id);
 
 	void setAltruistic(bool altruistic);
+	void setCompatibilityWithPairedCandidate(KPDCrossmatchResult result);
 
 	// Major Fields
 	void setName(QString name);

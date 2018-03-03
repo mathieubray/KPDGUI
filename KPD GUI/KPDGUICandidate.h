@@ -6,6 +6,7 @@
 
 #include "DialogCandidate.h"
 
+class KPDGUINode;
 class KPDGUIMatch;
 class KPDGUIDonor;
 
@@ -16,6 +17,8 @@ class KPDGUICandidate : public QObject, public QGraphicsEllipseItem
 private:
 
 	int matchingID;
+
+	KPDGUINode * parentNode;
 
 	// Major Fields
 	QString candidateName;
@@ -49,11 +52,16 @@ private:
 	int popularityInSolutions;
 
 	// Comment
-	QString candidateComment;	
+	QString candidateComment;
+
+	double hue;
 
 signals:
 
-	void candidateSelectionChanged(int id, bool selected);
+	void addAdditionalDonorSignal();
+
+	void candidateSelectionChanged();
+
 	void candidateEntered(int id);
 	void candidateExited(int id);
 	void candidateEdited();
@@ -67,8 +75,12 @@ protected:
 	
 public slots:
 
+	void edit();
 	void editCandidate(DialogCandidate * dialog);
+	void addAdditionalDonor();
 	void updateVisualProperties();
+
+	void updateHue(int n, double mu, double sigma);
 
 public:
 
@@ -99,6 +111,8 @@ public:
 	
 
 	/// Getters ///
+
+	KPDGUINode * getParentNode() const;
 
 	int getID() const;
 
@@ -139,6 +153,8 @@ public:
 		
 	
 	/// Setters ///
+
+	void setParentNode(KPDGUINode * node);
 
 	void setID(int id);
 	

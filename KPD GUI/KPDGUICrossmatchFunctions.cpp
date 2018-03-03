@@ -108,6 +108,9 @@ double KPDGUICrossmatchFunctions::calculateSurvival(KPDGUIDonor * donor, KPDGUIC
 	QVector<int> donorAgeChangePoints = { 30,10,10,10,10 };
 	int changePoint = 0;
 
+	//qDebug() << "Donor Age: " << donor->getAge();
+	//qDebug() << "Candidate Age: " << candidate->getAge();
+
 	int donorsAge = donor->getAge();
 
 	if (candidate->getAge() < 13) {
@@ -452,5 +455,17 @@ QVector<int> KPDGUICrossmatchFunctions::countHLAMismatches(KPDGUIDonor * donor, 
 	mismatches << hlaMismatches << drMismatches;
 
 	return mismatches;
+
+}
+
+bool KPDGUICrossmatchFunctions::determineDifficultMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate) {
+
+	bool difficultMatch = false;
+
+	if (candidate->getHLA().size() > 10 || donor->getBT() == BT_AB || candidate->getPRA() >= 97) {
+		difficultMatch = true;
+	}
+
+	return difficultMatch;
 
 }

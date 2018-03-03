@@ -58,26 +58,26 @@ public:
     {
         if (DialogDisplaySettings->objectName().isEmpty())
             DialogDisplaySettings->setObjectName(QStringLiteral("DialogDisplaySettings"));
-        DialogDisplaySettings->resize(425, 323);
+        DialogDisplaySettings->resize(453, 323);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(DialogDisplaySettings->sizePolicy().hasHeightForWidth());
         DialogDisplaySettings->setSizePolicy(sizePolicy);
-        DialogDisplaySettings->setMinimumSize(QSize(425, 323));
-        DialogDisplaySettings->setMaximumSize(QSize(425, 323));
+        DialogDisplaySettings->setMinimumSize(QSize(453, 323));
+        DialogDisplaySettings->setMaximumSize(QSize(453, 323));
         DialogDisplaySettings->setSizeGripEnabled(true);
         displaySettingsBox = new QGroupBox(DialogDisplaySettings);
         displaySettingsBox->setObjectName(QStringLiteral("displaySettingsBox"));
         displaySettingsBox->setEnabled(true);
-        displaySettingsBox->setGeometry(QRect(10, 200, 401, 111));
+        displaySettingsBox->setGeometry(QRect(10, 200, 431, 111));
         showIncompatibleCheckBox = new QCheckBox(displaySettingsBox);
         showIncompatibleCheckBox->setObjectName(QStringLiteral("showIncompatibleCheckBox"));
         showIncompatibleCheckBox->setGeometry(QRect(10, 53, 311, 17));
         showIncompatibleCheckBox->setChecked(true);
         layoutWidget = new QWidget(displaySettingsBox);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 73, 385, 24));
+        layoutWidget->setGeometry(QRect(10, 73, 402, 24));
         displaySettingsGridLayout = new QGridLayout(layoutWidget);
         displaySettingsGridLayout->setObjectName(QStringLiteral("displaySettingsGridLayout"));
         displaySettingsGridLayout->setContentsMargins(0, 0, 0, 0);
@@ -107,7 +107,7 @@ public:
         showExcludedCheckBox->setChecked(true);
         layoutWidget1 = new QWidget(DialogDisplaySettings);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
-        layoutWidget1->setGeometry(QRect(10, 10, 404, 178));
+        layoutWidget1->setGeometry(QRect(10, 10, 431, 178));
         gridLayout = new QGridLayout(layoutWidget1);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -184,19 +184,19 @@ public:
     {
         DialogDisplaySettings->setWindowTitle(QApplication::translate("DialogDisplaySettings", "Display Settings", 0));
         displaySettingsBox->setTitle(QApplication::translate("DialogDisplaySettings", "Node Subset Settings", 0));
-        showIncompatibleCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairs/ADs with No Compatibilities", 0));
-        praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Pairs with Candidates in PRA Range", 0));
-        showExcludedCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairs/ADs Excluded From Match Runs", 0));
+        showIncompatibleCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairings/NDDs with No Compatibilities", 0));
+        praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Pairings with Candidates in PRA Range", 0));
+        showExcludedCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairings/NDDs Excluded From Match Runs", 0));
         nodeDisplayModeLabel->setText(QApplication::translate("DialogDisplaySettings", "Network Display Mode:", 0));
         nodeDisplayModeComboBox->clear();
         nodeDisplayModeComboBox->insertItems(0, QStringList()
          << QApplication::translate("DialogDisplaySettings", "Display Donors and Candidate Separately", 0)
          << QApplication::translate("DialogDisplaySettings", "Display Donors and Candidate as a Single Node", 0)
         );
-        allNodesButton->setText(QApplication::translate("DialogDisplaySettings", "Display All Pairs/ADs", 0));
-        showArrangementsRadioButton->setText(QApplication::translate("DialogDisplaySettings", "Display Only Pairs/ADs Involved in Transplant Arrangements", 0));
-        showSolutionsRadioButton->setText(QApplication::translate("DialogDisplaySettings", "Display Only Pairs/ADs Involved in Solutions", 0));
-        nodeSubsetButton->setText(QApplication::translate("DialogDisplaySettings", "Display Pair/ADs Subset...", 0));
+        allNodesButton->setText(QApplication::translate("DialogDisplaySettings", "Display All Pairings/NDDs", 0));
+        showArrangementsRadioButton->setText(QApplication::translate("DialogDisplaySettings", "Display Only Pairings/NDDs Involved in Transplant Arrangements", 0));
+        showSolutionsRadioButton->setText(QApplication::translate("DialogDisplaySettings", "Display Only Pairings/NDDs Involved in Solutions", 0));
+        nodeSubsetButton->setText(QApplication::translate("DialogDisplaySettings", "Display Pairings/NDDs Subset...", 0));
     } // retranslateUi
 
 };

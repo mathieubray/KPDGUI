@@ -14,11 +14,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QToolBar>
@@ -55,9 +55,14 @@ public:
     QAction *actionRefresh;
     QAction *actionSurvival_Calculator;
     QAction *actionClearArrangements;
+    QAction *actionFilter_Successful_Matches;
+    QAction *actionFilter_O_Donor_to_Non_O_Candidate_Matches;
+    QAction *actionFilter_Failed_Matches_on_Addtional_HLA;
+    QAction *actionFilter_Failed_Matches_on_Crossmatch;
+    QAction *actionLoad_APD_Pool;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QHBoxLayout *horizontalLayout;
+    QSplitter *splitter;
     KPDGUIGraphicsView *kpdGraphicsView;
     QTabWidget *kpdListView;
     QMenuBar *menubar;
@@ -66,6 +71,7 @@ public:
     QMenu *menuHelp;
     QMenu *menuMatch_Run;
     QMenu *menuDisplay;
+    QMenu *menuFilter_Matches;
     QStatusBar *statusBar;
     QToolBar *toolBar;
 
@@ -164,36 +170,52 @@ public:
         actionSurvival_Calculator->setObjectName(QStringLiteral("actionSurvival_Calculator"));
         actionClearArrangements = new QAction(KPDGUI);
         actionClearArrangements->setObjectName(QStringLiteral("actionClearArrangements"));
+        actionFilter_Successful_Matches = new QAction(KPDGUI);
+        actionFilter_Successful_Matches->setObjectName(QStringLiteral("actionFilter_Successful_Matches"));
+        actionFilter_Successful_Matches->setCheckable(true);
+        actionFilter_Successful_Matches->setChecked(true);
+        actionFilter_O_Donor_to_Non_O_Candidate_Matches = new QAction(KPDGUI);
+        actionFilter_O_Donor_to_Non_O_Candidate_Matches->setObjectName(QStringLiteral("actionFilter_O_Donor_to_Non_O_Candidate_Matches"));
+        actionFilter_O_Donor_to_Non_O_Candidate_Matches->setCheckable(true);
+        actionFilter_O_Donor_to_Non_O_Candidate_Matches->setChecked(true);
+        actionFilter_Failed_Matches_on_Addtional_HLA = new QAction(KPDGUI);
+        actionFilter_Failed_Matches_on_Addtional_HLA->setObjectName(QStringLiteral("actionFilter_Failed_Matches_on_Addtional_HLA"));
+        actionFilter_Failed_Matches_on_Addtional_HLA->setCheckable(true);
+        actionFilter_Failed_Matches_on_Addtional_HLA->setChecked(true);
+        actionFilter_Failed_Matches_on_Crossmatch = new QAction(KPDGUI);
+        actionFilter_Failed_Matches_on_Crossmatch->setObjectName(QStringLiteral("actionFilter_Failed_Matches_on_Crossmatch"));
+        actionFilter_Failed_Matches_on_Crossmatch->setCheckable(true);
+        actionFilter_Failed_Matches_on_Crossmatch->setChecked(true);
+        actionLoad_APD_Pool = new QAction(KPDGUI);
+        actionLoad_APD_Pool->setObjectName(QStringLiteral("actionLoad_APD_Pool"));
         centralwidget = new QWidget(KPDGUI);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        kpdGraphicsView = new KPDGUIGraphicsView(centralwidget);
+        splitter = new QSplitter(centralwidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setOrientation(Qt::Horizontal);
+        splitter->setChildrenCollapsible(false);
+        kpdGraphicsView = new KPDGUIGraphicsView(splitter);
         kpdGraphicsView->setObjectName(QStringLiteral("kpdGraphicsView"));
         kpdGraphicsView->setMinimumSize(QSize(500, 300));
         kpdGraphicsView->setDragMode(QGraphicsView::RubberBandDrag);
         kpdGraphicsView->setTransformationAnchor(QGraphicsView::AnchorViewCenter);
-
-        horizontalLayout->addWidget(kpdGraphicsView);
-
-        kpdListView = new QTabWidget(centralwidget);
+        splitter->addWidget(kpdGraphicsView);
+        kpdListView = new QTabWidget(splitter);
         kpdListView->setObjectName(QStringLiteral("kpdListView"));
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(kpdListView->sizePolicy().hasHeightForWidth());
         kpdListView->setSizePolicy(sizePolicy);
-        kpdListView->setMinimumSize(QSize(200, 0));
+        kpdListView->setMinimumSize(QSize(400, 0));
         kpdListView->setMaximumSize(QSize(16777215, 16777215));
         kpdListView->setBaseSize(QSize(200, 0));
         kpdListView->setTabPosition(QTabWidget::South);
+        splitter->addWidget(kpdListView);
 
-        horizontalLayout->addWidget(kpdListView);
-
-
-        gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
         KPDGUI->setCentralWidget(centralwidget);
         menubar = new QMenuBar(KPDGUI);
@@ -209,6 +231,8 @@ public:
         menuMatch_Run->setObjectName(QStringLiteral("menuMatch_Run"));
         menuDisplay = new QMenu(menubar);
         menuDisplay->setObjectName(QStringLiteral("menuDisplay"));
+        menuFilter_Matches = new QMenu(menuDisplay);
+        menuFilter_Matches->setObjectName(QStringLiteral("menuFilter_Matches"));
         KPDGUI->setMenuBar(menubar);
         statusBar = new QStatusBar(KPDGUI);
         statusBar->setObjectName(QStringLiteral("statusBar"));
@@ -234,7 +258,9 @@ public:
         menuFile->addSeparator();
         menuFile->addAction(actionAddPairing);
         menuFile->addAction(actionAddNDD);
+        menuFile->addSeparator();
         menuFile->addAction(actionLoadPairings);
+        menuFile->addAction(actionLoad_APD_Pool);
         menuFile->addSeparator();
         menuFile->addAction(actionExit);
         menuTools->addAction(actionSurvival_Calculator);
@@ -252,10 +278,16 @@ public:
         menuMatch_Run->addAction(actionClearSolutions);
         menuDisplay->addAction(actionNodeDisplaySettings);
         menuDisplay->addSeparator();
-        menuDisplay->addAction(actionDisplayCompatibilitiesWithinSelection);
-        menuDisplay->addAction(actionDisplaySelectedCompatibilities);
         menuDisplay->addAction(actionDisplayAllCompatibilities);
+        menuDisplay->addAction(actionDisplaySelectedCompatibilities);
+        menuDisplay->addAction(actionDisplayCompatibilitiesWithinSelection);
         menuDisplay->addAction(actionDisplayNoCompatibilities);
+        menuDisplay->addSeparator();
+        menuDisplay->addAction(menuFilter_Matches->menuAction());
+        menuFilter_Matches->addAction(actionFilter_Successful_Matches);
+        menuFilter_Matches->addAction(actionFilter_O_Donor_to_Non_O_Candidate_Matches);
+        menuFilter_Matches->addAction(actionFilter_Failed_Matches_on_Addtional_HLA);
+        menuFilter_Matches->addAction(actionFilter_Failed_Matches_on_Crossmatch);
         toolBar->addAction(actionNew);
         toolBar->addAction(actionOpen);
         toolBar->addAction(actionSave);
@@ -294,6 +326,11 @@ public:
         QObject::connect(kpdGraphicsView, SIGNAL(zoomOut()), KPDGUI, SLOT(zoomOut()));
         QObject::connect(actionSurvival_Calculator, SIGNAL(triggered()), KPDGUI, SLOT(runSurvivalCalculator()));
         QObject::connect(actionClearArrangements, SIGNAL(triggered()), KPDGUI, SLOT(clearArrangements()));
+        QObject::connect(actionFilter_Successful_Matches, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesSuccessful(bool)));
+        QObject::connect(actionFilter_O_Donor_to_Non_O_Candidate_Matches, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesOtoNonO(bool)));
+        QObject::connect(actionFilter_Failed_Matches_on_Addtional_HLA, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesFailedAdditionalHLA(bool)));
+        QObject::connect(actionFilter_Failed_Matches_on_Crossmatch, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesFailedCrossmatch(bool)));
+        QObject::connect(actionLoad_APD_Pool, SIGNAL(triggered()), KPDGUI, SLOT(loadAPD()));
 
         kpdListView->setCurrentIndex(-1);
 
@@ -345,18 +382,24 @@ public:
         actionMouseTool->setShortcut(QApplication::translate("KPDGUI", "Ctrl+M", 0));
         actionNodeDisplaySettings->setText(QApplication::translate("KPDGUI", "Node Display Settings...", 0));
         actionNodeDisplaySettings->setShortcut(QApplication::translate("KPDGUI", "Ctrl+D", 0));
-        actionDisplayNoCompatibilities->setText(QApplication::translate("KPDGUI", "Display No Compatibilities", 0));
-        actionDisplayAllCompatibilities->setText(QApplication::translate("KPDGUI", "Display All Compatibilities", 0));
-        actionDisplaySelectedCompatibilities->setText(QApplication::translate("KPDGUI", "Display Selected Compatibilities", 0));
-        actionDisplayCompatibilitiesWithinSelection->setText(QApplication::translate("KPDGUI", "Display Compatibilities Within Selection", 0));
+        actionDisplayNoCompatibilities->setText(QApplication::translate("KPDGUI", "Display No Matches", 0));
+        actionDisplayAllCompatibilities->setText(QApplication::translate("KPDGUI", "Display All Matches", 0));
+        actionDisplaySelectedCompatibilities->setText(QApplication::translate("KPDGUI", "Display Selected Matches", 0));
+        actionDisplayCompatibilitiesWithinSelection->setText(QApplication::translate("KPDGUI", "Display Matches Within Selection", 0));
         actionRefresh->setText(QApplication::translate("KPDGUI", "Refresh", 0));
         actionSurvival_Calculator->setText(QApplication::translate("KPDGUI", "Survival Calculator", 0));
         actionClearArrangements->setText(QApplication::translate("KPDGUI", "Clear Arrangements", 0));
+        actionFilter_Successful_Matches->setText(QApplication::translate("KPDGUI", "Successful Matches", 0));
+        actionFilter_O_Donor_to_Non_O_Candidate_Matches->setText(QApplication::translate("KPDGUI", "O Donor to Non-O Candidate Matches", 0));
+        actionFilter_Failed_Matches_on_Addtional_HLA->setText(QApplication::translate("KPDGUI", "Failed Matches on Addtional HLA", 0));
+        actionFilter_Failed_Matches_on_Crossmatch->setText(QApplication::translate("KPDGUI", "Failed Matches on Crossmatch", 0));
+        actionLoad_APD_Pool->setText(QApplication::translate("KPDGUI", "Load APD Pool", 0));
         menuFile->setTitle(QApplication::translate("KPDGUI", "&File", 0));
         menuTools->setTitle(QApplication::translate("KPDGUI", "Tools", 0));
         menuHelp->setTitle(QApplication::translate("KPDGUI", "About", 0));
         menuMatch_Run->setTitle(QApplication::translate("KPDGUI", "Match Run", 0));
         menuDisplay->setTitle(QApplication::translate("KPDGUI", "Display", 0));
+        menuFilter_Matches->setTitle(QApplication::translate("KPDGUI", "Show Matches", 0));
         toolBar->setWindowTitle(QApplication::translate("KPDGUI", "toolBar", 0));
     } // retranslateUi
 

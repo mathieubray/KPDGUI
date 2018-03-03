@@ -7,32 +7,6 @@ KPDGUINode::KPDGUINode()
 {
 	nodeID = 0;
 	nodeType = PAIR;
-
-	//connect(addAssociatedDonorAction, SIGNAL(triggered()), this, SLOT(addAssociatedDonor()));
-
-	//connect(highlightStructuresAction, SIGNAL(triggered()), this, SLOT(highlightRelevantStructures()));
-
-	//connect(highlightSolutionsAction, SIGNAL(triggered()), this, SLOT(highlightRelevantSolutions()));
-
-	//connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
-
-	//connect(clearHighlightsAction, SIGNAL(triggered()), this, SLOT(clearHighlights()));
-
-	//connect(editNodeAction, SIGNAL(triggered()), this, SLOT(editNode()));
-
-	//connect(holdNodeAction, SIGNAL(triggered()), this, SLOT(holdNode()));
-
-	//connect(unholdNodeAction, SIGNAL(triggered()), this, SLOT(unholdNode()));
-
-	//connect(deleteNodeAction, SIGNAL(triggered()), this, SLOT(deleteNode()));
-
-	//connect(holdMultipleNodesAction, SIGNAL(triggered()), this, SLOT(holdMultipleNodes()));
-
-	//connect(unholdMultipleNodesAction, SIGNAL(triggered()), this, SLOT(unholdMultipleNodes()));
-
-	//connect(clusterMultipleNodesAction, SIGNAL(triggered()), this, SLOT(clusterMultipleNodes()));
-
-	//connect(deleteMultipleNodesAction, SIGNAL(triggered()), this, SLOT(deleteMultipleNodes()));
 }
 
 KPDGUINode::KPDGUINode(KPDGUIDonor * donor)
@@ -44,7 +18,7 @@ KPDGUINode::KPDGUINode(KPDGUIDonor * donor)
 	donor->setAltruistic(true);
 }
 
-KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidate, QVector<KPDCrossmatchResult> results)
+KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidate)
 {
 	nodeID = 0;
 	nodeType = PAIR;	
@@ -54,12 +28,6 @@ KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidat
 	foreach(KPDGUIDonor * donor, donors) {
 		donor->setAltruistic(false);
 		nodeDonors << donor;
-
-		//donor->setParentItem(candidate);
-	}
-
-	foreach(KPDCrossmatchResult result, results) {
-		crossmatchResults << result;
 	}
 }
 
@@ -139,6 +107,12 @@ int KPDGUINode::getNumberOfCompatibilities() {
 
 QVector<KPDCrossmatchResult> KPDGUINode::getCrossmatchResults() const {
 
+	QVector<KPDCrossmatchResult> crossmatchResults;
+
+	foreach(KPDGUIDonor * donor, nodeDonors) {
+		crossmatchResults << donor->getCompatibilityWithPairedCandidate();
+	}
+
 	return crossmatchResults;
 }
 
@@ -174,6 +148,12 @@ void KPDGUINode::setDonors(QVector<KPDGUIDonor *> donors) {
 
 void KPDGUINode::addDonor(KPDGUIDonor * donor) {
 
+	donor->setParentNode(this);
+	donor->setAltruistic(false);
+
+	donor->setID(getID());
+	donor->setDonorNumber(getNumberOfDonors() + 1);
+	
 	nodeDonors << donor;
 
 	clusterNode();
@@ -195,14 +175,14 @@ void KPDGUINode::setCandidate(KPDGUICandidate * c) {
 	nodeCandidate = c;
 }
 
-void KPDGUINode::setCrossmatchResults(QVector<KPDCrossmatchResult> results) {
+/*void KPDGUINode::setCrossmatchResults(QVector<KPDCrossmatchResult> results) {
 
 	crossmatchResults.clear();
 
 	foreach(KPDCrossmatchResult result, results) {
 		crossmatchResults << result;
 	}
-}
+}*/
 
 void KPDGUINode::clusterNode() {
 	
@@ -216,7 +196,6 @@ void KPDGUINode::clusterNode() {
 		qreal y = nodeCandidate->getCandidatePosition().y();
 
 		foreach(KPDGUIDonor * donor, nodeDonors) {
-			//donor->setDonorPosition(QPointF(nodeCandidate->boundingRect().width()/2 + dist*cos(donorAngle), nodeCandidate->boundingRect().height()/2 + dist*sin(donorAngle)));
 			donor->setDonorPosition(QPointF(x + dist*cos(donorAngle), y + dist*sin(donorAngle)));
 			donorAngle += (2 * PI) / numberOfDonors;
 		}
@@ -252,7 +231,9 @@ void KPDGUINode::setSelected(bool selected) {
 		donor->setSelected(selected);
 	}
 
-	nodeCandidate->setSelected(selected);
+	if (nodeType == PAIR) {
+		nodeCandidate->setSelected(selected);
+	}
 }
 
 void KPDGUINode::setNodePosition(QPointF center) {
@@ -401,6 +382,20 @@ void KPDGUINode::setZValue(int z) {
 	nodeCandidate->setZValue(z);
 }
 
+void KPDGUINode::edit() {
+
+	if (nodeType == PAIR) {
+		getCandidate()->edit();
+
+		foreach(KPDGUIDonor * donor,getDonors()) {
+			donor->edit();
+		}
+	}
+	else {
+		getFirstDonor()->edit();
+	}
+}
+
 void KPDGUINode::editActions() {
 	emit nodeEdited();
 }
@@ -461,18 +456,24 @@ QString KPDGUINode::getDashboardString() {
 		consoleString += "AD ";
 	}
 	consoleString += QString::number(nodeID);
-	consoleString += " (";
-	if (!nodeCandidate->getStatus()) {
-		consoleString += "Candidate not particpating in match run, ";
+	consoleString += ": ";
+	if (nodeType == PAIR) {
+		if (nodeCandidate->getStatus()) {
+			consoleString += "Candidate ";
+			consoleString += nodeCandidate->getName();
+			consoleString += ", ";
+		}
 	}
 
 	int i = 0;
 	foreach(KPDGUIDonor * donor, nodeDonors) {
 		i++;
-		if (!donor->getStatus()) {
+		if (donor->getStatus()) {
 			consoleString += "Donor ";
-			consoleString += i;
-			consoleString += " not participating in match run, ";
+			consoleString += donor->getName();
+			consoleString += " (";
+			consoleString += QString::number(i);
+			consoleString += "), ";
 		}
 	}
 	consoleString.chop(2);
@@ -480,21 +481,27 @@ QString KPDGUINode::getDashboardString() {
 	return consoleString;
 }
 
-QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
+/*QDataStream &operator<<(QDataStream &out, const KPDGUINode & node)
 {
 	out << qint32(node.getID());
 	out << qint32(KPDFunctions::nodeTypeToInt(node.getType()));
+
+	qDebug() << "out << node.getID(): " << QString::number(node.getID());
+	qDebug() << "out << node.getType(): " << QString::number(KPDFunctions::nodeTypeToInt(node.getType()));
 	
-	out << node.getNumberOfDonors();
+	out << qint32(node.getNumberOfDonors());
+	qDebug() << "out << node.getNumberOfDonors(): " << QString::number(node.getNumberOfDonors());
+
+	//if (node.getType() == PAIR) {
+	//	qDebug() << "out << *(node.getCandidate())";
+	//	out << *(node.getCandidate());
+	//}
 
 	foreach(KPDGUIDonor * donor, node.getDonors()) {
+		qDebug() << "out << *donor";
 		out << *donor;
 	}
-	out << node.getDonors();
-
-	if (node.getType() == PAIR){
-		out << *(node.getCandidate());
-	}
+	//out << node.getDonors();	
 	
 	return out;
 }
@@ -505,35 +512,41 @@ QDataStream &operator>>(QDataStream &in, KPDGUINode & node)
 	int type;
 		
 	in >> id >> type;
+	qDebug() << "in >> id >> type: " << QString::number(id) << QString::number(type);
 
 	KPDNodeType myType = KPDFunctions::intToNodeType(type);
-
-	node.setID(id);
-	node.setType(myType);
-
+	
 	QVector<KPDGUIDonor * > donors;
 	int numberOfDonors;
 
 	in >> numberOfDonors;
+	qDebug() << "in >> numberOfDonors: " << QString::number(numberOfDonors);
+
+	//if (myType == PAIR) {
+	//	KPDGUICandidate * c = new KPDGUICandidate();
+
+	//	qDebug() << "in >> *c:";
+	//	in >> *c;
+
+		//node.setCandidate(c);
+	//}
 
 	for (int i = 1; i <= numberOfDonors; i++) {
 		
-		KPDGUIDonor d;
+		KPDGUIDonor * d = new KPDGUIDonor();
 		
-		in >> d;
+		qDebug() << "in >> *d";
+		in >> *d;
 
-		donors.push_back(&d);
+		donors.push_back(d);
 	}
 
-	node.setDonors(donors);
+	//node.setDonors(donors);
 
-	if (myType == PAIR) {
-		KPDGUICandidate c;
-		
-		in >> c;
-		
-		node.setCandidate(&c);
-	}	
+	
+
+	//node.setID(id);
+	//node.setType(myType);
 
 	return in;
-}
+}*/

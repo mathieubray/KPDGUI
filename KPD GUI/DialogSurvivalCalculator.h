@@ -17,6 +17,8 @@ class DialogSurvivalCalculator : public QDialog, public Ui_DialogSurvivalCalcula
 	Q_OBJECT
 
 public:
+
+	DialogSurvivalCalculator(KPDGUIMatch * match, KPDGUIDashboardList * donorDashboard, KPDGUIDashboardList * candidateDashboard, KPDGUICrossmatchFunctions * functions, QWidget * parent = 0);
 	DialogSurvivalCalculator(KPDGUIDashboardList * donorDashboard, KPDGUIDashboardList * candidateDashboard, KPDGUICrossmatchFunctions * functions, QWidget * parent = 0);
 	~DialogSurvivalCalculator();
 
@@ -68,8 +70,11 @@ private slots:
 	void updateCandidateHepC(bool hepC);
 	void updateCandidateInsurance(int insuranceIndex);
 
-	void updateDonorInfo(QListWidgetItem * item);
-	void updateCandidateInfo(QListWidgetItem * item);
+	void selectDonor(QListWidgetItem *);
+	void selectCandidate(QListWidgetItem * item);
+
+	void updateDonorInfo(KPDGUIDonor * newDonor);
+	void updateCandidateInfo(KPDGUICandidate * newCandidate);
 
 	void updateSurvival();
 

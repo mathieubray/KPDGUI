@@ -7,6 +7,10 @@
 DialogMatch::DialogMatch(QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
+
+	additionalInformationButton->setVisible(false);
+
+	additionalInformation = false;
 }
 
 // Edit Match
@@ -40,4 +44,19 @@ DialogMatch::DialogMatch(KPDGUIMatch * match, QWidget *parent) : QDialog(parent)
 	//Assigned Transplant Score
 	scoreSpinBox->setValue(match->getAssignedUtility());
 
+	//Match Difficulty
+	difficultToMatchBox->setChecked(match->getTransplantScore() == 1);
+
+
+	additionalInformation = false;
 }
+
+bool DialogMatch::getAdditionalInformation() {
+	return (additionalInformation);
+}
+
+void DialogMatch::setAdditionalInformation() {
+	additionalInformation = true;
+}
+
+

@@ -101,7 +101,8 @@ private:
 public:
     enum { Type = UserType + 4 };
 
-	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCrossmatchResult result, double fiveYearSurvival, double tenYearSurvival);
+	KPDGUIMatch();
+	KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCrossmatchResult result, double fiveYearSurvival, double tenYearSurvival, bool difficultToTransplant);
 	~KPDGUIMatch();
 
 	//Nodes
@@ -143,6 +144,8 @@ public:
 	double getTransplantScore() const { return matchTransplantScore; }
 	double getAssignedUtility() const { return matchAssignedUtility; }
 	
+	void setDonorAndCandidate(KPDGUIDonor * donor, KPDGUICandidate * candidate);
+
 	void setInclude(bool include);
 	void setCrossmatchResult(KPDCrossmatchResult result);
 
@@ -162,10 +165,14 @@ public slots:
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void endDisplayAsPartOfSolution();
 
+	void edit();
 	void editMatch(DialogMatch * dialog);
+
+	void updateCrossmatchResults(KPDCrossmatchResult result, double fiveYear, double tenYear, bool difficultToMatch);
 
 signals:
 	void matchWasEdited();
+	void showAdditionalMatchInformation(KPDGUIMatch *);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);

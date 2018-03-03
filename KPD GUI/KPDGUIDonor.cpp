@@ -8,16 +8,18 @@ KPDGUIDonor::KPDGUIDonor(){
 	matchingID = 0;
 	donorNumber = 0;
 
+	donorIsAltruistic = false;
+	donorCompatibilityWithPairedCandidate = FAILED_CROSSMATCH_HLA;
+	
 	donorName = "Donor Name";
 	donorAge = 40;
 	donorBT = BT_O;
-
-	donorIsAltruistic = false;
-	donorStatus = true;
-	donorFailureProbability = 0.0;
-
-	popularityInArrangements = 0;
-	popularityInSolutions = 0;
+	
+	donorBW4 = false;
+	donorBW6 = false;
+	donorDR51 = false;
+	donorDR52 = false;
+	donorDR53 = false;
 
 	donorMale = false;
 	donorRace = RACE_WHITE;
@@ -25,13 +27,15 @@ KPDGUIDonor::KPDGUIDonor(){
 	donorWeight = 60.0;
 	donorCigarette = false;
 
-	donorBW4 = false;
-	donorBW6 = false;
-	donorDR51 = false;
-	donorDR52 = false;
-	donorDR53 = false;
+	donorStatus = true;
+	donorFailureProbability = 0.0;
+
+	popularityInArrangements = 0;
+	popularityInSolutions = 0;
 
 	donorComment = "";
+
+	hue = 80;
 
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);	
@@ -42,6 +46,7 @@ KPDGUIDonor::KPDGUIDonor(){
 	else {
 		setRect(QRectF(0, 0, 35, 30));
 	}
+
 }
 
 KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
@@ -52,18 +57,21 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 	popularityInArrangements = 0;
 	popularityInSolutions = 0;
 
+	donorCompatibilityWithPairedCandidate = FAILED_CROSSMATCH_HLA;
+
 	editDonor(d);
+
+	hue = 80;
+
+	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
+	setAcceptHoverEvents(true);
 
 	if (donorIsAltruistic) {
 		setRect(QRectF(0, 0, 45, 40));
 	}
 	else {
 		setRect(QRectF(0, 0, 35, 30));
-	}
-
-	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
-	setAcceptHoverEvents(true);
-		
+	}	
 }
 
 KPDGUIDonor::~KPDGUIDonor(){
@@ -190,6 +198,10 @@ void KPDGUIDonor::resetPopularityInSolutions() {
 	popularityInSolutions = 0;
 }
 
+KPDGUINode * KPDGUIDonor::getParentNode() const {
+	return parentNode;
+}
+
 int KPDGUIDonor::getID() const {
 	return matchingID;
 }
@@ -200,6 +212,10 @@ int KPDGUIDonor::getDonorNumber() const {
 
 bool KPDGUIDonor::isAltruistic() const {
 	return donorIsAltruistic;
+}
+
+KPDCrossmatchResult KPDGUIDonor::getCompatibilityWithPairedCandidate() const{
+	return donorCompatibilityWithPairedCandidate;
 }
 
 QString KPDGUIDonor::getName() const {
@@ -332,6 +348,12 @@ void KPDGUIDonor::setAltruistic(bool altruistic) {
 		setRect(QRectF(0, 0, 35, 30));
 	}
 
+	updateVisualProperties();
+}
+
+void KPDGUIDonor::setCompatibilityWithPairedCandidate(KPDCrossmatchResult result) {
+	donorCompatibilityWithPairedCandidate = result;
+	
 	updateVisualProperties();
 }
 
@@ -521,20 +543,35 @@ QPolygonF KPDGUIDonor::getRect() {
 void KPDGUIDonor::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * /* widget */)
 {
 	QColor myBackgroundColor;
+
 	if (donorStatus) {
 		if (donorIsAltruistic) {
 			myBackgroundColor = QColor(200, 0, 200);
 		}
 		else {
-			myBackgroundColor = QColor(0, 0, 255);
+
+			if (donorCompatibilityWithPairedCandidate == SUCCESSFUL_CROSSMATCH) {
+
+				myBackgroundColor = Qt::darkGreen;
+			}
+			else if (donorCompatibilityWithPairedCandidate == O_DONOR_TO_NON_O_CANDIDATE ||
+				donorCompatibilityWithPairedCandidate == FAILED_CROSSMATCH_ADDITIONAL_HLA ||
+				donorCompatibilityWithPairedCandidate == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O) {
+
+				myBackgroundColor = Qt::darkYellow;
+
+			}
+			else {
+				myBackgroundColor = QColor(hue, hue, 255);
+			}
 		}
 	}
 	else {
 		if (donorIsAltruistic) {
-			myBackgroundColor = QColor(75, 0, 75);
+			myBackgroundColor = QColor(100,100,100);
 		}
 		else {
-			myBackgroundColor = QColor(0, 0, 100);
+			myBackgroundColor = QColor(100,100,100);
 		}
 	}
 
@@ -555,8 +592,8 @@ void KPDGUIDonor::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 	QPen pen(Qt::black);
 
 	if (isSelected()) {
-		pen.setStyle(Qt::DotLine);
-		pen.setWidth(2);
+		//pen.setStyle(Qt::DotLine);
+		pen.setWidth(1.5);
 	}
 
 	painter->setPen(pen);
@@ -591,7 +628,7 @@ QString KPDGUIDonor::donorString() {
 }
 
 QString KPDGUIDonor::compatibilitiesString() {
-	QString compatibleDonorString = "Compatible Donors: ";
+	QString compatibleDonorString = "Compatible Candidates: ";
 
 	if (donorMatches.count() > 0) {
 		QVector<int> compatibilities;
@@ -700,8 +737,11 @@ QVariant KPDGUIDonor::itemChange(GraphicsItemChange change, const QVariant &valu
 	}
 
 	if (change == ItemSelectedHasChanged) {
-		emit donorSelectionChanged(matchingID, donorNumber, value.toBool());
-		update();
+		//emit donorSelectionChanged(matchingID, donorNumber, value.toBool());
+		
+		parentNode->setSelected(value.toBool());
+
+		emit donorSelectionChanged();
 	}
 
 	return QGraphicsItem::itemChange(change, value);
@@ -718,6 +758,11 @@ void KPDGUIDonor::hoverLeaveEvent(QGraphicsSceneHoverEvent *event) {
 }
 
 void KPDGUIDonor::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
+
+	edit();
+}
+
+void KPDGUIDonor::edit() {
 
 	DialogDonor * donorDialog = new DialogDonor(this, false);
 	if (donorDialog->exec()) {
@@ -816,27 +861,45 @@ void KPDGUIDonor::updateVisualProperties() {
 	update();
 }
 
+void KPDGUIDonor::updateHue(int n, double mu, double sigma) {
+
+	double pivot = (getNumberOfMatches() - mu) / (sigma / sqrt(n));
+
+	if (pivot < -1.5) {
+		pivot = -1.5;
+	}
+
+	if (pivot > 1.5) {
+		pivot = 1.5;
+	}
+
+	//hue = 225 - 75 * (pivot + 1.5);
+
+	hue = 0;
+
+}
+
 QDataStream &operator<<(QDataStream &out, const KPDGUIDonor & donor)
 {	
-	out << donor.getID();
-	out << donor.getDonorNumber();
+	out << qint32(donor.getID());
+	out << qint32(donor.getDonorNumber());
+	out << donor.isAltruistic();
+	out << qint32(KPDFunctions::crossmatchResultToInt(donor.getCompatibilityWithPairedCandidate()));
+	
+	//qDebug() << "out << qint32(donor.getID()): " << QString::number(donor.getID());
+	//qDebug() << "out << qint32(donor.getDonorNumber()): " << QString::number(donor.getDonorNumber());
+	//qDebug() << "out << donor.isAltruistic(): " << donor.isAltruistic();
 
+	// Major Fields
 	out << donor.getName();
 	out << qint32(donor.getAge());
 	out << qint32(KPDFunctions::bloodTypeToInt(donor.getBT()));
 
-	out << donor.isAltruistic();
-	out << donor.getStatus();
-	out << donor.getFailureProbability();
+	//qDebug() << "out << donor.getName(): " << donor.getName();
+	//qDebug() << "out << qint32(donor.getAge()): " << QString::number(donor.getAge());
+	//qDebug() << "out << qint32(KPDFunctions::bloodTypeToInt(donor.getBT())): " << QString::number(KPDFunctions::bloodTypeToInt(donor.getBT()));
 
-	//out << donor.getMatches();
-	
-	out << donor.getMale();
-	out << qint32(KPDFunctions::raceToInt(donor.getRace()));
-	out << donor.getHeight();
-	out << donor.getWeight();
-	out << donor.getCigarette();
-
+	// HLA Information
 	out << donor.getA();
 	out << donor.getB();
 	out << donor.getCW();
@@ -848,8 +911,30 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDonor & donor)
 	out << donor.getDR52();
 	out << donor.getDR53();
 	out << donor.getAdditionalHLA();
-	
+
+	// Characteristics
+	out << donor.getMale();
+	out << qint32(KPDFunctions::raceToInt(donor.getRace()));
+	out << qreal(donor.getHeight());
+	out << qreal(donor.getWeight());
+	out << donor.getCigarette();
+
+	//qDebug() << "out << donor.getMale(): " << donor.getMale();
+	//qDebug() << "out << qint32(KPDFunctions::raceToInt(donor.getRace())): " << QString::number(KPDFunctions::raceToInt(donor.getRace()));
+	//qDebug() << "out << qreal(donor.getHeight()): " << QString::number(donor.getHeight());
+	//qDebug() << "out << qreal(donor.getWeight()): " << QString::number(donor.getWeight());
+	//qDebug() << "out << donor.getCigarette(): " << QString::number(donor.getCigarette());
+
+	// Additional Parameters
+	out << donor.getStatus();
+	out << qreal(donor.getFailureProbability());
+		
+	//qDebug() << "out << donor.getStatus(): " << donor.getStatus();
+	//qDebug() << "out << qreal(donor.getFailureProbability()): " << QString::number(donor.getFailureProbability());
+
 	out << donor.getComment();
+	
+	//qDebug() << "out << donor.getComment(): " << donor.getComment();
 
 	return out;
 }
@@ -857,86 +942,82 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDonor & donor)
 QDataStream &operator>>(QDataStream &in, KPDGUIDonor & donor)
 {
 	int id;
-	int donorNumber;	
+	int donorNumber;
+	bool ad;
+	int crossmatch;
+	in >> id >> donorNumber >> ad >> crossmatch;
+	donor.setID(id);
+	donor.setDonorNumber(donorNumber);
+	donor.setAltruistic(ad);
+	donor.setCompatibilityWithPairedCandidate(KPDFunctions::intToCrossmatchResult(crossmatch));	
+	
+	//qDebug() << "in >> id >> nDonors: " << QString::number(id) << QString::number(nDonors);
 
+	// Major Fields
 	QString name;
 	int age;
 	int BT;
+	in >> name >> age >> BT;	
+	donor.setName(name);
+	donor.setAge(age);
+	donor.setBT(KPDFunctions::intToBloodType(BT));
 
-	bool ad;
-	bool status;
-	bool prob;
+	//qDebug() << "in >> name >> age >> BT: " << name << QString::number(age) << QString::number(BT);
 
-	//QSet<KPDGUIMatch *> matches;
+	// HLA Information
+	QVector<QString> dA;
+	QVector<QString> dB;
+	QVector<QString> dCW;
+	QVector<QString> dDQ;
+	QVector<QString> dDR;
+	bool dBW4;
+	bool dBW6;
+	bool dDR51;
+	bool dDR52;
+	bool dDR53;
+	QVector<QString> dAdditionalHLA;
+	in >> dA >> dB >> dCW >> dDQ >> dDR >> dBW4 >> dBW6 >> dDR51 >> dDR52 >> dDR53 >> dAdditionalHLA;
+	donor.setA(dA);
+	donor.setB(dB);
+	donor.setCW(dCW);
+	donor.setDQ(dDQ);
+	donor.setDR(dDR);
+	donor.setBW4(dBW4);
+	donor.setBW6(dBW6);
+	donor.setDR51(dDR51);
+	donor.setDR52(dDR52);
+	donor.setDR53(dDR52);
+	donor.setAdditionalDonorHLA(dAdditionalHLA);
 
+	// Characteristics
 	bool male;
 	int race;
 	double height;
 	double weight;
 	bool cigarette;
-	
-	QVector<QString> donorA;
-	QVector<QString> donorB;	
-	QVector<QString> donorCW;
-	QVector<QString> donorDQ;
-	QVector<QString> donorDR;
-	bool donorBW4;
-	bool donorBW6;
-	bool donorDR51;
-	bool donorDR52;
-	bool donorDR53;
-	QVector<QString> additionalDonorHLA;
-	
-	QString comment;
-
-	in >> id >> donorNumber;
-
-	in >> name >> age >> BT;
-
-	in >> ad >> status >> prob;
-
-	//in >> matches;
-
 	in >> male >> race >> height >> weight >> cigarette;
-	
-	in >> donorA >> donorB >> donorCW >> donorDQ >> donorDR;
-	in >> donorBW4 >> donorBW6 >> donorDR51 >> donorDR52 >> donorDR53;
-	in >> additionalDonorHLA;
-
-	in >> comment;
-
-	donor.setID(id);
-	donor.setDonorNumber(donorNumber);
-
-	donor.setName(name);
-	donor.setAge(age);
-	donor.setBT(KPDFunctions::intToBloodType(BT));
-
-	donor.setAltruistic(ad);
-	donor.setStatus(status);
-	donor.setFailureProbability(prob);
-
-	//donor.setMatches(matches);
-
 	donor.setMale(male);
 	donor.setRace(KPDFunctions::intToRace(race));
 	donor.setHeight(height);
 	donor.setWeight(weight);
 	donor.setCigarette(cigarette);
+		
+	//qDebug() << "in >> male >> race >> height >> weight >> cigarette: " << male << QString::number(race) << QString::number(height) << QString::number(weight) << cigarette;
+	
+	// Additional Parameters
+	bool status;
+	double prob;
+	in >> status >> prob;
+	donor.setStatus(status);
+	donor.setFailureProbability(prob);
 
-	donor.setA(donorA);
-	donor.setB(donorB);
-	donor.setCW(donorCW);
-	donor.setDQ(donorDQ);
-	donor.setDR(donorDR);
-	donor.setBW4(donorBW4);
-	donor.setBW6(donorBW6);
-	donor.setDR51(donorDR51);
-	donor.setDR52(donorDR52);
-	donor.setDR53(donorDR52);
-	donor.setAdditionalDonorHLA(additionalDonorHLA);
-
+	//qDebug() << "in >> status >> prob: " << ad << status << QString::number(prob);
+		
+	QString comment;
+	in >> comment;
 	donor.setComment(comment);
 
+	//qDebug() << "in >> comment: " << comment;
+	
 	return in;
 }

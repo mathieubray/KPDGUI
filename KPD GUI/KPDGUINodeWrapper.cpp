@@ -8,9 +8,7 @@ KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node) {
 	}
 
 	foreach(KPDGUIDonor * donor, node->getDonors()) {
-
 		QObject::connect(donor, SIGNAL(donorEdited()), this, SLOT(updateText()));
-
 	}
 
 	updateText();
@@ -52,10 +50,22 @@ void KPDGUINodeWrapper::updateText(){
 
 }
 
+void KPDGUINodeWrapper::nodeWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool isSelected = myNode->getFirstDonor()->isSelected();
+
+		myNode->setSelected(!isSelected);
+
+		emit updateVisibilitySignal();
+	}
+}
+
 void KPDGUINodeWrapper::nodeWrapperDoubleClickActions(QTreeWidgetItem * item) {
 
 	if (item == this) {
-		if (myNode->getType() == PAIR) {
+		/*if (myNode->getType() == PAIR) {
 			DialogCandidate * dialogCandidate = new DialogCandidate(myNode->getCandidate());
 			if (dialogCandidate->exec()) {
 				myNode->getCandidate()->editCandidate(dialogCandidate);
@@ -73,7 +83,9 @@ void KPDGUINodeWrapper::nodeWrapperDoubleClickActions(QTreeWidgetItem * item) {
 			if (dialogDonor->exec()) {
 				myNode->getFirstDonor()->editDonor(dialogDonor);
 			}
-		}
+		}*/
+
+		myNode->edit();
 	}
 
 }

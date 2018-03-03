@@ -201,6 +201,9 @@
      </item>
      <item row="0" column="4">
       <widget class="QComboBox" name="donorGenderComboBox">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
        <item>
         <property name="text">
          <string>Male</string>
@@ -616,6 +619,9 @@
      </item>
      <item row="0" column="2">
       <widget class="QComboBox" name="candidateGenderComboBox">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
        <item>
         <property name="text">
          <string>Male</string>
@@ -1120,38 +1126,6 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>donorList</sender>
-   <signal>itemPressed(QListWidgetItem*)</signal>
-   <receiver>DialogSurvivalCalculator</receiver>
-   <slot>updateDonorInfo(QListWidgetItem*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>77</x>
-     <y>453</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>155</x>
-     <y>480</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>candidateList</sender>
-   <signal>itemPressed(QListWidgetItem*)</signal>
-   <receiver>DialogSurvivalCalculator</receiver>
-   <slot>updateCandidateInfo(QListWidgetItem*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>477</x>
-     <y>461</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>433</x>
-     <y>527</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>candidateAgeSpinBox</sender>
    <signal>valueChanged(int)</signal>
    <receiver>DialogSurvivalCalculator</receiver>
@@ -1217,7 +1191,7 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>candidateHLALineEdit</sender>
-   <signal>textEdited(QString)</signal>
+   <signal>textChanged(QString)</signal>
    <receiver>DialogSurvivalCalculator</receiver>
    <slot>updateCandidateHLA(QString)</slot>
    <hints>
@@ -1377,7 +1351,7 @@ p, li { white-space: pre-wrap; }
   </connection>
   <connection>
    <sender>donorHLALineEdit</sender>
-   <signal>textEdited(QString)</signal>
+   <signal>textChanged(QString)</signal>
    <receiver>DialogSurvivalCalculator</receiver>
    <slot>updateAdditionalDonorHLA(QString)</slot>
    <hints>
@@ -1631,6 +1605,38 @@ p, li { white-space: pre-wrap; }
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>donorList</sender>
+   <signal>itemPressed(QListWidgetItem*)</signal>
+   <receiver>DialogSurvivalCalculator</receiver>
+   <slot>selectDonor(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>522</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>408</x>
+     <y>524</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>candidateList</sender>
+   <signal>itemPressed(QListWidgetItem*)</signal>
+   <receiver>DialogSurvivalCalculator</receiver>
+   <slot>selectCandidate(QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>568</x>
+     <y>481</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>541</x>
+     <y>413</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateSurvival()</slot>
@@ -1663,5 +1669,7 @@ p, li { white-space: pre-wrap; }
   <slot>updateDonorCW()</slot>
   <slot>updateDonorDQ()</slot>
   <slot>updateDonorDR()</slot>
+  <slot>selectDonor(QListWidgetItem*)</slot>
+  <slot>selectCandidate(QListWidgetItem*)</slot>
  </slots>
 </ui>

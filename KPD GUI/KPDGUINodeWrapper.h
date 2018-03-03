@@ -15,9 +15,13 @@ public:
 
 	KPDGUINode * getNode();	
 
+signals:
+	void updateVisibilitySignal();
+
 public slots:
 	void updateText();
 
+	void nodeWrapperClickActions(QTreeWidgetItem * item);
 	void nodeWrapperDoubleClickActions(QTreeWidgetItem * item);
 
 private:

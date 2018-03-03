@@ -14,10 +14,14 @@ public:
 	~KPDGUICandidateWrapper();
 
 	KPDGUICandidate * getCandidate();
+
+signals:
+	void updateVisibilitySignal();
 	
 public slots:		
 	void updateText();
 
+	void candidateWrapperClickActions(QTreeWidgetItem * item);
 	void candidateWrapperDoubleClickActions(QTreeWidgetItem * item);
 
 private:

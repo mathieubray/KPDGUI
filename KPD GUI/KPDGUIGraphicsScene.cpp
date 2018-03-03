@@ -6,8 +6,6 @@ KPDGUIGraphicsScene::KPDGUIGraphicsScene() : QGraphicsScene()
 	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense4Pattern));
 	nodePlacementSequenceNumber = 0;
 	zValue = 1;
-		
-	createActions();
 }
 
 KPDGUIGraphicsScene::~KPDGUIGraphicsScene()
@@ -60,11 +58,9 @@ void KPDGUIGraphicsScene::addNodes(QVector<KPDGUINode *> nodes, QString layout) 
 		else {
 			int h_offset = rand() % 50 - 25;
 			int v_offset = rand() % 50 - 25;
-			position.setX(150 + 150 * (nodePlacementSequenceNumber % 10) + h_offset);
-			position.setY(150 + 1500 * ((nodePlacementSequenceNumber / 10) % 10) + v_offset);
+			position.setX(150 + 150 * (nodePlacementSequenceNumber % 16) + h_offset);
+			position.setY(150 + 150 * ((nodePlacementSequenceNumber / 16) % 16) + v_offset);
 			nodePlacementSequenceNumber++;
-
-			qDebug() << nodePlacementSequenceNumber << " " << position.x() << " " << position.y();
 
 		}
 
@@ -82,30 +78,169 @@ void KPDGUIGraphicsScene::addNodes(QVector<KPDGUINode *> nodes, QString layout) 
 			addItem(node->getFirstDonor());
 		}
 	}
+
+	
+}
+
+void KPDGUIGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+
+	if (event->button() == Qt::RightButton) {
+		
+		QGraphicsItem * item = itemAt(event->scenePos(), QTransform());
+		if (item) {
+			KPDGUIDonor * donor = dynamic_cast<KPDGUIDonor *>(item);
+			if (donor) {
+
+				donor->setSelected(true);
+
+				emit updateVisibilitySignal();
+			}
+
+			KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+			if (candidate) {
+				
+				if (!candidate->isSelected()) {
+					qDebug() << "Before: Not Selected:";
+				}
+				
+				candidate->setSelected(true);
+				
+				if (candidate->isSelected()) {
+					qDebug() << "After: Selected";
+				}
+
+				emit updateVisibilitySignal();
+			}
+		}
+
+
+		QGraphicsScene::mousePressEvent(event);
+	}
+
+	else {
+
+		QGraphicsScene::mousePressEvent(event);
+
+		emit updateVisibilitySignal();
+	}
+}
+
+void KPDGUIGraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent * event) {
+
+	emit updateVisibilitySignal();
+
+	QGraphicsScene::mouseReleaseEvent(event);
+
 }
 
 void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
 {
+
 	QMenu menu(event->widget());
 	QList<QGraphicsItem*> items = selectedItems();
 
-	if (selectedItems().size() >= 2){
+	//int nCandidates = 0;
+
+	//foreach(QGraphicsItem * item, items) {
+
+	//	KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+	//	if (candidate) {
+	//		nCandidates++;
+	//	}
+	//}
+
+	QList<KPDGUINode *> nodes;
+
+	foreach(QGraphicsItem * item, items) {
+		KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+		if (candidate) {
+			nodes << candidate->getParentNode();
+		}
+
+		KPDGUIDonor * donor = dynamic_cast<KPDGUIDonor *>(item);
+		if (donor) {
+			if (donor->isAltruistic()) {
+				nodes << donor->getParentNode();
+			}
+		}
+	}
+
+	if (nodes.size() >= 2){
+
+		QAction * clusterAction = new QAction(tr("&Cluster Selection"), this);
+		connect(clusterAction, SIGNAL(triggered()), this, SLOT(cluster()));
+
 		menu.addAction(clusterAction);
 	}
 
-	else if (selectedItems().size() == 1){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(items.first());
-		if (node){
-			menu.addAction(editAction);
-			menu.addAction(changeStatusAction);
+	else if (nodes.size() == 1){
+
+		bool altruistic = false;
+
+		foreach(QGraphicsItem * item, items) {
+			KPDGUICandidate *candidate = dynamic_cast<KPDGUICandidate *>(item);
+			if (candidate) {
+
+				QAction * editAction = new QAction("Edit Candidate " + candidate->candidateString(), this);
+				connect(editAction, SIGNAL(triggered()), candidate, SLOT(edit()));
+
+
+				menu.addAction(editAction);
+				//menu.addAction(changeStatusAction);
+			}
+			else {
+				KPDGUIDonor *donor = dynamic_cast<KPDGUIDonor *>(item);
+				if (donor) {
+
+					if (donor->isAltruistic()) {
+						altruistic = true;
+					}
+
+					QAction * editAction = new QAction("Edit Donor " + donor->donorString(), this);
+					connect(editAction, SIGNAL(triggered()), donor, SLOT(edit()));
+
+					menu.addAction(editAction);
+					//menu.addAction(changeStatusAction);
+				}
+			}			
+		}	
+
+		if (!altruistic) {
+			QAction * addAdditionalDonorAction = new QAction("Add Additional Donor", this);
+			connect(addAdditionalDonorAction, SIGNAL(triggered()), this, SLOT(addAdditionalDonor()));
+
+			menu.addSeparator();
+			menu.addAction(addAdditionalDonorAction);
 		}
 	}
 
 	else {
+
+		QAction * selectAllAction = new QAction(tr("&Select All"), this);
+		connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
+
 		menu.addAction(selectAllAction);
 	}
 
 	menu.exec(event->screenPos());
+}
+
+void KPDGUIGraphicsScene::addAdditionalDonor() {
+
+	QList<QGraphicsItem*> items = selectedItems();
+	
+	foreach(QGraphicsItem * item, items) {
+		KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+		if (candidate) {
+
+			candidate->addAdditionalDonor();
+			//emit addNewDonorSignal(candidate);
+
+			break;
+		}
+	}
+
+
 }
 
 void KPDGUIGraphicsScene::edit(){
@@ -121,32 +256,49 @@ void KPDGUIGraphicsScene::edit(){
 
 
 void KPDGUIGraphicsScene::cluster() {
-
+	
 	qreal avgx = 0;
 	qreal avgy = 0;
 	qreal dist = 50+10*selectedItems().size();
 
 	QList<QGraphicsItem*> items = selectedItems();
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
-			avgx += node->getNodePosition().x();
-			avgy += node->getNodePosition().y();
+
+	QList<KPDGUINode*> nodes;
+
+	foreach(QGraphicsItem * item, items) {
+		KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+		if (candidate) {
+			nodes << candidate->getParentNode();
+		}
+
+		KPDGUIDonor * donor = dynamic_cast<KPDGUIDonor *>(item);
+		if (donor) {
+			if (donor->isAltruistic()) {
+				nodes << donor->getParentNode();
+			}
 		}
 	}
 
-	qreal x = avgx / selectedItems().size();
-	qreal y = avgy / selectedItems().size();
+	foreach(KPDGUINode * node, nodes){
+		//KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
+		//if (node){
+			avgx += node->getNodePosition().x();
+			avgy += node->getNodePosition().y();
+		//}
+	}
+
+	qreal x = avgx / nodes.size();
+	qreal y = avgy / nodes.size();
 	
-	qreal angle = (2 * PI) / selectedItems().size();
+	qreal angle = (2 * PI) / nodes.size();
 	qreal nodeAngle = PI;
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	QApplication::processEvents();
 
-	foreach(QGraphicsItem * item, items){
-		KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
-		if (node){
+	foreach(KPDGUINode * node, nodes){
+		//KPDGUINode *node = dynamic_cast<KPDGUINode *>(item);
+		//if (node){
 			//node->setVisible(false);
 			if (!(abs((node->getNodePosition().x()) - (x + dist*cos(nodeAngle))) < TOL && abs((node->getNodePosition().y()) - (y + dist*sin(nodeAngle)) < TOL))){
 				node->setNodePosition(QPoint(x + dist*cos(nodeAngle), y + dist*sin(nodeAngle)));
@@ -155,8 +307,10 @@ void KPDGUIGraphicsScene::cluster() {
 			//node->setVisible(true);
 			
 			node->setSelected(true);
-		}
+		//}
 	}
+
+	emit selectionClustered(x, y);
 
 	QApplication::restoreOverrideCursor();
 	QApplication::processEvents();
@@ -184,22 +338,23 @@ void KPDGUIGraphicsScene::changeStatus() {
 }
 
 void KPDGUIGraphicsScene::selectAll() {
-	qDebug() << "SELECT ALL!";
-}
-
-void KPDGUIGraphicsScene::createActions(){
 	
-	editAction = new QAction(tr("&Edit"), this);
-	connect(editAction, SIGNAL(triggered()), this, SLOT(edit()));
-
-	changeStatusAction = new QAction(tr("&Change Status"), this);
-	connect(changeStatusAction, SIGNAL(triggered()), this, SLOT(changeStatus()));
+	QList<QGraphicsItem*> sceneItems = items();
 	
-	clusterAction = new QAction(tr("&Cluster Selection"), this);
-	connect(clusterAction, SIGNAL(triggered()), this, SLOT(cluster()));
+	foreach(QGraphicsItem * item, sceneItems) {
+		KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+		if (candidate) {
+			candidate->setSelected(true);
+		}
 
-	selectAllAction = new QAction(tr("&Select All"), this);
-	connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
+		KPDGUIDonor * donor = dynamic_cast<KPDGUIDonor *>(item);
+		if (donor) {
+			if (donor->isAltruistic()) {
+				donor->setSelected(true);
+			}
+		}
+	}
+
 }
 
 void KPDGUIGraphicsScene::raiseZValue() {

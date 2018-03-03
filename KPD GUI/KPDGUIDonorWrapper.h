@@ -4,6 +4,7 @@
 #include <QtGui>
 
 #include "KPDGUIDonor.h"
+#include "KPDGUINode.h"
 
 class KPDGUIDonorWrapper : public QObject, public QTreeWidgetItem
 {
@@ -15,9 +16,13 @@ public:
 
 	KPDGUIDonor * getDonor();
 
+signals:
+	void updateVisibilitySignal();
+
 public slots:
 	void updateText();
 	
+	void donorWrapperClickActions(QTreeWidgetItem * item);
 	void donorWrapperDoubleClickActions(QTreeWidgetItem * item);
 
 private:

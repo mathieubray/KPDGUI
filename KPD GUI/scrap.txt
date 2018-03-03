@@ -1,0 +1,1257 @@
+if (scheme == FIVE_YEAR_SURVIVAL) {
+				if (associated5YearSurvivalMatrix[donorNodeID][candidateNodeID][donorID] > maxUtil) {
+					maxDonorID = donorID;
+					maxUtil = associated5YearSurvivalMatrix[donorNodeID][candidateNodeID][donorID];
+				}
+			}
+			else if (scheme == TEN_YEAR_SURVIVAL) {
+				if (associated10YearSurvivalMatrix[donorNodeID][candidateNodeID][donorID] > maxUtil) {
+					maxDonorID = donorID;
+					maxUtil = associated10YearSurvivalMatrix[donorNodeID][candidateNodeID][donorID];
+				}
+			}
+			else if (scheme == HARD_TO_TRANSPLANT) {
+				if (associatedTransplantScoreMatrix[donorNodeID][candidateNodeID][donorID] > maxUtil) {
+					maxDonorID = donorID;
+					maxUtil = associatedTransplantScoreMatrix[donorNodeID][candidateNodeID][donorID];
+				}
+			}
+			else if (scheme == ASSIGNED_SCORE) {
+				if (associatedAssignedUtilityMatrix[donorNodeID][candidateNodeID][donorID] > maxUtil) {
+					maxDonorID = donorID;
+					maxUtil = associatedAssignedUtilityMatrix[donorNodeID][candidateNodeID][donorID];
+				}
+			}
+			else { // Transplants
+				if (maxUtil == 0.0) {
+					maxDonorID = donorID;
+					maxUtil = 1.0;
+				}
+			}
+			
+			
+			
+			
+			
+			//5 year survival
+			if (utilityScheme == FIVE_YEAR_SURVIVAL) {
+				util += associated5YearSurvivalMatrix[*itNodes][*(itNodes + 1)][bestDonorIndex];
+			}
+			//10 year survival
+			else if (utilityScheme == TEN_YEAR_SURVIVAL) {
+				util += associated10YearSurvivalMatrix[*itNodes][*(itNodes + 1)][bestDonorIndex];
+			}
+			//Difficulty-to-transplant score
+			else if (utilityScheme == HARD_TO_TRANSPLANT) {
+				util += associatedTransplantScoreMatrix[*itNodes][*(itNodes + 1)][bestDonorIndex];
+			}
+			//Random utility assingment
+			else if (utilityScheme == ASSIGNED_SCORE) {
+				util += associatedAssignedUtilityMatrix[*itNodes][*(itNodes + 1)][bestDonorIndex];
+			}
+			else { // Transplants
+				util += 1;
+			}
+			
+			
+			
+			
+			//5 year survival
+			if (utilityScheme == FIVE_YEAR_SURVIVAL) {
+				util += associated5YearSurvivalMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][bestDonorIndex];
+			}
+			//10 year survival
+			else if (utilityScheme == TEN_YEAR_SURVIVAL) {
+				util += associated10YearSurvivalMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][bestDonorIndex];
+			}
+			//Difficulty-to-transplant score
+			else if (utilityScheme == HARD_TO_TRANSPLANT) {
+				util += associatedTransplantScoreMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][bestDonorIndex];
+			}
+			//Random utility assingment
+			else if (utilityScheme == ASSIGNED_SCORE) {
+				util += associatedAssignedUtilityMatrix[*(itStructures->end() - 1)][*(itStructures->begin())][bestDonorIndex];
+			}
+			else { // Transplants
+				util += 1;
+			}
+			
+			
+			
+			
+			
+			
+			
+			if (utilityScheme == FIVE_YEAR_SURVIVAL) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated5YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else if (utilityScheme == TEN_YEAR_SURVIVAL) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated10YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else if (utilityScheme == HARD_TO_TRANSPLANT) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associatedTransplantScoreMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else if (utilityScheme == ASSIGNED_SCORE) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associatedAssignedUtilityMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else { // Transplants
+										if (nodeInfoVector[edgeSubsetCandidateID].nodeType == PAIR) {
+											reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = 1;
+										}
+									}
+									
+									
+									
+									
+									
+									if (utilityScheme == FIVE_YEAR_SURVIVAL) {
+											randomAssociatedUtilityMatrix[i][j][k] = associated5YearSurvivalMatrix[*itDonors][*itCandidates][k];
+										}
+										else if (utilityScheme == TEN_YEAR_SURVIVAL) {
+											randomAssociatedUtilityMatrix[i][j][k] = associated10YearSurvivalMatrix[*itDonors][*itCandidates][k];
+										}
+										else if (utilityScheme == HARD_TO_TRANSPLANT) {
+											randomAssociatedUtilityMatrix[i][j][k] = associatedTransplantScoreMatrix[*itDonors][*itCandidates][k];
+										}
+										else if (utilityScheme == ASSIGNED_SCORE) {
+											randomAssociatedUtilityMatrix[i][j][k] = associatedAssignedUtilityMatrix[*itDonors][*itCandidates][k];
+										}
+										else {
+											if (nodeInfoVector[*itCandidates].nodeType == PAIR) {
+												randomAssociatedUtilityMatrix[*itDonors][*itCandidates][k] = 1;
+											}
+										}
+										
+										
+										
+										
+	
+	
+	/*double survival = 0.0;
+
+	//Age
+	QVector<double> cAge5yr = survivalParameters["recipAge5yr"];
+	QVector<double> cAge10yr = survivalParameters["recipAge10yr"];
+
+	int candidatesAge = candidate->getAge();
+	survival += candidatesAge*(fiveyear*(cAge5yr[0]) + (1 - fiveyear)*(cAge10yr[0]));
+	candidatesAge = candidatesAge - 35;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[1]) + (1 - fiveyear)*(cAge10yr[1]));
+	}
+	candidatesAge = candidatesAge - 15;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[2]) + (1 - fiveyear)*(cAge10yr[2]));
+	}
+	candidatesAge = candidatesAge - 15;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[3]) + (1 - fiveyear)*(cAge10yr[3]));
+	}
+
+	QVector<double> dAge5yr = survivalParameters["donorAge5yr"];
+	QVector<double> dAge10yr = survivalParameters["donorAge10yr"];
+
+	int donorsAge = donor->getAge();
+	survival += donorsAge*(fiveyear*(dAge5yr[0]) + (1 - fiveyear)*(dAge10yr[0]));
+	donorsAge = donorsAge - 50;
+	if (donorsAge>50) {
+		survival += donorsAge*(fiveyear*(dAge5yr[1]) + (1 - fiveyear)*(dAge10yr[1]));
+	}
+
+	//Gender
+	QVector<double> pGender5yr = survivalParameters["pairGender5yr"];
+	QVector<double> pGender10yr = survivalParameters["pairGender10yr"];
+	if (candidate->getMale() == false && donor->getMale() == false) {
+		survival += fiveyear*(pGender5yr[0]) + (1 - fiveyear)*(pGender10yr[0]);
+	}
+	if (candidate->getMale() == false && donor->getMale()) {
+		survival += fiveyear*(pGender5yr[1]) + (1 - fiveyear)*(pGender10yr[1]);
+	}
+	if (candidate->getMale() && donor->getMale()) {
+		survival += fiveyear*(pGender5yr[2]) + (1 - fiveyear)*(pGender10yr[2]);
+	}
+
+	//Race
+	QVector<double> cRace5yr = survivalParameters["recipRace5yr"];
+	QVector<double> cRace10yr = survivalParameters["recipRace10yr"];
+	if (candidate->getRace() == RACE_BLACK) {
+		survival += fiveyear*(cRace5yr[0]) + (1 - fiveyear)*(cRace10yr[0]);
+	}
+	else if (candidate->getRace() == RACE_HISPANIC) {
+		survival += fiveyear*(cRace5yr[1]) + (1 - fiveyear)*(cRace10yr[1]);
+	}
+	else if (candidate->getRace() == RACE_WHITE) {
+		survival += fiveyear*(cRace5yr[2]) + (1 - fiveyear)*(cRace10yr[2]);
+	}
+
+	//HLA Mismatches
+	double pNoMismatch5yr = survivalParameters["pairHLA5yr"][0];
+	double pNoMismatch10yr = survivalParameters["pairHLA10yr"][0];
+	survival += fiveyear*(pNoMismatch5yr)+(1 - fiveyear)*(pNoMismatch10yr);
+
+	//PRA
+	QVector<double> cPRA5yr = survivalParameters["recipPRA5yr"];
+	QVector<double> cPRA10yr = survivalParameters["recipPRA10yr"];
+	if (candidate->getPRA() >= 10 && candidate->getPRA() <= 79) {
+		survival += fiveyear*(cPRA5yr[0]) + (1 - fiveyear)*(cPRA10yr[0]);
+	}
+	else if (candidate->getPRA() >= 80 && candidate->getPRA() <= 100) {
+		survival += fiveyear*(cPRA5yr[1]) + (1 - fiveyear)*(cPRA10yr[1]);
+	}
+
+	//Recipient Diabetes Diagnosis
+	double cDiabetes5yr = survivalParameters["recipDiabetes5yr"][0];
+	double cDiabetes10yr = survivalParameters["recipDiabetes10yr"][0];
+	if (candidate->getDiabetes()) {
+		survival += fiveyear*(cDiabetes5yr)+(1 - fiveyear)*(cDiabetes10yr);
+	}
+
+	//Previous Tranpslant
+	double cPrevTrans5yr = survivalParameters["recipPrevTrans5yr"][0];
+	double cPrevTrans10yr = survivalParameters["recipPrevTrans10yr"][0];
+	if (candidate->getPrevTrans()) {
+		survival += fiveyear*(cPrevTrans5yr)+(1 - fiveyear)*(cPrevTrans10yr);
+	}
+
+	//BMI
+	double cBMI5yr = survivalParameters["recipBMI5yr"][0];
+	double cBMI10yr = survivalParameters["recipBMI10yr"][0];
+	double dBMI5yr = survivalParameters["donorBMI5yr"][0];
+	double dBMI10yr = survivalParameters["donorBMI10yr"][0];
+	if (candidate->getBMI()>30) {
+		survival += fiveyear*(cBMI5yr)+(1 - fiveyear)*(cBMI10yr);
+	}
+	if (donor->getBMI()>30) {
+		survival += fiveyear*(dBMI5yr)+(1 - fiveyear)*(dBMI10yr);
+	}
+
+	//Time on Dialysis
+	QVector<double> cTOD5yr = survivalParameters["recipTOD5yr"];
+	QVector<double> cTOD10yr = survivalParameters["recipTOD10yr"];
+	if (candidate->getTOD() == 0) {
+		survival += fiveyear*(cTOD5yr[0]) + (1 - fiveyear)*(cTOD10yr[0]);
+	}
+	else if (candidate->getTOD()>0 && candidate->getTOD() <= 0.5) {
+		survival += fiveyear*(cTOD5yr[1]) + (1 - fiveyear)*(cTOD10yr[1]);
+	}
+	else if (candidate->getTOD()>0.5 && candidate->getTOD() <= 1) {
+		survival += fiveyear*(cTOD5yr[2]) + (1 - fiveyear)*(cTOD10yr[2]);
+	}
+	else if (candidate->getTOD()>2 && candidate->getTOD() <= 3) {
+		survival += fiveyear*(cTOD5yr[3]) + (1 - fiveyear)*(cTOD10yr[3]);
+	}
+	else if (candidate->getTOD()>3) {
+		survival += fiveyear*(cTOD5yr[4]) + (1 - fiveyear)*(cTOD10yr[4]);
+	}
+
+	//Weight Ratio
+	double weightRatio = (donor->getWeight()) / (candidate->getWeight());
+	QVector<double> pWR5yr = survivalParameters["pairWeightRatio5yr"];
+	QVector<double> pWR10yr = survivalParameters["pairWeightRatio10yr"];
+
+	if (weightRatio < 0.75) {
+		survival += fiveyear*(pWR5yr[0]) + (1 - fiveyear)*(pWR10yr[0]);
+	}
+	else if (weightRatio >= 0.75 && weightRatio <0.90) {
+		survival += fiveyear*(pWR5yr[1]) + (1 - fiveyear)*(pWR10yr[1]);
+	}
+	else if (weightRatio >= 1.15) {
+		survival += fiveyear*(pWR5yr[2]) + (1 - fiveyear)*(pWR10yr[2]);
+	}
+
+	//Hep C Seriology
+	double cHepC5yr = survivalParameters["recipHepC5yr"][0];
+	double cHepC10yr = survivalParameters["recipHepC10yr"][0];
+	if (candidate->getHepC()) {
+		survival += fiveyear*(cHepC5yr)+(1 - fiveyear)*(cHepC10yr);
+	}
+
+	double expo = exp(survival);
+	if (fiveyear == 1) {
+		survival = pow(survivalParameters["baseline5yr"][0], expo);
+	}
+	else {
+		survival = pow(survivalParameters["baseline10yr"][0], expo);
+	}
+
+	return survival;*/
+	
+	
+	
+	
+	
+	
+	
+
+		/*if (dataRow.at(0).at(0) == "recipAge") {
+			survivalParameters["recipAge5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipAge10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "donorAge") {
+			survivalParameters["donorAge5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["donorAge10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "pairGender") {
+			survivalParameters["pairGender5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["pairGender10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipRace") {
+			survivalParameters["recipRace5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipRace10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "pairHLA") {
+			survivalParameters["pairHLA5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["pairHLA10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipPRA") {
+			survivalParameters["recipPRA5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipPRA10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipDiabetes") {
+			survivalParameters["recipDiabetes5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipDiabetes10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipPrevTrans") {
+			survivalParameters["recipPrevTrans5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipPrevTrans10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipBMI") {
+			survivalParameters["recipBMI5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipBMI10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "donorBMI") {
+			survivalParameters["donorBMI5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["donorBMI10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipTOD") {
+			survivalParameters["recipTOD5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipTOD10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "pairWeightRatio") {
+			survivalParameters["pairWeightRatio5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["pairWeightRatio10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "recipHepC") {
+			survivalParameters["recipHepC5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["recipHepC10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}
+		else if (dataRow.at(0).at(0) == "baseline") {
+			survivalParameters["baseline5yr"].push_back(dataRow.at(2).at(0).toDouble());
+			survivalParameters["baseline10yr"].push_back(dataRow.at(3).at(0).toDouble());
+		}*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//Parameters
+	KPDUtilityScheme utilityScheme = kpdguiParameters->getUtilityScheme();
+
+	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
+	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
+	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
+
+	double utility = 0;
+
+	int nCandidates = (int)structure.size();
+
+	//Iterates through each possible subset of candidates
+	for (int c = 3; c < pow((double)2, nCandidates); c++) {
+		std::vector<int> candidateFlags(nCandidates, 0);
+		int p = c;
+		int cIndex = 0;
+		int candidateSubsetSize = 0;
+		while (p != 0) {
+			int r = p % 2;
+			if (r == 1) {
+				candidateSubsetSize++;
+				candidateFlags[cIndex] = candidateSubsetSize;
+			}
+			p = p / 2;
+			cIndex++;
+		}
+
+		//Must have at least 2 candidates
+		if (candidateSubsetSize > 1) {
+
+			int numberOfDonorsInCandidateSubset = 0;
+			double probCandidateSubset = 1;
+
+			std::vector<int> subsetCandidateIndices;
+
+			std::vector<int> subsetDonorNodeIndices;
+			std::vector<int> subsetDonorIDs;
+
+			//Iterate through candidates
+			for (int index = 0; index < nCandidates; index++) {
+
+				int candidateID = structure[index];
+
+				//If candidate is included in this subset, include probability
+				if (candidateFlags[index] != 0) {
+					probCandidateSubset = probCandidateSubset * nodeInfoVector[candidateID].candidateUncertainty;
+
+					//Add to subset
+					subsetCandidateIndices.push_back(index);
+
+					//Count donors and add to subset
+					for (int k = 1; k <= nodeInfoVector[candidateID].numberOfDonors; k++) {
+						numberOfDonorsInCandidateSubset++;
+						subsetDonorNodeIndices.push_back(index);
+						subsetDonorIDs.push_back(k);
+					}
+				}
+				//If candidate is not included in this subset, include 1-probability
+				else {
+					probCandidateSubset = probCandidateSubset * (1 - nodeInfoVector[candidateID].candidateUncertainty);
+				}
+			}
+
+			//Iterates through each possible subset of donors
+			for (int d = 3; d < pow((double)2, numberOfDonorsInCandidateSubset); d++) {
+				std::vector<int> donorFlags(numberOfDonorsInCandidateSubset, 0);
+				int p = d;
+				int dIndex = 0;
+				int donorSubsetSize = 0;
+				while (p != 0) {
+					int r = p % 2;
+					if (r == 1) {
+						donorSubsetSize++;
+						donorFlags[dIndex] = donorSubsetSize;
+					}
+					p = p / 2;
+					dIndex++;
+				}
+
+				//Must have at least 2 donors
+				if (donorSubsetSize > 1) {
+
+					int numberOfEdgesInDonorSubset = 0;
+					double probDonorSubset = probCandidateSubset;
+
+					std::vector<int> edgeSubsetCandidateIndices;
+					std::vector<int> edgeSubsetDonorNodeIndices;
+					std::vector<int> edgeSubsetDonorIDs;
+
+					//Iterate through donors
+					for (int index = 0; index < numberOfDonorsInCandidateSubset; index++) {
+
+						int subsetDonorNodeIndex = subsetDonorNodeIndices[index];
+						int subsetDonorNodeID = structure[subsetDonorNodeIndex];
+						int subsetDonorID = subsetDonorIDs[index];
+
+						//If donor is included in this subset, include probability
+						if (donorFlags[index] != 0) {
+							probDonorSubset = probDonorSubset * nodeInfoVector[subsetDonorNodeID].donorUncertainty[subsetDonorID];
+
+							//Iterate through candidates to find edges
+							for (int index2 = 0; index2 < candidateSubsetSize; index2++) {
+
+								int subsetCandidateIndex = subsetCandidateIndices[index2];
+								int subsetCandidateID = structure[subsetCandidateIndex];
+
+								if (subsetDonorNodeID != subsetCandidateID) {
+									//Count edges and add to subset
+									if (associatedDonorMatrix[subsetDonorNodeID][subsetCandidateID][subsetDonorID] == 1) {
+										numberOfEdgesInDonorSubset++;
+
+										edgeSubsetCandidateIndices.push_back(subsetCandidateIndex);
+										edgeSubsetDonorNodeIndices.push_back(subsetDonorNodeIndex);
+										edgeSubsetDonorIDs.push_back(subsetDonorID);
+									}
+								}
+							}
+						}
+
+						//If donor is not included in this subset, include 1-probability
+						else {
+							probDonorSubset = probDonorSubset * (1 - nodeInfoVector[subsetDonorNodeID].donorUncertainty[subsetDonorID]);
+						}
+					}
+
+					// Iterate through every possible combination of edges
+					for (int e = 3; e < pow((double)2, numberOfEdgesInDonorSubset); e++) {
+						std::vector<int> edgeFlags(numberOfEdgesInDonorSubset, 0);
+						int p = e;
+						int eIndex = 0;
+						int edgeSubsetSize = 0;
+						while (p != 0) {
+							int r = p % 2;
+							if (r == 1) {
+								edgeSubsetSize++;
+								edgeFlags[eIndex] = edgeSubsetSize;
+							}
+							p = p / 2;
+							eIndex++;
+						}
+
+						//Must have at least 2 edges
+						if (edgeSubsetSize > 1) {
+
+							double probEdgeSubset = probDonorSubset;
+
+							std::vector<std::vector<std::vector<int> > > reducedDonorMatrix(nCandidates + 1, std::vector<std::vector<int> >(nCandidates + 1, std::vector<int>(1, 0)));
+							std::vector<int> reducedNumberOfDonors(nCandidates + 1, 0);
+
+							std::vector<std::vector<bool> > reducedIncidenceMatrix(nCandidates + 1, std::vector<bool>(nCandidates + 1, false));
+							std::vector<std::vector<std::vector<double> > > reducedUtilityMatrix(nCandidates + 1, std::vector<std::vector<double> >(nCandidates + 1, std::vector<double>(1, 0.0)));
+
+							std::vector<KPDNodeType> reducedNodeTypeVector(nCandidates + 1, PAIR);
+							std::vector<std::vector<KPDBloodType> > reducedDonorBloodTypes(nCandidates + 1, std::vector<KPDBloodType>(1, BT_AB));
+
+							//Build reduced matrices
+							for (int i = 1; i <= nCandidates; i++) {
+
+								int structureNodeDonors = nodeInfoVector[structure[i - 1]].numberOfDonors;
+
+								for (int j = 1; j <= nCandidates; j++) {
+									reducedDonorMatrix[i][j].assign(1 + structureNodeDonors, 0);
+									reducedUtilityMatrix[i][j].assign(1 + structureNodeDonors, 0.0);
+								}
+
+								reducedNodeTypeVector[i] = nodeInfoVector[structure[i - 1]].nodeType;
+
+								reducedDonorBloodTypes[i].assign(1 + structureNodeDonors, BT_AB);
+								for (int k = 1; k <= structureNodeDonors; k++) {
+									reducedDonorBloodTypes[i][k] = nodeInfoVector[structure[i - 1]].donorBTs[k];
+								}
+							}
+
+							for (int l = 0; l < edgeSubsetSize; l++) {
+
+								int edgeSubsetDonorNodeIndex = edgeSubsetDonorNodeIndices[l];
+								int edgeSubsetCandidateIndex = edgeSubsetCandidateIndices[l];
+								int edgeSubsetDonorID = edgeSubsetDonorIDs[l];
+
+								int edgeSubsetDonorNodeID = structure[edgeSubsetDonorNodeIndex];
+								int edgeSubsetCandidateID = structure[edgeSubsetCandidateIndex];
+
+								if (edgeFlags[l] != 0) {
+
+									probEdgeSubset = probEdgeSubset *  associatedProbabilitiesMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+
+									reducedDonorMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = 1;
+									reducedIncidenceMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1] = true;
+									if (utilityScheme == TRANSPLANTS) {
+										if (nodeInfoVector[edgeSubsetCandidateID].nodeType == PAIR) {
+											reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = 1;
+										}
+									}
+									else if (utilityScheme == SURVIVAL5YEAR) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated5YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else if (utilityScheme == SURVIVAL10YEAR) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associated10YearSurvivalMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+									else {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] = associatedScoresMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID];
+									}
+
+									if (addAdvantageToHighPRACandidates && nodeInfoVector[edgeSubsetCandidateID].nodeType == PAIR && nodeInfoVector[edgeSubsetCandidateID].candidatePRA >= praAdvantageCutoff) {
+										reducedUtilityMatrix[edgeSubsetDonorNodeIndex + 1][edgeSubsetCandidateIndex + 1][edgeSubsetDonorID] += praAdvantageValue;
+									}
+								}
+								else {
+									probEdgeSubset = probEdgeSubset * (1 - associatedProbabilitiesMatrix[edgeSubsetDonorNodeID][edgeSubsetCandidateID][edgeSubsetDonorID]);
+								}
+							}
+
+							utility += probEdgeSubset*calculatePartialUtility(nCandidates, reducedIncidenceMatrix, reducedUtilityMatrix, reducedNodeTypeVector, reducedDonorBloodTypes);
+							//std::cout << utility << std::endl;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return utility;
+
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+double KPDGUISimulation::calculateExpectedUtility(std::vector<int> structure, KPDUtilityScheme utility) {
+
+	double praAdvantageValue = kpdguiParameters->getPRAAdvantageValue();
+	double praAdvantageCutoff = kpdguiParameters->getPRAAdvantageCutoff();
+	bool addAdvantageToHighPRACandidates = kpdguiParameters->getAddAdvantageToHighPRACandidates();
+
+	bool chain = (nodeInfoVector[*(structure.begin())].nodeType != PAIR);
+
+	vector<double> transformedProbabilities;
+	vector<double> transformedUtilities;
+
+	for (vector<int>::iterator itNodes = structure.begin(); itNodes != structure.end() - 1; itNodes++) {
+		//Sort utilities, associated probabilities
+		vector<double> sortedUtilities;
+		vector<double> sortedMatchProbabilities;
+		vector<double> sortedDonorProbabilities;
+
+		vector<double> utils;
+		vector<double> matchProbs;
+		vector<double> donorProbs;
+
+		for (int k = 1; k <= nodeInfoVector[*itNodes].numberOfDonors; k++) {
+			if (associatedDonorMatrix[*itNodes][*(itNodes + 1)][k] == 1) {
+				if (utility == TRANSPLANTS) {
+					if (nodeInfoVector[*(itNodes + 1)].nodeType == PAIR) {
+						utils.push_back(1);
+					}
+				}
+				else if (utility == SURVIVAL5YEAR) {
+					utils.push_back(associated5YearSurvivalMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+				else if (utility == SURVIVAL10YEAR) {
+					utils.push_back(associated10YearSurvivalMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+				else {
+					utils.push_back(associatedScoresMatrix[*itNodes][*(itNodes + 1)][k]);
+				}
+
+				matchProbs.push_back(associatedProbabilitiesMatrix[*itNodes][*(itNodes + 1)][k]);
+				donorProbs.push_back(nodeInfoVector[*itNodes].donorUncertainty[k]);
+			}
+		}
+
+		while (utils.size() > 1) {
+			double maxScore = utils[0];
+			double associatedMatchProb = matchProbs[0];
+			double associatedDonorProb = donorProbs[0];
+			int maxIndex = 0;
+
+			for (unsigned i = 1; i < utils.size(); i++) {
+				if (utils[i] > maxScore) {
+					maxScore = utils[i];
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+				else if (utils[i] == maxScore && matchProbs[i] * donorProbs[i] > associatedMatchProb*associatedDonorProb) {
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+			}
+			sortedUtilities.push_back(maxScore);
+			sortedMatchProbabilities.push_back(associatedMatchProb);
+			sortedDonorProbabilities.push_back(associatedDonorProb);
+
+			utils.erase(utils.begin() + maxIndex);
+			matchProbs.erase(matchProbs.begin() + maxIndex);
+			donorProbs.erase(donorProbs.begin() + maxIndex);
+		}
+		sortedUtilities.push_back(utils[0]);
+		sortedMatchProbabilities.push_back(matchProbs[0]);
+		sortedDonorProbabilities.push_back(donorProbs[0]);
+
+		double prob = sortedDonorProbabilities[0] * sortedMatchProbabilities[0];
+		double util = sortedUtilities[0];
+
+		if (sortedUtilities.size() == 1) {
+			transformedProbabilities.push_back(prob);
+			transformedUtilities.push_back(util);
+		}
+		else {
+			double expectedUtil = prob*util;
+			double expectedProb = prob;
+			double probContinue = 1 - prob;
+
+			for (unsigned i = 1; i < sortedUtilities.size(); i++) {
+				expectedUtil += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i] * sortedUtilities[i];
+				expectedProb += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i];
+				probContinue = probContinue * (1 - sortedDonorProbabilities[i] * sortedMatchProbabilities[i]);
+			}
+
+			transformedProbabilities.push_back(expectedProb);
+			transformedUtilities.push_back(expectedUtil / expectedProb);
+		}
+	}
+
+	if (!chain) {
+
+		//Sort utilities, associated probabilities
+		vector<double> sortedUtilities;
+		vector<double> sortedMatchProbabilities;
+		vector<double> sortedDonorProbabilities;
+
+		vector<double> utils;
+		vector<double> matchProbs;
+		vector<double> donorProbs;
+
+		for (int k = 1; k <= nodeInfoVector[*(structure.end() - 1)].numberOfDonors; k++) {
+			if (associatedDonorMatrix[*(structure.end() - 1)][*structure.begin()][k] == 1) {
+				if (utility == TRANSPLANTS) {
+					if (nodeInfoVector[*structure.begin()].nodeType == PAIR) {
+						utils.push_back(1);
+					}
+				}
+				else if (utility == SURVIVAL5YEAR) {
+					utils.push_back(associated5YearSurvivalMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+				else if (utility == SURVIVAL10YEAR) {
+					utils.push_back(associated10YearSurvivalMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+				else {
+					utils.push_back(associatedScoresMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				}
+
+				matchProbs.push_back(associatedProbabilitiesMatrix[*(structure.end() - 1)][*structure.begin()][k]);
+				donorProbs.push_back(nodeInfoVector[*(structure.end() - 1)].donorUncertainty[k]);
+			}
+		}
+
+		while (utils.size() > 1) {
+			double maxScore = utils[0];
+			double associatedMatchProb = matchProbs[0];
+			double associatedDonorProb = donorProbs[0];
+			int maxIndex = 0;
+
+			for (unsigned i = 1; i < utils.size(); i++) {
+				if (utils[i] > maxScore) {
+					maxScore = utils[i];
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+				else if (utils[i] == maxScore && matchProbs[i] * donorProbs[i] > associatedMatchProb*associatedDonorProb) {
+					associatedMatchProb = matchProbs[i];
+					associatedDonorProb = donorProbs[i];
+					maxIndex = i;
+				}
+			}
+			sortedUtilities.push_back(maxScore);
+			sortedMatchProbabilities.push_back(associatedMatchProb);
+			sortedDonorProbabilities.push_back(associatedDonorProb);
+
+			utils.erase(utils.begin() + maxIndex);
+			matchProbs.erase(matchProbs.begin() + maxIndex);
+			donorProbs.erase(donorProbs.begin() + maxIndex);
+		}
+		sortedUtilities.push_back(utils[0]);
+		sortedMatchProbabilities.push_back(matchProbs[0]);
+		sortedDonorProbabilities.push_back(donorProbs[0]);
+
+		double prob = sortedDonorProbabilities[0] * sortedMatchProbabilities[0];
+		double util = sortedUtilities[0];
+
+		if (sortedUtilities.size() == 1) {
+			transformedProbabilities.push_back(prob);
+			transformedUtilities.push_back(util);
+		}
+		else {
+			double expectedUtil = prob*util;
+			double expectedProb = prob;
+			double probContinue = 1 - prob;
+
+			for (unsigned i = 1; i < sortedUtilities.size(); i++) {
+				expectedUtil += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i] * sortedUtilities[i];
+				expectedProb += probContinue * sortedDonorProbabilities[i] * sortedMatchProbabilities[i];
+				probContinue = probContinue * (1 - sortedDonorProbabilities[i] * sortedMatchProbabilities[i]);
+			}
+
+			transformedProbabilities.push_back(expectedProb);
+			transformedUtilities.push_back(expectedUtil / expectedProb);
+		}
+	}
+
+	int i = 0;
+	double expUtility = 0.0;
+	double cycleProb = 1.0;
+	double cycleUtil = 0.0;
+
+	//Chain
+	if (chain) {
+		cycleUtil = transformedUtilities[i];
+
+		if (addAdvantageToHighPRACandidates && nodeInfoVector[*(structure.begin() + 1)].candidatePRA >= praAdvantageCutoff) {
+			cycleUtil += praAdvantageValue;
+		}
+
+		cycleProb = nodeInfoVector[*(structure.begin() + 1)].candidateUncertainty * transformedProbabilities[i];
+
+		if (structure.size() == 2) {
+			expUtility = cycleProb*cycleUtil;
+		}
+		else if (structure.size()>2) {
+			for (vector<int >::iterator itNodes = structure.begin() + 1; itNodes != structure.end() - 1; ++itNodes) {
+				i++;
+
+				//Probability of continuing to next transplant
+				double probContinue = nodeInfoVector[*(itNodes + 1)].candidateUncertainty * transformedProbabilities[i];
+				expUtility += (1 - probContinue)*cycleUtil*cycleProb;
+
+				cycleProb = cycleProb*probContinue;
+				cycleUtil += transformedUtilities[i];
+
+				if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itNodes + 1)].candidatePRA >= praAdvantageCutoff) {
+					cycleUtil += praAdvantageValue;
+				}
+			}
+
+			expUtility += cycleUtil*cycleProb;
+		}
+	}
+
+	//Cycles
+	else {
+		//Calculates cycle probability and cycle utility		
+		for (vector<int >::iterator itNodes = structure.begin(); itNodes != structure.end() - 1; ++itNodes) {
+			cycleProb = cycleProb * nodeInfoVector[*(itNodes + 1)].candidateUncertainty * transformedProbabilities[i];
+
+			cycleUtil += transformedUtilities[i];
+
+			if (addAdvantageToHighPRACandidates && nodeInfoVector[*(itNodes + 1)].candidatePRA >= praAdvantageCutoff) {
+				cycleUtil += praAdvantageValue;
+			}
+			i++;
+		}
+
+		cycleProb = cycleProb * nodeInfoVector[*(structure.begin())].candidateUncertainty * transformedProbabilities[i];
+		cycleUtil += transformedUtilities[i];
+
+		if (addAdvantageToHighPRACandidates && nodeInfoVector[*(structure.begin())].candidatePRA >= praAdvantageCutoff) {
+			cycleUtil += praAdvantageValue;
+		}
+
+		expUtility = cycleProb*cycleUtil;
+	}
+
+	return expUtility;
+}
+
+
+
+
+
+
+
+
+
+
+
+/*double survival = 0.0;
+
+	//Age
+	QVector<double> cAge5yr = survivalParameters["recipAge5yr"];
+	QVector<double> cAge10yr = survivalParameters["recipAge10yr"];
+
+	int candidatesAge = candidate->getAge();
+	survival += candidatesAge*(fiveyear*(cAge5yr[0]) + (1 - fiveyear)*(cAge10yr[0]));
+	candidatesAge = candidatesAge - 35;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[1]) + (1 - fiveyear)*(cAge10yr[1]));
+	}
+	candidatesAge = candidatesAge - 15;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[2]) + (1 - fiveyear)*(cAge10yr[2]));
+	}
+	candidatesAge = candidatesAge - 15;
+	if (candidatesAge>0) {
+		survival += candidatesAge*(fiveyear*(cAge5yr[3]) + (1 - fiveyear)*(cAge10yr[3]));
+	}
+
+	QVector<double> dAge5yr = survivalParameters["donorAge5yr"];
+	QVector<double> dAge10yr = survivalParameters["donorAge10yr"];
+
+	int donorsAge = donor->getAge();
+	survival += donorsAge*(fiveyear*(dAge5yr[0]) + (1 - fiveyear)*(dAge10yr[0]));
+	donorsAge = donorsAge - 50;
+	if (donorsAge>50) {
+		survival += donorsAge*(fiveyear*(dAge5yr[1]) + (1 - fiveyear)*(dAge10yr[1]));
+	}
+
+	//Gender
+	QVector<double> pGender5yr = survivalParameters["pairGender5yr"];
+	QVector<double> pGender10yr = survivalParameters["pairGender10yr"];
+	if (candidate->getMale() == false && donor->getMale() == false) {
+		survival += fiveyear*(pGender5yr[0]) + (1 - fiveyear)*(pGender10yr[0]);
+	}
+	if (candidate->getMale() == false && donor->getMale()) {
+		survival += fiveyear*(pGender5yr[1]) + (1 - fiveyear)*(pGender10yr[1]);
+	}
+	if (candidate->getMale() && donor->getMale()) {
+		survival += fiveyear*(pGender5yr[2]) + (1 - fiveyear)*(pGender10yr[2]);
+	}
+
+	//Race
+	QVector<double> cRace5yr = survivalParameters["recipRace5yr"];
+	QVector<double> cRace10yr = survivalParameters["recipRace10yr"];
+	if (candidate->getRace() == RACE_BLACK) {
+		survival += fiveyear*(cRace5yr[0]) + (1 - fiveyear)*(cRace10yr[0]);
+	}
+	else if (candidate->getRace() == RACE_HISPANIC) {
+		survival += fiveyear*(cRace5yr[1]) + (1 - fiveyear)*(cRace10yr[1]);
+	}
+	else if (candidate->getRace() == RACE_WHITE) {
+		survival += fiveyear*(cRace5yr[2]) + (1 - fiveyear)*(cRace10yr[2]);
+	}
+
+	//HLA Mismatches
+	double pNoMismatch5yr = survivalParameters["pairHLA5yr"][0];
+	double pNoMismatch10yr = survivalParameters["pairHLA10yr"][0];
+	survival += fiveyear*(pNoMismatch5yr)+(1 - fiveyear)*(pNoMismatch10yr);
+
+	//PRA
+	QVector<double> cPRA5yr = survivalParameters["recipPRA5yr"];
+	QVector<double> cPRA10yr = survivalParameters["recipPRA10yr"];
+	if (candidate->getPRA() >= 10 && candidate->getPRA() <= 79) {
+		survival += fiveyear*(cPRA5yr[0]) + (1 - fiveyear)*(cPRA10yr[0]);
+	}
+	else if (candidate->getPRA() >= 80 && candidate->getPRA() <= 100) {
+		survival += fiveyear*(cPRA5yr[1]) + (1 - fiveyear)*(cPRA10yr[1]);
+	}
+
+	//Recipient Diabetes Diagnosis
+	double cDiabetes5yr = survivalParameters["recipDiabetes5yr"][0];
+	double cDiabetes10yr = survivalParameters["recipDiabetes10yr"][0];
+	if (candidate->getDiabetes()) {
+		survival += fiveyear*(cDiabetes5yr)+(1 - fiveyear)*(cDiabetes10yr);
+	}
+
+	//Previous Tranpslant
+	double cPrevTrans5yr = survivalParameters["recipPrevTrans5yr"][0];
+	double cPrevTrans10yr = survivalParameters["recipPrevTrans10yr"][0];
+	if (candidate->getPrevTrans()) {
+		survival += fiveyear*(cPrevTrans5yr)+(1 - fiveyear)*(cPrevTrans10yr);
+	}
+
+	//BMI
+	double cBMI5yr = survivalParameters["recipBMI5yr"][0];
+	double cBMI10yr = survivalParameters["recipBMI10yr"][0];
+	double dBMI5yr = survivalParameters["donorBMI5yr"][0];
+	double dBMI10yr = survivalParameters["donorBMI10yr"][0];
+	if (candidate->getBMI()>30) {
+		survival += fiveyear*(cBMI5yr)+(1 - fiveyear)*(cBMI10yr);
+	}
+	if (donor->getBMI()>30) {
+		survival += fiveyear*(dBMI5yr)+(1 - fiveyear)*(dBMI10yr);
+	}
+
+	//Time on Dialysis
+	QVector<double> cTOD5yr = survivalParameters["recipTOD5yr"];
+	QVector<double> cTOD10yr = survivalParameters["recipTOD10yr"];
+	if (candidate->getTOD() == 0) {
+		survival += fiveyear*(cTOD5yr[0]) + (1 - fiveyear)*(cTOD10yr[0]);
+	}
+	else if (candidate->getTOD()>0 && candidate->getTOD() <= 0.5) {
+		survival += fiveyear*(cTOD5yr[1]) + (1 - fiveyear)*(cTOD10yr[1]);
+	}
+	else if (candidate->getTOD()>0.5 && candidate->getTOD() <= 1) {
+		survival += fiveyear*(cTOD5yr[2]) + (1 - fiveyear)*(cTOD10yr[2]);
+	}
+	else if (candidate->getTOD()>2 && candidate->getTOD() <= 3) {
+		survival += fiveyear*(cTOD5yr[3]) + (1 - fiveyear)*(cTOD10yr[3]);
+	}
+	else if (candidate->getTOD()>3) {
+		survival += fiveyear*(cTOD5yr[4]) + (1 - fiveyear)*(cTOD10yr[4]);
+	}
+
+	//Weight Ratio
+	double weightRatio = (donor->getWeight()) / (candidate->getWeight());
+	QVector<double> pWR5yr = survivalParameters["pairWeightRatio5yr"];
+	QVector<double> pWR10yr = survivalParameters["pairWeightRatio10yr"];
+
+	if (weightRatio < 0.75) {
+		survival += fiveyear*(pWR5yr[0]) + (1 - fiveyear)*(pWR10yr[0]);
+	}
+	else if (weightRatio >= 0.75 && weightRatio <0.90) {
+		survival += fiveyear*(pWR5yr[1]) + (1 - fiveyear)*(pWR10yr[1]);
+	}
+	else if (weightRatio >= 1.15) {
+		survival += fiveyear*(pWR5yr[2]) + (1 - fiveyear)*(pWR10yr[2]);
+	}
+
+	//Hep C Seriology
+	double cHepC5yr = survivalParameters["recipHepC5yr"][0];
+	double cHepC10yr = survivalParameters["recipHepC10yr"][0];
+	if (candidate->getHepC()) {
+		survival += fiveyear*(cHepC5yr)+(1 - fiveyear)*(cHepC10yr);
+	}
+
+	double expo = exp(survival);
+	if (fiveyear == 1) {
+		survival = pow(survivalParameters["baseline5yr"][0], expo);
+	}
+	else {
+		survival = pow(survivalParameters["baseline10yr"][0], expo);
+	}
+
+	return survival;*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	int progressBarValue = 0;
+	progress->setRange(0, (int)(2 * selectedSolutions.size() + currentMatchRunStructures.size())); // +ui->nodeList->topLevelItemCount())); // + matchListWidget->topLevelItemCount()
+	progress->setLabelText("Saving Structures...");
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	
+	//Create Timestamp
+	//QString timestamp = QDate::currentDate().toString() + " " + QTime::currentTime().toString();
+	//Get Simulation Log
+	//QString simLog = g->getSimulationLog();
+
+	//Initialize Structure List and Collection of Solution Lists
+	/*KPDGUIStructureSet * structureList = new KPDGUIStructureSet(kpdguiParameters, timestamp, recordLog, simLog, false);
+	QVector<KPDGUIStructureSet *> solutionLists;
+
+	int sol = 0;
+	for (vector<vector<int> >::iterator it = solutionSet.begin(); it != solutionSet.end(); ++it){
+	sol++;
+	solutionLists.push_back(new KPDGUIStructureSet(kpdguiParameters, timestamp, recordLog, simLog, true, sol));
+
+	progressBarValue++;
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	}
+
+	//Count Cycles, Chains, LRSs
+	int numberOfCycles = 0;
+	int numberOfChains = 0;
+	int numberOfLRSs = 0;*/
+
+	/*
+
+	//Iterate Through Structures To Add To Structure List
+	for (int itStruct = 0; itStruct < allStructures.size(); itStruct++){
+	//Initialize New Node List;
+	QVector<KPDGUINode *> structureNodes;
+	bool chain = false;
+
+	//Iterate Through Nodes in the Structure
+	for (int itNode = 0; itNode < allStructures[itStruct].size(); itNode++){
+	//Get Pair ID of Node
+	int id = kpdguiRecord->getNodeInfoVector()[allStructures[itStruct][itNode]].nodeID;
+	//Collect Node Object based on Pair ID
+	KPDGUINode * node = kpdguiRecord->getNode(id);
+	if (node->getType() == NDD){
+	chain = true;
+	}
+	//Add to Node List
+	structureNodes.push_back(node);
+	}
+
+	//Determine ID Number of Structure
+	int idnum;
+	if (optScheme == KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+	numberOfLRSs++;
+	idnum = numberOfLRSs;
+	}
+	else {
+	if (chain){
+	numberOfChains++;
+	idnum = numberOfChains;
+	}
+	else {
+	numberOfCycles++;
+	idnum = numberOfCycles;
+	}
+	}
+
+	//Initialize New Structure Object using Node List, Utility; Push to Structure List
+	KPDGUIStructure * newStructure = new KPDGUIStructure(structureNodes, optScheme, utilValues[itStruct], idnum);
+	structureList->addStructure(newStructure);
+
+	//Iterate Through Solutions
+	for (int itSolution = 0; itSolution < solutionSet.size(); itSolution++){
+	//If Current Structure is Found in Current Solution
+	if (std::find(solutionSet[itSolution].begin(), solutionSet[itSolution].end(), itStruct) != solutionSet[itSolution].end()){
+	solutionLists[itSolution]->addStructure(newStructure);
+	}
+	}
+
+	progressBarValue++;
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	}
+
+	//Collapse all Current Solutions Shown In the Widget
+	ui->solutionWidget->collapseAll();
+
+	*/
+
+	//Reset Popularity Values in The Node List Widget and Edge List Widget
+	/*	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
+	KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->nodeList->topLevelItem(i));
+	if (wrapper){
+	wrapper->getNode()->resetPopularityInStructures();
+	}
+	progressBarValue++;
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	}*/
+	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
+	KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(ui->nodeList->topLevelItem(i));
+	if (wrapper){
+	wrapper->getArrow()->resetPopularityInStructures();
+	}
+	progressBarValue++;
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	}*/
+	//Update Popularity of Structure
+	//structureList->updatePopularity();
+
+	/*
+
+	//Add Structure to Structure Widget and Expand
+	ui->structureWidget->insertTopLevelItem(0, structureList);
+
+	structureList->sort();
+	structureList->setExpanded(true);
+
+
+	//Add Solutions to Solution Widget
+	int level = 0;
+	foreach(KPDGUIStructureSet * structureSet, solutionLists){
+	structureSet->updatePopularity();
+	ui->solutionWidget->insertTopLevelItem(level, structureSet);
+	structureSet->setExpanded(true);
+	level++;
+
+	structureSet->sort();
+
+	progressBarValue++;
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+	}
+
+	//Parameters Have Not Been Set For Next Simulation
+	kpdguiParameters->setParametersHaveBeenUpdated(false);
+
+	//Switch Tab to "Solution" Tab
+	//ui->tabWidget->setCurrentIndex(3);
+
+	//Sort Matches Based on Solution Popularity
+	//setMatchSortMode(0, true);
+	//matchSortMode = MATCHSORT_POPULARITY_SOLUTIONS;
+	//matchSortDecreasing = true;
+	//sort();
+
+	*/
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	inline int getRandomValue(int & seed) {
+		if (seed == 0) {
+			seed = 1;
+		}
+
+		int k = seed / 127773;
+		seed = 16807 * (seed - k * 127773) - k * 2836;
+		if (seed < 0)
+			seed += 2147483647;
+		int u = seed * (double) (1.0 / 2147483647);
+
+		return u;
+	}

@@ -196,6 +196,9 @@
              <property name="maximum">
               <double>3.000000000000000</double>
              </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
              <property name="value">
               <double>1.500000000000000</double>
              </property>

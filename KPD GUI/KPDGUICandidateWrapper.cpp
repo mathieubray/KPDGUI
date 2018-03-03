@@ -41,15 +41,29 @@ void KPDGUICandidateWrapper::updateText() {
 	}
 }
 
+void KPDGUICandidateWrapper::candidateWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool isSelected = myCandidate->isSelected();
+
+		myCandidate->setSelected(!isSelected);
+
+		emit updateVisibilitySignal();
+	}
+}
+
 void KPDGUICandidateWrapper::candidateWrapperDoubleClickActions(QTreeWidgetItem * item) {
 
 	if (item == this) {
 
-		DialogCandidate * dialogCandidate = new DialogCandidate(myCandidate);
+		//DialogCandidate * dialogCandidate = new DialogCandidate(myCandidate);
 
-		if (dialogCandidate->exec()) {
-			myCandidate->editCandidate(dialogCandidate);
-		}
+		//if (dialogCandidate->exec()) {
+			//myCandidate->editCandidate(dialogCandidate);
+		//}
+
+		myCandidate->edit();
 	}
 
 }

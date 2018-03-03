@@ -26,14 +26,14 @@ private:
 
 	QVector<KPDGUIDonor *> nodeDonors;
 	KPDGUICandidate * nodeCandidate;
-
-	QVector<KPDCrossmatchResult> crossmatchResults;
 	
 
 public slots:
 
 	void updateVisibility(KPDGUIDisplaySettings * displaySettings);
 	void clusterNode();
+
+	void edit();
 	void editActions();
 
 signals:
@@ -44,7 +44,7 @@ public:
 	
 	KPDGUINode();
 	KPDGUINode(KPDGUIDonor* donor);
-	KPDGUINode(QVector<KPDGUIDonor*> donors, KPDGUICandidate * candidate, QVector<KPDCrossmatchResult> results);
+	KPDGUINode(QVector<KPDGUIDonor*> donors, KPDGUICandidate * candidate);
 	~KPDGUINode();
 		
 	//Getters
@@ -72,9 +72,7 @@ public:
 	void addDonor(KPDGUIDonor * donor);
 	void removeDonor(KPDGUIDonor * donor);
 	
-	void setCandidate(KPDGUICandidate * candidate);
-
-	void setCrossmatchResults(QVector<KPDCrossmatchResult> results);		
+	void setCandidate(KPDGUICandidate * candidate);		
 
 
 	// Visual Properties
@@ -96,8 +94,8 @@ public:
 
 };
 
-QDataStream &operator<<(QDataStream &out, const KPDGUINode & node);
+//QDataStream &operator<<(QDataStream &out, const KPDGUINode & node);
 
-QDataStream &operator>>(QDataStream &in, KPDGUINode & node);
+//QDataStream &operator>>(QDataStream &in, KPDGUINode & node);
 
 #endif

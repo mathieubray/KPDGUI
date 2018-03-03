@@ -22,6 +22,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -31,7 +32,7 @@ QT_BEGIN_NAMESPACE
 class Ui_DialogMatch
 {
 public:
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *matchLayout;
     QGridLayout *textLayout;
     QLabel *crossmatchLabel;
@@ -41,6 +42,7 @@ public:
     QLineEdit *candidateLineEdit;
     QLabel *donorLabel;
     QLabel *candidateLabel;
+    QCheckBox *difficultToMatchBox;
     QGridLayout *estimatesLayout;
     QLineEdit *tenYearSurvivalLineEdit;
     QLabel *probabilityLabel;
@@ -51,6 +53,7 @@ public:
     QDoubleSpinBox *probabilitySpinBox;
     QLabel *fiveYearSurvivalLabel;
     QHBoxLayout *buttonBoxLayout;
+    QPushButton *additionalInformationButton;
     QSpacerItem *buttonBoxSpacer;
     QDialogButtonBox *buttonBox;
 
@@ -61,94 +64,102 @@ public:
         DialogMatch->resize(501, 201);
         DialogMatch->setMinimumSize(QSize(501, 201));
         DialogMatch->setMaximumSize(QSize(501, 201));
-        widget = new QWidget(DialogMatch);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(10, 10, 481, 181));
-        matchLayout = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(DialogMatch);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 10, 481, 181));
+        matchLayout = new QVBoxLayout(layoutWidget);
         matchLayout->setObjectName(QStringLiteral("matchLayout"));
         matchLayout->setContentsMargins(0, 0, 0, 0);
         textLayout = new QGridLayout();
         textLayout->setObjectName(QStringLiteral("textLayout"));
-        crossmatchLabel = new QLabel(widget);
+        crossmatchLabel = new QLabel(layoutWidget);
         crossmatchLabel->setObjectName(QStringLiteral("crossmatchLabel"));
 
         textLayout->addWidget(crossmatchLabel, 3, 0, 1, 2);
 
-        crossmatchLineEdit = new QLineEdit(widget);
+        crossmatchLineEdit = new QLineEdit(layoutWidget);
         crossmatchLineEdit->setObjectName(QStringLiteral("crossmatchLineEdit"));
         crossmatchLineEdit->setReadOnly(true);
 
         textLayout->addWidget(crossmatchLineEdit, 3, 2, 1, 2);
 
-        includeCheckBox = new QCheckBox(widget);
+        includeCheckBox = new QCheckBox(layoutWidget);
         includeCheckBox->setObjectName(QStringLiteral("includeCheckBox"));
         includeCheckBox->setLayoutDirection(Qt::RightToLeft);
         includeCheckBox->setChecked(true);
 
         textLayout->addWidget(includeCheckBox, 1, 3, 1, 1);
 
-        donorLineEdit = new QLineEdit(widget);
+        donorLineEdit = new QLineEdit(layoutWidget);
         donorLineEdit->setObjectName(QStringLiteral("donorLineEdit"));
         donorLineEdit->setReadOnly(true);
 
         textLayout->addWidget(donorLineEdit, 1, 2, 1, 1);
 
-        candidateLineEdit = new QLineEdit(widget);
+        candidateLineEdit = new QLineEdit(layoutWidget);
         candidateLineEdit->setObjectName(QStringLiteral("candidateLineEdit"));
         candidateLineEdit->setReadOnly(true);
 
         textLayout->addWidget(candidateLineEdit, 2, 2, 1, 1);
 
-        donorLabel = new QLabel(widget);
+        donorLabel = new QLabel(layoutWidget);
         donorLabel->setObjectName(QStringLiteral("donorLabel"));
 
         textLayout->addWidget(donorLabel, 1, 0, 1, 2);
 
-        candidateLabel = new QLabel(widget);
+        candidateLabel = new QLabel(layoutWidget);
         candidateLabel->setObjectName(QStringLiteral("candidateLabel"));
 
         textLayout->addWidget(candidateLabel, 2, 0, 1, 2);
+
+        difficultToMatchBox = new QCheckBox(layoutWidget);
+        difficultToMatchBox->setObjectName(QStringLiteral("difficultToMatchBox"));
+        difficultToMatchBox->setEnabled(false);
+        difficultToMatchBox->setLayoutDirection(Qt::RightToLeft);
+        difficultToMatchBox->setCheckable(true);
+
+        textLayout->addWidget(difficultToMatchBox, 2, 3, 1, 1);
 
 
         matchLayout->addLayout(textLayout);
 
         estimatesLayout = new QGridLayout();
         estimatesLayout->setObjectName(QStringLiteral("estimatesLayout"));
-        tenYearSurvivalLineEdit = new QLineEdit(widget);
+        tenYearSurvivalLineEdit = new QLineEdit(layoutWidget);
         tenYearSurvivalLineEdit->setObjectName(QStringLiteral("tenYearSurvivalLineEdit"));
         tenYearSurvivalLineEdit->setReadOnly(true);
 
         estimatesLayout->addWidget(tenYearSurvivalLineEdit, 0, 3, 1, 1);
 
-        probabilityLabel = new QLabel(widget);
+        probabilityLabel = new QLabel(layoutWidget);
         probabilityLabel->setObjectName(QStringLiteral("probabilityLabel"));
 
         estimatesLayout->addWidget(probabilityLabel, 1, 0, 1, 1);
 
-        scoreSpinBox = new QDoubleSpinBox(widget);
+        scoreSpinBox = new QDoubleSpinBox(layoutWidget);
         scoreSpinBox->setObjectName(QStringLiteral("scoreSpinBox"));
         scoreSpinBox->setMaximum(1000);
         scoreSpinBox->setValue(1);
 
         estimatesLayout->addWidget(scoreSpinBox, 1, 3, 1, 1);
 
-        scoreLabel = new QLabel(widget);
+        scoreLabel = new QLabel(layoutWidget);
         scoreLabel->setObjectName(QStringLiteral("scoreLabel"));
 
         estimatesLayout->addWidget(scoreLabel, 1, 2, 1, 1);
 
-        tenYearSurvivalLabel = new QLabel(widget);
+        tenYearSurvivalLabel = new QLabel(layoutWidget);
         tenYearSurvivalLabel->setObjectName(QStringLiteral("tenYearSurvivalLabel"));
 
         estimatesLayout->addWidget(tenYearSurvivalLabel, 0, 2, 1, 1);
 
-        fiveYearSurvivalLineEdit = new QLineEdit(widget);
+        fiveYearSurvivalLineEdit = new QLineEdit(layoutWidget);
         fiveYearSurvivalLineEdit->setObjectName(QStringLiteral("fiveYearSurvivalLineEdit"));
         fiveYearSurvivalLineEdit->setReadOnly(true);
 
         estimatesLayout->addWidget(fiveYearSurvivalLineEdit, 0, 1, 1, 1);
 
-        probabilitySpinBox = new QDoubleSpinBox(widget);
+        probabilitySpinBox = new QDoubleSpinBox(layoutWidget);
         probabilitySpinBox->setObjectName(QStringLiteral("probabilitySpinBox"));
         probabilitySpinBox->setMaximum(1);
         probabilitySpinBox->setSingleStep(0.1);
@@ -156,7 +167,7 @@ public:
 
         estimatesLayout->addWidget(probabilitySpinBox, 1, 1, 1, 1);
 
-        fiveYearSurvivalLabel = new QLabel(widget);
+        fiveYearSurvivalLabel = new QLabel(layoutWidget);
         fiveYearSurvivalLabel->setObjectName(QStringLiteral("fiveYearSurvivalLabel"));
 
         estimatesLayout->addWidget(fiveYearSurvivalLabel, 0, 0, 1, 1);
@@ -166,11 +177,16 @@ public:
 
         buttonBoxLayout = new QHBoxLayout();
         buttonBoxLayout->setObjectName(QStringLiteral("buttonBoxLayout"));
+        additionalInformationButton = new QPushButton(layoutWidget);
+        additionalInformationButton->setObjectName(QStringLiteral("additionalInformationButton"));
+
+        buttonBoxLayout->addWidget(additionalInformationButton);
+
         buttonBoxSpacer = new QSpacerItem(258, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         buttonBoxLayout->addItem(buttonBoxSpacer);
 
-        buttonBox = new QDialogButtonBox(widget);
+        buttonBox = new QDialogButtonBox(layoutWidget);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
@@ -184,6 +200,8 @@ public:
         retranslateUi(DialogMatch);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogMatch, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogMatch, SLOT(reject()));
+        QObject::connect(additionalInformationButton, SIGNAL(clicked()), DialogMatch, SLOT(accept()));
+        QObject::connect(additionalInformationButton, SIGNAL(clicked()), DialogMatch, SLOT(setAdditionalInformation()));
 
         QMetaObject::connectSlotsByName(DialogMatch);
     } // setupUi
@@ -195,10 +213,12 @@ public:
         includeCheckBox->setText(QApplication::translate("DialogMatch", "Include in Match Run", 0));
         donorLabel->setText(QApplication::translate("DialogMatch", "Donor", 0));
         candidateLabel->setText(QApplication::translate("DialogMatch", "Candidate", 0));
+        difficultToMatchBox->setText(QApplication::translate("DialogMatch", "Difficult Match", 0));
         probabilityLabel->setText(QApplication::translate("DialogMatch", "Failure Probability", 0));
         scoreLabel->setText(QApplication::translate("DialogMatch", "User-Assigned Score", 0));
         tenYearSurvivalLabel->setText(QApplication::translate("DialogMatch", "Ten Year Survival Estimate", 0));
         fiveYearSurvivalLabel->setText(QApplication::translate("DialogMatch", "Five Year Survival Estimate", 0));
+        additionalInformationButton->setText(QApplication::translate("DialogMatch", "View Additional Information", 0));
     } // retranslateUi
 
 };

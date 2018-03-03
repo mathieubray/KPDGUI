@@ -2,6 +2,30 @@
 
 #include "DialogSurvivalCalculator.h"
 
+DialogSurvivalCalculator::DialogSurvivalCalculator(KPDGUIMatch * match, KPDGUIDashboardList * donorDashboard, KPDGUIDashboardList * candidateDashboard, KPDGUICrossmatchFunctions * functions, QWidget * parent) : QDialog(parent)
+{
+	donor = new KPDGUIDonor();
+	candidate = new KPDGUICandidate();
+
+	crossmatchFunctions = functions;
+
+	setupUi(this);
+
+	connect(this, SIGNAL(survivalSignal()), this, SLOT(updateSurvival()));
+
+	additionalSetup(donorDashboard, candidateDashboard);
+
+	updateDonorInfo(match->getDonor());
+	updateCandidateInfo(match->getCandidate());
+
+	//qDebug() << "From the Match: " << match->getFiveYearSurvival() << match->getTenYearSurvival();
+	//qDebug() << "Calculated: " << crossmatchFunctions->calculateSurvival(match->getDonor(), match->getCandidate(), true) << crossmatchFunctions->calculateSurvival(match->getDonor(), match->getCandidate(), false);
+	//qDebug() << "Updated Info: " << crossmatchFunctions->calculateSurvival(donor, candidate, true) << crossmatchFunctions->calculateSurvival(donor, candidate, false);
+
+	updateSurvival();
+}
+
+
 DialogSurvivalCalculator::DialogSurvivalCalculator(KPDGUIDashboardList * donorDashboard, KPDGUIDashboardList * candidateDashboard, KPDGUICrossmatchFunctions * functions, QWidget * parent) : QDialog(parent)
 {
 	donor = new KPDGUIDonor();
@@ -28,6 +52,8 @@ void DialogSurvivalCalculator::updateDonorAge(int age) {
 
 	donor->setAge(age);
 
+	//qDebug() << "Updated Donor Age!";
+
 	emit survivalSignal();
 }
 
@@ -36,6 +62,8 @@ void DialogSurvivalCalculator::updateDonorBT(int btIndex) {
 	KPDBloodType bt = KPDFunctions::intToBloodType(btIndex);
 
 	donor->setBT(bt);
+
+	//qDebug() << "Updated Donor BT!";
 
 	emit survivalSignal();
 }
@@ -55,6 +83,9 @@ void DialogSurvivalCalculator::updateDonorA() {
 	}
 	
 	donor->setA(hlaList);
+
+
+	//qDebug() << "Updated Donor HLA A!";
 
 	emit survivalSignal();
 }
@@ -76,6 +107,8 @@ void DialogSurvivalCalculator::updateDonorB() {
 
 	donor->setB(hlaList);
 
+	//qDebug() << "Updated Donor HLA B!";
+
 	emit survivalSignal();
 }
 
@@ -94,6 +127,8 @@ void DialogSurvivalCalculator::updateDonorCW() {
 	}
 
 	donor->setCW(hlaList);
+
+	//qDebug() << "Updated Donor HLA CW!";
 
 	emit survivalSignal();
 }
@@ -115,6 +150,8 @@ void DialogSurvivalCalculator::updateDonorDQ() {
 
 	donor->setDQ(hlaList);
 
+	//qDebug() << "Updated Donor HLA DQ!";
+
 	emit survivalSignal();
 }
 
@@ -135,12 +172,16 @@ void DialogSurvivalCalculator::updateDonorDR() {
 
 	donor->setDR(hlaList);
 
+	//qDebug() << "Updated Donor HLA DR!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateDonorBW4(bool hla) {
 
 	donor->setBW4(hla);
+
+	//qDebug() << "Updated Donor HLA BW4!";
 
 	emit survivalSignal();
 }
@@ -149,12 +190,16 @@ void DialogSurvivalCalculator::updateDonorBW6(bool hla) {
 
 	donor->setBW6(hla);
 
+	//qDebug() << "Updated Donor HLA BW6!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateDonorDR51(bool hla) {
 	
 	donor->setDR51(hla);
+
+	//qDebug() << "Updated Donor HLA DR51!";
 
 	emit survivalSignal();
 }
@@ -163,12 +208,16 @@ void DialogSurvivalCalculator::updateDonorDR52(bool hla) {
 
 	donor->setDR52(hla);
 
+	//qDebug() << "Updated Donor HLA DR52!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateDonorDR53(bool hla) {
 
 	donor->setDR53(hla);
+
+	//qDebug() << "Updated Donor HLA DR53!";
 
 	emit survivalSignal();
 }
@@ -179,6 +228,8 @@ void DialogSurvivalCalculator::updateAdditionalDonorHLA(QString hla) {
 
 	donor->setAdditionalDonorHLA(hlaList);
 
+	//qDebug() << "Updated Donor HLA Additional HLA!";
+
 	emit survivalSignal();
 }
 
@@ -187,6 +238,8 @@ void DialogSurvivalCalculator::updateDonorRace(int raceIndex) {
 	KPDRace race = KPDFunctions::intToRace(raceIndex);
 
 	donor->setRace(race);
+
+	//qDebug() << "Updated Donor HLA Race!";
 
 	emit survivalSignal();
 }
@@ -200,12 +253,16 @@ void DialogSurvivalCalculator::updateDonorGender(int genderIndex) {
 		donor->setMale(false);
 	}
 
+	//qDebug() << "Updated Donor HLA Gender!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateDonorWeight(double weight) {
 
 	donor->setWeight(weight);
+
+	//qDebug() << "Updated Donor Weight!";
 
 	emit survivalSignal();
 }
@@ -214,12 +271,16 @@ void DialogSurvivalCalculator::updateDonorHeight(double height) {
 
 	donor->setHeight(height);
 
+	//qDebug() << "Updated Donor Height!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateDonorCigaretteUse(bool cigarette) {
 
 	donor->setCigarette(cigarette);
+
+	//qDebug() << "Updated Donor Cigarette!";
 
 	emit survivalSignal();
 }
@@ -228,12 +289,17 @@ void DialogSurvivalCalculator::updateCandidateAge(int age){
 
 	candidate->setAge(age);
 
+	//qDebug() << "Updated Candidate Age!";
+
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateCandidatePRA(int pra){
 
 	candidate->setPRA(pra);
+
+	//qDebug() << "Updated Candidate PRA!";
 
 	emit survivalSignal();
 }
@@ -244,6 +310,8 @@ void DialogSurvivalCalculator::updateCandidateBT(int btIndex) {
 
 	candidate->setBT(bt);
 
+	//qDebug() << "Updated Candidate BT!";
+
 	emit survivalSignal();
 }
 
@@ -252,6 +320,8 @@ void DialogSurvivalCalculator::updateCandidateHLA(QString hla){
 	QVector<QString> hlaList = hla.split(";").toVector();
 
 	candidate->setHLA(hlaList);
+
+	//qDebug() << "Updated Candidate HLA!";
 	
 	emit survivalSignal();
 }
@@ -265,6 +335,8 @@ void DialogSurvivalCalculator::updateCandidateGender(int genderIndex) {
 		candidate->setMale(false);
 	}
 
+	//qDebug() << "Updated Candidate Gender!";
+
 	emit survivalSignal();
 }
 
@@ -274,12 +346,16 @@ void DialogSurvivalCalculator::updateCandidateRace(int raceIndex) {
 
 	candidate->setRace(race);
 
+	//qDebug() << "Updated Candidate Race!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateCandidateDiabetes(bool diabetes) {
 
 	candidate->setDiabetes(diabetes);
+
+	//qDebug() << "Updated Candidate Diabetes!";
 
 	emit survivalSignal();
 }
@@ -288,12 +364,17 @@ void DialogSurvivalCalculator::updateCandidateWeight(double weight) {
 
 	candidate->setWeight(weight);
 
+	//qDebug() << "Updated Candidate Weight!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateCandidateHeight(double height) {
 
 	candidate->setHeight(height);
+
+	//qDebug() << "Updated Candidate Height!";
+
 
 	emit survivalSignal();
 }
@@ -302,6 +383,8 @@ void DialogSurvivalCalculator::updateCandidatePrevTrans(bool prevTrans) {
 
 	candidate->setPrevTrans(prevTrans);
 
+	//qDebug() << "Updated Candidate Previous Transplant!";
+
 	emit survivalSignal();
 }
 
@@ -309,12 +392,16 @@ void DialogSurvivalCalculator::updateCandidateTOD(double TOD) {
 
 	candidate->setTOD(TOD);
 
+	//qDebug() << "Updated Candidate TOD!";
+
 	emit survivalSignal();
 }
 
 void DialogSurvivalCalculator::updateCandidateHepC(bool hepC) {
 
 	candidate->setHepC(hepC);
+
+	//qDebug() << "Updated Candidate Hep C!";
 
 	emit survivalSignal();
 }
@@ -325,16 +412,23 @@ void DialogSurvivalCalculator::updateCandidateInsurance(int insuranceIndex) {
 
 	candidate->setInsurance(insurance);
 
+	//qDebug() << "Updated Candidate Insurance!";
+
 	emit survivalSignal();
 
 }
 
-void DialogSurvivalCalculator::updateDonorInfo(QListWidgetItem * item) {
+void DialogSurvivalCalculator::selectDonor(QListWidgetItem * item) {
 
 	KPDGUIDonor * newDonor = donorMap.value(item);
-	
-	blockSignals(true);
 
+	updateDonorInfo(newDonor);
+}
+
+void DialogSurvivalCalculator::updateDonorInfo(KPDGUIDonor * newDonor) {
+		
+	blockSignals(true);
+	
 	//Age
 	donorAgeSpinBox->setValue(newDonor->getAge());
 
@@ -342,6 +436,7 @@ void DialogSurvivalCalculator::updateDonorInfo(QListWidgetItem * item) {
 	donorBTComboBox->setCurrentIndex(KPDFunctions::bloodTypeToInt(newDonor->getBT()));
 
 	//Gender
+
 	if (newDonor->getMale()) { donorGenderComboBox->setCurrentIndex(0); }
 	else { donorGenderComboBox->setCurrentIndex(1); }
 
@@ -439,10 +534,15 @@ void DialogSurvivalCalculator::updateDonorInfo(QListWidgetItem * item) {
 	updateSurvival();
 }
 
-void DialogSurvivalCalculator::updateCandidateInfo(QListWidgetItem * item) {
-
+void DialogSurvivalCalculator::selectCandidate(QListWidgetItem * item) {
+	
 	KPDGUICandidate * newCandidate = candidateMap.value(item);
 
+	updateCandidateInfo(newCandidate);
+}
+
+void DialogSurvivalCalculator::updateCandidateInfo(KPDGUICandidate * newCandidate) {
+	
 	blockSignals(true);
 	
 	//Candidate Age
@@ -520,7 +620,6 @@ void DialogSurvivalCalculator::updateSurvival() {
 
 	fiveYearTextEdit->setText(QString::number(newFiveYearSurvival));
 	tenYearTextEdit->setText(QString::number(newTenYearSurvival));
-
 
 	crossmatchTextEdit->setText(KPDFunctions::toString(crossmatchResult));
 

@@ -27,12 +27,18 @@ private:
 
 	KPDMatchDisplayMode matchDisplayMode;
 
+	bool filterSuccessfulMatches;
+	bool filterOtoNonOMatches;
+	bool filterFailedMatchesAdditionalHLA;
+	bool filterFailedMatchesCrossmatch;
+
 public:
 
 	KPDGUIDisplaySettings();
 	~KPDGUIDisplaySettings();
 
 	bool changeDisplaySettings(DialogDisplaySettings * d);
+	bool changeDisplaySettings(KPDGUIDisplaySettings * d);
 
 	// Getters
 	KPDNodeDisplayMode getNodeDisplayMode() const;
@@ -50,8 +56,13 @@ public:
 
 	KPDMatchDisplayMode getMatchDisplayMode() const;
 
+	bool getFilterSuccessfulMatches() const;
+	bool getFilterOtoNonOMatches() const;
+	bool getFilterFailedMatchesAdditionalHLA() const;
+	bool getFilterFailedMatchesCrossmatch() const;
+
 	// Setters
-	void setNodeDisplayMode(KPDNodeDisplayMode mode);
+	void setNodeDisplayMode(KPDNodeDisplayMode mode);	
 
 	void setShowAllNodes(bool show);
 	void setShowNodeSubset(bool show);
@@ -65,6 +76,11 @@ public:
 	void setMaxPRA(int pra);
 
 	void setMatchDisplayMode(KPDMatchDisplayMode mode);
+
+	void setFilterSuccessfulMatches(bool show);
+	void setFilterOtoNonOMatches(bool show);
+	void setFilterFailedMatchesAdditionalHLA(bool show);
+	void setFilterFailedMatchesCrossmatch(bool show);
 
 };
 

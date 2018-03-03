@@ -12,11 +12,16 @@ class ReadFileDialog : public QDialog, public Ui_DialogReadFile
 	Q_OBJECT
 
 public:
-	ReadFileDialog(QWidget *parent = 0);
+	ReadFileDialog(bool apd, QWidget *parent = 0);
 
 private slots :
 	void browse();
-	void checkValidFile(QString file);
+	void checkValid(QString path);
+
+private :
+	bool loadAPD;
+
+	bool validAPDFilePath(QString path, QString file);
 
 };
 

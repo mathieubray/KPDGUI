@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>425</width>
+    <width>453</width>
     <height>323</height>
    </rect>
   </property>
@@ -18,13 +18,13 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>425</width>
+    <width>453</width>
     <height>323</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>425</width>
+    <width>453</width>
     <height>323</height>
    </size>
   </property>
@@ -42,7 +42,7 @@
     <rect>
      <x>10</x>
      <y>200</y>
-     <width>401</width>
+     <width>431</width>
      <height>111</height>
     </rect>
    </property>
@@ -59,7 +59,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Show Pairs/ADs with No Compatibilities</string>
+     <string>Show Pairings/NDDs with No Compatibilities</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -70,7 +70,7 @@
      <rect>
       <x>10</x>
       <y>73</y>
-      <width>385</width>
+      <width>402</width>
       <height>24</height>
      </rect>
     </property>
@@ -78,7 +78,7 @@
      <item row="0" column="0">
       <widget class="QCheckBox" name="praCheckBox">
        <property name="text">
-        <string>Display Pairs with Candidates in PRA Range</string>
+        <string>Display Pairings with Candidates in PRA Range</string>
        </property>
       </widget>
      </item>
@@ -117,7 +117,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Show Pairs/ADs Excluded From Match Runs</string>
+     <string>Show Pairings/NDDs Excluded From Match Runs</string>
     </property>
     <property name="checked">
      <bool>true</bool>
@@ -129,7 +129,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>404</width>
+     <width>431</width>
      <height>178</height>
     </rect>
    </property>
@@ -187,7 +187,7 @@
       <item>
        <widget class="QRadioButton" name="allNodesButton">
         <property name="text">
-         <string>Display All Pairs/ADs</string>
+         <string>Display All Pairings/NDDs</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -200,7 +200,7 @@
       <item>
        <widget class="QRadioButton" name="showArrangementsRadioButton">
         <property name="text">
-         <string>Display Only Pairs/ADs Involved in Transplant Arrangements</string>
+         <string>Display Only Pairings/NDDs Involved in Transplant Arrangements</string>
         </property>
         <attribute name="buttonGroup">
          <string notr="true">buttonGroup</string>
@@ -210,7 +210,7 @@
       <item>
        <widget class="QRadioButton" name="showSolutionsRadioButton">
         <property name="text">
-         <string>Display Only Pairs/ADs Involved in Solutions</string>
+         <string>Display Only Pairings/NDDs Involved in Solutions</string>
         </property>
         <attribute name="buttonGroup">
          <string notr="true">buttonGroup</string>
@@ -220,7 +220,7 @@
       <item>
        <widget class="QRadioButton" name="nodeSubsetButton">
         <property name="text">
-         <string>Display Pair/ADs Subset...</string>
+         <string>Display Pairings/NDDs Subset...</string>
         </property>
         <attribute name="buttonGroup">
          <string notr="true">buttonGroup</string>

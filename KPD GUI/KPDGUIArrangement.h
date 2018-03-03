@@ -9,14 +9,17 @@
 #include "KPDGUINodeWrapper.h"
 #include "KPDGUIMatch.h"
 
-class KPDGUIArrangement
+class KPDGUIArrangement : public QObject
 {
+
+	Q_OBJECT;
+
 public:
 	KPDGUIArrangement();
-	KPDGUIArrangement(double utility, QString id);
+	KPDGUIArrangement(int id, double utility);
 	~KPDGUIArrangement();
 
-	void setID(QString id);
+	void setID(int id);
 	void setUtility(double util);
 
 	void addNode(KPDGUINode * node);
@@ -26,7 +29,7 @@ public:
 	QVector<KPDGUINode *> getNodes();
 	QList<KPDGUIMatch *> getMatches();
 
-	QString getID() const;
+	int getID() const;
 	double getUtility() const;
 	
 	int getNumberOfNodes();
@@ -37,6 +40,10 @@ public:
 	bool containsDonor(KPDGUIDonor * donor);
 	bool containsCandidate(KPDGUICandidate * candidate);
 
+signals:
+	void arrangementClustered(int x, int y);
+
+public slots:
 	// Visual Properties
 	void select();
 	void highlight();
@@ -62,7 +69,7 @@ private:
 	QVector<KPDGUINode *> arrangementNodes;
 	QList<KPDGUIMatch *> arrangementMatches;
 	
-	QString arrangementID;
+	int arrangementID;
 	double arrangementUtility;
 
 	bool arrangementHasAnNDD;

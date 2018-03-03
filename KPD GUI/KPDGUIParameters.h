@@ -26,6 +26,9 @@ public:
 	int getMaxChainLength() const;
 	int getMaxLRSSize() const;
 
+	bool getCollectArrangements() const;
+	int getCollectArrangementsCutoff() const;
+
 	bool addAdvantageToHighPRACandidates() const;
 	int getPRAAdvantageCutoff() const;
 	double getPRAAdvantageValue() const;
@@ -48,6 +51,9 @@ public:
 	void setMaxCycleSize(int size);
 	void setMaxChainLength(int length);
 	void setMaxLRSSize(int size);
+
+	void setCollectArrangements(bool collect);
+	void setCollectArrangementsCutoff(int cutoff);
 
 	void setAddAdvantagetoHighPRACandidatesFlag(bool flag);
 	void setPRAAdvantageCutoff(int cutoff);
@@ -75,6 +81,9 @@ private:
 	int maxCycleSize;
 	int maxChainLength;
 	int maxLRSSize;
+
+	bool collectArrangements;
+	int collectArrangementsCutoff;
 
 	//Numerical Parameters		
 	bool addAdvantage;

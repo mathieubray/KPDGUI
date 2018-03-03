@@ -1,6 +1,35 @@
 #include "KPDGUIMatch.h"
 
-KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCrossmatchResult result, double fiveYearSurvival, double tenYearSurvival)
+KPDGUIMatch::KPDGUIMatch() 
+{
+	matchResult = FAILED_CROSSMATCH_HLA;
+
+	matchFailureProbability = 0.1;
+
+	matchFiveYearSurvival = 0;
+	matchTenYearSurvival = 0;
+	matchTransplantScore = 0;
+	matchAssignedUtility = 0;
+
+	includeMatch = false;
+
+	myColor = determineArrowColor();
+	myWidth = 3;
+	myPenStyle = determineArrowPenStyle();
+	myOpacity = 0.35;
+	myZValue = -1;
+
+	//Arrow Defaults
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+
+	//Reset Popularity
+	myPopularityInArrangements = 0;
+	myPopularityInSolutions = 0;
+
+	displayAsPartOfSolution = false;
+}
+
+KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCrossmatchResult result, double fiveYearSurvival, double tenYearSurvival, bool difficultToMatch)
 {
 	myDonor = donor;
     myCandidate = candidate;
@@ -13,14 +42,18 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCr
 
 	matchFiveYearSurvival = fiveYearSurvival;
 	matchTenYearSurvival = tenYearSurvival;
+	matchTransplantScore = 0.00001;
+	if (difficultToMatch) {
+		matchTransplantScore = 1;
+	}
 	matchAssignedUtility = 1;
 
 	includeMatch = true;
 	
 	myColor = determineArrowColor();
-	myWidth = 2;
+	myWidth = 3;
 	myPenStyle = determineArrowPenStyle();
-	myOpacity = 0.25;
+	myOpacity = 0.35;
 	myZValue = -1;	
 
 	//Arrow Defaults
@@ -66,11 +99,11 @@ QColor KPDGUIMatch::determineArrowColor() {
 
 	QColor color;
 
-	if (matchResult == FAILED_CROSSMATCH_BT || matchResult == FAILED_CROSSMATCH_HLA) {
+	if (!includeMatch || matchResult == FAILED_CROSSMATCH_BT || matchResult == FAILED_CROSSMATCH_HLA) {
 		color = Qt::red;
 	}
 	else if (matchResult == O_DONOR_TO_NON_O_CANDIDATE || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O) {
-		color = QColor(255,162,0);
+		color = QColor(255,165,0);
 	}
 	else {
 		color = Qt::black;
@@ -83,7 +116,7 @@ Qt::PenStyle KPDGUIMatch::determineArrowPenStyle() {
 
 	Qt::PenStyle style = Qt::SolidLine;
 
-	if (!includeMatch) {
+	if (!includeMatch || matchResult == FAILED_CROSSMATCH_BT || matchResult == FAILED_CROSSMATCH_HLA) {
 		style = Qt::DashLine;
 	}
 
@@ -91,27 +124,39 @@ Qt::PenStyle KPDGUIMatch::determineArrowPenStyle() {
 }
 
 void KPDGUIMatch::highlightMatch(int level){
-
+	
 	if (level == 1) {
-		if (!displayAsPartOfSolution) {
-			setArrowProperties(determineArrowColor(), 2, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
-		}
+		//if (!displayAsPartOfSolution) {
+			setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
+		//}
 	}
 	else if (level == 2) {
 		setVisible(false);
-		setArrowProperties(determineArrowColor(), 4, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
+		setArrowProperties(Qt::green, 5, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
 		setVisible(true);
 
-		displayAsPartOfSolution = true;
+	//	displayAsPartOfSolution = true;
 	}
+	
 }
 
 void KPDGUIMatch::clearHighlight() {
-
-	if (!displayAsPartOfSolution) {
-		setArrowProperties(determineArrowColor(), 2, determineArrowPenStyle(), 0.25, -1);
-	}
+	
+	//if (!displayAsPartOfSolution) {
+		setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), 0.35, -1);
+	//}
+	
 }
+
+void KPDGUIMatch::setDonorAndCandidate(KPDGUIDonor * donor, KPDGUICandidate * candidate) {
+
+	myDonor = donor;
+	myCandidate = candidate;
+	myDonor->addMatchingCandidate(this);
+	myCandidate->addMatchingDonor(this);
+
+}
+
 
 void KPDGUIMatch::setInclude(bool include) {
 	includeMatch = include;
@@ -201,7 +246,7 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 	myPen.setColor(myColor);
 	myPen.setWidth(myWidth);
 	myPen.setStyle(myPenStyle);
-	qreal arrowSize = 6;
+	qreal arrowSize = 10;
 	painter->setPen(myPen);
 	painter->setBrush(myColor);
 	
@@ -266,7 +311,7 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 	
 	if (displaySettings->getShowNodeSubset()){
-		if (!displaySettings->getShowExcludedNodes() && (myDonor->getStatus() || myCandidate->getStatus())){
+		if (!displaySettings->getShowExcludedNodes() && (!myDonor->getStatus() || !myCandidate->getParentNode()->getStatus())){
 			return false;
 		}
 
@@ -315,27 +360,96 @@ void KPDGUIMatch::updateSelection(int id, bool selected){
 void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 
 	if (!displayAsPartOfSolution){
+		
 		setVisible(false);
 		clearHighlight();
 
-		if (myDonor->isSelected() && myCandidate->isSelected()){
-			highlightMatch(1);
+		bool filterOut = false;
+		
+		if (!displaySettings->getFilterSuccessfulMatches() && matchResult == SUCCESSFUL_CROSSMATCH) {
+			filterOut = true;
+		}
+		if (!displaySettings->getFilterOtoNonOMatches() && (matchResult == O_DONOR_TO_NON_O_CANDIDATE || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O)) {
+			filterOut = true;
+		}
+		if (!displaySettings->getFilterFailedMatchesAdditionalHLA() && (matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O)) {
+			filterOut = true;
+		}
+		if (!displaySettings->getFilterFailedMatchesCrossmatch() && (matchResult == FAILED_CROSSMATCH_BT || matchResult == FAILED_CROSSMATCH_HLA)) {
+			filterOut = true;
 		}
 
-		if (displaySettings->getMatchDisplayMode() == ALL_COMPATIBILITIES){
-			setVisible(checkVisibility(displaySettings));
-		}
-		else if (displaySettings->getMatchDisplayMode() == SELECTED_COMPATIBILITIES){
-			if (myDonor->isSelected()){
+		if (!filterOut) {
+			
+			KPDNodeDisplayMode nodeDisplayMode = displaySettings->getNodeDisplayMode();
+
+			if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+				if (myDonor->isSelected() && myCandidate->isSelected()) {
+					highlightMatch(1);
+				}
+			}
+			else {
+
+				if (myDonor->isAltruistic()) {
+					if (myDonor->isSelected() && myCandidate->isSelected()) {
+						highlightMatch(1);
+					}
+				}
+
+				else if (myDonor->getParentNode()->getCandidate()->isSelected() && myCandidate->isSelected()) {
+					highlightMatch(1);
+				}
+			}
+
+			if (displaySettings->getMatchDisplayMode() == ALL_COMPATIBILITIES) {
 				setVisible(checkVisibility(displaySettings));
 			}
-			else if (myCandidate->isSelected()){
-				setVisible(checkVisibility(displaySettings));
+			else if (displaySettings->getMatchDisplayMode() == SELECTED_COMPATIBILITIES) {
+				if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+					if (myDonor->isSelected()) {
+						setVisible(checkVisibility(displaySettings));
+					}
+					else if (myCandidate->isSelected()) {
+						setVisible(checkVisibility(displaySettings));
+					}
+				}
+				else {
+					if (myDonor->isAltruistic()) {
+						if (myDonor->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+						else if (myCandidate->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+					}
+					else {
+						if (myDonor->getParentNode()->getCandidate()->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+						else if (myCandidate->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+					}
+				}
 			}
-		}
-		else if (displaySettings->getMatchDisplayMode() == WITHIN_SELECTION){
-			if (myDonor->isSelected() && myCandidate->isSelected()){
-				setVisible(checkVisibility(displaySettings));
+			else if (displaySettings->getMatchDisplayMode() == WITHIN_SELECTION) {
+				if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+					if (myDonor->isSelected() && myCandidate->isSelected()) {
+						setVisible(checkVisibility(displaySettings));
+					}
+				}
+				else {
+					if (myDonor->isAltruistic()) {
+						if (myDonor->isSelected() && myCandidate->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+					}
+					else {
+						if (myDonor->getParentNode()->getCandidate()->isSelected() && myCandidate->isSelected()) {
+							setVisible(checkVisibility(displaySettings));
+						}
+					}
+				}
 			}
 		}
 	}
@@ -348,11 +462,20 @@ void KPDGUIMatch::endDisplayAsPartOfSolution(){
 
 void KPDGUIMatch::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
+	edit();
+}
+
+void KPDGUIMatch::edit() {
+
 	DialogMatch * matchDialog = new DialogMatch(this);
 	if (matchDialog->exec()) {
 		editMatch(matchDialog);
+		
+		if (matchDialog->getAdditionalInformation()) {
+			emit showAdditionalMatchInformation(this);
+		}
 	}
-	
+
 }
 
 void KPDGUIMatch::editMatch(DialogMatch * dialog) {
@@ -369,13 +492,61 @@ void KPDGUIMatch::editMatch(DialogMatch * dialog) {
 	
 }
 
+void KPDGUIMatch::updateCrossmatchResults(KPDCrossmatchResult result, double fiveYear, double tenYear, bool difficultToMatch) {
+
+	matchResult = result;
+	matchFiveYearSurvival = fiveYear;
+	matchTenYearSurvival = tenYear;
+
+	if (difficultToMatch) {
+		matchTransplantScore = 1;
+	}
+	else {
+		matchTransplantScore = 0.00001;
+	}
+
+	myPenStyle = determineArrowPenStyle();
+	myColor = determineArrowColor();
+
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+}
+
 QDataStream &operator<<(QDataStream &out, const KPDGUIMatch & match)
 {
+	out << match.getInclude();
+	out << qint32(KPDFunctions::crossmatchResultToInt(match.getCrossmatchResult()));
+
+	out << qreal(match.getFailureProbability());
+
+	out << qreal(match.getFiveYearSurvival());
+	out << qreal(match.getTenYearSurvival());
+	out << qreal(match.getTransplantScore());
+	out << qreal(match.getAssignedUtility());
+
 	return out;
 }
 
 QDataStream &operator>>(QDataStream &in, KPDGUIMatch & match)
 {
+	bool include;
+	int crossmatch;
+	in >> include >> crossmatch;
+	match.setInclude(include);
+	match.setCrossmatchResult(KPDFunctions::intToCrossmatchResult(crossmatch));
+
+	double prob;
+	in >> prob;
+	match.setFailureProbability(prob);
+
+	double fiveYear;
+	double tenYear;
+	double score;
+	double utility;
+	in >> fiveYear >> tenYear >> score >> utility;
+	match.setFiveYearSurvival(fiveYear);
+	match.setTenYearSurvival(tenYear);
+	match.setTransplantScore(score);
+	match.setAssignedUtility(utility);
 	
 	return in;
 }

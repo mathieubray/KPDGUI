@@ -618,13 +618,11 @@ public:
         QObject::connect(donorGenderComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateDonorGender(int)));
         QObject::connect(donorWeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateDonorWeight(double)));
         QObject::connect(donorHeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateDonorHeight(double)));
-        QObject::connect(donorList, SIGNAL(itemPressed(QListWidgetItem*)), DialogSurvivalCalculator, SLOT(updateDonorInfo(QListWidgetItem*)));
-        QObject::connect(candidateList, SIGNAL(itemPressed(QListWidgetItem*)), DialogSurvivalCalculator, SLOT(updateCandidateInfo(QListWidgetItem*)));
         QObject::connect(candidateAgeSpinBox, SIGNAL(valueChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateAge(int)));
         QObject::connect(candidatePRASpinBox, SIGNAL(valueChanged(int)), praSlider, SLOT(setValue(int)));
         QObject::connect(praSlider, SIGNAL(valueChanged(int)), candidatePRASpinBox, SLOT(setValue(int)));
         QObject::connect(candidatePRASpinBox, SIGNAL(valueChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidatePRA(int)));
-        QObject::connect(candidateHLALineEdit, SIGNAL(textEdited(QString)), DialogSurvivalCalculator, SLOT(updateCandidateHLA(QString)));
+        QObject::connect(candidateHLALineEdit, SIGNAL(textChanged(QString)), DialogSurvivalCalculator, SLOT(updateCandidateHLA(QString)));
         QObject::connect(candidateInsuranceComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateInsurance(int)));
         QObject::connect(candidateGenderComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateGender(int)));
         QObject::connect(candidateRaceComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateRace(int)));
@@ -634,7 +632,7 @@ public:
         QObject::connect(candidateHepCCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidateHepC(bool)));
         QObject::connect(candidateDiabetesCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidateDiabetes(bool)));
         QObject::connect(candidatePrevTransCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidatePrevTrans(bool)));
-        QObject::connect(donorHLALineEdit, SIGNAL(textEdited(QString)), DialogSurvivalCalculator, SLOT(updateAdditionalDonorHLA(QString)));
+        QObject::connect(donorHLALineEdit, SIGNAL(textChanged(QString)), DialogSurvivalCalculator, SLOT(updateAdditionalDonorHLA(QString)));
         QObject::connect(donorDR51CheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateDonorDR51(bool)));
         QObject::connect(donorDR52CheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateDonorDR52(bool)));
         QObject::connect(donorDR53CheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateDonorDR53(bool)));
@@ -650,6 +648,12 @@ public:
         QObject::connect(donorHLADQ2ComboBox, SIGNAL(currentIndexChanged(QString)), DialogSurvivalCalculator, SLOT(updateDonorDQ()));
         QObject::connect(donorHLADR2ComboBox, SIGNAL(currentIndexChanged(QString)), DialogSurvivalCalculator, SLOT(updateDonorDR()));
         QObject::connect(donorHLAA1ComboBox, SIGNAL(currentIndexChanged(QString)), DialogSurvivalCalculator, SLOT(updateDonorA()));
+        QObject::connect(donorList, SIGNAL(itemPressed(QListWidgetItem*)), DialogSurvivalCalculator, SLOT(selectDonor(QListWidgetItem*)));
+        QObject::connect(candidateList, SIGNAL(itemPressed(QListWidgetItem*)), DialogSurvivalCalculator, SLOT(selectCandidate(QListWidgetItem*)));
+
+        donorGenderComboBox->setCurrentIndex(1);
+        candidateGenderComboBox->setCurrentIndex(1);
+
 
         QMetaObject::connectSlotsByName(DialogSurvivalCalculator);
     } // setupUi

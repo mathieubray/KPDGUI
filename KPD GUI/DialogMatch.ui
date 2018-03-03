@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Match Information</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -89,6 +89,22 @@
        <widget class="QLabel" name="candidateLabel">
         <property name="text">
          <string>Candidate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QCheckBox" name="difficultToMatchBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="layoutDirection">
+         <enum>Qt::RightToLeft</enum>
+        </property>
+        <property name="text">
+         <string>Difficult Match</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -166,6 +182,13 @@
     <item>
      <layout class="QHBoxLayout" name="buttonBoxLayout">
       <item>
+       <widget class="QPushButton" name="additionalInformationButton">
+        <property name="text">
+         <string>View Additional Information</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="buttonBoxSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -202,8 +225,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>488</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -218,8 +241,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>488</x>
+     <y>188</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -227,5 +250,40 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>additionalInformationButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogMatch</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>121</x>
+     <y>177</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>210</x>
+     <y>178</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>additionalInformationButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogMatch</receiver>
+   <slot>setAdditionalInformation()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>195</x>
+     <y>170</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>setAdditionalInformation()</slot>
+ </slots>
 </ui>

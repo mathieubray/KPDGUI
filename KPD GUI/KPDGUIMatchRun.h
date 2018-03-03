@@ -96,11 +96,13 @@ private:
 	double estimateExpectedUtility(std::vector<int> &arrangement);
 	double calculatePartialUtility(int nV, std::vector<std::vector<bool> > & incidence, std::vector<std::vector<std::vector<double> > > & utility, std::vector<KPDNodeType> & nodeTypes, std::vector<std::vector<KPDBloodType> > & donorBloodTypes);
 
+	QString matchRunNodeList;
+	QString matchRunMatchList;
 
 	QString matchRunLog;
 
 public:
-	KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * params);
+	KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * params, QProgressDialog * progress);
 	~KPDGUIMatchRun();	
 
 	//Use Pool Information to Generate Matrices
@@ -127,6 +129,10 @@ public:
 	
 
 	//Output
+
+	QString getNodeListString();
+	QString getMatchListString();
+
 	QString printLog();	
 
 };

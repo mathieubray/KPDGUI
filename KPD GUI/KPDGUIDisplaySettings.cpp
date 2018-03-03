@@ -17,6 +17,12 @@ KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
 	maxPRA = 100;
 
 	matchDisplayMode = WITHIN_SELECTION;
+
+	filterSuccessfulMatches = true;
+	filterOtoNonOMatches = true;
+	filterFailedMatchesAdditionalHLA = true;
+	filterFailedMatchesCrossmatch = true;
+
 }
 
 KPDGUIDisplaySettings::~KPDGUIDisplaySettings(){
@@ -46,6 +52,34 @@ bool KPDGUIDisplaySettings::changeDisplaySettings(DialogDisplaySettings * d){
 		minPRA = rightPRAVal;
 		maxPRA = leftPRAVal;
 	}	
+
+	return true;
+}
+
+bool KPDGUIDisplaySettings::changeDisplaySettings(KPDGUIDisplaySettings * d) {
+
+	nodeDisplayMode = d->getNodeDisplayMode();
+
+	showAllNodes = d->getShowAllNodes();
+	showNodeSubset = d->getShowNodeSubset();
+	showNodesInArrangements = d->getShowNodesInArrangements();
+	showNodesInSolutions = d->getShowNodesInSolutions();
+	showExcludedNodes = d->getShowExcludedNodes();
+	showNodesWithNoCompatibilities = d->getShowNodesWithNoCompatibilities();
+	showCandidatesInPRARange = d->getShowCandidatesInPRARange();
+
+	int leftPRAVal = d->getMinPRA();
+	int rightPRAVal = d->getMaxPRA();
+
+	minPRA = leftPRAVal;
+	maxPRA = rightPRAVal;
+	
+	matchDisplayMode = d->getMatchDisplayMode();
+
+	filterSuccessfulMatches = d->getFilterSuccessfulMatches();
+	filterOtoNonOMatches = d->getFilterOtoNonOMatches();
+	filterFailedMatchesAdditionalHLA = d->getFilterFailedMatchesAdditionalHLA();
+	filterFailedMatchesCrossmatch = d->getFilterFailedMatchesCrossmatch();
 
 	return true;
 }
@@ -94,6 +128,22 @@ KPDMatchDisplayMode KPDGUIDisplaySettings::getMatchDisplayMode() const {
 	return matchDisplayMode;
 }
 
+bool KPDGUIDisplaySettings::getFilterSuccessfulMatches() const {
+	return filterSuccessfulMatches;
+}
+
+bool KPDGUIDisplaySettings::getFilterOtoNonOMatches() const {
+	return filterOtoNonOMatches;
+}
+
+bool KPDGUIDisplaySettings::getFilterFailedMatchesAdditionalHLA() const {
+	return filterFailedMatchesAdditionalHLA;
+}
+
+bool KPDGUIDisplaySettings::getFilterFailedMatchesCrossmatch() const {
+	return filterFailedMatchesCrossmatch;
+}
+
 void KPDGUIDisplaySettings::setNodeDisplayMode(KPDNodeDisplayMode mode) {
 	nodeDisplayMode = mode;
 }
@@ -138,6 +188,22 @@ void KPDGUIDisplaySettings::setMatchDisplayMode(KPDMatchDisplayMode mode){
 	matchDisplayMode = mode;
 }
 
+void KPDGUIDisplaySettings::setFilterSuccessfulMatches(bool show) {
+	filterSuccessfulMatches = show;
+}
+
+void KPDGUIDisplaySettings::setFilterOtoNonOMatches(bool show) {
+	filterOtoNonOMatches = show;
+}
+
+void KPDGUIDisplaySettings::setFilterFailedMatchesAdditionalHLA(bool show) {
+	filterFailedMatchesAdditionalHLA = show;
+}
+
+void KPDGUIDisplaySettings::setFilterFailedMatchesCrossmatch(bool show) {
+	filterFailedMatchesCrossmatch = show;
+}
+
 QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings)
 {
 	out << qint32(KPDFunctions::nodeDisplayModeToInt(settings.getNodeDisplayMode()));
@@ -150,6 +216,9 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings)
 	out << qint32(settings.getMinPRA()) << qint32(settings.getMaxPRA());
 
 	out << qint32(KPDFunctions::matchDisplayModeToInt(settings.getMatchDisplayMode()));
+
+	out << settings.getFilterSuccessfulMatches() << settings.getFilterOtoNonOMatches() 
+		<< settings.getFilterFailedMatchesAdditionalHLA() << settings.getFilterFailedMatchesCrossmatch();
 	
 	return out;
 }
@@ -170,6 +239,11 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 	int maxPRA;
 
 	int matchDisplayMode;
+
+	bool filterSuccessfulMatches;
+	bool filterOtoNonOMatches;
+	bool filterFailedMatchesAdditionalHLA;
+	bool filterFailedMatchesCrossmatch;
 	
 	in >> nodeDisplayMode;
 
@@ -179,6 +253,9 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 	in >> minPRA >> maxPRA;
 
 	in >> matchDisplayMode;
+
+	in >> filterSuccessfulMatches >> filterOtoNonOMatches 
+		>> filterFailedMatchesAdditionalHLA >> filterFailedMatchesCrossmatch;
 
 	settings.setNodeDisplayMode(KPDFunctions::intToNodeDisplayMode(nodeDisplayMode));
 
@@ -194,6 +271,11 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 	settings.setMaxPRA(maxPRA);
 
 	settings.setMatchDisplayMode(KPDFunctions::intToMatchDisplayMode(matchDisplayMode));
+
+	settings.setFilterSuccessfulMatches(filterSuccessfulMatches);
+	settings.setFilterOtoNonOMatches(filterOtoNonOMatches);
+	settings.setFilterFailedMatchesAdditionalHLA(filterFailedMatchesAdditionalHLA);
+	settings.setFilterFailedMatchesCrossmatch(filterFailedMatchesCrossmatch);
 
 	return in;
 

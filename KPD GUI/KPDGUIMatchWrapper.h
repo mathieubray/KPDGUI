@@ -15,9 +15,13 @@ public:
 
 	KPDGUIMatch * getMatch();
 
+signals:
+	void updateVisibilitySignal();
+
 public slots:
 	void updateText();
 
+	void matchWrapperClickActions(QTreeWidgetItem * item);
 	void matchWrapperDoubleClickActions(QTreeWidgetItem * item);
 	
 private:

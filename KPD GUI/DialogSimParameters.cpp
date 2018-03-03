@@ -27,6 +27,10 @@ DialogSimParameters::DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *p
 	cycleSizeSpinBox->setValue(paramInfo->getMaxCycleSize());
 	chainLengthSpinBox->setValue(paramInfo->getMaxChainLength());
 	lrsSizeSpinBox->setValue(paramInfo->getMaxLRSSize());
+
+	//Arrangements
+	collectArrangementsCheckBox->setChecked(paramInfo->getCollectArrangements());
+	collectArrangementsSpinBox->setValue(paramInfo->getCollectArrangementsCutoff());
 	
 	//Numerical Parameters
 	praCheckBox->setChecked(paramInfo->addAdvantageToHighPRACandidates());

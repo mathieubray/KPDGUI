@@ -22,6 +22,8 @@ public:
 
 public slots:
 	void updateText();
+
+	void rightClickActions(QPoint pos);
 	
 private:
 	KPDDashboardMode myMode;

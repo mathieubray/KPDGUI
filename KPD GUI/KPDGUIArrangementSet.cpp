@@ -4,17 +4,21 @@ KPDGUIArrangementSet::KPDGUIArrangementSet(){
 	
 	arrangementSetParameters = new KPDGUIParameters();
 
+	arrangementSetName = "";
 	arrangementSetTimestamp = "";
-	arrangementSetMatchRunText = "";
-	
+	arrangementSetNodeList = "";
+	arrangementSetMatchList = "";
 	isSolution = true;
+	isComplete = true;
 	setNumber = -1;
 	
 }
 
-KPDGUIArrangementSet::KPDGUIArrangementSet(KPDGUIParameters * parameters, QString timestamp, QString text, bool solution, int number){
+KPDGUIArrangementSet::KPDGUIArrangementSet(KPDGUIParameters * parameters, QString timestamp, QString nodeList, QString matchList, bool solution, bool complete, int trueSetNum, int number){
 	
-	construct(parameters, timestamp, text, solution, number);
+	arrangementSetParameters = new KPDGUIParameters();
+
+	construct(parameters, timestamp, nodeList, matchList, solution, complete, trueSetNum, number);
 	
 }
 
@@ -22,33 +26,31 @@ KPDGUIArrangementSet::~KPDGUIArrangementSet(){
 
 }
 
-void KPDGUIArrangementSet::construct(KPDGUIParameters * params, QString timestamp, QString text, bool solution, int number){
-	
-	arrangementSetParameters = new KPDGUIParameters();
+void KPDGUIArrangementSet::construct(KPDGUIParameters * params, QString timestamp, QString nodeList, QString matchList, bool solution, bool complete, int trueSetNum, int number){
 	
 	arrangementSetParameters->copyParameters(params);
-
+	
+	arrangementSetName = KPDFunctions::toString(arrangementSetParameters->getOptimizationScheme());
 	arrangementSetTimestamp = timestamp;
-	arrangementSetMatchRunText = text;
-
+	arrangementSetNodeList = nodeList;
+	arrangementSetMatchList = matchList;
 	isSolution = solution;
+	isComplete = complete;
+	trueSetSize = trueSetNum;
 	setNumber = number;
 	
-
-	QString textOptScheme = KPDFunctions::toString(arrangementSetParameters->getOptimizationScheme());
-
 	if (isSolution){
-		setText(0, textOptScheme + "[" + QString::number(setNumber) + "] (" + arrangementSetTimestamp + ")");
+		setText(0, arrangementSetName + " [" + QString::number(setNumber) + "]\n" + arrangementSetTimestamp);
 	}
 	else{
-		setText(0, textOptScheme + " (" + arrangementSetTimestamp + ")");
+		setText(0, arrangementSetName + "\n" + arrangementSetTimestamp);
 	}
 
 	setUpWidgets();	
 }
 
-void KPDGUIArrangementSet::addArrangement(KPDGUIArrangement * arrangement){
-	
+void KPDGUIArrangementSet::addArrangement(KPDGUIArrangement * arrangement){	
+
 	arrangements.push_back(arrangement);
 		
 	setUpWidgets();
@@ -67,19 +69,35 @@ QList<KPDGUIArrangement*> KPDGUIArrangementSet::getArrangements(){
 }
 
 KPDGUIParameters * KPDGUIArrangementSet::getParameters() const {
-	return NULL;
+	return arrangementSetParameters;
+}
+
+QString KPDGUIArrangementSet::getName() const {
+	return arrangementSetName;
 }
 
 QString KPDGUIArrangementSet::getTimestamp() const {
 	return arrangementSetTimestamp;
 }
 
-QString KPDGUIArrangementSet::getMatchRunText() const {
-	return arrangementSetMatchRunText;
+QString KPDGUIArrangementSet::getNodeList() const {
+	return arrangementSetNodeList;
+}
+
+QString KPDGUIArrangementSet::getMatchList() const {
+	return arrangementSetMatchList;
 }
 
 bool KPDGUIArrangementSet::isSolutionSet() const {
 	return isSolution;
+}
+
+bool KPDGUIArrangementSet::isCompleteSet() const {
+	return isComplete;
+}
+
+int KPDGUIArrangementSet::getTrueSetSize() const {
+	return trueSetSize;
 }
 
 int KPDGUIArrangementSet::getSetNumber() const {
@@ -131,8 +149,6 @@ void KPDGUIArrangementSet::sort() {
 				item->removeChild(arrangement);
 			}
 		}
-		//qSort(newArrangementList.begin(), newArrangementList.end(), KPDGUIArrangementGreaterThan(0));
-
 
 		foreach(KPDGUIArrangementWrapper * arrangement, newArrangementList) {
 			item->addChild(arrangement);
@@ -222,7 +238,7 @@ qreal KPDGUIArrangementSet::centerY(){
 }
 
 void KPDGUIArrangementSet::cluster(){
-	qreal dist = 100 + 10 * arrangements.size();
+	qreal dist = 125 + 50 * arrangements.size();
 	
 	qreal centerX = this->centerX();
 	qreal centerY = this->centerY();
@@ -234,6 +250,8 @@ void KPDGUIArrangementSet::cluster(){
 		arrangement->cluster(centerX + dist*cos(nodeAngle), centerY + dist*sin(nodeAngle));
 		nodeAngle += angle;
 	}	
+
+	emit arrangementClustered(centerX, centerY);
 }
 
 void KPDGUIArrangementSet::increasePopularity(){
@@ -260,40 +278,146 @@ void KPDGUIArrangementSet::resetPopularity(){
 
 }
 
-QString KPDGUIArrangementSet::getDashboardString(){
+QString KPDGUIArrangementSet::toString(){
 
 	QString receipt = "";
 
 	if (isSolution){
-		receipt = receipt + "Solution " + QString::number(setNumber) + " For Match Run Performed On " + arrangementSetTimestamp + "\nObjective: " + QString::number(getUtility()) + "\n\n";
+		receipt = receipt + "Solution " + QString::number(setNumber) + " For Match Run " + arrangementSetName + "\n";
+		receipt = receipt + "Performed On " + arrangementSetTimestamp + "\n";
+		receipt = receipt + "\n";
+
+		if (floor(getUtility()) == getUtility()) {
+			receipt = receipt + "Objective: " + QString::number(getUtility()) + "\n\n";
+		}
+		else {
+			receipt = receipt + "Objective: " + QString::number(floor(getUtility() * 1000 + 0.5) / 1000) + "\n\n";
+		}
+
 	}
 	else {
 		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
-			receipt = receipt + "Cycle/Chain List For Match Run Performed On " + arrangementSetTimestamp + "\n\n";
+			receipt = receipt + "Match Run " + arrangementSetName + "\n";
+			receipt = receipt + "Performed On " + arrangementSetTimestamp + "\n\n";
 		}
 		else{
-			receipt = receipt + "LRS List For Match Run Performed On " + arrangementSetTimestamp + "\n\n";
+			receipt = receipt + "Match Run " + arrangementSetName + "\n";
+			receipt = receipt + "Performed On " + arrangementSetTimestamp + "\n\n";
+		}
+	}
+
+	if (!isSolution && !isComplete) {
+		receipt = receipt + "NOTE: THE COLLECTION BELOW IS NOT COMPLETE\n";
+		if (arrangementSetParameters->getCollectArrangements()) {			
+			receipt = receipt + "The true number of possible arrangements (" + QString::number(trueSetSize) + ") was higher than the specified cutoff of " + QString::number(arrangementSetParameters->getCollectArrangementsCutoff()) + "\n\n";		
+		}
+		else {
+			receipt = receipt + "User specified not to collect all possible arrangements, of which there were " + QString::number(trueSetSize) + "\n\n";
 		}
 	}
 
 	int chains = 0;
 	int cycles = 0;
 
-	foreach(KPDGUIArrangement * arrangement, arrangements){
+	if (isSolution) {
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+			receipt = receipt + "------------------------------\n";
+			receipt = receipt + "Solution Cycle/Chain List\n";
+			receipt = receipt + "------------------------------\n\n";
+		}
+		else {
+			receipt = receipt + "----------------------\n";
+			receipt = receipt + "Solution LRS List\n";
+			receipt = receipt + "----------------------\n\n";
+		}
+	}
+	else {
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+			receipt = receipt + "----------------------\n";
+			receipt = receipt + "Match Run Cycle/Chain List\n";
+			receipt = receipt + "----------------------\n\n";
+		}
+		else {
+			receipt = receipt + "----------------------\n";
+			receipt = receipt + "Match Run LRS List\n";
+			receipt = receipt + "----------------------\n\n";
+		}
+	}
+
+	foreach(KPDGUIArrangement * arrangement, arrangements) {
 		receipt = receipt + arrangement->arrangementDashboardString() + "\n";
-		if (arrangement->hasAnNDD()){
+		if (arrangement->hasAnNDD()) {
 			chains++;
 		}
 		else {
 			cycles++;
 		}
 	}
-	receipt = receipt + "\n" + arrangementSetMatchRunText + "\n";
+	receipt = receipt + "\n";
 
-	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+
+	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
-	else{
+	else {
+		receipt = receipt + "Locally Relevant Subsets: " + QString::number(getNumberOfArrangements()) + "\n";
+	}
+
+	receipt = receipt + "\n";
+
+	receipt = receipt + "---------------------\n";
+	receipt = receipt + "Pairing/NDD List\n";
+	receipt = receipt + "---------------------\n\n";
+
+	receipt = receipt + arrangementSetNodeList;
+
+	receipt = receipt + "\n";
+
+	receipt = receipt + "---------------\n";
+	receipt = receipt + "Match List\n";
+	receipt = receipt + "---------------\n\n";
+
+	receipt = receipt + arrangementSetMatchList;
+
+	receipt = receipt + "\n";
+
+	receipt = receipt + "------------------------\n";
+	receipt = receipt + "Match Run Specifications\n";
+	receipt = receipt + "------------------------\n\n";
+
+	receipt = receipt + arrangementSetParameters->toString();
+
+	receipt = receipt + "\n";
+
+	return receipt;
+}
+
+
+QString KPDGUIArrangementSet::toCondensedString() {
+
+	QString receipt = "";
+
+	if (isSolution) {
+		receipt = receipt + "Solution " + QString::number(setNumber) + " For Match Run " + arrangementSetName + "\n";
+		receipt = receipt + "Performed On " + arrangementSetTimestamp + "\n\nObjective: " + QString::number(getUtility()) + "\n\n";
+	}
+
+	int chains = 0;
+	int cycles = 0;
+
+	foreach(KPDGUIArrangement * arrangement, arrangements) {
+		if (arrangement->hasAnNDD()) {
+			chains++;
+		}
+		else {
+			cycles++;
+		}
+	}
+
+	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
+	}
+	else {
 		receipt = receipt + "Locally Relevant Subsets: " + QString::number(getNumberOfArrangements()) + "\n";
 	}
 
@@ -374,13 +498,15 @@ void KPDGUIArrangementSet::setUpWidgets(){
 }
 
 void KPDGUIArrangementSet::displayInformation() {
-
-	qDebug() << "DOUBLE-CLICKED!";
 	
-	DialogMessage * dialog = new DialogMessage(getDashboardString());
+	DialogMessage * dialog = new DialogMessage(toString());
+
+	if (!isSolution) {
+		dialog->setWindowTitle("Possible Exchanges");
+	}
 
 	if (dialog->exec()) {
-
+		
 	}
 
 }
@@ -405,7 +531,11 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIArrangementSet & arrangeme
 {
 	out << *arrangementSet.getParameters();
 	out << arrangementSet.getTimestamp();
-	out << arrangementSet.getMatchRunText();
+	out << arrangementSet.getNodeList();
+	out << arrangementSet.getMatchList();
+	out << arrangementSet.isSolutionSet();
+	out << arrangementSet.isCompleteSet();
+	out << qint32(arrangementSet.getTrueSetSize());
 	out << qint32(arrangementSet.getSetNumber());
 
 	return out;
@@ -413,17 +543,19 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIArrangementSet & arrangeme
 
 //void KPDGUINode::extractFromDataStream(QDataStream& dataStream)
 QDataStream &operator>>(QDataStream &in, KPDGUIArrangementSet & arrangementSet)
-{
-	
-	KPDGUIParameters * params= new KPDGUIParameters();
+{	
+	KPDGUIParameters * params = new KPDGUIParameters();
 	QString timeStamp;
-	QString text;
+	QString nodeList;
+	QString matchList;
 	bool isSolution;
-	qint32 id;
+	bool isComplete;
+	int trueSetNum;
+	int id;
 
-	in >> *params >> timeStamp >> text >> isSolution >> id;
+	in >> *params >> timeStamp >> nodeList >> matchList >> isSolution >> isComplete >> trueSetNum >> id;
 	
-	arrangementSet.construct(params, timeStamp, text, isSolution, id);
+	arrangementSet.construct(params, timeStamp, nodeList, matchList, isSolution, isComplete, trueSetNum, id);
 	
 	return in;
 }

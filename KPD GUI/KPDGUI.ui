@@ -32,58 +32,60 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="KPDGUIGraphicsView" name="kpdGraphicsView">
-        <property name="minimumSize">
-         <size>
-          <width>500</width>
-          <height>300</height>
-         </size>
-        </property>
-        <property name="dragMode">
-         <enum>QGraphicsView::RubberBandDrag</enum>
-        </property>
-        <property name="transformationAnchor">
-         <enum>QGraphicsView::AnchorViewCenter</enum>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QTabWidget" name="kpdListView">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>200</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="tabPosition">
-         <enum>QTabWidget::South</enum>
-        </property>
-        <property name="currentIndex">
-         <number>-1</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="KPDGUIGraphicsView" name="kpdGraphicsView">
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>300</height>
+        </size>
+       </property>
+       <property name="dragMode">
+        <enum>QGraphicsView::RubberBandDrag</enum>
+       </property>
+       <property name="transformationAnchor">
+        <enum>QGraphicsView::AnchorViewCenter</enum>
+       </property>
+      </widget>
+      <widget class="QTabWidget" name="kpdListView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="tabPosition">
+        <enum>QTabWidget::South</enum>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -108,7 +110,9 @@
     <addaction name="separator"/>
     <addaction name="actionAddPairing"/>
     <addaction name="actionAddNDD"/>
+    <addaction name="separator"/>
     <addaction name="actionLoadPairings"/>
+    <addaction name="actionLoad_APD_Pool"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -144,12 +148,23 @@
     <property name="title">
      <string>Display</string>
     </property>
+    <widget class="QMenu" name="menuFilter_Matches">
+     <property name="title">
+      <string>Show Matches</string>
+     </property>
+     <addaction name="actionFilter_Successful_Matches"/>
+     <addaction name="actionFilter_O_Donor_to_Non_O_Candidate_Matches"/>
+     <addaction name="actionFilter_Failed_Matches_on_Addtional_HLA"/>
+     <addaction name="actionFilter_Failed_Matches_on_Crossmatch"/>
+    </widget>
     <addaction name="actionNodeDisplaySettings"/>
     <addaction name="separator"/>
-    <addaction name="actionDisplayCompatibilitiesWithinSelection"/>
-    <addaction name="actionDisplaySelectedCompatibilities"/>
     <addaction name="actionDisplayAllCompatibilities"/>
+    <addaction name="actionDisplaySelectedCompatibilities"/>
+    <addaction name="actionDisplayCompatibilitiesWithinSelection"/>
     <addaction name="actionDisplayNoCompatibilities"/>
+    <addaction name="separator"/>
+    <addaction name="menuFilter_Matches"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuMatch_Run"/>
@@ -384,7 +399,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Display No Compatibilities</string>
+    <string>Display No Matches</string>
    </property>
   </action>
   <action name="actionDisplayAllCompatibilities">
@@ -392,7 +407,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Display All Compatibilities</string>
+    <string>Display All Matches</string>
    </property>
   </action>
   <action name="actionDisplaySelectedCompatibilities">
@@ -400,7 +415,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Display Selected Compatibilities</string>
+    <string>Display Selected Matches</string>
    </property>
   </action>
   <action name="actionDisplayCompatibilitiesWithinSelection">
@@ -411,7 +426,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Display Compatibilities Within Selection</string>
+    <string>Display Matches Within Selection</string>
    </property>
   </action>
   <action name="actionRefresh">
@@ -431,6 +446,55 @@
   <action name="actionClearArrangements">
    <property name="text">
     <string>Clear Arrangements</string>
+   </property>
+  </action>
+  <action name="actionFilter_Successful_Matches">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Successful Matches</string>
+   </property>
+  </action>
+  <action name="actionFilter_O_Donor_to_Non_O_Candidate_Matches">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>O Donor to Non-O Candidate Matches</string>
+   </property>
+  </action>
+  <action name="actionFilter_Failed_Matches_on_Addtional_HLA">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Failed Matches on Addtional HLA</string>
+   </property>
+  </action>
+  <action name="actionFilter_Failed_Matches_on_Crossmatch">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Failed Matches on Crossmatch</string>
+   </property>
+  </action>
+  <action name="actionLoad_APD_Pool">
+   <property name="text">
+    <string>Load APD Pool</string>
    </property>
   </action>
  </widget>
@@ -869,6 +933,86 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionFilter_Successful_Matches</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesSuccessful(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_O_Donor_to_Non_O_Candidate_Matches</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesOtoNonO(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_Failed_Matches_on_Addtional_HLA</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesFailedAdditionalHLA(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_Failed_Matches_on_Crossmatch</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesFailedCrossmatch(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLoad_APD_Pool</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>loadAPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>newKPD()</slot>
@@ -905,5 +1049,10 @@
   <slot>refresh()</slot>
   <slot>runSurvivalCalculator()</slot>
   <slot>clearArrangements()</slot>
+  <slot>filterMatchesSuccessful(bool)</slot>
+  <slot>filterMatchesOtoNonO(bool)</slot>
+  <slot>filterMatchesFailedAdditionalHLA(bool)</slot>
+  <slot>filterMatchesFailedCrossmatch(bool)</slot>
+  <slot>loadAPD()</slot>
  </slots>
 </ui>

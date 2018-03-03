@@ -18,6 +18,13 @@ KPDGUIMatch * KPDGUIMatchWrapper::getMatch(){
 }
 
 void KPDGUIMatchWrapper::updateText(){
+
+	QString difficultyString = "No";
+
+	if (myMatch->getTransplantScore() == 1) {
+		difficultyString = "Yes";
+	}
+
 	
 	setText(0, QString::number(myMatch->getDonor()->getID()));
 	setText(1, QString::number(myMatch->getDonor()->getDonorNumber()));
@@ -27,9 +34,10 @@ void KPDGUIMatchWrapper::updateText(){
 	setText(5, KPDFunctions::toString(myMatch->getCrossmatchResult()));
 	setText(6, QString::number(floor(myMatch->getFiveYearSurvival() * 1000 + 0.5) / 1000));
 	setText(7, QString::number(floor(myMatch->getTenYearSurvival() * 1000 + 0.5) / 1000));
-	setText(8, QString::number(myMatch->getPopularityInArrangements()));
-	setText(9, QString::number(myMatch->getPopularityInSolutions()));
-	setText(10, "");
+	setText(8, difficultyString);
+	setText(9, QString::number(myMatch->getPopularityInArrangements()));
+	setText(10, QString::number(myMatch->getPopularityInSolutions()));
+	setText(11, "");
 
 	QColor textColor;
 	if (myMatch->getInclude()) {
@@ -41,7 +49,7 @@ void KPDGUIMatchWrapper::updateText(){
 
 	for (int i = 0; i < columnCount(); i++) {
 		setTextColor(i, textColor);
-		if (i >= 6 && i <= 9) {
+		if (i == 6 || i == 7 || i == 8 || i ==9 || i == 10) {
 			setTextAlignment(i, Qt::AlignRight | Qt::AlignVCenter);
 		}
 		else {
@@ -51,16 +59,60 @@ void KPDGUIMatchWrapper::updateText(){
 
 }
 
+void KPDGUIMatchWrapper::matchWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool donorIsSelected = false;
+
+		if (myMatch->getDonor()->isAltruistic()) {
+			donorIsSelected = myMatch->getDonor()->isSelected() || myMatch->getDonor()->isSelected();
+		}
+		else {
+			donorIsSelected = myMatch->getDonor()->isSelected() || myMatch->getDonor()->getParentNode()->getCandidate()->isSelected();
+		}
+
+		bool candidateIsSelected = myMatch->getCandidate()->isSelected();
+
+		if (donorIsSelected && candidateIsSelected) {
+			/*myMatch->getDonor()->setSelected(false);
+			if (!myMatch->getDonor()->isAltruistic()) {
+				myMatch->getDonor()->getParentNode()->getCandidate()->setSelected(false);
+			}*/
+
+			myMatch->getDonor()->getParentNode()->setSelected(false);
+
+			myMatch->getCandidate()->setSelected(false);
+		}
+		else {
+			//if (!donorIsSelected) {
+				/*myMatch->getDonor()->setSelected(true);
+				if (!myMatch->getDonor()->isAltruistic()) {
+					myMatch->getDonor()->getParentNode()->getCandidate()->setSelected(true);
+				}*/
+				myMatch->getDonor()->getParentNode()->setSelected(true);
+			//}
+
+			//if (!candidateIsSelected) {
+				myMatch->getCandidate()->setSelected(true);
+			//}
+		}
+
+		emit updateVisibilitySignal();
+	}
+}
 
 void KPDGUIMatchWrapper::matchWrapperDoubleClickActions(QTreeWidgetItem * item) {
 
 	if (item == this) {
 
-		DialogMatch * dialogMatch = new DialogMatch(myMatch);
+		myMatch->edit();
 
-		if (dialogMatch->exec()) {
-			myMatch->editMatch(dialogMatch);
-		}
+		//DialogMatch * dialogMatch = new DialogMatch(myMatch);
+
+		//if (dialogMatch->exec()) {
+			//myMatch->editMatch(dialogMatch);
+		//}
 	}
 
 }
@@ -134,7 +186,7 @@ bool KPDGUIMatchWrapper::operator<(const QTreeWidgetItem &other) const {
 		}
 	}
 
-	else if (column >= 6 && column <= 9) {
+	else if (column == 6 || column == 7 || column == 9 || column == 10) {
 
 		double fromValue = text(column).toDouble();
 		double otherValue = other.text(column).toDouble();
