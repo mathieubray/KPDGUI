@@ -394,6 +394,7 @@ public:
         actionFilter_Failed_Matches_on_Addtional_HLA->setText(QApplication::translate("KPDGUI", "Failed Matches on Addtional HLA", 0));
         actionFilter_Failed_Matches_on_Crossmatch->setText(QApplication::translate("KPDGUI", "Failed Matches on Crossmatch", 0));
         actionLoad_APD_Pool->setText(QApplication::translate("KPDGUI", "Load APD Pool", 0));
+        actionLoad_APD_Pool->setShortcut(QApplication::translate("KPDGUI", "Ctrl+Shift+L", 0));
         menuFile->setTitle(QApplication::translate("KPDGUI", "&File", 0));
         menuTools->setTitle(QApplication::translate("KPDGUI", "Tools", 0));
         menuHelp->setTitle(QApplication::translate("KPDGUI", "About", 0));

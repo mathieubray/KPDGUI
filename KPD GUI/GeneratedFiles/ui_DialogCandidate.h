@@ -240,7 +240,7 @@ public:
         candidateGroupBox->setGeometry(QRect(10, 10, 371, 291));
         layoutWidget2 = new QWidget(candidateGroupBox);
         layoutWidget2->setObjectName(QStringLiteral("layoutWidget2"));
-        layoutWidget2->setGeometry(QRect(10, 22, 351, 263));
+        layoutWidget2->setGeometry(QRect(10, 20, 351, 263));
         gridLayout = new QGridLayout(layoutWidget2);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
@@ -393,7 +393,7 @@ public:
          << QApplication::translate("DialogCandidate", "AB", 0)
         );
         candidatePRALabel->setText(QApplication::translate("DialogCandidate", "PRA", 0));
-        candidateAdditionalLabel->setText(QApplication::translate("DialogCandidate", "Candidate Antibodies", 0));
+        candidateAdditionalLabel->setText(QApplication::translate("DialogCandidate", "Unacceptable Antigens", 0));
         label->setText(QApplication::translate("DialogCandidate", "Insurance", 0));
         candidateInsuranceComboBox->clear();
         candidateInsuranceComboBox->insertItems(0, QStringList()

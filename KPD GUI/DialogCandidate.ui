@@ -312,7 +312,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>22</y>
+      <y>20</y>
       <width>351</width>
       <height>263</height>
      </rect>
@@ -436,7 +436,7 @@
      <item row="4" column="0" colspan="2">
       <widget class="QLabel" name="candidateAdditionalLabel">
        <property name="text">
-        <string>Candidate Antibodies</string>
+        <string>Unacceptable Antigens</string>
        </property>
       </widget>
      </item>

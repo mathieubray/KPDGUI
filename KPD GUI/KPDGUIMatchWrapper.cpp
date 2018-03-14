@@ -136,7 +136,7 @@ bool KPDGUIMatchWrapper::operator<(const QTreeWidgetItem &other) const {
 	QString candidateName = text(4);
 	QString otherCandidateName = other.text(4);
 
-	if (column == 0 && column == 1) {
+	if (column == 0 || column == 1) {
 
 		if (donorNodeID == otherDonorNodeID) {
 			if (donorNumber == otherDonorNumber) {

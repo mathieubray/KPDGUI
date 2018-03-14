@@ -496,6 +496,9 @@
    <property name="text">
     <string>Load APD Pool</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+L</string>
+   </property>
   </action>
  </widget>
  <customwidgets>

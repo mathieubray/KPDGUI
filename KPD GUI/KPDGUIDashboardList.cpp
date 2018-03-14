@@ -1,7 +1,7 @@
 #include "KPDGUIDashboardList.h"
 
 KPDGUIDashboardList::KPDGUIDashboardList(KPDDashboardMode mode, QWidget *parent) : QTreeWidget(parent) {
-
+	
 	myMode = mode;
 
 	QStringList headers;
@@ -31,6 +31,7 @@ KPDGUIDashboardList::KPDGUIDashboardList(KPDDashboardMode mode, QWidget *parent)
 	setSelectionMode(QAbstractItemView::NoSelection);
 
 	connect(this, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(rightClickActions(QPoint)));
+	connect(this, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
 
 }
 
@@ -79,6 +80,44 @@ void KPDGUIDashboardList::updateText() {
 				wrapper->updateText();
 			}
 		}		
+	}
+}
+
+
+void KPDGUIDashboardList::clickActions(QTreeWidgetItem * item) {
+		
+	if (myMode == DONOR) {
+		KPDGUIDonorWrapper * wrapper = dynamic_cast<KPDGUIDonorWrapper *>(item);
+		if (wrapper) {
+			QPointF center = wrapper->getDonor()->getParentNode()->getNodePosition();
+			emit recenterView(center.x(), center.y());
+		}
+	}
+	else if (myMode == CANDIDATE) {
+		KPDGUICandidateWrapper * wrapper = dynamic_cast<KPDGUICandidateWrapper *>(item);
+		if (wrapper) {
+			QPointF center = wrapper->getCandidate()->getParentNode()->getNodePosition();
+			emit recenterView(center.x(), center.y());
+		}
+	}
+	else if (myMode == MATCH) {
+		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(item);
+		if (wrapper) {
+			QPointF point1 = wrapper->getMatch()->getDonor()->getParentNode()->getNodePosition();
+			QPointF point2 = wrapper->getMatch()->getCandidate()->getParentNode()->getNodePosition();
+
+			int x = (point1.x() + point2.x()) / 2;
+			int y = (point1.y() + point2.y()) / 2;
+
+			emit recenterView(x, y);
+		}
+	}
+	else {
+		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(item);
+		if (wrapper) {
+			QPointF center = wrapper->getNode()->getNodePosition();
+			emit recenterView(center.x(), center.y());
+		}
 	}
 }
 

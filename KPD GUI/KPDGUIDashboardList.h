@@ -9,6 +9,8 @@
 #include "KPDGUICandidateWrapper.h"
 #include "KPDGUIMatchWrapper.h"
 
+#include "KPDGUIGraphicsView.h"
+
 
 class KPDGUIDashboardList : public QTreeWidget
 {
@@ -20,9 +22,13 @@ public:
 
 	QVector<QTreeWidgetItem *> getDashboardItems();
 
+signals:
+	void recenterView(int x, int y);
+
 public slots:
 	void updateText();
 
+	void clickActions(QTreeWidgetItem * item);
 	void rightClickActions(QPoint pos);
 	
 private:

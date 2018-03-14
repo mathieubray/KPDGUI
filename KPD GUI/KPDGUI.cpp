@@ -24,8 +24,14 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	kpdguiCommandHistory = new KPDGUICommandHistory();
 	kpdguiNodeList = new KPDGUIDashboardList(NODE);
 	kpdguiDonorList = new KPDGUIDashboardList(DONOR);
-	kpdguiCandidateList = new KPDGUIDashboardList(CANDIDATE);	
+	kpdguiCandidateList = new KPDGUIDashboardList(CANDIDATE);
 	kpdguiMatchList = new KPDGUIDashboardList(MATCH);
+
+	connect(kpdguiNodeList, SIGNAL(recenterView(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+	connect(kpdguiDonorList, SIGNAL(recenterView(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+	connect(kpdguiCandidateList, SIGNAL(recenterView(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+	connect(kpdguiMatchList, SIGNAL(recenterView(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+
 	
 	kpdguiArrangementList = new QTreeWidget();
 	kpdguiArrangementList->setHeaderHidden(true);
@@ -485,6 +491,7 @@ void KPDGUI::loadNodes()
 			newDonor->setWeight(line.at(39).at(0).toDouble());
 			newDonor->setCigarette(line.at(40).at(0) == "Y");
 
+			newDonor->setFailureProbability(0.1);
 			newDonor->setStatus(status);
 
 			// NDD
@@ -562,6 +569,7 @@ void KPDGUI::loadNodes()
 				}
 
 				//newCandidate->setStatus(status);
+				newCandidate->setFailureProbability(0.1);
 				newCandidate->setStatus(true);
 
 				candidatesToAdd[currentNodeID] = newCandidate;
@@ -735,6 +743,7 @@ void KPDGUI::loadAPD()
 				KPDGUIDonor * newDonor = new KPDGUIDonor();
 				newDonor->setName(donorName + " (" + QString::number(id) + ")");
 				newDonor->setBT(donorBT);
+				newDonor->setFailureProbability(0.1);
 
 				fullDonors << newDonor;
 
@@ -753,6 +762,7 @@ void KPDGUI::loadAPD()
 					newCandidate->setName(candidateName + " (" + QString::number(matchingID) + ")");
 					newCandidate->setPRA(pra);
 					newCandidate->setBT(candidateBT);
+					newCandidate->setFailureProbability(0.1);
 
 					candidateMap[matchingID] = newCandidate;
 
@@ -770,6 +780,7 @@ void KPDGUI::loadAPD()
 					KPDGUIDonor * newDonor = new KPDGUIDonor();
 					newDonor->setName(donorName + " (" + QString::number(id) + ")");
 					newDonor->setBT(donorBT);
+					newDonor->setFailureProbability(0.1);
 
 					fullDonors << newDonor;
 
@@ -784,6 +795,7 @@ void KPDGUI::loadAPD()
 					KPDGUIDonor * newDonor = new KPDGUIDonor();
 					newDonor->setName(donorName + " (" + QString::number(id) + ")");
 					newDonor->setBT(donorBT);
+					newDonor->setFailureProbability(0.1);
 
 					fullDonors << newDonor;
 
@@ -795,6 +807,7 @@ void KPDGUI::loadAPD()
 					newCandidate->setName(candidateName + " (" + QString::number(id) + ")");
 					newCandidate->setPRA(pra);
 					newCandidate->setBT(candidateBT);
+					newCandidate->setFailureProbability(0.1);
 
 					candidateMap[id] = newCandidate;
 
@@ -2094,11 +2107,13 @@ void KPDGUI::arrangementListClickActions(QTreeWidgetItem * item) {
 	KPDGUIArrangementWrapper * wrapper = dynamic_cast<KPDGUIArrangementWrapper *>(item);
 	if (wrapper) {	
 		wrapper->getArrangement()->highlight();
+		ui->kpdGraphicsView->centerOn(wrapper->getArrangement()->centerX(), wrapper->getArrangement()->centerY());
 	}
 	else {
 		KPDGUIArrangementSet * set = dynamic_cast<KPDGUIArrangementSet *>(item);
 		if (set) {
 			set->highlight();
+			ui->kpdGraphicsView->centerOn(set->centerX(), set->centerY());
 		}
 	}
 
@@ -2150,11 +2165,13 @@ void KPDGUI::solutionListClickActions(QTreeWidgetItem * item) {
 	KPDGUIArrangementWrapper * wrapper = dynamic_cast<KPDGUIArrangementWrapper *>(item);
 	if (wrapper) {
 		wrapper->getArrangement()->highlight();
+		ui->kpdGraphicsView->centerOn(wrapper->getArrangement()->centerX(), wrapper->getArrangement()->centerY());
 	}
 	else {
 		KPDGUIArrangementSet * set = dynamic_cast<KPDGUIArrangementSet *>(item);
 		if (set) {
 			set->highlight();
+			ui->kpdGraphicsView->centerOn(set->centerX(), set->centerY());
 		}
 	}
 
