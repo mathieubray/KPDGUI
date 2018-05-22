@@ -77,7 +77,8 @@ private:
 	int myWidth;
 	Qt::PenStyle myPenStyle;
 	qreal myOpacity;
-	int myZValue;	
+	int myZValue;
+	bool myCautionHighlightStatus;
 
 	QPolygonF arrowHead;
 
@@ -123,7 +124,8 @@ public:
 	void setArrowPenStyle(Qt::PenStyle penStyle) { myPenStyle = penStyle; }
 	void setArrowOpacity(qreal opacity) { myOpacity = opacity; }
 	void setArrowZValue(int zValue) { myZValue = zValue; }
-	
+	void setArrowCautionFlag(bool flag) { myCautionHighlightStatus = flag; }
+
 	QColor color() const { return pen().color(); }
     	
 	void highlightMatch(int level);
@@ -178,7 +180,7 @@ protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
 	bool checkVisibility(KPDGUIDisplaySettings * displaySettings);
 
-	void setArrowProperties(QColor color, int width, Qt::PenStyle penStyle, qreal opacity, int zValue);
+	void setArrowProperties(QColor color, int width, Qt::PenStyle penStyle, qreal opacity, int zValue, bool cautionFlag);
 
 	void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event);
 	

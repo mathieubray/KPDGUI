@@ -396,7 +396,7 @@ void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 
 	QFont * font = new QFont();
 	font->setBold(true);
-	font->setPointSize(8);
+	font->setPointSize(14);
 	painter->setFont(*font);
 
 	painter->drawText(donorRect, Qt::AlignCenter, QString::number(matchingID));

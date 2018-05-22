@@ -1288,6 +1288,11 @@ void KPDGUI::filterMatchesFailedCrossmatch(bool show) {
 	emit displaySettingsChanged(kpdguiDisplaySettings);
 }
 
+void KPDGUI::highlightMatchesToAvoid(bool flag) {
+	kpdguiDisplaySettings->setHightlightMatchesToAvoid(flag);
+	emit displaySettingsChanged(kpdguiDisplaySettings);
+}
+
 void KPDGUI::runSurvivalCalculator(KPDGUIMatch * match) {
 
 	DialogSurvivalCalculator * dialog = new DialogSurvivalCalculator(match, kpdguiDonorList, kpdguiCandidateList, kpdguiCrossmatchFunctions, this);

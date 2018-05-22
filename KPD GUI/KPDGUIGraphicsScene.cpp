@@ -3,7 +3,6 @@
 
 KPDGUIGraphicsScene::KPDGUIGraphicsScene() : QGraphicsScene()
 {
-	setBackgroundBrush(QBrush(Qt::lightGray, Qt::Dense4Pattern));
 	nodePlacementSequenceNumber = 0;
 	zValue = 1;
 }
@@ -259,7 +258,7 @@ void KPDGUIGraphicsScene::cluster() {
 	
 	qreal avgx = 0;
 	qreal avgy = 0;
-	qreal dist = 50+10*selectedItems().size();
+	qreal dist = 50+DEFAULT_CLUSTER_SPREAD*selectedItems().size();
 
 	QList<QGraphicsItem*> items = selectedItems();
 

@@ -32,6 +32,8 @@ private:
 	bool filterFailedMatchesAdditionalHLA;
 	bool filterFailedMatchesCrossmatch;
 
+	bool highlightMatchesToAvoid;
+
 public:
 
 	KPDGUIDisplaySettings();
@@ -61,6 +63,8 @@ public:
 	bool getFilterFailedMatchesAdditionalHLA() const;
 	bool getFilterFailedMatchesCrossmatch() const;
 
+	bool getHighlightMatchesToAvoid() const;
+
 	// Setters
 	void setNodeDisplayMode(KPDNodeDisplayMode mode);	
 
@@ -81,6 +85,8 @@ public:
 	void setFilterOtoNonOMatches(bool show);
 	void setFilterFailedMatchesAdditionalHLA(bool show);
 	void setFilterFailedMatchesCrossmatch(bool show);
+
+	void setHightlightMatchesToAvoid(bool flag);
 
 };
 

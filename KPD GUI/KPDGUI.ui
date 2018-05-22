@@ -164,6 +164,8 @@
     <addaction name="actionDisplayCompatibilitiesWithinSelection"/>
     <addaction name="actionDisplayNoCompatibilities"/>
     <addaction name="separator"/>
+    <addaction name="actionHighlight_Matches_to_Avoid"/>
+    <addaction name="separator"/>
     <addaction name="menuFilter_Matches"/>
    </widget>
    <addaction name="menuFile"/>
@@ -498,6 +500,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="actionHighlight_Matches_to_Avoid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highlight Matches to Avoid</string>
    </property>
   </action>
  </widget>
@@ -1016,6 +1029,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionHighlight_Matches_to_Avoid</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>highlightMatchesToAvoid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>newKPD()</slot>
@@ -1057,5 +1086,6 @@
   <slot>filterMatchesFailedAdditionalHLA(bool)</slot>
   <slot>filterMatchesFailedCrossmatch(bool)</slot>
   <slot>loadAPD()</slot>
+  <slot>highlightMatchesToAvoid(bool)</slot>
  </slots>
 </ui>

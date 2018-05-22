@@ -44,7 +44,7 @@ KPDGUIDonor::KPDGUIDonor(){
 		setRect(QRectF(0, 0, 55, 50));
 	}
 	else {
-		setRect(QRectF(0, 0, 35, 30));
+		setRect(QRectF(0, 0, 45, 40));
 	}
 
 }
@@ -67,10 +67,10 @@ KPDGUIDonor::KPDGUIDonor(DialogDonor * d){
 	setAcceptHoverEvents(true);
 
 	if (donorIsAltruistic) {
-		setRect(QRectF(0, 0, 45, 40));
+		setRect(QRectF(0, 0, 55, 50));
 	}
 	else {
-		setRect(QRectF(0, 0, 35, 30));
+		setRect(QRectF(0, 0, 45, 40));
 	}	
 }
 
@@ -345,7 +345,7 @@ void KPDGUIDonor::setAltruistic(bool altruistic) {
 		setRect(QRectF(0, 0, 55, 50));
 	}
 	else {
-		setRect(QRectF(0, 0, 35, 30));
+		setRect(QRectF(0, 0, 45, 40));
 	}
 
 	updateVisualProperties();
@@ -606,7 +606,7 @@ void KPDGUIDonor::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
 
 	QFont * font = new QFont();
 	font->setBold(true);
-	font->setPointSize(8);
+	font->setPointSize(11);
 	painter->setFont(*font);
 
 	if (donorIsAltruistic) {

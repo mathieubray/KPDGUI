@@ -23,6 +23,8 @@ KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
 	filterFailedMatchesAdditionalHLA = true;
 	filterFailedMatchesCrossmatch = true;
 
+	highlightMatchesToAvoid = true;
+
 }
 
 KPDGUIDisplaySettings::~KPDGUIDisplaySettings(){
@@ -80,6 +82,8 @@ bool KPDGUIDisplaySettings::changeDisplaySettings(KPDGUIDisplaySettings * d) {
 	filterOtoNonOMatches = d->getFilterOtoNonOMatches();
 	filterFailedMatchesAdditionalHLA = d->getFilterFailedMatchesAdditionalHLA();
 	filterFailedMatchesCrossmatch = d->getFilterFailedMatchesCrossmatch();
+
+	highlightMatchesToAvoid = d->getHighlightMatchesToAvoid();
 
 	return true;
 }
@@ -144,6 +148,10 @@ bool KPDGUIDisplaySettings::getFilterFailedMatchesCrossmatch() const {
 	return filterFailedMatchesCrossmatch;
 }
 
+bool KPDGUIDisplaySettings::getHighlightMatchesToAvoid() const {
+	return highlightMatchesToAvoid;
+}
+
 void KPDGUIDisplaySettings::setNodeDisplayMode(KPDNodeDisplayMode mode) {
 	nodeDisplayMode = mode;
 }
@@ -204,6 +212,10 @@ void KPDGUIDisplaySettings::setFilterFailedMatchesCrossmatch(bool show) {
 	filterFailedMatchesCrossmatch = show;
 }
 
+void KPDGUIDisplaySettings::setHightlightMatchesToAvoid(bool flag) {
+	highlightMatchesToAvoid = flag;
+}
+
 QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings)
 {
 	out << qint32(KPDFunctions::nodeDisplayModeToInt(settings.getNodeDisplayMode()));
@@ -219,6 +231,8 @@ QDataStream &operator<<(QDataStream &out, const KPDGUIDisplaySettings &settings)
 
 	out << settings.getFilterSuccessfulMatches() << settings.getFilterOtoNonOMatches() 
 		<< settings.getFilterFailedMatchesAdditionalHLA() << settings.getFilterFailedMatchesCrossmatch();
+
+	out << settings.getHighlightMatchesToAvoid();
 	
 	return out;
 }
@@ -244,6 +258,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 	bool filterOtoNonOMatches;
 	bool filterFailedMatchesAdditionalHLA;
 	bool filterFailedMatchesCrossmatch;
+
+	bool highlightMatchesToAvoid;
 	
 	in >> nodeDisplayMode;
 
@@ -256,6 +272,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 
 	in >> filterSuccessfulMatches >> filterOtoNonOMatches 
 		>> filterFailedMatchesAdditionalHLA >> filterFailedMatchesCrossmatch;
+
+	in >> highlightMatchesToAvoid;
 
 	settings.setNodeDisplayMode(KPDFunctions::intToNodeDisplayMode(nodeDisplayMode));
 
@@ -276,6 +294,8 @@ QDataStream &operator>>(QDataStream &in, KPDGUIDisplaySettings &settings)
 	settings.setFilterOtoNonOMatches(filterOtoNonOMatches);
 	settings.setFilterFailedMatchesAdditionalHLA(filterFailedMatchesAdditionalHLA);
 	settings.setFilterFailedMatchesCrossmatch(filterFailedMatchesCrossmatch);
+
+	settings.setHightlightMatchesToAvoid(highlightMatchesToAvoid);
 
 	return in;
 

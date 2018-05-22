@@ -16,11 +16,12 @@ KPDGUIMatch::KPDGUIMatch()
 	myColor = determineArrowColor();
 	myWidth = 3;
 	myPenStyle = determineArrowPenStyle();
-	myOpacity = 0.35;
+	myOpacity = DEFAULT_OPACITY;
 	myZValue = -1;
+	myCautionHighlightStatus = false;
 
 	//Arrow Defaults
-	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue, myCautionHighlightStatus);
 
 	//Reset Popularity
 	myPopularityInArrangements = 0;
@@ -33,6 +34,7 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCr
 {
 	myDonor = donor;
     myCandidate = candidate;
+
 	myDonor->addMatchingCandidate(this);
 	myCandidate->addMatchingDonor(this);
 
@@ -55,9 +57,10 @@ KPDGUIMatch::KPDGUIMatch(KPDGUIDonor * donor, KPDGUICandidate * candidate, KPDCr
 	myPenStyle = determineArrowPenStyle();
 	myOpacity = 0.35;
 	myZValue = -1;	
+	myCautionHighlightStatus = false;
 
 	//Arrow Defaults
-	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue, myCautionHighlightStatus);
 	
 	//Reset Popularity
 	myPopularityInArrangements = 0;
@@ -102,8 +105,8 @@ QColor KPDGUIMatch::determineArrowColor() {
 	if (!includeMatch || matchResult == FAILED_CROSSMATCH_BT || matchResult == FAILED_CROSSMATCH_HLA) {
 		color = Qt::red;
 	}
-	else if (matchResult == O_DONOR_TO_NON_O_CANDIDATE || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O) {
-		color = QColor(255,165,0);
+	else if (myCautionHighlightStatus && (matchResult == O_DONOR_TO_NON_O_CANDIDATE || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA || matchResult == FAILED_CROSSMATCH_ADDITIONAL_HLA_AND_O_TO_NON_O)) {
+		color = DEFAULT_CAUTION_COLOR;
 	}
 	else {
 		color = Qt::black;
@@ -127,12 +130,12 @@ void KPDGUIMatch::highlightMatch(int level){
 	
 	if (level == 1) {
 		//if (!displayAsPartOfSolution) {
-			setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
+			setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1, myCautionHighlightStatus);
 		//}
 	}
 	else if (level == 2) {
 		setVisible(false);
-		setArrowProperties(Qt::green, 5, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1);
+		setArrowProperties(Qt::magenta, 5, determineArrowPenStyle(), 1, myDonor->zValue() - 0.1, myCautionHighlightStatus);
 		setVisible(true);
 
 	//	displayAsPartOfSolution = true;
@@ -143,7 +146,7 @@ void KPDGUIMatch::highlightMatch(int level){
 void KPDGUIMatch::clearHighlight() {
 	
 	//if (!displayAsPartOfSolution) {
-		setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), 0.35, -1);
+		setArrowProperties(determineArrowColor(), 3, determineArrowPenStyle(), DEFAULT_OPACITY, -1, myCautionHighlightStatus);
 	//}
 	
 }
@@ -311,8 +314,22 @@ void KPDGUIMatch::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWi
 bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 	
 	if (displaySettings->getShowNodeSubset()){
-		if (!displaySettings->getShowExcludedNodes() && (!myDonor->getStatus() || !myCandidate->getParentNode()->getStatus())){
-			return false;
+		if (!displaySettings->getShowExcludedNodes()){
+
+			if (displaySettings->getNodeDisplayMode() == SEPARATE_DONOR_CANDIDATE) {
+
+				if (!(myDonor->getStatus() && myCandidate->getParentNode()->getStatus())) {
+					return false;
+				}
+
+			}
+			else {
+				if (!(myDonor->getParentNode()->getStatus() && myCandidate->getParentNode()->getStatus())) {
+					return false;
+				}
+			}
+
+			
 		}
 
 		int toPRA = myCandidate->getPRA();
@@ -337,12 +354,13 @@ bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 	return true;
 }
 
-void KPDGUIMatch::setArrowProperties(QColor color, int width, Qt::PenStyle penStyle, qreal opacity, int zValue) {
+void KPDGUIMatch::setArrowProperties(QColor color, int width, Qt::PenStyle penStyle, qreal opacity, int zValue, bool cautionFlag) {
 	setArrowColor(color);
 	setArrowWidth(width);
 	setArrowPenStyle(penStyle);
 	setArrowOpacity(opacity);
 	setArrowZValue(zValue);
+	setArrowCautionFlag(cautionFlag);
 
 	
 	setPen(QPen(myColor, myWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
@@ -358,6 +376,10 @@ void KPDGUIMatch::updateSelection(int id, bool selected){
 }
 
 void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
+
+	if (myCautionHighlightStatus != displaySettings->getHighlightMatchesToAvoid()) {
+		setArrowCautionFlag(displaySettings->getHighlightMatchesToAvoid());
+	}
 
 	if (!displayAsPartOfSolution){
 		
@@ -488,7 +510,7 @@ void KPDGUIMatch::editMatch(DialogMatch * dialog) {
 	myPenStyle = determineArrowPenStyle();
 	myColor = determineArrowColor();
 
-	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue, myCautionHighlightStatus);
 	
 }
 
@@ -508,7 +530,7 @@ void KPDGUIMatch::updateCrossmatchResults(KPDCrossmatchResult result, double fiv
 	myPenStyle = determineArrowPenStyle();
 	myColor = determineArrowColor();
 
-	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue);
+	setArrowProperties(myColor, myWidth, myPenStyle, myOpacity, myZValue, myCautionHighlightStatus);
 }
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIMatch & match)

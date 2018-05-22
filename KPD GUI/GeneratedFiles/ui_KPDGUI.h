@@ -60,6 +60,7 @@ public:
     QAction *actionFilter_Failed_Matches_on_Addtional_HLA;
     QAction *actionFilter_Failed_Matches_on_Crossmatch;
     QAction *actionLoad_APD_Pool;
+    QAction *actionHighlight_Matches_to_Avoid;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QSplitter *splitter;
@@ -188,6 +189,10 @@ public:
         actionFilter_Failed_Matches_on_Crossmatch->setChecked(true);
         actionLoad_APD_Pool = new QAction(KPDGUI);
         actionLoad_APD_Pool->setObjectName(QStringLiteral("actionLoad_APD_Pool"));
+        actionHighlight_Matches_to_Avoid = new QAction(KPDGUI);
+        actionHighlight_Matches_to_Avoid->setObjectName(QStringLiteral("actionHighlight_Matches_to_Avoid"));
+        actionHighlight_Matches_to_Avoid->setCheckable(true);
+        actionHighlight_Matches_to_Avoid->setChecked(true);
         centralwidget = new QWidget(KPDGUI);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -283,6 +288,8 @@ public:
         menuDisplay->addAction(actionDisplayCompatibilitiesWithinSelection);
         menuDisplay->addAction(actionDisplayNoCompatibilities);
         menuDisplay->addSeparator();
+        menuDisplay->addAction(actionHighlight_Matches_to_Avoid);
+        menuDisplay->addSeparator();
         menuDisplay->addAction(menuFilter_Matches->menuAction());
         menuFilter_Matches->addAction(actionFilter_Successful_Matches);
         menuFilter_Matches->addAction(actionFilter_O_Donor_to_Non_O_Candidate_Matches);
@@ -331,6 +338,7 @@ public:
         QObject::connect(actionFilter_Failed_Matches_on_Addtional_HLA, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesFailedAdditionalHLA(bool)));
         QObject::connect(actionFilter_Failed_Matches_on_Crossmatch, SIGNAL(toggled(bool)), KPDGUI, SLOT(filterMatchesFailedCrossmatch(bool)));
         QObject::connect(actionLoad_APD_Pool, SIGNAL(triggered()), KPDGUI, SLOT(loadAPD()));
+        QObject::connect(actionHighlight_Matches_to_Avoid, SIGNAL(triggered(bool)), KPDGUI, SLOT(highlightMatchesToAvoid(bool)));
 
         kpdListView->setCurrentIndex(-1);
 
@@ -395,6 +403,7 @@ public:
         actionFilter_Failed_Matches_on_Crossmatch->setText(QApplication::translate("KPDGUI", "Failed Matches on Crossmatch", 0));
         actionLoad_APD_Pool->setText(QApplication::translate("KPDGUI", "Load APD Pool", 0));
         actionLoad_APD_Pool->setShortcut(QApplication::translate("KPDGUI", "Ctrl+Shift+L", 0));
+        actionHighlight_Matches_to_Avoid->setText(QApplication::translate("KPDGUI", "Highlight Matches to Avoid", 0));
         menuFile->setTitle(QApplication::translate("KPDGUI", "&File", 0));
         menuTools->setTitle(QApplication::translate("KPDGUI", "Tools", 0));
         menuHelp->setTitle(QApplication::translate("KPDGUI", "About", 0));

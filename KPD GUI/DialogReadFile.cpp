@@ -24,11 +24,11 @@ ReadFileDialog::ReadFileDialog(bool apd, QWidget *parent) : QDialog(parent)
 void ReadFileDialog::browse(){
 	
 	if (loadAPD) {
-		QString folderName = QFileDialog::getExistingDirectory(this, "Open Folder", "", QFileDialog::ShowDirsOnly);
+		QString folderName = QFileDialog::getExistingDirectory(this, "Open Folder", "", QFileDialog::ShowDirsOnly|QFileDialog::DontUseNativeDialog);
 		loadLineEdit->setText(folderName);
 	}
 	else {
-		QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)");
+		QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)", Q_NULLPTR,  QFileDialog::DontUseNativeDialog);
 		loadLineEdit->setText(fileName);
 	}
 }

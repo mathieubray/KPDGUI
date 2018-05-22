@@ -87,6 +87,7 @@ public slots:
 	void filterMatchesOtoNonO(bool show);
 	void filterMatchesFailedAdditionalHLA(bool show);
 	void filterMatchesFailedCrossmatch(bool show);
+	void highlightMatchesToAvoid(bool flag);
 	
 	//Window -> Tools
 	void runSurvivalCalculator(KPDGUIMatch *);
