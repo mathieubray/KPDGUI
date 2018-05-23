@@ -3,11 +3,9 @@
 KPDGUICandidateWrapper::KPDGUICandidateWrapper(KPDGUICandidate * candidate) {
 	myCandidate = candidate;
 
-<<<<<<< HEAD
-=======
+
 	QObject::connect(candidate, SIGNAL(candidateEdited()), this, SLOT(updateText()));
 
->>>>>>> newMajorEdits
 	updateText();
 }
 
@@ -25,12 +23,7 @@ void KPDGUICandidateWrapper::updateText() {
 	setText(1, myCandidate->getName());
 	setText(2, QString::number(myCandidate->getNumberOfMatches()));
 
-<<<<<<< HEAD
-}
 
-
-bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other)const {
-=======
 	QColor textColor;
 	if (myCandidate->getStatus()) {
 		textColor = QColor(0, 0, 0);
@@ -79,7 +72,6 @@ void KPDGUICandidateWrapper::candidateWrapperDoubleClickActions(QTreeWidgetItem 
 
 
 bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other) const {
->>>>>>> newMajorEdits
 
 	int column = treeWidget()->sortColumn();
 
@@ -114,9 +106,6 @@ bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other) const {
 			return thisMatches < otherMatches;
 		}
 	}
-<<<<<<< HEAD
-=======
 
 	return true;
->>>>>>> newMajorEdits
 }
