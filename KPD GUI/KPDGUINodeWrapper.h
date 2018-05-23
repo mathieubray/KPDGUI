@@ -7,46 +7,29 @@
 
 class KPDGUINodeWrapper : public QObject, public QTreeWidgetItem 
 {
-	Q_OBJECT
+	Q_OBJECT;
 
 public:
 	KPDGUINodeWrapper(KPDGUINode * node);
 	~KPDGUINodeWrapper();
 
-	KPDGUINode * getNode();
+	KPDGUINode * getNode();	
 
-	void updateText(int mode);
+signals:
+	void updateVisibilitySignal();
 
 public slots:
-	void selectionActions(int,bool);
-	void editActions(int);
+	void updateText();
+
+	void nodeWrapperClickActions(QTreeWidgetItem * item);
+	void nodeWrapperDoubleClickActions(QTreeWidgetItem * item);
 
 private:
 	KPDGUINode * myNode;
-	int prevMode;
+
+	bool operator<(const QTreeWidgetItem &other)const;
 	
 };
 
-//Sorting Classes
-
-class KPDGUINodeLessThan
-{
-public:
-	KPDGUINodeLessThan(int mode);
-	bool operator()(KPDGUINodeWrapper *left, KPDGUINodeWrapper *right) const;
-
-private:
-	int myMode;
-};
-
-class KPDGUINodeGreaterThan
-{
-public:
-	KPDGUINodeGreaterThan(int mode);
-	bool operator()(KPDGUINodeWrapper *left, KPDGUINodeWrapper *right) const;
-
-private:
-	int myMode;
-};
 
 #endif

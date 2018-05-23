@@ -8,8 +8,6 @@
 #include <QMessageBox>
 
 #include "KPDGUINode.h"
-#include "DialogPair.h"
-#include "DialogAD.h"
 
 class KPDGUIGraphicsScene : public QGraphicsScene 
 {
@@ -19,49 +17,39 @@ public:
 	KPDGUIGraphicsScene();
 	~KPDGUIGraphicsScene();	
 
-	//void changeMode(int i);
-
-protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
-	//void wheelEvent(QGraphicsSceneWheelEvent *event);
+	void addNode(KPDGUINode * node);
+	void addNodes(QVector<KPDGUINode *> nodes, QString layout);
+	
+	void raiseZValue();
 
 signals:
-	void deleteNode(int i);
-	void editNode(int i);
-	void screenChanged();
+	void updateVisibilitySignal();
+
+	void addNewDonorSignal(KPDGUICandidate * candidate);
+
+	void selectionClustered(int x, int y);
 	
-	//void zoomIn();
-	//void zoomOut();
-	void mouseReleased();
+protected:
+	void mousePressEvent(QGraphicsSceneMouseEvent *event);
+	void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+	void contextMenuEvent(QGraphicsSceneContextMenuEvent *event);
+
 
 private slots:
-	void editNode();
-	void holdNode();
-	void unholdNode();
-	void deleteNode();
 
-	void holdMultipleNodes();
-	void unholdMultipleNodes();
-	void clusterMultipleNodes();
-	void deleteMultipleNodes();
+	void edit();
+	void addAdditionalDonor();
+	void changeStatus();
+
+	void cluster();
+
+	void selectAll();
+
 
 private:
 
-	//int mode;
-
-	void createNodeActions();
-	
-
-	QAction * editNodeAction;
-	QAction * holdNodeAction;
-	QAction * unholdNodeAction;
-	QAction * deleteNodeAction;
-
-	QAction * holdMultipleNodesAction;
-	QAction * unholdMultipleNodesAction;
-	QAction * clusterMultipleNodesAction;
-	QAction * deleteMultipleNodesAction;
+	int zValue;
+	int nodePlacementSequenceNumber;
 
 };
 

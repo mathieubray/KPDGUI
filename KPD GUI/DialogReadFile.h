@@ -2,21 +2,26 @@
 #define DIALOGREADFILE_H
 
 #include <QtGui>
-#include <QDialog>
-#include <QFileDialog>
+#include <QtWidgets>
 
-#include "ui_ReadFileDialog.h"
+#include "ui_DialogReadFile.h"
 
-class ReadFileDialog : public QDialog, public Ui_ReadFileDialog 
+
+class ReadFileDialog : public QDialog, public Ui_DialogReadFile 
 {
 	Q_OBJECT
 
 public:
-	ReadFileDialog(QWidget *parent = 0);
+	ReadFileDialog(bool apd, QWidget *parent = 0);
 
 private slots :
 	void browse();
-	void checkValidFile(QString file);
+	void checkValid(QString path);
+
+private :
+	bool loadAPD;
+
+	bool validAPDFilePath(QString path, QString file);
 
 };
 

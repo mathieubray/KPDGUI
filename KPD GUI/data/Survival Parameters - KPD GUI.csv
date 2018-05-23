@@ -1,0 +1,98 @@
+Characteristic,Group,FiveYearEstimate,TenYearEstimate
+Living Donor Type,Unrelated (Ref),0,0
+Living Donor Type,Related-1st Degree,0.0112,0.0493
+Living Donor Type,Related-2nd Degree,0.0434,0.0408
+Recipient Age,< 13,0.0263,1.3055
+Recipient Age,13-17,0.5365,-0.4378
+Recipient Age,18-29,0.4375,1.2684
+Recipient Age,30-39,-0.1087,0.8588
+Recipient Age,40-49 (Ref),0,0
+Recipient Age,50-59,-0.2557,1.017
+Recipient Age,60+,-0.0748,1.6204
+Among Recipients Age < 12,Donor Age (continuous),-0.0078,-0.036
+Among Recipients Age < 12,Donor Age > 30,-0.0158,0.0968
+Among Recipients Age < 12,Donor Age > 40,0.0608,-0.0794
+Among Recipients Age < 12,Donor Age > 50,-0.0205,0.1326
+Among Recipients 13-17,Donor Age (continuous),0.0011,0.064
+Among Recipients 13-17,Donor Age > 30,-0.011,-0.1099
+Among Recipients 13-17,Donor Age > 40,-0.0066,0.0396
+Among Recipients 13-17,Donor Age > 50,0.07,0.0935
+Among Recipients 18-29,Donor Age (continuous),-0.0151,-0.0227
+Among Recipients 18-29,Donor Age > 30,0.0633,0.0898
+Among Recipients 18-29,Donor Age > 40,-0.0704,-0.096
+Among Recipients 18-29,Donor Age > 50,0.0342,0.0188
+Among Recipients 18-29,Donor Age > 60,0.0854,-0.3487
+Among Recipients 30-39,Donor Age (continuous),-0.0056,-0.0152
+Among Recipients 30-39,Donor Age > 30,0.0117,0.0162
+Among Recipients 30-39,Donor Age > 40,0.0154,0.0221
+Among Recipients 30-39,Donor Age > 50,-0.0169,-0.0098
+Among Recipients 30-39,Donor Age > 60,0.0732,-0.0111
+Among Recipients 40-49,Donor Age (continuous),-0.0113,0.0188
+Among Recipients 40-49,Donor Age > 30,0.0222,-0.0393
+Among Recipients 40-49,Donor Age > 40,-0.0225,0.0425
+Among Recipients 40-49,Donor Age > 50,0.0627,0.005
+Among Recipients 40-49,Donor Age > 60,-0.062,0.0059
+Among Recipients 50-59,Donor Age (continuous),3e-04,-0.0126
+Among Recipients 50-59,Donor Age > 30,0.0049,0.0054
+Among Recipients 50-59,Donor Age > 40,-0.0012,0.0212
+Among Recipients 50-59,Donor Age > 50,0.0239,0.004
+Among Recipients 50-59,Donor Age > 60,0.0103,0.0249
+Among Recipients 60+,Donor Age (continuous),0.0014,-0.0229
+Among Recipients 60+,Donor Age > 30,0.0115,0.0399
+Among Recipients 60+,Donor Age > 40,0.0049,0.0097
+Among Recipients 60+,Donor Age > 50,-0.0174,-0.0426
+Among Recipients 60+,Donor Age > 60,0.0472,0.0579
+Donor-Recipient Sex,Female-Female,0.0458,-0.0561
+Donor-Recipient Sex,Male-Female,0.0502,-0.0125
+Donor-Recipient Sex,Female-Male (Ref),0,0
+Donor-Recipient Sex,Male-Male,-0.1221,-0.0469
+HLA ABDR Mismatch,0 HLA MM,-0.4623,-0.4616
+HLA ABDR Mismatch,1-2 HLA MM - 0 DR MM,-0.0892,-0.1842
+HLA ABDR Mismatch,1-2 HLA MM - Any DR MM,-0.0688,-0.0344
+HLA ABDR Mismatch,3-4 HLA MM - 0 DR MM,-0.0581,-0.1595
+HLA ABDR Mismatch,3-4 HLA MM - Any DR  MM (Ref),0,0
+HLA ABDR Mismatch,5 -6 - Missing HLA MM,0.0662,0.0877
+Recipient BMI,Not Obese (<30) (Ref),0,0
+Recipient BMI,Obese (> 30),0.1469,0.1484
+Donor BMI,Not Obese (<30) (Ref),0,0
+Donor BMI,Obese (> 30),0.0654,0.0929
+Donor-Recipient Weight Ratio,< 0.75,0.0903,0.0235
+Donor-Recipient Weight Ratio,0.75-0.90,0.0083,0.0571
+Donor-Recipient Weight Ratio,0.90-1.15 (Ref),0,0
+Donor-Recipient Weight Ratio,> 1.15,0.0047,0.0078
+Donor-Recipient Height Ratio,Height ratio < 0.94,0.0943,0.0342
+Donor-Recipient Height Ratio,Height ratio 0.94-1.00,0.0067,0.0196
+Donor-Recipient Height Ratio,Height ratio 1.00-1.06 (Ref),0,0
+Donor-Recipient Height Ratio,Height ratio > 1.06,-0.0269,0.0011
+Recipient Race,White,0,0
+Recipient Race,Black,0.1984,0.1448
+Recipient Race,Hispanic,-0.1068,-0.1684
+Recipient Race,Other,-0.316,-0.4079
+Donor Race,Not Black or Hispanic (Ref),0,0
+Donor Race,Black,0.1395,0.0401
+Donor Race,Hispanic,-0.1359,-0.1642
+Donor Cigarette Use,No,0,0
+Donor Cigarette Use,Yes,0.0771,0.2257
+ABO Incompatible,Not Incompatible,0,0
+ABO Incompatible,Incompatible,0.3594,0.0547
+PRA,0-9 (Ref),0,0
+PRA,10-79,0.0965,0.1397
+PRA,80+,0.3464,0.266
+Recipient Diabetes Status,Not Diabetes (Ref),0,0
+Recipient Diabetes Status,Diabetes,0.2732,0.4675
+Previous Transplant,No (Ref),0,0
+Previous Transplant,Yes,0.2246,0.1608
+Time on Dialysis,Pre-emptive Transplant,-0.4141,-0.4092
+Time on Dialysis,0-1 years,-0.1731,-0.1946
+Time on Dialysis,1-2 years (Ref),0,0
+Time on Dialysis,2-3 years,-0.022,0.0231
+Time on Dialysis,3+ years,0.0512,-0.0234
+Recipient Hepatitis C Seriology,Negative or Missing (Ref),0,0
+Recipient Hepatitis C Seriology,Positive,0.397,0.3831
+Recipient Insurance,Public Primary Payer (Ref),0,0
+Recipient Insurance,Private Primary Payer,-0.2266,-0.2084
+Recipient Insurance,Other/Missing,-0.116,-0.2214
+Transplant Year,1998-2002 (Ref),0,0
+Transplant Year,2003-2007,-0.1098,-0.1155
+Transplant Year,2008-2012,-0.333,-0.0762
+Baseline,Baseline,0.7995,0.86147

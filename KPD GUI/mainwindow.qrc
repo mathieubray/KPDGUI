@@ -1,13 +1,15 @@
 <RCC>
   <qresource prefix="/images">
+    <file>images/refresh.PNG</file>
     <file>images/zoomin.png</file>
     <file>images/zoomout.png</file>
     <file>images/cursor.png</file>
     <file>images/handtool.png</file>
-    <file>images/logo.png</file>
     <file>images/new.png</file>
+    <file>images/logo.png</file>
     <file>images/open.png</file>
     <file>images/run.png</file>
     <file>images/save.png</file>
+    <file>images/default.txt</file>
   </qresource>
 </RCC>

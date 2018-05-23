@@ -9,8 +9,8 @@ KPDGUIConsolePairWidget::KPDGUIConsolePairWidget(){
 	setAutoFillBackground(true);
 	setPalette(Pal);
 	
-	connect(leftButton, SIGNAL(clicked()), this, SLOT(left()));
-	connect(rightButton, SIGNAL(clicked()), this, SLOT(right()));
+	//connect(leftButton, SIGNAL(clicked()), this, SLOT(left()));
+	//connect(rightButton, SIGNAL(clicked()), this, SLOT(right()));
 }
 
 KPDGUIConsolePairWidget::~KPDGUIConsolePairWidget(){

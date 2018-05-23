@@ -1,0 +1,1387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>KPDGUI</class>
+ <widget class="QMainWindow" name="KPDGUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1060</width>
+    <height>751</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1060</width>
+    <height>590</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>KPD</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="mainwindow.qrc">
+    <normaloff>:/images/images/logo.png</normaloff>:/images/images/logo.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+<<<<<<< HEAD:KPD GUI/MainWindow.ui
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>263</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>250</width>
+        <height>263</height>
+       </size>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="showGrid">
+       <bool>false</bool>
+      </property>
+      <property name="cornerButtonEnabled">
+       <bool>true</bool>
+      </property>
+      <attribute name="horizontalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>150</number>
+      </attribute>
+      <attribute name="horizontalHeaderMinimumSectionSize">
+       <number>27</number>
+      </attribute>
+      <attribute name="verticalHeaderDefaultSectionSize">
+       <number>30</number>
+      </attribute>
+      <attribute name="verticalHeaderHighlightSections">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>20</number>
+      </attribute>
+      <row>
+       <property name="text">
+        <string>ID</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Donor Name</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Donor Age</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Donor BT</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Candidate Name</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Candidate Age</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Candidate BT</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>Candidate PRA</string>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </row>
+      <column>
+       <property name="text">
+        <string>Item</string>
+       </property>
+      </column>
+      <item row="0" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="1" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="2" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="3" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="4" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="5" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="6" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+      <item row="7" column="0">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+      </item>
+     </widget>
+    </item>
+    <item row="0" column="1" rowspan="2">
+     <widget class="KPDGUIGraphicsView" name="graphicsView">
+      <property name="minimumSize">
+       <size>
+        <width>480</width>
+        <height>300</height>
+       </size>
+      </property>
+      <property name="dragMode">
+       <enum>QGraphicsView::RubberBandDrag</enum>
+      </property>
+      <property name="transformationAnchor">
+       <enum>QGraphicsView::AnchorViewCenter</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>250</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::West</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="KPDGUIConsole" name="consoleWidget">
+      <property name="minimumSize">
+       <size>
+        <width>480</width>
+        <height>150</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>150</height>
+       </size>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="KPDGUIGraphicsView" name="kpdGraphicsView">
+       <property name="minimumSize">
+        <size>
+         <width>500</width>
+         <height>300</height>
+        </size>
+       </property>
+       <property name="dragMode">
+        <enum>QGraphicsView::RubberBandDrag</enum>
+       </property>
+       <property name="transformationAnchor">
+        <enum>QGraphicsView::AnchorViewCenter</enum>
+       </property>
+      </widget>
+      <widget class="QTabWidget" name="kpdListView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>400</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>200</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="tabPosition">
+        <enum>QTabWidget::South</enum>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1060</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
+    <addaction name="actionClose"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddPairing"/>
+    <addaction name="actionAddNDD"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoadPairings"/>
+    <addaction name="actionLoad_APD_Pool"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionSurvival_Calculator"/>
+    <addaction name="separator"/>
+    <addaction name="actionZoomIn"/>
+    <addaction name="actionZoomOut"/>
+    <addaction name="separator"/>
+    <addaction name="actionMouseTool"/>
+    <addaction name="actionHandTool"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuMatch_Run">
+    <property name="title">
+     <string>Match Run</string>
+    </property>
+    <addaction name="actionPerformMatchRun"/>
+    <addaction name="actionSetParameters"/>
+    <addaction name="separator"/>
+    <addaction name="actionClearArrangements"/>
+    <addaction name="actionClearSolutions"/>
+   </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <widget class="QMenu" name="menuFilter_Matches">
+     <property name="title">
+      <string>Show Matches</string>
+     </property>
+     <addaction name="actionFilter_Successful_Matches"/>
+     <addaction name="actionFilter_O_Donor_to_Non_O_Candidate_Matches"/>
+     <addaction name="actionFilter_Failed_Matches_on_Addtional_HLA"/>
+     <addaction name="actionFilter_Failed_Matches_on_Crossmatch"/>
+    </widget>
+    <addaction name="actionNodeDisplaySettings"/>
+    <addaction name="separator"/>
+    <addaction name="actionDisplayAllCompatibilities"/>
+    <addaction name="actionDisplaySelectedCompatibilities"/>
+    <addaction name="actionDisplayCompatibilitiesWithinSelection"/>
+    <addaction name="actionDisplayNoCompatibilities"/>
+    <addaction name="separator"/>
+    <addaction name="actionHighlight_Matches_to_Avoid"/>
+    <addaction name="separator"/>
+    <addaction name="menuFilter_Matches"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuMatch_Run"/>
+   <addaction name="menuDisplay"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionPerformMatchRun"/>
+   <addaction name="separator"/>
+   <addaction name="actionZoomOut"/>
+   <addaction name="actionZoomIn"/>
+   <addaction name="actionMouseTool"/>
+   <addaction name="actionHandTool"/>
+  </widget>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/new.png</normaloff>:/images/images/new.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/open.png</normaloff>:/images/images/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAddPairing">
+   <property name="text">
+    <string>Add &amp;Donor-Candidate Pairing</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionAddNDD">
+   <property name="text">
+    <string>Add Non-Directed (Altruistic) Donor</string>
+   </property>
+   <property name="toolTip">
+    <string>Add NDD</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
+   </property>
+  </action>
+  <action name="actionLoadPairings">
+   <property name="text">
+    <string>&amp;Load Pairings from File</string>
+   </property>
+   <property name="toolTip">
+    <string>Load Pairings</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+  </action>
+  <action name="actionPerformMatchRun">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/run.png</normaloff>:/images/images/run.png</iconset>
+   </property>
+   <property name="text">
+    <string>Perform Match Run</string>
+   </property>
+   <property name="toolTip">
+    <string>Perform Match Run</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>&amp;About</string>
+   </property>
+  </action>
+  <action name="actionSetParameters">
+   <property name="text">
+    <string>Set Parameters</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/save.png</normaloff>:/images/images/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSaveAs">
+   <property name="text">
+    <string>&amp;Save As</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionClearSolutions">
+   <property name="text">
+    <string>Clear Solutions</string>
+   </property>
+  </action>
+  <action name="actionZoomOut">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/zoomout.png</normaloff>:/images/images/zoomout.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionZoomIn">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/zoomin.png</normaloff>:/images/images/zoomin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionHandTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/handtool.png</normaloff>:/images/images/handtool.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hand Tool</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionMouseTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/cursor.png</normaloff>:/images/images/cursor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mouse Tool</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionNodeDisplaySettings">
+   <property name="text">
+    <string>Node Display Settings...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionDisplayNoCompatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display No Matches</string>
+   </property>
+  </action>
+  <action name="actionDisplayAllCompatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display All Matches</string>
+   </property>
+  </action>
+  <action name="actionDisplaySelectedCompatibilities">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Selected Matches</string>
+   </property>
+  </action>
+  <action name="actionDisplayCompatibilitiesWithinSelection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Display Matches Within Selection</string>
+   </property>
+  </action>
+  <action name="actionRefresh">
+   <property name="icon">
+    <iconset resource="mainwindow.qrc">
+     <normaloff>:/images/images/refresh.PNG</normaloff>:/images/images/refresh.PNG</iconset>
+   </property>
+   <property name="text">
+    <string>Refresh</string>
+   </property>
+  </action>
+  <action name="actionSurvival_Calculator">
+   <property name="text">
+    <string>Survival Calculator</string>
+   </property>
+  </action>
+  <action name="actionClearArrangements">
+   <property name="text">
+    <string>Clear Arrangements</string>
+   </property>
+  </action>
+  <action name="actionFilter_Successful_Matches">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Successful Matches</string>
+   </property>
+  </action>
+  <action name="actionFilter_O_Donor_to_Non_O_Candidate_Matches">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>O Donor to Non-O Candidate Matches</string>
+   </property>
+  </action>
+  <action name="actionFilter_Failed_Matches_on_Addtional_HLA">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Failed Matches on Addtional HLA</string>
+   </property>
+  </action>
+  <action name="actionFilter_Failed_Matches_on_Crossmatch">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Failed Matches on Crossmatch</string>
+   </property>
+  </action>
+  <action name="actionLoad_APD_Pool">
+   <property name="text">
+    <string>Load APD Pool</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+L</string>
+   </property>
+  </action>
+  <action name="actionHighlight_Matches_to_Avoid">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Highlight Matches to Avoid</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KPDGUIGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>kpdguigraphicsview.h</header>
+   <slots>
+    <signal>zoomIn()</signal>
+    <signal>zoomOut()</signal>
+    <signal>mouseReleased()</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>kpdGraphicsView</tabstop>
+ </tabstops>
+ <resources>
+  <include location="mainwindow.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>openKPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClose</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>exitProgram()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>aboutKPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>saveKPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSaveAs</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>saveKPDAs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAddPairing</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>addNewNode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSetParameters</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>setSimParameters()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLoadPairings</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>loadNodes()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAddNDD</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>addNewNDD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>339</x>
+     <y>251</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionPerformMatchRun</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>performMatchRun()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>400</x>
+     <y>252</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClearSolutions</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>clearSolutions()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>414</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomIn</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>267</x>
+     <y>68</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionZoomOut</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>281</x>
+     <y>192</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHandTool</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeToHandMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionMouseTool</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeToMouseMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplayAllCompatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeMatchViewMode_All()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplayCompatibilitiesWithinSelection</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeMatchViewMode_Within()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplayNoCompatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeMatchViewMode_None()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionDisplaySelectedCompatibilities</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>421</x>
+     <y>279</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNew</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>newKPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionNodeDisplaySettings</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>changeNodeViewMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>294</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kpdGraphicsView</sender>
+   <signal>zoomIn()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>277</x>
+     <y>335</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>kpdGraphicsView</sender>
+   <signal>zoomOut()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>557</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>275</x>
+     <y>429</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSurvival_Calculator</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>runSurvivalCalculator()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClearArrangements</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>clearArrangements()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_Successful_Matches</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesSuccessful(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_O_Donor_to_Non_O_Candidate_Matches</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesOtoNonO(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_Failed_Matches_on_Addtional_HLA</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesFailedAdditionalHLA(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionFilter_Failed_Matches_on_Crossmatch</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>filterMatchesFailedCrossmatch(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLoad_APD_Pool</sender>
+   <signal>triggered()</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>loadAPD()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionHighlight_Matches_to_Avoid</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>KPDGUI</receiver>
+   <slot>highlightMatchesToAvoid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>375</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>newKPD()</slot>
+  <slot>openKPD()</slot>
+  <slot>saveKPD()</slot>
+  <slot>saveKPDAs()</slot>
+  <slot>aboutKPD()</slot>
+  <slot>exitProgram()</slot>
+  <slot>addNewNode()</slot>
+  <slot>setSimParameters()</slot>
+  <slot>loadNodes()</slot>
+  <slot>addNewNDD()</slot>
+  <slot>updateViews()</slot>
+  <slot>toggleArrows(bool)</slot>
+  <slot>performMatchRun()</slot>
+  <slot>newTreeSelectionActions(QTreeWidgetItem*)</slot>
+  <slot>zoomIn()</slot>
+  <slot>zoomOut()</slot>
+  <slot>zoom(int)</slot>
+  <slot>changeMatchViewMode_All()</slot>
+  <slot>changeNodeViewMode()</slot>
+  <slot>newNodeListSelectionActions(QTreeWidgetItem*)</slot>
+  <slot>solutionTreeCustomMenu(QPoint)</slot>
+  <slot>cycleTreeCustomMenu(QPoint)</slot>
+  <slot>sortLists()</slot>
+  <slot>clearSolutions()</slot>
+  <slot>changeToHandMode()</slot>
+  <slot>changeToMouseMode()</slot>
+  <slot>changeMatchViewMode_None()</slot>
+  <slot>changeMatchViewMode_Within()</slot>
+  <slot>changeMatchViewMode_SelectedCompatibilities()</slot>
+  <slot>screenCustomMenu(QPoint)</slot>
+  <slot>updateVisibility()</slot>
+  <slot>refresh()</slot>
+  <slot>runSurvivalCalculator()</slot>
+  <slot>clearArrangements()</slot>
+  <slot>filterMatchesSuccessful(bool)</slot>
+  <slot>filterMatchesOtoNonO(bool)</slot>
+  <slot>filterMatchesFailedAdditionalHLA(bool)</slot>
+  <slot>filterMatchesFailedCrossmatch(bool)</slot>
+  <slot>loadAPD()</slot>
+  <slot>highlightMatchesToAvoid(bool)</slot>
+ </slots>
+</ui>

@@ -1,14 +1,5 @@
-#include "KPDGUIRecord.h"
 
-KPDGUIRecord::KPDGUIRecord()
-{
-	id_code = 1;		
-	loadDictionary();
-}
 
-KPDGUIRecord::~KPDGUIRecord(){
-
-}
 
 void KPDGUIRecord::insert(KPDGUINode * node, bool fromSavedFile){
 

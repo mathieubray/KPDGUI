@@ -1,9 +1,9 @@
-#include "mainwindow.h"
+#include "KPDGUI.h"
 
 int main(int argc, char *argv[])
 {
 	QApplication app(argc, argv);	
-	MainWindow *mainWin = new MainWindow;	
-	mainWin->show();	
+	KPDGUI *kpdgui = new KPDGUI;	
+	kpdgui->show();	
 	return app.exec();
 }

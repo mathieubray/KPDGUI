@@ -20,7 +20,7 @@
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_ReadFileDialog_t {
     QByteArrayData data[5];
-    char stringdata0[43];
+    char stringdata0[39];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -32,12 +32,12 @@ static const qt_meta_stringdata_ReadFileDialog_t qt_meta_stringdata_ReadFileDial
 QT_MOC_LITERAL(0, 0, 14), // "ReadFileDialog"
 QT_MOC_LITERAL(1, 15, 6), // "browse"
 QT_MOC_LITERAL(2, 22, 0), // ""
-QT_MOC_LITERAL(3, 23, 14), // "checkValidFile"
-QT_MOC_LITERAL(4, 38, 4) // "file"
+QT_MOC_LITERAL(3, 23, 10), // "checkValid"
+QT_MOC_LITERAL(4, 34, 4) // "path"
 
     },
-    "ReadFileDialog\0browse\0\0checkValidFile\0"
-    "file"
+    "ReadFileDialog\0browse\0\0checkValid\0"
+    "path"
 };
 #undef QT_MOC_LITERAL
 
@@ -72,7 +72,7 @@ void ReadFileDialog::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->browse(); break;
-        case 1: _t->checkValidFile((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 1: _t->checkValid((*reinterpret_cast< QString(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -94,8 +94,8 @@ void *ReadFileDialog::qt_metacast(const char *_clname)
     if (!_clname) return Q_NULLPTR;
     if (!strcmp(_clname, qt_meta_stringdata_ReadFileDialog.stringdata0))
         return static_cast<void*>(const_cast< ReadFileDialog*>(this));
-    if (!strcmp(_clname, "Ui_ReadFileDialog"))
-        return static_cast< Ui_ReadFileDialog*>(const_cast< ReadFileDialog*>(this));
+    if (!strcmp(_clname, "Ui_DialogReadFile"))
+        return static_cast< Ui_DialogReadFile*>(const_cast< ReadFileDialog*>(this));
     return QDialog::qt_metacast(_clname);
 }
 

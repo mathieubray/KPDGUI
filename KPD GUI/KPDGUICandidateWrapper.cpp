@@ -3,6 +3,11 @@
 KPDGUICandidateWrapper::KPDGUICandidateWrapper(KPDGUICandidate * candidate) {
 	myCandidate = candidate;
 
+<<<<<<< HEAD
+=======
+	QObject::connect(candidate, SIGNAL(candidateEdited()), this, SLOT(updateText()));
+
+>>>>>>> newMajorEdits
 	updateText();
 }
 
@@ -20,10 +25,61 @@ void KPDGUICandidateWrapper::updateText() {
 	setText(1, myCandidate->getName());
 	setText(2, QString::number(myCandidate->getNumberOfMatches()));
 
+<<<<<<< HEAD
 }
 
 
 bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other)const {
+=======
+	QColor textColor;
+	if (myCandidate->getStatus()) {
+		textColor = QColor(0, 0, 0);
+	}
+	else {
+		textColor = QColor(175, 175, 175);
+	}
+
+	for (int i = 0; i < columnCount(); i++) {
+		setTextColor(i, textColor);
+		if (i == 0 || i == 2) {
+			setTextAlignment(i, Qt::AlignRight | Qt::AlignVCenter);
+		}
+		else {
+			setTextAlignment(i, Qt::AlignLeft | Qt::AlignVCenter);
+		}
+	}
+}
+
+void KPDGUICandidateWrapper::candidateWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool isSelected = myCandidate->isSelected();
+
+		myCandidate->setSelected(!isSelected);
+
+		emit updateVisibilitySignal();
+	}
+}
+
+void KPDGUICandidateWrapper::candidateWrapperDoubleClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		//DialogCandidate * dialogCandidate = new DialogCandidate(myCandidate);
+
+		//if (dialogCandidate->exec()) {
+			//myCandidate->editCandidate(dialogCandidate);
+		//}
+
+		myCandidate->edit();
+	}
+
+}
+
+
+bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other) const {
+>>>>>>> newMajorEdits
 
 	int column = treeWidget()->sortColumn();
 
@@ -58,4 +114,9 @@ bool KPDGUICandidateWrapper::operator<(const QTreeWidgetItem &other)const {
 			return thisMatches < otherMatches;
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	return true;
+>>>>>>> newMajorEdits
 }

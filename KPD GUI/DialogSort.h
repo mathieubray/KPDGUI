@@ -3,15 +3,17 @@
 
 #include <QDialog>
 
-#include "ui_SortDialog.h"
+#include "ui_DialogSort.h"
 
-class SortDialog : public QDialog, public Ui_SortDialog
+#include "EnumsFunctions.h"
+
+class DialogSort : public QDialog, public Ui_DialogSort
 {
 	Q_OBJECT
 
 public:
-	SortDialog(QWidget *parent = 0);
-	SortDialog(int pairSortMode, bool pairDecreasing, int matchSortMode, bool matchDecreasing, QWidget *parent = 0);
+	DialogSort(QWidget *parent = 0);
+	DialogSort(KPDNodeSortMode nodeSortMode, bool pairDecreasing, KPDMatchSortMode matchSortMode, bool matchDecreasing, QWidget *parent = 0);
 };
 
 #endif

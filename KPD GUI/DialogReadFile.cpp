@@ -1,9 +1,20 @@
+
 #include "DialogReadFile.h"
 
 //Constructor
-ReadFileDialog::ReadFileDialog(QWidget *parent) : QDialog(parent)
+ReadFileDialog::ReadFileDialog(bool apd, QWidget *parent) : QDialog(parent)
 {
 	setupUi(this);
+
+	loadAPD = apd;
+
+	if (apd) {
+
+		setWindowTitle("Load APD Pool");
+
+		loadLabel->setText("Folder");
+
+	}
 
 	//Disables the OK button until a file is selected
 	this->buttonBox->buttons().first()->setDisabled(true);
@@ -11,19 +22,53 @@ ReadFileDialog::ReadFileDialog(QWidget *parent) : QDialog(parent)
 
 //Opens file browser
 void ReadFileDialog::browse(){
-	QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)");
-	pairFileLineEdit->setText(fileName);
-
-	//this->buttonBox->buttons().first()->setEnabled(true);
-}
-
-void ReadFileDialog::checkValidFile(QString file){
-	if (file.endsWith(".csv")){
-		this->buttonBox->buttons().first()->setEnabled(true);
+	
+	if (loadAPD) {
+		QString folderName = QFileDialog::getExistingDirectory(this, "Open Folder", "", QFileDialog::ShowDirsOnly|QFileDialog::DontUseNativeDialog);
+		loadLineEdit->setText(folderName);
 	}
 	else {
-		this->buttonBox->buttons().first()->setEnabled(false);
+		QString fileName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV Files (*.csv*)", Q_NULLPTR,  QFileDialog::DontUseNativeDialog);
+		loadLineEdit->setText(fileName);
 	}
+}
+
+//Check whether file exists and is a 'csv', or whether folder exists with requisite files inside
+void ReadFileDialog::checkValid(QString path){
+	QFileInfo info(path);
+
+	if (loadAPD) {
+		if (info.isDir() &&
+			validAPDFilePath(path, "Comp_APD.csv") &&
+			validAPDFilePath(path, "Info_APD.csv") && 
+			validAPDFilePath(path, "NDD_APD.csv") && 
+			validAPDFilePath(path, "SamePat_APD.csv") && 
+			validAPDFilePath(path, "Weight_APD.csv")) {
+
+			this->buttonBox->buttons().first()->setEnabled(true);
+		}
+		else {
+			this->buttonBox->buttons().first()->setEnabled(false);
+		}
+
+	}
+	else {
+		if (info.isFile() && path.endsWith(".csv")) {
+			this->buttonBox->buttons().first()->setEnabled(true);
+		}
+		else {
+			this->buttonBox->buttons().first()->setEnabled(false);
+		}
+	}
+
+}
+
+
+bool ReadFileDialog::validAPDFilePath(QString path, QString file) {
+
+	QFileInfo info(path + "/" + file);
+
+	return info.isFile();
 
 }
 

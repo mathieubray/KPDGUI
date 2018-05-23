@@ -1,0 +1,538 @@
+
+int KPDGUIRecord::getNumberOfNodes(){
+	return nodes.size();
+}
+
+int KPDGUIRecord::getNumberOfAvailableNodes() {
+	return availableNodes.size();
+}
+
+
+
+	KPDGUINode * getNode(int nodeID);
+	QList<KPDGUINode *> getNodes();
+	
+	int getNumberOfNodes();
+	int getNumberOfAvailableNodes();	
+	
+	//Matrices
+	void generateMatrices(KPDGUISimParameters * params, QProgressDialog * progress);	
+
+private:
+
+	std::vector<KPDGUINode *> availableNodes;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void KPDGUI::runSimulation(){
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QApplication::processEvents();
+
+	QProgressDialog * progress = new QProgressDialog("Setting Up Simulation...",QString(),0,100);
+	progress->setWindowModality(Qt::WindowModal);
+	progress->setWindowTitle("Simulation Progress");
+	progress->setAutoClose(false);
+	progress->show();
+	QApplication::processEvents();
+
+	//Generate Matrices for Simulation
+	//kpdguiRecord->generateMatrices(kpdguiParameters,progress);
+
+	//QString recordLog = kpdguiRecord->getRecordLog();
+
+	//Build New Simulation
+	KPDGUISimulation *g = new KPDGUISimulation(kpdguiParameters);
+
+	//Collect All Structures
+	KPDOptimizationScheme optScheme = kpdguiParameters->getOptimizationScheme();
+
+	vector<vector<int> > allStructures;
+	if (optScheme == KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+		allStructures = g->collectCyclesAndChainsForCurrentMatchRun(progress);
+	}
+	else {
+		allStructures = g->collectLRSForCurrentMatchRun(progress);
+	}
+
+	//Calculate and Collect Utility Values
+	
+	std::vector<double> utilValues;
+	if (optScheme == KPDOptimizationScheme::CYCLES_AND_CHAINS){ utilValues = g->assignUtilitiesForCurrentMatchRun(progress); }
+	else { utilValues = g->assignExpectedUtilitiesForCurrentMatchRun(progress); }
+	
+	//Run Simulation
+	g->getOptimalSolutionForCurrentMatchRun(progress);
+
+	//Collect Solution Set and Solution Objectives
+	vector<vector<int> > solutionSet = g->returnSolutionSet();
+	vector<double> solutionObjectives = g->returnSolutionObjectives();
+
+	int progressBarValue = 0;
+	progress->setRange(0, (int)(2 * solutionSet.size() + allStructures.size())); // +ui->nodeList->topLevelItemCount())); // + matchListWidget->topLevelItemCount()
+	progress->setLabelText("Saving Structures...");
+	progress->setValue(progressBarValue);
+	QApplication::processEvents();
+
+	//Create Timestamp
+	QString timestamp = QDate::currentDate().toString() + " " + QTime::currentTime().toString();
+	//Get Simulation Log
+	QString simLog = g->getSimulationLog();
+
+	//Initialize Structure List and Collection of Solution Lists
+	/*KPDGUIStructureSet * structureList = new KPDGUIStructureSet(kpdguiParameters, timestamp, recordLog, simLog, false);
+	QVector<KPDGUIStructureSet *> solutionLists;
+
+	int sol = 0;
+	for (vector<vector<int> >::iterator it = solutionSet.begin(); it != solutionSet.end(); ++it){
+		sol++;
+		solutionLists.push_back(new KPDGUIStructureSet(kpdguiParameters, timestamp, recordLog, simLog, true, sol));
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
+	}
+
+	//Count Cycles, Chains, LRSs
+	int numberOfCycles = 0;
+	int numberOfChains = 0;
+	int numberOfLRSs = 0;*/
+
+	/*
+
+	//Iterate Through Structures To Add To Structure List
+	for (int itStruct = 0; itStruct < allStructures.size(); itStruct++){
+		//Initialize New Node List;
+		QVector<KPDGUINode *> structureNodes;
+		bool chain = false;
+
+		//Iterate Through Nodes in the Structure
+		for (int itNode = 0; itNode < allStructures[itStruct].size(); itNode++){
+			//Get Pair ID of Node
+			int id = kpdguiRecord->getNodeInfoVector()[allStructures[itStruct][itNode]].nodeID;
+			//Collect Node Object based on Pair ID
+			KPDGUINode * node = kpdguiRecord->getNode(id);
+			if (node->getType() == NDD){
+				chain = true;
+			}
+			//Add to Node List
+			structureNodes.push_back(node);
+		}
+
+		//Determine ID Number of Structure
+		int idnum;
+		if (optScheme == KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+			numberOfLRSs++;
+			idnum = numberOfLRSs;
+		}
+		else {
+			if (chain){
+				numberOfChains++;
+				idnum = numberOfChains;
+			}
+			else {
+				numberOfCycles++;
+				idnum = numberOfCycles;
+			}
+		}
+
+		//Initialize New Structure Object using Node List, Utility; Push to Structure List
+		KPDGUIStructure * newStructure = new KPDGUIStructure(structureNodes, optScheme, utilValues[itStruct], idnum);
+		structureList->addStructure(newStructure);
+
+		//Iterate Through Solutions
+		for (int itSolution = 0; itSolution < solutionSet.size(); itSolution++){
+			//If Current Structure is Found in Current Solution
+			if (std::find(solutionSet[itSolution].begin(), solutionSet[itSolution].end(), itStruct) != solutionSet[itSolution].end()){
+				solutionLists[itSolution]->addStructure(newStructure);
+			}
+		}
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
+	}
+
+	//Collapse all Current Solutions Shown In the Widget
+	ui->solutionWidget->collapseAll();
+
+	*/
+
+	//Reset Popularity Values in The Node List Widget and Edge List Widget
+/*	for (int i = 0; i < ui->nodeList->topLevelItemCount(); i++){
+		KPDGUINodeWrapper * wrapper = dynamic_cast<KPDGUINodeWrapper *>(ui->nodeList->topLevelItem(i));
+		if (wrapper){
+			wrapper->getNode()->resetPopularityInStructures();
+		}
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
+	}*/
+	/*for (int i = 0; i < matchListWidget->topLevelItemCount(); i++){
+		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(ui->nodeList->topLevelItem(i));
+		if (wrapper){
+			wrapper->getArrow()->resetPopularityInStructures();
+		}
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
+	}*/
+	//Update Popularity of Structure
+	//structureList->updatePopularity();
+	
+	/*
+	
+	//Add Structure to Structure Widget and Expand
+	ui->structureWidget->insertTopLevelItem(0, structureList);
+	
+	structureList->sort();
+	structureList->setExpanded(true);
+	
+
+	//Add Solutions to Solution Widget
+	int level = 0;
+	foreach(KPDGUIStructureSet * structureSet, solutionLists){
+		structureSet->updatePopularity();
+		ui->solutionWidget->insertTopLevelItem(level, structureSet);
+		structureSet->setExpanded(true);
+		level++;
+
+		structureSet->sort();
+
+		progressBarValue++;
+		progress->setValue(progressBarValue);
+		QApplication::processEvents();
+	}
+
+	//Parameters Have Not Been Set For Next Simulation
+	kpdguiParameters->setParametersHaveBeenUpdated(false);
+
+	//Switch Tab to "Solution" Tab
+	//ui->tabWidget->setCurrentIndex(3);
+
+	//Sort Matches Based on Solution Popularity
+	//setMatchSortMode(0, true);
+	//matchSortMode = MATCHSORT_POPULARITY_SOLUTIONS;
+	//matchSortDecreasing = true;
+	//sort();
+
+	*/
+
+	QApplication::restoreOverrideCursor();
+	QApplication::processEvents();
+
+	progress->close();
+	QApplication::processEvents();
+
+	//ui->actionView_Structures_Solutions->setChecked(true);
+
+	delete g;
+	delete progress;	
+
+	
+}
+
+
+
+
+
+
+
+
+
+bool KPDGUI::loadFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly)) {
+		QMessageBox::warning(this, tr("KPD"),
+			tr("Cannot read file %1:\n%2.")
+			.arg(file.fileName())
+			.arg(file.errorString()));
+
+		updateStatus("Failed To Load " + fileName);
+		return false;
+	}
+
+	QDataStream in(&file);
+	in.setVersion(QDataStream::Qt_5_3);
+
+	qint32 number;
+	in >> number;
+
+	if (number != MagicNumber) {
+		QMessageBox::warning(this, tr("KPD"), tr("The file is not a KPD file."));
+		return false;
+	}
+
+	qint32 baselineCode;
+	qint32 size;
+
+	in >> baselineCode >> size;
+
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	QApplication::processEvents();
+
+	//Clear Screen
+	kpdguiScene->clear();
+	//ui->nodeList->clear();
+	//matchListWidget->clear();
+	//ui->structureWidget->clear();
+	//ui->solutionWidget->clear();
+	//clearTable();
+
+	QMap<int, KPDGUINode*> nodeMap;
+
+	for (int i = 0; i < size; i++){
+		////qDebug() << i;
+		KPDGUINode * node = new KPDGUINode();
+		in >> *node;
+		addNode(node, true);
+
+		int internalID = node->getID();
+		nodeMap.insert(internalID, node);
+
+		qint32 x;
+		qint32 y;
+
+		in >> x >> y;
+		node->setNodePosition(QPointF(x, y));
+	}
+	
+	in >> *kpdguiDisplaySettings;
+	
+	qint32 zoom;
+	in >> zoom;
+	zoomSlider->setValue(zoom);
+
+	/*qint32 solutions;
+	in >> solutions;
+
+	QList<QTreeWidgetItem *> solutionItems;
+	for (int i = 0; i < solutions; i++){
+		KPDGUIStructureSet * solution = new KPDGUIStructureSet();
+		in >> *solution;
+		int numberOfStructures;
+		in >> numberOfStructures;
+		for (int j = 0; j < numberOfStructures; j++){
+			int structureID;
+			double utility;
+			int numberOfNodes;
+			in >> structureID >> utility >> numberOfNodes;
+			QVector<KPDGUINode *> nodeList;
+			for (int k = 0; k < numberOfNodes; k++){
+				int id;
+				in >> id;
+				nodeList.push_back(nodeMap[id]);
+			}
+			KPDGUIStructure * structure = new KPDGUIStructure(nodeList, solution->getOptScheme(), utility, structureID);
+			solution->addStructure(structure);
+		}
+		solution->updatePopularity();
+		solutionItems.push_back(solution);
+	}
+	ui->solutionWidget->addTopLevelItems(solutionItems);
+	ui->solutionWidget->collapseAll();*/
+
+	//kpdguiRecord->setBaselineIDCode(baselineCode);
+	//baselineID = baselineCode;
+
+	setCurrentFile(fileName);
+	updateStatus(fileName + " Loaded");
+
+	setDisplaySettings(kpdguiDisplaySettings);
+	setWindowModified(false);
+
+	QApplication::restoreOverrideCursor();
+	QApplication::processEvents();
+
+	return true;
+}
+
+bool KPDGUI::saveFile(const QString &fileName)
+{
+	QFile file(fileName);
+	if (!file.open(QIODevice::WriteOnly)) {
+		QMessageBox::warning(this, tr("KPD"),
+			tr("Cannot write file %1:\n%2.")
+			.arg(file.fileName())
+			.arg(file.errorString()));
+
+		updateStatus("Failed To Save " + fileName);
+		return false;
+	}
+
+	QDataStream out(&file);
+	out.setVersion(QDataStream::Qt_5_3);
+
+	out << qint32(MagicNumber);
+
+	//out << qint32(kpdguiRecord->getBaselineIDCode());
+	//out << qint32(kpdguiRecord->getNumberOfNodes());
+
+	/*foreach(KPDGUINode * node, kpdguiRecord->getNodes()) {
+		out << &node;
+
+		int x = node->getNodePosition().x();
+		int y = node->getNodePosition().y();
+
+		out << qint32(x) << qint32(y);
+	}
+
+	out << &kpdguiDisplaySettings;
+
+	int zoom = zoomSlider->value();
+	out << qint32(zoom);
+
+	int solutions = ui->solutionWidget->topLevelItemCount();
+	out << qint32(solutions);
+
+	for (int i = 0; i < solutions; i++){
+		KPDGUIStructureSet * solutionPtr = dynamic_cast<KPDGUIStructureSet*>(ui->solutionWidget->topLevelItem(i));
+		if (solutionPtr){
+			KPDGUIStructureSet const& solution = *solutionPtr;
+			out << solution;
+			out << qint32(solutionPtr->size());
+			for (int j = 0; j < solutionPtr->childCount(); j++){
+				QTreeWidgetItem * item = solutionPtr->child(j);
+				for (int k = 0; k < item->childCount(); k++){
+					KPDGUIStructureWrapper * structure = dynamic_cast<KPDGUIStructureWrapper *>(item->child(k));
+					if (structure){
+						out << qint32(structure->getStructure()->getID());
+						out << qreal(structure->getStructure()->getUtility());
+						out << qint32(structure->childCount());
+						for (int l = 0; l < structure->childCount(); l++){
+							KPDGUINodeWrapper* node = dynamic_cast<KPDGUINodeWrapper*>(structure->child(l));
+							if (node){
+								out << qint32(node->getNode()->getID());
+							}
+						}
+					}
+				}
+			}
+		}
+	}*/
+
+	setCurrentFile(fileName);
+	updateStatus(fileName + " Saved");
+
+	return true;
+}
+
+	//Simulation Parameters
+	kpdguiParameters = new KPDGUISimParameters();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//connect(ui->nodeList, SIGNAL(itemClicked(QTreeWidgetItem*, int)), this, SLOT(clickActions(QTreeWidgetItem*)));
+//connect(ui->nodeList, SIGNAL(mouseReleased()), this, SLOT(newPairListSelectionActions()));
+//connect(ui->nodeList, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(pairListCustomMenu(QPoint)));
+
+//Structure Tree
+//ui->structureWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+//connect(ui->structureWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(structureTreeSelectionActions(QTreeWidgetItem*)));
+//connect(ui->structureWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(structureTreeCustomMenu(QPoint)));
+
+//Solution Tree
+//ui->solutionWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+//connect(ui->solutionWidget, SIGNAL(itemPressed(QTreeWidgetItem*, int)), this, SLOT(solutionTreeSelectionActions(QTreeWidgetItem*)));
+//connect(ui->solutionWidget, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(solutionTreeCustomMenu(QPoint)));
+
+//ui->structureWidget->setVisible(false);
+//ui->solutionWidget->setVisible(false);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//connect(ui->actionRefresh, SIGNAL(triggered()), newNode, SLOT(clusterNode()));
+	

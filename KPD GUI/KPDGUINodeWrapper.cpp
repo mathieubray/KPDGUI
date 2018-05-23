@@ -1,18 +1,17 @@
 #include "KPDGUINodeWrapper.h"
 
-KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node){
+KPDGUINodeWrapper::KPDGUINodeWrapper(KPDGUINode * node) {
 	myNode = node;
-	prevMode = 0;
 
 	if (node->getType() == PAIR){
-		setText(0, QString::number(node->getInternalID()) + ": (" + node->getDonorName() + ", " + node->getRecipName() + ")");
-	}
-	else {
-		setText(0, QString::number(node->getInternalID()) + ": (" + node->getDonorName() + ")");
+		QObject::connect(node->getCandidate(), SIGNAL(candidateEdited()), this, SLOT(updateText()));
 	}
 
-	connect(node, SIGNAL(nodeSelectionChanged(int, bool)), this, SLOT(selectionActions(int, bool)));
-	connect(node, SIGNAL(nodeEdited(int)), this, SLOT(editActions(int)));
+	foreach(KPDGUIDonor * donor, node->getDonors()) {
+		QObject::connect(donor, SIGNAL(donorEdited()), this, SLOT(updateText()));
+	}
+
+	updateText();
 }
 
 KPDGUINodeWrapper::~KPDGUINodeWrapper(){
@@ -23,297 +22,120 @@ KPDGUINode * KPDGUINodeWrapper::getNode(){
 	return myNode;
 }
 
-void KPDGUINodeWrapper::updateText(int mode){
-	if (myNode->getType() == PAIR){
-		//Sorted by ID
-		if (mode == 0){
-			setText(0, QString::number(myNode->getInternalID()) + ": (" + myNode->getDonorName() + ", " + myNode->getRecipName() + ")");
-		}
-		//By Popularity in Solutions
-		else if (mode == 1){
-			setText(0, QString::number(myNode->getInternalID()) + " [Popularity: " + QString::number(myNode->getPopularityInSolutions() ) + "]");
-		}
-		//By Popularity in Structures
-		else if (mode == 2){
-			setText(0, QString::number(myNode->getInternalID()) + " [Popularity: " + QString::number(myNode->getPopularityInStructures() ) + "]");
-		}
-		//By Compatibilities
-		else if (mode == 3){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatibilities: " + QString::number(myNode->getNumberOfCompatibilities() ) + "]");
-		}
-		//By Compatible Donors
-		else if (mode == 4){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatible Donors: " + QString::number(myNode->getNumberOfCompatibleDonors() ) + "]");
-		}
-		//By Compatible Recipients
-		else if (mode == 5){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatible Recipients: " + QString::number(myNode->getNumberOfCompatibleRecipients() ) + "]");
-		}
-		//By PRA
-		else{
-			setText(0, QString::number(myNode->getInternalID()) + " [PRA: " + QString::number(myNode->getRecipPRA() ) + "]");
-		}
+void KPDGUINodeWrapper::updateText(){
+	
+	setText(0, QString::number(myNode->getID()));
+	setText(1, KPDFunctions::toString(myNode->getType()));
+	setText(2, myNode->getNodeListString());
+	setText(3, QString::number(myNode->getNumberOfDonors()));
+	setText(4, "");
+	
+	QColor textColor;
+	if (myNode->getStatus()) {
+		textColor = QColor(0, 0, 0);
 	}
 	else {
-		if (mode == 0){
-			setText(0, QString::number(myNode->getInternalID()) + ": (" + myNode->getDonorName() + ")");
+		textColor = QColor(175, 175, 175);
+	}
+
+	for (int i = 0; i < columnCount(); i++){
+		setTextColor(i, textColor);
+		if (i == 0 || i == 3) {
+			setTextAlignment(i, Qt::AlignRight | Qt::AlignVCenter);
 		}
-		else if (mode == 1){
-			setText(0, QString::number(myNode->getInternalID()) + " [Popularity: " + QString::number(myNode->getPopularityInSolutions() ) + "]");
-		}
-		else if (mode == 2){
-			setText(0, QString::number(myNode->getInternalID()) + " [Popularity: " + QString::number(myNode->getPopularityInStructures() ) + "]");
-		}
-		else if (mode == 3){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatibilities: " + QString::number(myNode->getNumberOfCompatibilities() ) + "]");
-		}
-		else if (mode == 4){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatible Donors: " + QString::number(myNode->getNumberOfCompatibleDonors() ) + "]");
-		}
-		else if (mode == 5){
-			setText(0, QString::number(myNode->getInternalID()) + " [Compatible Recipients: " + QString::number(myNode->getNumberOfCompatibleRecipients() ) + "]");
-		}
-		else{
-			setText(0, QString::number(myNode->getInternalID()) + " [PRA: 0 (AD)]");
+		else {
+			setTextAlignment(i, Qt::AlignLeft | Qt::AlignVCenter);
 		}
 	}
-	prevMode = mode;
+
 }
 
-void KPDGUINodeWrapper::selectionActions(int id, bool selected){
-	setSelected(selected);
+void KPDGUINodeWrapper::nodeWrapperClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+
+		bool isSelected = myNode->getFirstDonor()->isSelected();
+
+		myNode->setSelected(!isSelected);
+
+		emit updateVisibilitySignal();
+	}
 }
 
-void KPDGUINodeWrapper::editActions(int id){
-	updateText(prevMode);
+void KPDGUINodeWrapper::nodeWrapperDoubleClickActions(QTreeWidgetItem * item) {
+
+	if (item == this) {
+		/*if (myNode->getType() == PAIR) {
+			DialogCandidate * dialogCandidate = new DialogCandidate(myNode->getCandidate());
+			if (dialogCandidate->exec()) {
+				myNode->getCandidate()->editCandidate(dialogCandidate);
+			}
+
+			foreach(KPDGUIDonor * donor, myNode->getDonors()) {
+				DialogDonor * dialogDonor = new DialogDonor(donor);
+				if (dialogDonor->exec()) {
+					donor->editDonor(dialogDonor);
+				}
+			}
+		}
+		else {
+			DialogDonor * dialogDonor = new DialogDonor(myNode->getFirstDonor());
+			if (dialogDonor->exec()) {
+				myNode->getFirstDonor()->editDonor(dialogDonor);
+			}
+		}*/
+
+		myNode->edit();
+	}
+
 }
 
+bool KPDGUINodeWrapper::operator<(const QTreeWidgetItem &other) const {
+	
+	int column = treeWidget()->sortColumn();
 
-KPDGUINodeLessThan::KPDGUINodeLessThan(int mode) :myMode(mode){}
+	int thisID = text(0).toInt();
+	int otherID = other.text(0).toInt();
 
-bool KPDGUINodeLessThan::operator()(KPDGUINodeWrapper * left, KPDGUINodeWrapper * right) const
-{
-	bool toReturn;
-	if (myMode == 0){
-		toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-	}
+	if (column == 1) {
+		
+		QString thisType = text(column).toLower();
+		QString otherType = other.text(column).toLower();
 
-	else if (myMode == 1){
-		int leftPop = left->getNode()->getPopularityInSolutions();
-		int rightPop = right->getNode()->getPopularityInSolutions();
-		if (leftPop <= rightPop){
-			if (leftPop == rightPop){
-				toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
+		if (thisType == otherType) {
+			return thisID < otherID;
 		}
 		else {
-			toReturn = false;
+			return thisType < otherType;
 		}
 	}
+	else if (column == 2) {
 
-	else if (myMode == 2){
-		int leftPop = left->getNode()->getPopularityInStructures();
-		int rightPop = right->getNode()->getPopularityInStructures();
-		if (leftPop <= rightPop){
-			if (leftPop == rightPop){
-				toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
+		QString thisName = text(column).toLower();
+		QString otherName = other.text(column).toLower();
 
+		if (thisName == otherName) {
+			return thisID < otherID;
 		}
 		else {
-			toReturn = false;
+			return thisName < otherName;
 		}
 	}
 
-	else if (myMode == 3){
-		int leftComp = left->getNode()->getNumberOfCompatibilities();
-		int rightComp = right->getNode()->getNumberOfCompatibilities();
-		if (leftComp <= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-			
+	else if (column == 3) {
+
+		QString thisMatches = text(column).toInt();
+		QString otherMatches = other.text(column).toInt();
+
+		if (thisMatches == otherMatches) {
+			return thisID < otherID;
 		}
 		else {
-			toReturn = false;
-		}		
-	}
-
-	else if (myMode == 4){
-		int leftComp = left->getNode()->getNumberOfCompatibleDonors();
-		int rightComp = right->getNode()->getNumberOfCompatibleDonors();
-		if (leftComp <= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else if (myMode == 5){
-		int leftComp = left->getNode()->getNumberOfCompatibleRecipients();
-		int rightComp = right->getNode()->getNumberOfCompatibleRecipients();
-		if (leftComp <= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
+			return thisMatches < otherMatches;
 		}
 	}
 
 	else {
-		int leftType = left->getNode()->getType();
-		int rightType = right->getNode()->getType();
-		if (leftType != AD && rightType != AD){
-			toReturn = (left->getNode()->getRecipPRA() < right->getNode()->getRecipPRA());
-		}
-		else if (leftType == AD && rightType == AD){
-			toReturn = (left->getNode()->getInternalID() < right->getNode()->getInternalID());
-		}
-		else if (leftType == AD){
-			toReturn = true;
-		}
-		else {
-			toReturn = false;
-		}
+		return thisID < otherID;
 	}
-
-	return toReturn;
-}
-
-KPDGUINodeGreaterThan::KPDGUINodeGreaterThan(int mode) :myMode(mode){}
-
-bool KPDGUINodeGreaterThan::operator()(KPDGUINodeWrapper * left, KPDGUINodeWrapper * right) const
-{
-
-	bool toReturn;
-	if (myMode == 0){
-		toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-	}
-
-	else if (myMode == 1){
-		int leftPop = left->getNode()->getPopularityInSolutions();
-		int rightPop = right->getNode()->getPopularityInSolutions();
-		if (leftPop >= rightPop){
-			if (leftPop == rightPop){
-				toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else if (myMode == 2){
-		int leftPop = left->getNode()->getPopularityInStructures();
-		int rightPop = right->getNode()->getPopularityInStructures();
-		if (leftPop >= rightPop){
-			if (leftPop == rightPop){
-				toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else if (myMode == 3){
-		int leftComp = left->getNode()->getNumberOfCompatibilities();
-		int rightComp = right->getNode()->getNumberOfCompatibilities();
-		if (leftComp >= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else if (myMode == 4){
-		int leftComp = left->getNode()->getNumberOfCompatibleDonors();
-		int rightComp = right->getNode()->getNumberOfCompatibleDonors();
-		if (leftComp >= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else if (myMode == 5){
-		int leftComp = left->getNode()->getNumberOfCompatibleRecipients();
-		int rightComp = right->getNode()->getNumberOfCompatibleRecipients();
-		if (leftComp >= rightComp){
-			if (leftComp == rightComp){
-				toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-			}
-			else {
-				toReturn = true;
-			}
-
-		}
-		else {
-			toReturn = false;
-		}
-	}
-
-	else {
-		int leftType = left->getNode()->getType();
-		int rightType = right->getNode()->getType();
-		if (leftType != AD && rightType != AD){
-			toReturn = (left->getNode()->getRecipPRA() > right->getNode()->getRecipPRA());
-		}
-		else if (leftType == AD && rightType == AD){
-			toReturn = (left->getNode()->getInternalID() > right->getNode()->getInternalID());
-		}
-		else if (leftType == AD){
-			toReturn = false;
-		}
-		else {
-			toReturn = true;
-		}
-	}
-
-	return toReturn;
 }

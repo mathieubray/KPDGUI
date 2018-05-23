@@ -3,18 +3,29 @@
 KPDGUIMatchList::KPDGUIMatchList(QWidget *parent) : QTreeWidget(parent) {
 
 	QStringList headers;
+<<<<<<< HEAD
 	headers << "Donor" << "Candidate" << "Score";
 	setHeaderLabels(headers);
 
 	header()->resizeSection(0, 50);
 	header()->resizeSection(1, 75);
 	header()->resizeSection(2, 50);
+=======
+	headers << "Donor ID" << "Number" << "Donor Name" << "Candidate ID" << "Candidate Name" << "Crossmatch Result" << "Five-Year Survival" << "Ten-Year Survival" << "Structures" << "Solutions" << "";
+	setHeaderLabels(headers);
+	
+	header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+>>>>>>> newMajorEdits
 
 	setSortingEnabled(true);
 	setMouseTracking(true);
 
 	sortItems(0, Qt::AscendingOrder);
 	setContextMenuPolicy(Qt::CustomContextMenu);
+<<<<<<< HEAD
+=======
+	setSelectionMode(QAbstractItemView::NoSelection);
+>>>>>>> newMajorEdits
 
 }
 
@@ -22,6 +33,7 @@ KPDGUIMatchList::~KPDGUIMatchList() {
 
 }
 
+<<<<<<< HEAD
 void KPDGUIMatchList::mouseReleaseEvent(QMouseEvent *event)
 {
 	QTreeWidget::mouseReleaseEvent(event);
@@ -64,3 +76,19 @@ void KPDGUIMatchList::mouseMoveEvent(QMouseEvent *event)
 	QTreeWidget::mouseMoveEvent(event);
 }
 
+=======
+void KPDGUIMatchList::updateText() {
+	
+	for (int i = 0; i < topLevelItemCount(); i++) {
+		QTreeWidgetItem * item = topLevelItem(0);
+
+		KPDGUIMatchWrapper * wrapper = dynamic_cast<KPDGUIMatchWrapper *>(item);
+		if (wrapper) {
+			wrapper->updateText();
+		}
+	}	
+
+}
+
+
+>>>>>>> newMajorEdits
