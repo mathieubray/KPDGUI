@@ -2,13 +2,16 @@
 
 ### Software Description
 
-The aim in kidney paired-donation (KPD) is typically to maximize the utility achieved via cycles among incompatible donor-candidate pairs, as well as chains originating from non-directed donors (NDD). With many possible overlapping options in a KPD pool, a preferable choice of cycles and chains realistically cannot be found by simple inspection. In practice, objective criteria are used to define near-optimal solutions, but with the increasing complexity of the criteria used, solutions can be difficult to compare or visualize. 
+The aim in kidney paired-donation is typically to maximize the number of transplants achieved through the exchange of donors in a pool comprising incompatible donor-candidate pairs, along with non-directed (or altruistic) donors. With many possible allocations at any given time, an optimal set of exchanges cannot be determined by simple inspection. In practice, objective criteria are used to determine an optimal or near-optimal set of exchanges to pursue.  
 
-We present a software platform for managing and visualizing exchanges suggested by optimization criteria in KPD, which offers several advantages over other available software:  
+We present a software application for management and optimization of a kidney paired donation program, KPDGUI (Kidney Paired Donation Graphical User Interface). We implement a variety of published optimization schemes, while offering the user an interactive and visual environment. The application allows comparison of exchanges suggested under different optimization criteria, and examination of the consequences of various policies on proposed solutions. 
 
-1. An interactive visual display of the state of the KPD, including active and inactive pairs/NDDs, as well as donor & candidate characteristics.
-2. Implementation of optimization methods from previous literature that account for probabilities of failure between selection and transplantation, for each pair and match, as well as fallback options (sub-cycles and sub-chains) for immediate recourse in the case of such failures. 
-3. Optimization is extended beyond the selection of simple cycles or chains, to more general subsets of pairs and NDDs that facilitate fallback options.
+KPDGUI offers the following advantages over the most common alternatives:
+
+1. An interactive visual display of the current state of the KPD program.
+2. Implementation of optimization methods from previous literature[5,6], which can be used to account for (a) probabilities that preferred transplants are unviable either due to positive crossmatch or through the unavailability of a candidate or donor in the exchange, and (b) fallback options for immediate recourse in case potential exchanges are unable to proceed as determined due to unviability.
+3. Optimization is extended beyond selection of simple cycles or chains to more general subsets of pairs, possibly with more than one associated incompatible donor, and NDDs that facilitate fallback options in the case of unviability[7].
+
 
 
 ### Instructions for Download
@@ -26,23 +29,15 @@ Synthetic examples, both in .kpd and .csv format, can be found in the 'examples'
 
 ### Features
 
-* Interactive visual display of the pairs/NDDs and matches in the KPD pool, as well as selectable and sortable lists of the pairs/NDDs 
-  + Pairs/NDDs can be selected, moved, deleted in the visualization 
-  + Additionally, groups of pairs/NDDs can be selected, clustered 
-* Ability to input individual pairs/NDDs, or upload a structured data file of several pairs/NDDs 
-* Estimation of graft survival probabilities based on donor and candidate characteristics for each match 
-* Various user options for running optimizations
-  + Constraints on the sizes of cycles and chains
-  + Failure probabilities (on pairs/NDDs as well as matches)
-  + Choice of utility function; either number of transplants or total estimated 5- or 10-year graft survival 
-  + Certain administrative policies, such as priority for highly sensitized candidates or reserving O donors for O candidates
-* Shading indicates degree of sensitization, i.e. panel reactive antibody (PRA)
-* KPD pools can be saved (encrypted) in their current state
-  + Loading a saved KPD pool will restore all previously found solutions
-* Subsets of pairs can be hidden in the visualization, e.g. if they are to be left out of selection, or have no compatibilities
-* Pairs can be sorted by ID, appearances in cycles/chains or solutions, number of compatibilities, compatible donors or compatible recipients, or by PRA; matches can be sorted by donor or candidate ID, or by appearances in cycles/chains or solutions
-* Matches are automatically determined based on pair information whenever a pair or NDD is added 
-* By default, matches between pairs are only shown when both pairs are selected; match display options include showing selected compatible recipients, compatible donors, or all or no compatibilities
+* Interactive visual display of pairs, NDDs and matches in the KPD pool, as well as sortable lists of pairs, donors, candidates, matches, and found transplant arrangements and solutions.
+* Ability to add individual pairs and NDDs, or upload a structured dataset with information on an existing KPD pool. 
+* Matches automatically determined based on virtual crossmatch results with all pairs in the pool whenever a pair or NDD is added. 
+* Various user options for running optimizations:
+  + Constraints on the sizes of cycles, chains, and LRSs
+  + Choice of utility to assign to each match (e.g. number of transplants, estimated 5- or 10-year graft survival, etc.) 
+  + Other administrative policies (e.g. priority for highly sensitized candidates, reserving O donors for O candidates, etc.)
+* Ability to edit individual characteristics by right-clicking donors, candidates, or matches.
+* KPD program can be saved in current state to be loaded at later time.
 
 
 ### More Information
@@ -56,5 +51,5 @@ Software was developed in C++, using [Gurobi](www.gurobi.com) for optimization, 
 
 **NOT MEDICAL ADVICE:** The content contained in this software is not intended to and does not constitute medical advice. The accuracy, completeness, adequacy, or currency of the content is not warranted or guaranteed. The use of information from this software is at the user's own risk. Users should never disregard professional medical advice or delay in seeking it because of something resulting from the software.
 
-Mathieu Bray 2016. *KPDGUI: A Visualization Software Platform for Managing a Kidney Paired-Donation Program.* Contributions: M. Bray, W. Wang, M.A. Rees, P.X-K. Song, A.B. Leichtman, V.B. Ashby, J.D. Kalbfleisch. This work was supported in part by the National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK) through grant number 1R01-DK093513. Dr. Rees  is supported in part by NIAID grants R21 AI-111579 and R01-AI090244. Drs. Rees and Leichtman are supported in part by AHRQ grant R18 HS-020610. The authors have no relevant financial relationships with commercial interests to disclose.
+Mathieu Bray 2016-2018. *KPDGUI: Interactive Software for Management of a Kidney Paired-Donation Program.* Contributions: M. Bray, W. Wang, M.A. Rees, P.X-K. Song, A.B. Leichtman, V.B. Ashby, J.D. Kalbfleisch. This work was supported in part by the National Institute of Diabetes and Digestive and Kidney Diseases (NIDDK) through grant number 1R01-DK093513. Dr. Rees  is supported in part by NIAID grants R21 AI-111579 and R01-AI090244. Drs. Rees and Leichtman are supported in part by AHRQ grant R18 HS-020610. The authors have no relevant financial relationships with commercial interests to disclose.
 

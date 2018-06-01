@@ -522,6 +522,7 @@ void KPDGUICandidate::editCandidate(DialogCandidate * dialog) {
 	antibodies.replace(" ", "");
 	QStringList antibodyList = antibodies.split(";");
 
+	candidateHLA.clear();
 	foreach(QString antibody, antibodyList) {
 		candidateHLA << antibody;
 	}

@@ -788,6 +788,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 	donorWeight = dialog->donorWeightSpinBox->value();
 	donorCigarette = dialog->donorCigaretteCheckBox->isChecked();
 
+	donorA.clear();
 	QString hlaA1 = dialog->donorHLAA1ComboBox->currentText();
 	QString hlaA2 = dialog->donorHLAA2ComboBox->currentText();
 	if (hlaA1 != "") {
@@ -797,6 +798,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 		donorA << hlaA2;
 	}
 
+	donorB.clear();
 	QString hlaB1 = dialog->donorHLAB1ComboBox->currentText();
 	QString hlaB2 = dialog->donorHLAB2ComboBox->currentText();
 	if (hlaB1 != "") {
@@ -806,6 +808,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 		donorB << hlaB2;
 	}
 
+	donorCW.clear();
 	QString hlaCW1 = dialog->donorHLACW1ComboBox->currentText();
 	QString hlaCW2 = dialog->donorHLACW2ComboBox->currentText();
 	if (hlaCW1 != "") {
@@ -815,6 +818,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 		donorCW << hlaCW2;
 	}
 
+	donorDQ.clear();
 	QString hlaDQ1 = dialog->donorHLADQ1ComboBox->currentText();
 	QString hlaDQ2 = dialog->donorHLADQ2ComboBox->currentText();
 	if (hlaDQ1 != "") {
@@ -824,6 +828,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 		donorDQ << hlaDQ2;
 	}
 
+	donorDR.clear();
 	QString hlaDR1 = dialog->donorHLADR1ComboBox->currentText();
 	QString hlaDR2 = dialog->donorHLADR2ComboBox->currentText();
 	if (hlaDR1 != "") {
@@ -843,6 +848,7 @@ void KPDGUIDonor::editDonor(DialogDonor * dialog) {
 	additionalHLA.replace(" ", "");
 	QStringList additionalHLAList = additionalHLA.split(";");
 
+	additionalDonorHLA.clear();
 	foreach(QString antibody, additionalHLAList) {
 		additionalDonorHLA << antibody;
 	}
