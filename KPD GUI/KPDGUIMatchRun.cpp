@@ -34,7 +34,7 @@ KPDGUIMatchRun::KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * par
 	
 	
 	// Collect All Arrangements
-	if (optScheme == LOCALLY_RELEVANT_SUBSETS) {
+	if (optScheme == LOCALLY_RELEVANT_SUBGRAPHS) {
 		collectLRSForCurrentMatchRun();
 	}
 	else {

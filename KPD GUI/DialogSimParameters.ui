@@ -25,7 +25,7 @@
   <property name="windowTitle">
    <string>Set Parameters</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -39,6 +39,9 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="2">
        <widget class="QComboBox" name="optComboBox">
+        <property name="currentIndex">
+         <number>2</number>
+        </property>
         <item>
          <property name="text">
           <string>Cycles and Chains</string>

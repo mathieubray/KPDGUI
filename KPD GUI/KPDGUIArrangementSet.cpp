@@ -296,7 +296,7 @@ QString KPDGUIArrangementSet::toString(){
 
 	}
 	else {
-		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS){
 			receipt = receipt + "Match Run " + arrangementSetName + "\n";
 			receipt = receipt + "Performed On " + arrangementSetTimestamp + "\n\n";
 		}
@@ -320,7 +320,7 @@ QString KPDGUIArrangementSet::toString(){
 	int cycles = 0;
 
 	if (isSolution) {
-		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS) {
 			receipt = receipt + "------------------------------\n";
 			receipt = receipt + "Solution Cycle/Chain List\n";
 			receipt = receipt + "------------------------------\n\n";
@@ -332,7 +332,7 @@ QString KPDGUIArrangementSet::toString(){
 		}
 	}
 	else {
-		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS) {
 			receipt = receipt + "----------------------\n";
 			receipt = receipt + "Match Run Cycle/Chain List\n";
 			receipt = receipt + "----------------------\n\n";
@@ -356,7 +356,7 @@ QString KPDGUIArrangementSet::toString(){
 	receipt = receipt + "\n";
 
 
-	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS) {
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else {
@@ -414,7 +414,7 @@ QString KPDGUIArrangementSet::toCondensedString() {
 		}
 	}
 
-	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+	if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS) {
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else {
@@ -436,7 +436,7 @@ void KPDGUIArrangementSet::setUpWidgets(){
 		
 		int size = arrangement->getNumberOfNodes();
 
-		if (arrangementSetParameters->getOptimizationScheme() == LOCALLY_RELEVANT_SUBSETS) {
+		if (arrangementSetParameters->getOptimizationScheme() == LOCALLY_RELEVANT_SUBGRAPHS) {
 			
 			QTreeWidgetItem * newItem = new QTreeWidgetItem();
 			arrangementSetLRSs[size] = newItem;
@@ -464,7 +464,7 @@ void KPDGUIArrangementSet::setUpWidgets(){
 
 		int arrangementSize = arrangement->getNumberOfNodes();
 
-		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS) {
+		if (arrangementSetParameters->getOptimizationScheme() != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS) {
 
 			if (arrangement->hasAnNDD()) {
 				arrangementSetChains[arrangementSize - 1]->addChild(wrapper);

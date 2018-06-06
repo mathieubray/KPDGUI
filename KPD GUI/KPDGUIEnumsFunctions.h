@@ -24,7 +24,7 @@ const int MAXIMUM_SLIDER_POSITION = 6;
 const double DEFAULT_OPACITY = 0.15;
 const QColor DEFAULT_CAUTION_COLOR = QColor(255, 165, 0);
 //const QColor DEFAULT_CAUTION_COLOR = Qt::black;
-const double DEFAULT_CLUSTER_SPREAD = 25;
+const double DEFAULT_CLUSTER_SPREAD = 15;
 
 // String Constants
 const QString HLA_LIST = "A1,A2,A3,A9,A10,A11,A19,A23,A24,A25,A26,A28,A29,A30,A31,A32,A33,A34,A36,A43,A66,A68,A69,A74,A80,A203,A210,A2403,A6601,A6602,B5,B7,B8,B12,B13,B14,B15,B16,B17,B18,B21,B22,B27,B35,B37,B38,B39,B40,B41,B42,B44,B45,B46,B47,B48,B49,B50,B51,B52,B53,B54,B55,B56,B57,B58,B59,B60,B61,B62,B63,B64,B65,B67,B70,B71,B72,B73,B75,B76,B77,B78,B81,B82,B703,B804,B1304,B2708,B3901,B3902,B3905,B4005,B5102,B5103,B8201,BW4,BW6,CW1,CW2,CW3,CW4,CW5,CW6,CW7,CW8,CW9,CW10,CW12,CW13,CW14,CW15,CW16,CW17,CW18,DQ1,DQ2,DQ3,DQ4,DQ5,DQ6,DQ7,DQ8,DQ9,DQB1,DQB2,DQB3,DQB4,DQB5,DQB6,DQB7,DQB8,DQB9,DR1,DR2,DR3,DR4,DR5,DR6,DR7,DR8,DR9,DR10,DR11,DR12,DR13,DR14,DR15,DR16,DR17,DR18,DR103,DR1403,DR1404,DR51,DR52,DR53";
@@ -37,7 +37,7 @@ const int RAND_R = 2836;
 const double RAND_SCALE = (1.0 / RAND_M);
 
 // Simulation Specifications
-enum KPDOptimizationScheme { CYCLES_AND_CHAINS, CYCLES_AND_CHAINS_WITH_FALLBACKS, LOCALLY_RELEVANT_SUBSETS };
+enum KPDOptimizationScheme { CYCLES_AND_CHAINS, CYCLES_AND_CHAINS_WITH_FALLBACKS, LOCALLY_RELEVANT_SUBGRAPHS };
 enum KPDUtilityScheme { TRANSPLANTS, FIVE_YEAR_SURVIVAL, TEN_YEAR_SURVIVAL, HARD_TO_TRANSPLANT, ASSIGNED_SCORE };
 
 // Characteristics
@@ -66,7 +66,7 @@ namespace KPDFunctions {
 		KPDOptimizationScheme scheme = CYCLES_AND_CHAINS;
 
 		if (i == 1){ scheme = CYCLES_AND_CHAINS_WITH_FALLBACKS;	}
-		else if (i == 2){ scheme = LOCALLY_RELEVANT_SUBSETS; }
+		else if (i == 2){ scheme = LOCALLY_RELEVANT_SUBGRAPHS; }
 
 		return scheme;
 	}
@@ -76,7 +76,7 @@ namespace KPDFunctions {
 		int i = 0;
 		
 		if (scheme == CYCLES_AND_CHAINS_WITH_FALLBACKS){ i = 1; }
-		else if (scheme == LOCALLY_RELEVANT_SUBSETS){ i = 2; }
+		else if (scheme == LOCALLY_RELEVANT_SUBGRAPHS){ i = 2; }
 
 		return i;
 	}
@@ -84,7 +84,7 @@ namespace KPDFunctions {
 	inline QString toString(KPDOptimizationScheme scheme){
 		if (scheme == CYCLES_AND_CHAINS){ return "Maximum Utility Cycles and Chains"; }
 		else if (scheme == CYCLES_AND_CHAINS_WITH_FALLBACKS){ return "Maximum Expected Utility Cycles and Chains (with Fallbacks)"; }
-		else if (scheme == LOCALLY_RELEVANT_SUBSETS){ return "Maximum Expected Utility Locally Relevant Subsets"; }
+		else if (scheme == LOCALLY_RELEVANT_SUBGRAPHS){ return "Maximum Expected Utility Locally Relevant Subgraphs"; }
 		else { return ""; }
 	}
 

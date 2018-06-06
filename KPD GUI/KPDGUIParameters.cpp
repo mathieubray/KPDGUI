@@ -7,7 +7,7 @@ KPDGUIParameters::KPDGUIParameters(){
 	parametersUpdated = false;
 
 	//Simulation Settings
-	optimizationScheme = CYCLES_AND_CHAINS;
+	optimizationScheme = LOCALLY_RELEVANT_SUBGRAPHS;
 	utilityScheme = TRANSPLANTS;	
 	
 	maxCycleSize = 3;
@@ -117,7 +117,7 @@ QString KPDGUIParameters::toString(){
 
 	parameterString.append("Utility Based On " + KPDFunctions::toString(utilityScheme) + "\n");
 
-	if (optimizationScheme != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBSETS){
+	if (optimizationScheme != KPDOptimizationScheme::LOCALLY_RELEVANT_SUBGRAPHS){
 		parameterString.append("Maximum Cycle Size: " + QString::number(maxCycleSize) + "\n");
 		parameterString.append("Maximum Chain Length: " + QString::number(maxChainLength) + "\n");
 	}
