@@ -41,6 +41,7 @@ public:
 	bool containsCandidate(KPDGUICandidate * candidate);
 
 signals:
+	void arrangementIsolated(int minX, int maxX, int minY, int maxY);
 	void arrangementClustered(int x, int y);
 
 public slots:
@@ -50,8 +51,14 @@ public slots:
 	void undoHighlights();
 	qreal centerX();
 	qreal centerY();
+	qreal minX();
+	qreal maxX();
+	qreal minY();
+	qreal maxY();
 	void cluster();
 	void cluster(qreal x, qreal y);
+	void isolate();
+	void isolate(qreal minX, qreal maxX, qreal minY, qreal maxY);
 	
 	// Helper Functions
 	void increasePopularity(bool solution);

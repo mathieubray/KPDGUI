@@ -186,6 +186,59 @@ void KPDGUIArrangement::cluster(){
 	cluster(this->centerX(), this->centerY());
 }
 
+void KPDGUIArrangement::isolate() {
+	isolate(this->minX(), this->maxX(), this->minY(), this->maxY());
+}
+
+qreal KPDGUIArrangement::minX() {
+	qreal minX = 9999;
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		if (node->getNodePosition().x() < minX) {
+			minX = node->getNodePosition().x();
+		}
+	}
+
+	return minX;
+
+}
+
+qreal KPDGUIArrangement::maxX() {
+	qreal maxX = -9999;
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		if (node->getNodePosition().x() > maxX) {
+			maxX = node->getNodePosition().x();
+		}
+	}
+
+	return maxX;
+}
+
+qreal KPDGUIArrangement::minY() {
+	qreal minY = 9999;
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		if (node->getNodePosition().y() < minY) {
+			minY = node->getNodePosition().y();
+		}
+	}
+
+	return minY;
+}
+
+qreal KPDGUIArrangement::maxY() {
+	qreal maxY = -9999;
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		if (node->getNodePosition().y() > maxY) {
+			maxY = node->getNodePosition().y();
+		}
+	}
+
+	return maxY;
+}
+
 void KPDGUIArrangement::cluster(qreal x, qreal y){
 
 	qreal dist = 50 + 10 * arrangementNodes.size();
@@ -204,6 +257,39 @@ void KPDGUIArrangement::cluster(qreal x, qreal y){
 
 	emit arrangementClustered(x, y);
 
+}
+
+void KPDGUIArrangement::isolate(qreal minX, qreal maxX, qreal minY, qreal maxY) {
+
+	/*QList<QGraphicsItem *> collidingItems;
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+
+		if (node->getType() == PAIR) {
+			collidingItems.append(node->getCandidate()->collidingItems());
+		}
+		else {
+			collidingItems.append(node->getFirstDonor()->collidingItems());
+		}
+	}
+	
+	int counter = 1;
+	int bump = 50;
+
+	foreach(QGraphicsItem * item, collidingItems) {
+
+		if (counter % 2 == 0) {
+			item->setPos(QPointF(minX, minY));
+		}
+		else {
+			item->setPos(QPointF(maxX, maxY));
+		}
+		counter++;
+	}
+
+	emit arrangementClustered(this->centerX(), this->centerY());*/
+
+	emit arrangementIsolated(minX, maxX, minY, maxY);
 }
 
 void KPDGUIArrangement::increasePopularity(bool solution) {

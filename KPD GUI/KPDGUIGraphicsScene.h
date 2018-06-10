@@ -8,6 +8,8 @@
 #include <QMessageBox>
 
 #include "KPDGUINode.h"
+#include "KPDGUIArrangement.h"
+#include "KPDGUIArrangementSet.h"
 
 class KPDGUIGraphicsScene : public QGraphicsScene 
 {
@@ -42,6 +44,7 @@ private slots:
 	void changeStatus();
 
 	void cluster();
+	void isolate(int minX, int maxX, int minY, int maxY);
 
 	void selectAll();
 

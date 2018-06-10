@@ -270,7 +270,7 @@ void DialogSurvivalCalculator::updateDonorWeight(double weight) {
 void DialogSurvivalCalculator::updateDonorHeight(double height) {
 
 	donor->setHeight(height);
-
+	
 	//qDebug() << "Updated Donor Height!";
 
 	emit survivalSignal();

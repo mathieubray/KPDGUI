@@ -55,8 +55,8 @@ public:
     QSpacerItem *candidateRaceSpacer;
     QLabel *candidateGenderLabel;
     QLabel *candidateTODLabel;
-    QDoubleSpinBox *candidateHeightSpinBox;
     QDoubleSpinBox *candidateWeightSpinBox;
+    QDoubleSpinBox *candidateHeightSpinBox;
     QCheckBox *candidateHepCCheckBox;
     QCheckBox *candidateDiabetesCheckBox;
     QCheckBox *candidatePrevTransCheckBox;
@@ -170,20 +170,23 @@ public:
 
         candidateCharacteristicsGridLayout->addWidget(candidateTODLabel, 2, 0, 1, 2);
 
-        candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget1);
-        candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
-        candidateHeightSpinBox->setMaximum(3);
-        candidateHeightSpinBox->setSingleStep(0.1);
-        candidateHeightSpinBox->setValue(1.5);
-
-        candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);
-
         candidateWeightSpinBox = new QDoubleSpinBox(layoutWidget1);
         candidateWeightSpinBox->setObjectName(QStringLiteral("candidateWeightSpinBox"));
-        candidateWeightSpinBox->setMaximum(400);
-        candidateWeightSpinBox->setValue(60);
+        candidateWeightSpinBox->setDecimals(1);
+        candidateWeightSpinBox->setMinimum(20);
+        candidateWeightSpinBox->setMaximum(200);
+        candidateWeightSpinBox->setValue(89);
 
         candidateCharacteristicsGridLayout->addWidget(candidateWeightSpinBox, 3, 2, 1, 1);
+
+        candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget1);
+        candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
+        candidateHeightSpinBox->setMinimum(0.5);
+        candidateHeightSpinBox->setMaximum(3);
+        candidateHeightSpinBox->setSingleStep(0.05);
+        candidateHeightSpinBox->setValue(1.75);
+
+        candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);
 
 
         gridLayout_2->addLayout(candidateCharacteristicsGridLayout, 0, 0, 4, 1);
@@ -348,6 +351,7 @@ public:
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogCandidate, SLOT(reject()));
         QObject::connect(praSlider, SIGNAL(valueChanged(int)), candidatePRASpinBox, SLOT(setValue(int)));
         QObject::connect(candidatePRASpinBox, SIGNAL(valueChanged(int)), praSlider, SLOT(setValue(int)));
+        QObject::connect(candidateGenderComboBox, SIGNAL(currentIndexChanged(int)), DialogCandidate, SLOT(setDefaultHeightWeight(int)));
 
         moreRecipInfo->setCurrentIndex(0);
 

@@ -88,3 +88,16 @@ void DialogCandidate::additionalSetup(){
 	candidateHLALineEdit->setCompleter(hlaCompleter);
 
 }
+
+void DialogCandidate::setDefaultHeightWeight(int index) {
+
+	if (index == 0) {
+		candidateHeightSpinBox->setValue(1.75);
+		candidateWeightSpinBox->setValue(89.0);
+	}
+	else if (index == 1) {
+		candidateHeightSpinBox->setValue(1.62);
+		candidateWeightSpinBox->setValue(76.0);
+	}
+
+}

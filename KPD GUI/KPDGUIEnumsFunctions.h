@@ -21,7 +21,7 @@ const qreal STATUS_TIME = 3000;
 const int MINIMUM_SLIDER_POSITION = -6;
 const int MAXIMUM_SLIDER_POSITION = 6;
 
-const double DEFAULT_OPACITY = 0.15;
+const double DEFAULT_OPACITY = 0.05;
 const QColor DEFAULT_CAUTION_COLOR = QColor(255, 165, 0);
 //const QColor DEFAULT_CAUTION_COLOR = Qt::black;
 const double DEFAULT_CLUSTER_SPREAD = 15;

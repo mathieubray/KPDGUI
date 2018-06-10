@@ -19,6 +19,7 @@ KPDGUI::KPDGUI(QWidget *parent) : QMainWindow(parent), ui(new Ui::KPDGUI)
 	ui->kpdGraphicsView->setScene(kpdguiScene);
 	connect(kpdguiScene, SIGNAL(updateVisibilitySignal()), this, SLOT(updateScene()));
 	connect(kpdguiScene, SIGNAL(selectionClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+	
 	//connect(kpdguiScene, SIGNAL(addNewDonorSignal(KPDGUICandidate*)), this, SLOT(addNewDonor(KPDGUICandidate*)));
 
 	kpdguiCommandHistory = new KPDGUICommandHistory();
@@ -1066,6 +1067,7 @@ void KPDGUI::performMatchRun()
 				// Create new arrangement
 				KPDGUIArrangement * newArrangement = new KPDGUIArrangement(i, currentArrangementValue);
 				QObject::connect(newArrangement, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+				QObject::connect(newArrangement, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
 
 				// Add nodes to arrangement
 				foreach(KPDGUINode * node, arrangement) {
@@ -1090,7 +1092,8 @@ void KPDGUI::performMatchRun()
 		// Create new arrangement set
 		KPDGUIArrangementSet * matchRunArrangementSet = new KPDGUIArrangementSet(kpdguiParameters, timestamp, matchRunNodeList, matchRunMatchList, false, collectAllMatchRunArrangements, numberOfCollectedArrangements);
 		QObject::connect(matchRunArrangementSet, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
-
+		QObject::connect(matchRunArrangementSet, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
+		
 		// Add official arrangements to arrangement set
 		foreach(KPDGUIArrangement * arrangement, matchRunArrangements) {
 
@@ -1133,6 +1136,7 @@ void KPDGUI::performMatchRun()
 			// Create new solution set
 			KPDGUIArrangementSet * newSolution = new KPDGUIArrangementSet(parameters, timestamp, matchRunNodeList, matchRunMatchList, true, true, solution.size(), i + 1);
 			QObject::connect(newSolution, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+			QObject::connect(newSolution, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
 
 			// Add arrangements to solution set
 			foreach(int arrangementID, solution) {
@@ -1542,6 +1546,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 		KPDGUIArrangementSet * matchRunResult = new KPDGUIArrangementSet();
 		in >> *matchRunResult;
 		QObject::connect(matchRunResult, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+		QObject::connect(matchRunResult, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
 
 
 		qint32 numberOfArrangements;
@@ -1557,6 +1562,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 
 			KPDGUIArrangement * newArrangement = new KPDGUIArrangement(id, util);
 			QObject::connect(newArrangement, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+			QObject::connect(newArrangement, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
 
 
 			for (int k = 0; k < numberOfNodes; k++) {
@@ -1615,6 +1621,7 @@ bool KPDGUI::loadFile(const QString &fileName)
 			KPDGUIArrangementSet * matchRunSolution = new KPDGUIArrangementSet();
 			in >> *matchRunSolution;
 			QObject::connect(matchRunSolution, SIGNAL(arrangementClustered(int, int)), ui->kpdGraphicsView, SLOT(centerView(int, int)));
+			QObject::connect(matchRunSolution, SIGNAL(arrangementIsolated(int, int, int, int)), kpdguiScene, SLOT(isolate(int, int, int, int)));
 
 
 			qint32 numberOfArrangements;
@@ -2138,14 +2145,17 @@ void KPDGUI::arrangementListRightClickActions(QPoint pos) {
 
 	QMenu *menu = new QMenu(this);
 	QAction * clusterAction = new QAction("Cluster Arrangement", this);
+	QAction * isolateAction = new QAction("Isolate Arrangement", this);
 	QAction * displayInformationAction = new QAction("View Information", this);
 
 	KPDGUIArrangementWrapper * wrapper = dynamic_cast<KPDGUIArrangementWrapper *>(item);
 	if (wrapper) {
 		
 		connect(clusterAction, SIGNAL(triggered()), wrapper->getArrangement(), SLOT(cluster()));
+		connect(isolateAction, SIGNAL(triggered()), wrapper->getArrangement(), SLOT(isolate()));
 		
 		menu->addAction(clusterAction);
+		menu->addAction(isolateAction);
 	}
 	else {
 		KPDGUIArrangementSet * arrangementSet = dynamic_cast<KPDGUIArrangementSet *>(item);
@@ -2197,27 +2207,34 @@ void KPDGUI::solutionListRightClickActions(QPoint pos) {
 
 	QMenu * menu = new QMenu(this);
 	QAction * clusterAction;
+	QAction * isolateAction;
 	QAction * displayInformationAction = new QAction("View Information", this);
 
 	KPDGUIArrangementWrapper * wrapper = dynamic_cast<KPDGUIArrangementWrapper *>(item);
 	if (wrapper) {
 		
 		clusterAction = new QAction("Cluster Arrangement", this);
+		isolateAction = new QAction("Isolate Arrangement", this);
 
 		connect(clusterAction, SIGNAL(triggered()), wrapper->getArrangement(), SLOT(cluster()));
+		connect(isolateAction, SIGNAL(triggered()), wrapper->getArrangement(), SLOT(isolate()));
 
 		menu->addAction(clusterAction);
+		menu->addAction(isolateAction);
 	}
 	else {
 		KPDGUIArrangementSet * arrangementSet = dynamic_cast<KPDGUIArrangementSet *>(item);
 		if (arrangementSet) {
 
 			clusterAction = new QAction("Cluster Solution", this);
+			isolateAction = new QAction("Isolate Solution", this);
 			
 			connect(clusterAction, SIGNAL(triggered()), arrangementSet, SLOT(cluster()));
+			connect(isolateAction, SIGNAL(triggered()), arrangementSet, SLOT(isolate()));
 			connect(displayInformationAction, SIGNAL(triggered()), arrangementSet, SLOT(displayInformation()));
 
 			menu->addAction(clusterAction);
+			menu->addAction(isolateAction);
 			menu->addSeparator();
 			menu->addAction(displayInformationAction);
 		}

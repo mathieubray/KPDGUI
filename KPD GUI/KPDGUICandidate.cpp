@@ -21,8 +21,8 @@ KPDGUICandidate::KPDGUICandidate(){
 	candidateMale = false;
 	candidateRace = RACE_WHITE;
 	candidateDiabetes = false;
-	candidateHeight = 1.5;
-	candidateWeight = 60.0;	
+	candidateHeight = 1.62;
+	candidateWeight = 76.0;	
 	candidatePrevTrans = false;
 	candidateTOD = 0.0;
 	candidateHepC = false;
@@ -192,6 +192,12 @@ double KPDGUICandidate::getWeight() const {
 }
 
 double KPDGUICandidate::getBMI() const{
+
+	//double newHeight = (double)candidateHeight * 0.0254;
+	//double newWeight = (double)candidateWeight * 0.4536;
+
+	//return (newWeight / newHeight) / newHeight;
+
 	return (candidateWeight / candidateHeight) / candidateHeight;
 }
 

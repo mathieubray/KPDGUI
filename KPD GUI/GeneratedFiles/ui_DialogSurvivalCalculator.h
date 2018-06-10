@@ -76,8 +76,8 @@ public:
     QComboBox *donorRaceComboBox;
     QSpacerItem *horizontalSpacer_3;
     QLabel *donorHeightLabel;
-    QDoubleSpinBox *donorHeightSpinBox;
     QCheckBox *donorCigaretteCheckBox;
+    QDoubleSpinBox *donorHeightSpinBox;
     QGroupBox *donorHLABWLayout;
     QWidget *layoutWidget_6;
     QVBoxLayout *donorHLABWVerticalLayout;
@@ -119,8 +119,8 @@ public:
     QSpacerItem *candidateRaceSpacer;
     QLabel *candidateGenderLabel;
     QLabel *candidateTODLabel;
-    QDoubleSpinBox *candidateHeightSpinBox;
     QDoubleSpinBox *candidateWeightSpinBox;
+    QDoubleSpinBox *candidateHeightSpinBox;
     QWidget *layoutWidget4;
     QVBoxLayout *candidateVerticalLayout;
     QCheckBox *candidateHepCCheckBox;
@@ -303,8 +303,10 @@ public:
 
         donorWeightSpinBox = new QDoubleSpinBox(layoutWidget2);
         donorWeightSpinBox->setObjectName(QStringLiteral("donorWeightSpinBox"));
-        donorWeightSpinBox->setMaximum(400);
-        donorWeightSpinBox->setValue(60);
+        donorWeightSpinBox->setDecimals(1);
+        donorWeightSpinBox->setMinimum(20);
+        donorWeightSpinBox->setMaximum(200);
+        donorWeightSpinBox->setValue(76);
 
         donorGridLayout->addWidget(donorWeightSpinBox, 1, 4, 1, 1);
 
@@ -327,18 +329,20 @@ public:
 
         donorGridLayout->addWidget(donorHeightLabel, 2, 3, 1, 1);
 
-        donorHeightSpinBox = new QDoubleSpinBox(layoutWidget2);
-        donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
-        donorHeightSpinBox->setMaximum(3);
-        donorHeightSpinBox->setValue(1.5);
-
-        donorGridLayout->addWidget(donorHeightSpinBox, 2, 4, 1, 1);
-
         donorCigaretteCheckBox = new QCheckBox(layoutWidget2);
         donorCigaretteCheckBox->setObjectName(QStringLiteral("donorCigaretteCheckBox"));
         donorCigaretteCheckBox->setLayoutDirection(Qt::RightToLeft);
 
         donorGridLayout->addWidget(donorCigaretteCheckBox, 3, 4, 1, 1);
+
+        donorHeightSpinBox = new QDoubleSpinBox(layoutWidget2);
+        donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
+        donorHeightSpinBox->setMinimum(0.5);
+        donorHeightSpinBox->setMaximum(3);
+        donorHeightSpinBox->setSingleStep(0.05);
+        donorHeightSpinBox->setValue(1.62);
+
+        donorGridLayout->addWidget(donorHeightSpinBox, 2, 4, 1, 1);
 
         donorHLABWLayout = new QGroupBox(donorGroupBox);
         donorHLABWLayout->setObjectName(QStringLiteral("donorHLABWLayout"));
@@ -523,19 +527,23 @@ public:
 
         candidateCharacteristicsGridLayout->addWidget(candidateTODLabel, 2, 0, 1, 2);
 
-        candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget3);
-        candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
-        candidateHeightSpinBox->setMaximum(3);
-        candidateHeightSpinBox->setValue(1.5);
-
-        candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);
-
         candidateWeightSpinBox = new QDoubleSpinBox(layoutWidget3);
         candidateWeightSpinBox->setObjectName(QStringLiteral("candidateWeightSpinBox"));
-        candidateWeightSpinBox->setMaximum(400);
-        candidateWeightSpinBox->setValue(60);
+        candidateWeightSpinBox->setDecimals(1);
+        candidateWeightSpinBox->setMinimum(20);
+        candidateWeightSpinBox->setMaximum(200);
+        candidateWeightSpinBox->setValue(76);
 
         candidateCharacteristicsGridLayout->addWidget(candidateWeightSpinBox, 3, 2, 1, 1);
+
+        candidateHeightSpinBox = new QDoubleSpinBox(layoutWidget3);
+        candidateHeightSpinBox->setObjectName(QStringLiteral("candidateHeightSpinBox"));
+        candidateHeightSpinBox->setMinimum(0.5);
+        candidateHeightSpinBox->setMaximum(3);
+        candidateHeightSpinBox->setSingleStep(0.05);
+        candidateHeightSpinBox->setValue(1.62);
+
+        candidateCharacteristicsGridLayout->addWidget(candidateHeightSpinBox, 4, 2, 1, 1);
 
         layoutWidget4 = new QWidget(candidateGroupBox);
         layoutWidget4->setObjectName(QStringLiteral("layoutWidget4"));
@@ -617,7 +625,6 @@ public:
         QObject::connect(donorRaceComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateDonorRace(int)));
         QObject::connect(donorGenderComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateDonorGender(int)));
         QObject::connect(donorWeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateDonorWeight(double)));
-        QObject::connect(donorHeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateDonorHeight(double)));
         QObject::connect(candidateAgeSpinBox, SIGNAL(valueChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateAge(int)));
         QObject::connect(candidatePRASpinBox, SIGNAL(valueChanged(int)), praSlider, SLOT(setValue(int)));
         QObject::connect(praSlider, SIGNAL(valueChanged(int)), candidatePRASpinBox, SLOT(setValue(int)));
@@ -628,7 +635,6 @@ public:
         QObject::connect(candidateRaceComboBox, SIGNAL(currentIndexChanged(int)), DialogSurvivalCalculator, SLOT(updateCandidateRace(int)));
         QObject::connect(candidateTODSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateCandidateTOD(double)));
         QObject::connect(candidateWeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateCandidateWeight(double)));
-        QObject::connect(candidateHeightSpinBox, SIGNAL(valueChanged(double)), DialogSurvivalCalculator, SLOT(updateDonorHeight(double)));
         QObject::connect(candidateHepCCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidateHepC(bool)));
         QObject::connect(candidateDiabetesCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidateDiabetes(bool)));
         QObject::connect(candidatePrevTransCheckBox, SIGNAL(toggled(bool)), DialogSurvivalCalculator, SLOT(updateCandidatePrevTrans(bool)));

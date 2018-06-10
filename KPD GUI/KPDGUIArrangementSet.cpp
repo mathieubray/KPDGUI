@@ -254,6 +254,41 @@ void KPDGUIArrangementSet::cluster(){
 	emit arrangementClustered(centerX, centerY);
 }
 
+void KPDGUIArrangementSet::isolate() {
+
+	qreal minX = 9999;
+	qreal maxX = -9999;
+	qreal minY = 9999;
+	qreal maxY = -9999;
+
+	foreach(KPDGUIArrangement * arrangement, arrangements) {
+		qreal newMinX = arrangement->minX();
+		qreal newMaxX = arrangement->maxX();
+		qreal newMinY = arrangement->minY();
+		qreal newMaxY = arrangement->maxY();
+
+		if (newMinX < minX) {
+			minX = newMinX;
+		}
+		if (newMaxX > maxX) {
+			maxX = newMaxX;
+		}
+		if (newMinY < minY) {
+			minY = newMinY;
+		}
+		if (newMaxY > maxY) {
+			maxY = newMaxY;
+		}
+	}
+
+	//foreach(KPDGUIArrangement * arrangement, arrangements) {
+		//arrangement->isolate(minX,maxX,minY,maxY);
+	//}
+
+	emit arrangementIsolated(minX, maxX, minY, maxY);
+
+}
+
 void KPDGUIArrangementSet::increasePopularity(){
 
 	foreach(KPDGUIArrangement * arrangement, arrangements){
@@ -360,7 +395,7 @@ QString KPDGUIArrangementSet::toString(){
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else {
-		receipt = receipt + "Locally Relevant Subsets: " + QString::number(getNumberOfArrangements()) + "\n";
+		receipt = receipt + "Locally Relevant Subgraphs: " + QString::number(getNumberOfArrangements()) + "\n";
 	}
 
 	receipt = receipt + "\n";
@@ -418,7 +453,7 @@ QString KPDGUIArrangementSet::toCondensedString() {
 		receipt = receipt + "Cycles: " + QString::number(cycles) + ", Chains: " + QString::number(chains) + "\n";
 	}
 	else {
-		receipt = receipt + "Locally Relevant Subsets: " + QString::number(getNumberOfArrangements()) + "\n";
+		receipt = receipt + "Locally Relevant Subgraphs: " + QString::number(getNumberOfArrangements()) + "\n";
 	}
 
 	return receipt;
@@ -522,7 +557,7 @@ void KPDGUIArrangementSet::updateText(){
 	}
 
 	foreach(int size, arrangementSetLRSs.keys()) {
-		arrangementSetLRSs[size]->setText(0, "Locally Relevant Subsets of Size " + QString::number(size) + " (" + QString::number(arrangementSetLRSs[size]->childCount()) + ")");
+		arrangementSetLRSs[size]->setText(0, "Locally Relevant Subgraphs of Size " + QString::number(size) + " (" + QString::number(arrangementSetLRSs[size]->childCount()) + ")");
 	}
 }
 

@@ -209,3 +209,16 @@ void DialogDonor::additionalSetup(){
 	donorHLALineEdit->setCompleter(hlaCompleter);
 
 }
+
+void DialogDonor::setDefaultHeightWeight(int index) {
+
+	if (index == 0) {
+		donorHeightSpinBox->setValue(1.62);
+		donorWeightSpinBox->setValue(76.0);
+	}
+	else if (index == 1) {
+		donorHeightSpinBox->setValue(1.75);
+		donorWeightSpinBox->setValue(89.0);
+	}
+
+}

@@ -158,11 +158,17 @@
      </item>
      <item row="2" column="5">
       <widget class="QDoubleSpinBox" name="donorWeightSpinBox">
+       <property name="decimals">
+        <number>1</number>
+       </property>
+       <property name="minimum">
+        <double>20.000000000000000</double>
+       </property>
        <property name="maximum">
-        <double>400.000000000000000</double>
+        <double>200.000000000000000</double>
        </property>
        <property name="value">
-        <double>60.000000000000000</double>
+        <double>89.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -203,19 +209,6 @@
       <widget class="QLabel" name="donorHeightLabel">
        <property name="text">
         <string>Height (m)</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="5">
-      <widget class="QDoubleSpinBox" name="donorHeightSpinBox">
-       <property name="maximum">
-        <double>3.000000000000000</double>
-       </property>
-       <property name="singleStep">
-        <double>0.100000000000000</double>
-       </property>
-       <property name="value">
-        <double>1.500000000000000</double>
        </property>
       </widget>
      </item>
@@ -290,6 +283,22 @@
       <widget class="QLineEdit" name="donorNameLineEdit">
        <property name="text">
         <string>Donor Name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="5">
+      <widget class="QDoubleSpinBox" name="donorHeightSpinBox">
+       <property name="minimum">
+        <double>0.500000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>3.000000000000000</double>
+       </property>
+       <property name="singleStep">
+        <double>0.050000000000000</double>
+       </property>
+       <property name="value">
+        <double>1.750000000000000</double>
        </property>
       </widget>
      </item>
@@ -617,8 +626,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>donorGenderComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>DialogDonor</receiver>
+   <slot>setDefaultHeightWeight(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>359</x>
+     <y>73</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>86</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>setAdditionalDonor()</slot>
+  <slot>setDefaultHeightWeight(int)</slot>
  </slots>
 </ui>

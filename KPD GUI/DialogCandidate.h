@@ -23,6 +23,10 @@ public:
 
 	QTextEdit * commentTextEdit;
 
+public slots:
+
+	void setDefaultHeightWeight(int index);
+
 private:
 	void additionalSetup();
 

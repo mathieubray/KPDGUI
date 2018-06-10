@@ -315,6 +315,99 @@ void KPDGUIGraphicsScene::cluster() {
 	QApplication::processEvents();
 }
 
+void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
+
+	qreal padding = 150;
+	
+	QObject * object = sender();
+	
+	QList<QGraphicsItem *> itemsToMove = items(QRectF(QPointF(minX - padding, minY - padding), QPointF(maxX + padding, maxY + padding)));
+
+	QSet<KPDGUINode *> nodesToMove;
+
+	foreach(QGraphicsItem * item, itemsToMove) {
+
+		KPDGUICandidate * candidate = dynamic_cast<KPDGUICandidate *>(item);
+		if (candidate) {
+			nodesToMove.insert(candidate->getParentNode());
+		}
+		else {
+			KPDGUIDonor * donor = dynamic_cast<KPDGUIDonor *>(item);
+			if (donor) {
+				nodesToMove.insert(donor->getParentNode());
+			}
+		}
+	}
+
+
+	int counter = 1;
+
+	KPDGUIArrangement * arrangement = dynamic_cast<KPDGUIArrangement *>(object);
+	
+	if (arrangement) {
+
+		foreach(KPDGUINode * node, nodesToMove) {
+
+			if (!arrangement->containsNode(node)) {
+
+				qreal newX = node->getNodePosition().x();
+				qreal newY = node->getNodePosition().y();
+
+				if (counter % 4 == 0) {
+					newX = minX - padding;
+				}
+				else if (counter % 4 == 1) {
+					newX = maxX + padding;
+				}
+				else if (counter % 4 == 2) {
+					newY = minY - padding;
+				}
+				else {
+					newY = maxY + padding;
+				}
+
+				node->setNodePosition(QPointF(newX, newY));
+
+				counter++;
+			}			
+		}
+	}
+
+	else {
+			
+		KPDGUIArrangementSet * arrangementSet = dynamic_cast<KPDGUIArrangementSet *>(object);
+
+		if (arrangementSet) {
+
+			foreach(KPDGUINode * node, nodesToMove){
+
+				if (!arrangementSet->containsNode(node)) {
+
+					qreal newX = node->getNodePosition().x();
+					qreal newY = node->getNodePosition().y();
+
+					if (counter % 4 == 0) {
+						newX = minX - padding;
+					}
+					else if (counter % 4 == 1) {
+						newX = maxX + padding;
+					}
+					else if (counter % 4 == 2) {
+						newY = minY - padding;
+					}
+					else {
+						newY = maxY + padding;
+					}
+
+					node->setNodePosition(QPointF(newX, newY));
+
+					counter++;
+				}
+			}
+		}
+	}
+}
+
 void KPDGUIGraphicsScene::changeStatus() {
 	
 	KPDGUIDonor * d = dynamic_cast<KPDGUIDonor *>(selectedItems().first());

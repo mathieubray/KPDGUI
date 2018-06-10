@@ -23,8 +23,8 @@ KPDGUIDonor::KPDGUIDonor(){
 
 	donorMale = false;
 	donorRace = RACE_WHITE;
-	donorHeight = 1.5;
-	donorWeight = 60.0;
+	donorHeight = 1.62;
+	donorWeight = 76;
 	donorCigarette = false;
 
 	donorStatus = true;
@@ -291,6 +291,12 @@ double KPDGUIDonor::getWeight() const {
 }
 
 double KPDGUIDonor::getBMI() const {
+
+	//double newHeight = (double)donorHeight * 0.0254;
+	//double newWeight = (double)donorWeight * 0.4536;
+
+	//return (newWeight / newHeight) / newHeight;
+
 	return (donorWeight / donorHeight) / donorHeight;
 }
 

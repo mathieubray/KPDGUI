@@ -54,6 +54,7 @@ public:
 signals:
 
 	void arrangementClustered(int x, int y);
+	void arrangementIsolated(int minX, int maxX, int minY, int maxY);
 
 public slots:
 
@@ -64,7 +65,7 @@ public slots:
 	qreal centerX();
 	qreal centerY();
 	void cluster();
-
+	void isolate();
 
 	// Helper Functions
 	void increasePopularity();

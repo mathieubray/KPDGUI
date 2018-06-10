@@ -54,13 +54,13 @@ public:
     QDoubleSpinBox *donorFailureProbabilitySpinBox;
     QSpacerItem *horizontalSpacer_3;
     QLabel *donorHeightLabel;
-    QDoubleSpinBox *donorHeightSpinBox;
     QLabel *label_2;
     QComboBox *donorRaceComboBox;
     QSpacerItem *horizontalSpacer_4;
     QCheckBox *donorCigaretteCheckBox;
     QCheckBox *donorStatusCheckBox;
     QLineEdit *donorNameLineEdit;
+    QDoubleSpinBox *donorHeightSpinBox;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout;
     QTabWidget *donorInfoTabWidget;
@@ -174,8 +174,10 @@ public:
 
         donorWeightSpinBox = new QDoubleSpinBox(layoutWidget);
         donorWeightSpinBox->setObjectName(QStringLiteral("donorWeightSpinBox"));
-        donorWeightSpinBox->setMaximum(400);
-        donorWeightSpinBox->setValue(60);
+        donorWeightSpinBox->setDecimals(1);
+        donorWeightSpinBox->setMinimum(20);
+        donorWeightSpinBox->setMaximum(200);
+        donorWeightSpinBox->setValue(89);
 
         gridLayout->addWidget(donorWeightSpinBox, 2, 5, 1, 1);
 
@@ -200,14 +202,6 @@ public:
         donorHeightLabel->setObjectName(QStringLiteral("donorHeightLabel"));
 
         gridLayout->addWidget(donorHeightLabel, 3, 4, 1, 1);
-
-        donorHeightSpinBox = new QDoubleSpinBox(layoutWidget);
-        donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
-        donorHeightSpinBox->setMaximum(3);
-        donorHeightSpinBox->setSingleStep(0.1);
-        donorHeightSpinBox->setValue(1.5);
-
-        gridLayout->addWidget(donorHeightSpinBox, 3, 5, 1, 1);
 
         label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
@@ -240,6 +234,15 @@ public:
         donorNameLineEdit->setObjectName(QStringLiteral("donorNameLineEdit"));
 
         gridLayout->addWidget(donorNameLineEdit, 0, 2, 1, 4);
+
+        donorHeightSpinBox = new QDoubleSpinBox(layoutWidget);
+        donorHeightSpinBox->setObjectName(QStringLiteral("donorHeightSpinBox"));
+        donorHeightSpinBox->setMinimum(0.5);
+        donorHeightSpinBox->setMaximum(3);
+        donorHeightSpinBox->setSingleStep(0.05);
+        donorHeightSpinBox->setValue(1.75);
+
+        gridLayout->addWidget(donorHeightSpinBox, 3, 5, 1, 1);
 
         layoutWidget1 = new QWidget(DialogDonor);
         layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
@@ -450,6 +453,7 @@ public:
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogDonor, SLOT(reject()));
         QObject::connect(additionalDonorButton, SIGNAL(clicked()), DialogDonor, SLOT(accept()));
         QObject::connect(additionalDonorButton, SIGNAL(clicked()), DialogDonor, SLOT(setAdditionalDonor()));
+        QObject::connect(donorGenderComboBox, SIGNAL(currentIndexChanged(int)), DialogDonor, SLOT(setDefaultHeightWeight(int)));
 
         donorInfoTabWidget->setCurrentIndex(0);
 

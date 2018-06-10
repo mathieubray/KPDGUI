@@ -191,26 +191,35 @@
              </property>
             </widget>
            </item>
+           <item row="3" column="2">
+            <widget class="QDoubleSpinBox" name="candidateWeightSpinBox">
+             <property name="decimals">
+              <number>1</number>
+             </property>
+             <property name="minimum">
+              <double>20.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>200.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>89.000000000000000</double>
+             </property>
+            </widget>
+           </item>
            <item row="4" column="2">
             <widget class="QDoubleSpinBox" name="candidateHeightSpinBox">
+             <property name="minimum">
+              <double>0.500000000000000</double>
+             </property>
              <property name="maximum">
               <double>3.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.100000000000000</double>
+              <double>0.050000000000000</double>
              </property>
              <property name="value">
-              <double>1.500000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QDoubleSpinBox" name="candidateWeightSpinBox">
-             <property name="maximum">
-              <double>400.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>60.000000000000000</double>
+              <double>1.750000000000000</double>
              </property>
             </widget>
            </item>
@@ -515,8 +524,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>368</x>
-     <y>418</y>
+     <x>378</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -531,8 +540,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>368</x>
-     <y>418</y>
+     <x>378</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -547,12 +556,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>191</x>
-     <y>129</y>
+     <x>369</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
-     <x>150</x>
-     <y>130</y>
+     <x>207</x>
+     <y>171</y>
     </hint>
    </hints>
   </connection>
@@ -563,14 +572,33 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>143</x>
-     <y>131</y>
+     <x>207</x>
+     <y>171</y>
     </hint>
     <hint type="destinationlabel">
-     <x>236</x>
-     <y>130</y>
+     <x>369</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>candidateGenderComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>DialogCandidate</receiver>
+   <slot>setDefaultHeightWeight(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>184</x>
+     <y>362</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>200</x>
+     <y>307</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>setDefaultHeightWeight(int)</slot>
+ </slots>
 </ui>

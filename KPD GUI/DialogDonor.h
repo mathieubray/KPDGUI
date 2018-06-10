@@ -27,6 +27,8 @@ public:
 public slots:
 	void setAdditionalDonor();
 
+	void setDefaultHeightWeight(int index);
+
 private:
 	void additionalSetup();
 

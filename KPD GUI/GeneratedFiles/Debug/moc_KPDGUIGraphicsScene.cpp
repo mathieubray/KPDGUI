@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_KPDGUIGraphicsScene_t {
-    QByteArrayData data[14];
-    char stringdata0[167];
+    QByteArrayData data[19];
+    char stringdata0[195];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -42,14 +42,19 @@ QT_MOC_LITERAL(9, 112, 4), // "edit"
 QT_MOC_LITERAL(10, 117, 18), // "addAdditionalDonor"
 QT_MOC_LITERAL(11, 136, 12), // "changeStatus"
 QT_MOC_LITERAL(12, 149, 7), // "cluster"
-QT_MOC_LITERAL(13, 157, 9) // "selectAll"
+QT_MOC_LITERAL(13, 157, 7), // "isolate"
+QT_MOC_LITERAL(14, 165, 4), // "minX"
+QT_MOC_LITERAL(15, 170, 4), // "maxX"
+QT_MOC_LITERAL(16, 175, 4), // "minY"
+QT_MOC_LITERAL(17, 180, 4), // "maxY"
+QT_MOC_LITERAL(18, 185, 9) // "selectAll"
 
     },
     "KPDGUIGraphicsScene\0updateVisibilitySignal\0"
     "\0addNewDonorSignal\0KPDGUICandidate*\0"
     "candidate\0selectionClustered\0x\0y\0edit\0"
     "addAdditionalDonor\0changeStatus\0cluster\0"
-    "selectAll"
+    "isolate\0minX\0maxX\0minY\0maxY\0selectAll"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,7 +64,7 @@ static const uint qt_meta_data_KPDGUIGraphicsScene[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       8,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -67,16 +72,17 @@ static const uint qt_meta_data_KPDGUIGraphicsScene[] = {
        3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   54,    2, 0x06 /* Public */,
-       3,    1,   55,    2, 0x06 /* Public */,
-       6,    2,   58,    2, 0x06 /* Public */,
+       1,    0,   59,    2, 0x06 /* Public */,
+       3,    1,   60,    2, 0x06 /* Public */,
+       6,    2,   63,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       9,    0,   63,    2, 0x08 /* Private */,
-      10,    0,   64,    2, 0x08 /* Private */,
-      11,    0,   65,    2, 0x08 /* Private */,
-      12,    0,   66,    2, 0x08 /* Private */,
-      13,    0,   67,    2, 0x08 /* Private */,
+       9,    0,   68,    2, 0x08 /* Private */,
+      10,    0,   69,    2, 0x08 /* Private */,
+      11,    0,   70,    2, 0x08 /* Private */,
+      12,    0,   71,    2, 0x08 /* Private */,
+      13,    4,   72,    2, 0x08 /* Private */,
+      18,    0,   81,    2, 0x08 /* Private */,
 
  // signals: parameters
     QMetaType::Void,
@@ -88,6 +94,7 @@ static const uint qt_meta_data_KPDGUIGraphicsScene[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void, QMetaType::Int, QMetaType::Int, QMetaType::Int, QMetaType::Int,   14,   15,   16,   17,
     QMetaType::Void,
 
        0        // eod
@@ -106,7 +113,8 @@ void KPDGUIGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
         case 4: _t->addAdditionalDonor(); break;
         case 5: _t->changeStatus(); break;
         case 6: _t->cluster(); break;
-        case 7: _t->selectAll(); break;
+        case 7: _t->isolate((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4]))); break;
+        case 8: _t->selectAll(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -142,7 +150,6 @@ void KPDGUIGraphicsScene::qt_static_metacall(QObject *_o, QMetaObject::Call _c, 
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&KPDGUIGraphicsScene::selectionClustered)) {
                 *result = 2;
                 return;
-
             }
         }
     }
@@ -173,13 +180,13 @@ int KPDGUIGraphicsScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 8)
+        if (_id < 9)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 8;
+        _id -= 9;
     }
     return _id;
 }
@@ -187,9 +194,7 @@ int KPDGUIGraphicsScene::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 // SIGNAL 0
 void KPDGUIGraphicsScene::updateVisibilitySignal()
 {
-
     QMetaObject::activate(this, &staticMetaObject, 0, Q_NULLPTR);
-
 }
 
 // SIGNAL 1
@@ -200,11 +205,9 @@ void KPDGUIGraphicsScene::addNewDonorSignal(KPDGUICandidate * _t1)
 }
 
 // SIGNAL 2
-
 void KPDGUIGraphicsScene::selectionClustered(int _t1, int _t2)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
-
 }
 QT_END_MOC_NAMESPACE
