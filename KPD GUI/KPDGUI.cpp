@@ -123,7 +123,7 @@ void KPDGUI::openKPD()
 	}
 
     if (open) {
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Open KPD"), ".", tr("KPD files (*.kpd)"));
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Open KPD"), ".", tr("KPD files (*.kpd)"), Q_NULLPTR, QFileDialog::DontUseNativeDialog);
 		if (!fileName.isEmpty()){
 
 			QFile file(fileName);
@@ -173,10 +173,14 @@ bool KPDGUI::saveKPD()
 
 bool KPDGUI::saveKPDAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save KPD"), ".", tr("KPD files (*.kpd)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save KPD"), ".", tr("KPD files (*.kpd)"), Q_NULLPTR, QFileDialog::DontUseNativeDialog);
     if (fileName.isEmpty()){
-		updateStatus("Failed to load empty file");
+		updateStatus("Failed to save empty file");
 		return false;
+	}
+	
+	if (!fileName.endsWith(".kpd")) {
+		fileName.append(".kpd");
 	}
 		
     return saveFile(fileName);
