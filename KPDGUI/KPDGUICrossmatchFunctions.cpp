@@ -12,7 +12,7 @@ KPDGUICrossmatchFunctions::~KPDGUICrossmatchFunctions() {
 
 void KPDGUICrossmatchFunctions::loadDictionary() {
 
-	QVector<QVector<QVector<QString> > > dictionaryData = KPDFunctions::loadData("HLA Dictionary - KPD GUI.csv", false);
+	QVector<QVector<QVector<QString> > > dictionaryData = KPDFunctions::loadData("HLADictionary.csv", false);
 
 	foreach(QVector<QVector<QString> > equivalencies, dictionaryData) {
 		QString antigen = equivalencies.at(0).at(0);
@@ -23,7 +23,7 @@ void KPDGUICrossmatchFunctions::loadDictionary() {
 
 void KPDGUICrossmatchFunctions::loadSurvivalParameters() {
 
-	QVector<QVector<QVector<QString> > > survivalData = KPDFunctions::loadData("Survival Parameters - KPD GUI.csv", false);
+	QVector<QVector<QVector<QString> > > survivalData = KPDFunctions::loadData("SurvivalParameters.csv", false);
 
 	foreach(QVector<QVector<QString> > dataRow, survivalData) {
 
