@@ -55,9 +55,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="GeneratedFiles\qrc_mainwindow.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_KPDGUIGraphicsScene.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -295,11 +292,14 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KPDGUIArrangementSet.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_KPDGUI.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KPDGUIRNG.cpp">
+      <Filter>Helper Code</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="mainwindow.qrc">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="DialogReadFile.h">
       <Filter>Dialog</Filter>
     </CustomBuild>
@@ -402,6 +402,9 @@
     <CustomBuild Include="DialogMessage.h">
       <Filter>Dialog</Filter>
     </CustomBuild>
+    <CustomBuild Include="KPDGUI.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_DialogDonor.h">
@@ -446,6 +449,9 @@
     <ClInclude Include="GeneratedFiles\ui_DialogMessage.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
+    <ClInclude Include="KPDGUIRNG.h">
+      <Filter>Helper Code</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="images\copy.png">
@@ -478,20 +484,40 @@
     <Image Include="images\run.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\images\cursor.png">
+    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPDGUI\KPDGUI\images\cursor.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\images\handtool.png">
+    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPDGUI\KPDGUI\images\handtool.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\images\zoomin.png">
+    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPDGUI\KPDGUI\images\zoomin.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPD GUI\KPD GUI\images\zoomout.png">
+    <Image Include="..\..\..\..\..\Mathieu%27s Folder\University of Michigan\KPD Project\KPDGUI\KPDGUI\images\zoomout.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="images\refresh.PNG">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="images\zoomin.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\zoomout.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\cursor.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\handtool.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="images\logo.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="images\default.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

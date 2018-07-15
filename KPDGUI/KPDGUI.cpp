@@ -831,6 +831,9 @@ void KPDGUI::loadAPD()
 		
 		QVector<KPDGUINode *> nodesToAdd;
 
+		QStringList hlas = HLA_LIST_REDUCED.split(",");
+		int q = 0;
+
 		foreach(int matchingID, nodeIDs){
 			
 			KPDGUINode * newNode;
@@ -838,6 +841,8 @@ void KPDGUI::loadAPD()
 			if (nodeTypeMap[matchingID] == NDD) {
 
 				KPDGUIDonor * ndd = donorMap[matchingID].at(0);
+				ndd->addAdditionalDonorHLA(hlas.at(q));
+
 
 				newNode = new KPDGUINode(ndd);
 
@@ -847,9 +852,12 @@ void KPDGUI::loadAPD()
 			}
 			else {
 				KPDGUICandidate * candidate = candidateMap[matchingID];
+				candidate->addHLA(hlas.at(q));
+
 				QVector<KPDGUIDonor *> donors = donorMap[matchingID];
 
 				foreach(KPDGUIDonor * donor, donors) {
+					donor->addAdditionalDonorHLA(hlas.at(q));
 					donor->setCompatibilityWithPairedCandidate(FAILED_CROSSMATCH_HLA);
 				}
 
@@ -868,6 +876,8 @@ void KPDGUI::loadAPD()
 			baselineID++;
 
 			nodesToAdd << newNode;
+
+			q++;
 		}
 
 		foreach(KPDGUINode * node, nodesToAdd) {
@@ -929,8 +939,6 @@ void KPDGUI::loadAPD()
 			foreach(QString token, tokens) {
 				if (incidenceMatrix[i][j]) {
 					weightMatrix[i][j] = token.toDouble();
-
-					//qDebug() << "[" << QString::number(i) << "," << QString::number(j) << "] " << weightMatrix[i][j];
 				}
 				j++;
 			}
@@ -943,30 +951,36 @@ void KPDGUI::loadAPD()
 
 				for (int j = 1; j <= n; j++) {
 
-					if (incidenceMatrix[i][j]) {
+					if (i != j) {
 
 						KPDGUIDonor * donor = fullDonors[j - 1];
 						KPDGUICandidate * candidate = candidateMap[i];
 
-						KPDCrossmatchResult result = kpdguiCrossmatchFunctions->performCrossmatch(donor, candidate);
-						double fiveYearSurvival = kpdguiCrossmatchFunctions->calculateSurvival(donor, candidate, true);
-						double tenYearSurvival = kpdguiCrossmatchFunctions->calculateSurvival(donor, candidate, false);
-						bool difficultToMatch = kpdguiCrossmatchFunctions->determineDifficultMatch(donor, candidate);
+						if (incidenceMatrix[i][j]) {
 
-						KPDGUIMatch * match = new KPDGUIMatch(donor, candidate, result, fiveYearSurvival, tenYearSurvival, difficultToMatch);
+							KPDCrossmatchResult result = kpdguiCrossmatchFunctions->performCrossmatch(donor, candidate);
+							double fiveYearSurvival = kpdguiCrossmatchFunctions->calculateSurvival(donor, candidate, true);
+							double tenYearSurvival = kpdguiCrossmatchFunctions->calculateSurvival(donor, candidate, false);
+							bool difficultToMatch = kpdguiCrossmatchFunctions->determineDifficultMatch(donor, candidate);
 
-						double score = weightMatrix[i][j];
-						if (score == 0) {
-							score = 0.00001;
+							KPDGUIMatch * match = new KPDGUIMatch(donor, candidate, result, fiveYearSurvival, tenYearSurvival, difficultToMatch);
+
+							double score = weightMatrix[i][j];
+							if (score == 0) {
+								score = 0.00001;
+							}
+
+							match->setAssignedUtility(score);
+
+							insertMatch(match, true);
+
 						}
 
-						match->setAssignedUtility(score);
-
-						insertMatch(match, true);				
-
+						else {
+							candidate->addHLA(donor->getFullHLA().at(0));							
+						}
 					}
-				}
-				
+				}				
 			}
 		}
 

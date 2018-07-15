@@ -7,6 +7,7 @@
 #include "KPDGUINode.h"
 #include "KPDGUIMatch.h"
 #include "KPDGUICrossmatchFunctions.h"
+#include "KPDGUIRNG.h"
 
 #include <vector>
 #include <set>

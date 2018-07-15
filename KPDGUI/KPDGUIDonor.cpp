@@ -99,7 +99,43 @@ void KPDGUIDonor::addDR(QString hlaDR) {
 }
 
 void KPDGUIDonor::addAdditionalDonorHLA(QString additionalHLA) {
-	additionalDonorHLA << additionalHLA;
+
+	if (HLA_LIST.split(",").contains(additionalHLA)) {
+
+		if (additionalHLA == "BW4") {
+			donorBW4 = true;
+		}
+		else if (additionalHLA == "BW6") {
+			donorBW6 = true;
+		}
+		else if (additionalHLA == "DR51") {
+			donorDR51 = true;
+		}
+		else if (additionalHLA == "DR52") {
+			donorDR52 = true;
+		}
+		else if (additionalHLA == "DR53") {
+			donorDR53 = true;
+		}
+		else if (additionalHLA.startsWith("A")) {
+			donorA << additionalHLA;
+		}
+		else if (additionalHLA.startsWith("B")) {
+			donorB << additionalHLA;
+		}
+		else if (additionalHLA.startsWith("CW")) {
+			donorCW << additionalHLA;
+		}
+		else if (additionalHLA.startsWith("DQ")) {
+			donorDQ << additionalHLA;
+		}
+		else if (additionalHLA.startsWith("DR")) {
+			donorDR << additionalHLA;
+		}
+	}
+	else {
+		additionalDonorHLA << additionalHLA;
+	}
 }
 
 void KPDGUIDonor::removeA(QString hlaA) {
@@ -268,6 +304,35 @@ bool KPDGUIDonor::getDR52() const {
 
 bool KPDGUIDonor::getDR53() const {
 	return donorDR53;
+}
+
+QVector<QString> KPDGUIDonor::getFullHLA() {
+
+	QVector<QString> hlas;
+
+	hlas << donorA;
+	hlas << donorB;
+	if (donorBW4) {
+		hlas << "BW4";
+	}
+	if (donorBW6) {
+		hlas << "BW6";
+	}
+	hlas << donorCW;
+	hlas << donorDQ;
+	hlas << donorDR;
+	if (donorDR51) {
+		hlas << "DR51";
+	}
+	if (donorDR52) {
+		hlas << "DR52";
+	}
+	if (donorDR53) {
+		hlas << "DR53";
+	}
+	hlas << additionalDonorHLA;
+
+	return hlas;
 }
 
 QVector<QString> KPDGUIDonor::getAdditionalHLA() const {

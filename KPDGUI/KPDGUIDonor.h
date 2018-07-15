@@ -148,6 +148,7 @@ public:
 	bool getDR51() const;
 	bool getDR52() const;
 	bool getDR53() const;
+	QVector<QString> getFullHLA();
 	QVector<QString> getAdditionalHLA() const;
 
 	// Characteristics

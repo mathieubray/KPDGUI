@@ -1386,25 +1386,38 @@ bool KPDGUIMatchRun::validateLRSBounds(std::vector<int> & arrangement) {
 	}
 
 	for (int i = 1; i < arrangementSize; i++) {
+
 		for (int j = 0; j < i; j++) {
 
+			int sp = matchRunNumberOfNodes;
 			for (int q = 0; q <= i - 1; q++) {
-				if (matchRunIncidenceMatrix[arrangement[q]][arrangement[i]]) {
-					shortestPathLengths[j][i] = std::min(matchRunNumberOfNodes, shortestPathLengths[j][q] + 1);
+				if (matchRunIncidenceMatrixReduced[arrangement[q]][arrangement[i]]) {
+					sp = std::min(sp, shortestPathLengths[j][q] + 1);
 				}
 			}
+			shortestPathLengths[j][i] = sp;
 
+			sp = matchRunNumberOfNodes;
 			for (int q = 0; q <= i - 1; q++) {
-				if (matchRunIncidenceMatrix[arrangement[i]][arrangement[q]]) {
-					shortestPathLengths[i][j] = std::min(matchRunNumberOfNodes, shortestPathLengths[q][j] + 1);
+				if (matchRunIncidenceMatrixReduced[arrangement[i]][arrangement[q]]) {
+					sp = std::min(sp, shortestPathLengths[q][j] + 1);
 				}
 			}
-
+			shortestPathLengths[i][j] = sp;
 		}
+
 		for (int j = 0; j < i; j++) {
 			for (int k = 0; k < j; k++) {
-				shortestPathLengths[j][k] = std::min(shortestPathLengths[j][k], shortestPathLengths[j][i] + shortestPathLengths[i][k]);
-				shortestPathLengths[k][j] = std::min(shortestPathLengths[k][j], shortestPathLengths[k][i] + shortestPathLengths[i][j]);
+
+				int spIJ = shortestPathLengths[i][j];
+				int spIK = shortestPathLengths[i][k];
+				int spJI = shortestPathLengths[j][i];
+				int spJK = shortestPathLengths[j][k];
+				int spKI = shortestPathLengths[k][i];
+				int spKJ = shortestPathLengths[k][j];
+
+				shortestPathLengths[j][k] = std::min(spJK, spJI + spIK);
+				shortestPathLengths[k][j] = std::min(spKJ, spKI + spIJ);
 			}
 		}
 	}
@@ -1674,7 +1687,10 @@ double KPDGUIMatchRun::estimateExpectedUtility(std::vector<int> &arrangement) {
 	double expUtility = 0;
 
 	QTime t;
-	t.start();
+	int seed = t.msecsSinceStartOfDay();
+
+	RNG rng;
+	rng.setSeed(seed);
 
 	for (int sims = 1; sims <= numberOfExpectedUtilityIterations; sims++) {
 
@@ -1705,7 +1721,9 @@ double KPDGUIMatchRun::estimateExpectedUtility(std::vector<int> &arrangement) {
 
 			for (int k = 1; k <= numDonors; k++) {
 
-				if (KPDFunctions::getRandomValue(t.elapsed()) < (1 - matchRunNodeVector[*itNodes]->getDonor(k-1)->getFailureProbability())) {
+				double u = rng.runif();
+
+				if (u < (1 - matchRunNodeVector[*itNodes]->getDonor(k-1)->getFailureProbability())) {
 					randomDonorAvailabilityVector[i][k] = true;
 
 					if (matchRunNodeTypeVector[*itNodes] != PAIR) { // Add marker for NDD availability (acts as a shortcut for the next section)
@@ -1718,7 +1736,10 @@ double KPDGUIMatchRun::estimateExpectedUtility(std::vector<int> &arrangement) {
 
 			//Randomly generate candidate availability for PAIRs
 			if (matchRunNodeTypeVector[*itNodes] == PAIR) {
-				if (KPDFunctions::getRandomValue(t.elapsed()) < (1 - matchRunNodeVector[*itNodes]->getCandidate()->getFailureProbability())) {
+
+				double u2 = rng.runif();
+
+				if (u2 < (1 - matchRunNodeVector[*itNodes]->getCandidate()->getFailureProbability())) {
 					randomCandidateAvailabilityVector[i] = true;
 				}
 			}
@@ -1760,7 +1781,9 @@ double KPDGUIMatchRun::estimateExpectedUtility(std::vector<int> &arrangement) {
 								// For existing original matches, and for donors that are available, randomly generate matches
 								if (matchRunDonorIncidenceMatrix[*itDonors][*itCandidates][k] && randomDonorAvailabilityVector[i][k]) {
 
-									if (KPDFunctions::getRandomValue(t.elapsed()) < matchRunSuccessProbabilitiesMatrix[*itDonors][*itCandidates][k]) {
+									double u3 = rng.runif();
+
+									if (u3 < matchRunSuccessProbabilitiesMatrix[*itDonors][*itCandidates][k]) {
 										randomDonorIncidenceMatrix[i][j][k] = 1;
 										randomUtilityMatrix[i][j][k] = matchRunUtilityMatrix[*itDonors][*itCandidates][k];
 
@@ -1785,6 +1808,8 @@ double KPDGUIMatchRun::estimateExpectedUtility(std::vector<int> &arrangement) {
 		double partialUtil = calculatePartialUtility(N, randomIncidenceMatrix, randomUtilityMatrix, subNodeTypeVector, subDonorBloodTypeVector);
 		expUtility += partialUtil;
 	}
+
+	//qDebug() << expUtility << " " << numberOfExpectedUtilityIterations;
 
 	//Expected utility is the average of the calculated utility values over the number of iterations
 	return expUtility / numberOfExpectedUtilityIterations;
@@ -1959,7 +1984,7 @@ double KPDGUIMatchRun::calculatePartialUtility(int nV, std::vector<std::vector<b
 				}
 			}
 
-			if (validSolution == true && tempU > utilityValue) {
+			if (validSolution && tempU > utilityValue) {
 				utilityValue = tempU;
 			}
 		}

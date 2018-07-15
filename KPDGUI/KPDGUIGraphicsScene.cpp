@@ -99,13 +99,13 @@ void KPDGUIGraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *event) {
 			if (candidate) {
 				
 				if (!candidate->isSelected()) {
-					qDebug() << "Before: Not Selected:";
+					//qDebug() << "Before: Not Selected:";
 				}
 				
 				candidate->setSelected(true);
 				
 				if (candidate->isSelected()) {
-					qDebug() << "After: Selected";
+					//qDebug() << "After: Selected";
 				}
 
 				emit updateVisibilitySignal();
@@ -176,33 +176,63 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 
 		bool altruistic = false;
 
+		QVector<KPDGUICandidate *> candidates;
+		QVector<KPDGUIDonor *> donors;
+
 		foreach(QGraphicsItem * item, items) {
 			KPDGUICandidate *candidate = dynamic_cast<KPDGUICandidate *>(item);
 			if (candidate) {
-
-				QAction * editAction = new QAction("Edit Candidate " + candidate->candidateString(), this);
-				connect(editAction, SIGNAL(triggered()), candidate, SLOT(edit()));
-
-
-				menu.addAction(editAction);
-				//menu.addAction(changeStatusAction);
+				candidates << candidate;
 			}
 			else {
 				KPDGUIDonor *donor = dynamic_cast<KPDGUIDonor *>(item);
 				if (donor) {
-
-					if (donor->isAltruistic()) {
-						altruistic = true;
-					}
-
-					QAction * editAction = new QAction("Edit Donor " + donor->donorString(), this);
-					connect(editAction, SIGNAL(triggered()), donor, SLOT(edit()));
-
-					menu.addAction(editAction);
-					//menu.addAction(changeStatusAction);
+					donors << donor;
 				}
 			}			
-		}	
+		}
+
+		if (donors.size() > 1) {
+
+			int n = donors.size();
+			bool continueSorting = true;
+
+			while (continueSorting) {
+				continueSorting = false;
+
+				for (int i = 1; i < n; i++) {
+					if (donors[i - 1]->getDonorNumber() > donors[i]->getDonorNumber()) {
+						KPDGUIDonor * tempDonor = donors.takeAt(i);
+						donors.insert(i-1, tempDonor);
+
+						continueSorting = true;
+					}
+				}
+			}			
+		}
+
+		if (candidates.size() > 0) {
+
+			KPDGUICandidate * candidate = candidates.at(0);
+
+			QAction * editAction = new QAction("Edit Candidate " + candidate->candidateString(), this);
+			connect(editAction, SIGNAL(triggered()), candidate, SLOT(edit()));
+
+			menu.addAction(editAction);
+			menu.addSeparator();
+		}
+
+		foreach(KPDGUIDonor * donor, donors){
+			
+			if (donor->isAltruistic()) {
+				altruistic = true;
+			}
+
+			QAction * editAction = new QAction("Edit Donor " + donor->donorString(), this);
+			connect(editAction, SIGNAL(triggered()), donor, SLOT(edit()));
+
+			menu.addAction(editAction);						
+		}
 
 		if (!altruistic) {
 			QAction * addAdditionalDonorAction = new QAction("Add Additional Donor", this);
