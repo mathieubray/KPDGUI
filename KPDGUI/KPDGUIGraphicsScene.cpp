@@ -173,10 +173,12 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 	}
 
 	else if (nodes.size() == 1){
+		
+		KPDGUINode * node = nodes.at(0);
 
-		bool altruistic = false;
+		//bool altruistic = false;
 
-		QVector<KPDGUICandidate *> candidates;
+		/*QVector<KPDGUICandidate *> candidates;
 		QVector<KPDGUIDonor *> donors;
 
 		foreach(QGraphicsItem * item, items) {
@@ -190,9 +192,10 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 					donors << donor;
 				}
 			}			
-		}
+		}*/
 
-		if (donors.size() > 1) {
+
+		/*if (node->getNumberOfDonors() > 1) {
 
 			int n = donors.size();
 			bool continueSorting = true;
@@ -209,11 +212,15 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 					}
 				}
 			}			
-		}
+		}*/
 
-		if (candidates.size() > 0) {
+		//if (candidates.size() > 0) {
 
-			KPDGUICandidate * candidate = candidates.at(0);
+			//KPDGUICandidate * candidate = candidates.at(0);
+
+		if (node->getType() != NDD) {
+
+			KPDGUICandidate * candidate = node->getCandidate();
 
 			QAction * editAction = new QAction("Edit Candidate " + candidate->candidateString(), this);
 			connect(editAction, SIGNAL(triggered()), candidate, SLOT(edit()));
@@ -222,11 +229,11 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 			menu.addSeparator();
 		}
 
-		foreach(KPDGUIDonor * donor, donors){
+		foreach(KPDGUIDonor * donor, node->getDonors()){
 			
-			if (donor->isAltruistic()) {
+			/*if (donor->isAltruistic()) {
 				altruistic = true;
-			}
+			}*/
 
 			QAction * editAction = new QAction("Edit Donor " + donor->donorString(), this);
 			connect(editAction, SIGNAL(triggered()), donor, SLOT(edit()));
@@ -234,7 +241,7 @@ void KPDGUIGraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 			menu.addAction(editAction);						
 		}
 
-		if (!altruistic) {
+		if (node->getType() != NDD) {
 			QAction * addAdditionalDonorAction = new QAction("Add Additional Donor", this);
 			connect(addAdditionalDonorAction, SIGNAL(triggered()), this, SLOT(addAdditionalDonor()));
 
@@ -347,7 +354,10 @@ void KPDGUIGraphicsScene::cluster() {
 
 void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
 
-	qreal padding = 150;
+	qreal padding = 500;
+
+	RNG * rng = new RNG();
+	rng->setSeed(900707);
 	
 	QObject * object = sender();
 	
@@ -374,6 +384,7 @@ void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
 
 	KPDGUIArrangement * arrangement = dynamic_cast<KPDGUIArrangement *>(object);
 	
+
 	if (arrangement) {
 
 		foreach(KPDGUINode * node, nodesToMove) {
@@ -384,16 +395,16 @@ void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
 				qreal newY = node->getNodePosition().y();
 
 				if (counter % 4 == 0) {
-					newX = minX - padding;
+					newX = minX - padding * (1 + rng->runif());
 				}
 				else if (counter % 4 == 1) {
-					newX = maxX + padding;
+					newX = maxX + padding * (1 + rng->runif());
 				}
 				else if (counter % 4 == 2) {
-					newY = minY - padding;
+					newY = minY - padding * (1 + rng->runif());
 				}
 				else {
-					newY = maxY + padding;
+					newY = maxY + padding * (1 + rng->runif());
 				}
 
 				node->setNodePosition(QPointF(newX, newY));
@@ -417,16 +428,16 @@ void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
 					qreal newY = node->getNodePosition().y();
 
 					if (counter % 4 == 0) {
-						newX = minX - padding;
+						newX = minX - padding * (1 + rng->runif());
 					}
 					else if (counter % 4 == 1) {
-						newX = maxX + padding;
+						newX = maxX + padding * (1 + rng->runif());
 					}
 					else if (counter % 4 == 2) {
-						newY = minY - padding;
+						newY = minY - padding * (1 + rng->runif());
 					}
 					else {
-						newY = maxY + padding;
+						newY = maxY + padding * (1 + rng->runif());
 					}
 
 					node->setNodePosition(QPointF(newX, newY));
@@ -436,6 +447,8 @@ void KPDGUIGraphicsScene::isolate(int minX, int maxX, int minY, int maxY) {
 			}
 		}
 	}
+
+	delete rng;
 }
 
 void KPDGUIGraphicsScene::changeStatus() {

@@ -15,24 +15,29 @@ DialogSimParameters::DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *p
 {
 	setupUi(this);
 
-	//Optimization Scheme
+	saveSolutionCheckBox->setChecked(paramInfo->getSaveSolution());
+	folderLineEdit->setText(paramInfo->getSaveSolutionFolder());
+
+	highlightTopSolutionCheckBox->setChecked(paramInfo->getHighlightTopSolution());
+
+	collectArrangementsCheckBox->setChecked(paramInfo->getCollectArrangements());
+	collectArrangementsSpinBox->setValue(paramInfo->getCollectArrangementsCutoff());	
+
+	// Simulation Settings
 	optComboBox->setCurrentIndex(KPDFunctions::optSchemeToInt(paramInfo->getOptimizationScheme()));
 	
 	enableOptimizationOptions(optComboBox->currentIndex());
 
-	//Utility Scheme
 	utilComboBox->setCurrentIndex(KPDFunctions::utilSchemeToInt(paramInfo->getUtilityScheme()));
 	
-	//Max Chain Length
 	cycleSizeSpinBox->setValue(paramInfo->getMaxCycleSize());
 	chainLengthSpinBox->setValue(paramInfo->getMaxChainLength());
 	lrsSizeSpinBox->setValue(paramInfo->getMaxLRSSize());
 
-	//Arrangements
-	collectArrangementsCheckBox->setChecked(paramInfo->getCollectArrangements());
-	collectArrangementsSpinBox->setValue(paramInfo->getCollectArrangementsCutoff());
+	solutionsSpinBox->setValue(paramInfo->getNumberOfSolutions());
+
 	
-	//Numerical Parameters
+	//Additional Options
 	praCheckBox->setChecked(paramInfo->addAdvantageToHighPRACandidates());
 	if (paramInfo->addAdvantageToHighPRACandidates()){
 		praCutoffSpinBox->setValue(paramInfo->getPRAAdvantageCutoff());
@@ -45,14 +50,11 @@ DialogSimParameters::DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *p
 	
 	enablePRAOptions(praCheckBox->isChecked());
 
-	solutionsSpinBox->setValue(paramInfo->getNumberOfSolutions());
-
 	estimateEUCheckBox->setChecked(paramInfo->estimateExpectedUtility());
 	numberOfEUSimSpinBox->setValue(paramInfo->getNumberOfExpectedUtilityIterations());
 	
 	enableEstimateEUOptions(estimateEUCheckBox->isChecked());
 
-	//Additional Options
 	reserveOtoOBox->setChecked(paramInfo->reserveODonorsForOCandidates());
 	checkAdditionalHLABox->setChecked(paramInfo->checkAdditionalHLA());
 	compatibleBox->setChecked(paramInfo->includeCompatiblePairs());
@@ -60,6 +62,13 @@ DialogSimParameters::DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *p
 	allowABBridgeBox->setChecked(paramInfo->allowABBridgeDonors());
 	
 	enableBridgeDonorOptions(excludeABDonorsBox->isChecked());
+	
+}
+
+void DialogSimParameters::browse() {
+	
+	QString folderName = QFileDialog::getExistingDirectory(this, "Open Folder", "", QFileDialog::ShowDirsOnly | QFileDialog::DontUseNativeDialog);
+	folderLineEdit->setText(folderName);
 	
 }
 

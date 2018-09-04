@@ -465,7 +465,7 @@ public:
     {
         DialogDonor->setWindowTitle(QApplication::translate("DialogDonor", "Add New NDD", 0));
         donorGroupBox->setTitle(QApplication::translate("DialogDonor", "Donor Information", 0));
-        donorNameLabel->setText(QApplication::translate("DialogDonor", "Name", 0));
+        donorNameLabel->setText(QApplication::translate("DialogDonor", "Identifier", 0));
         donorAgeLabel->setText(QApplication::translate("DialogDonor", "Age", 0));
         donorGenderLabel->setText(QApplication::translate("DialogDonor", "Gender", 0));
         donorGenderComboBox->clear();
@@ -494,7 +494,7 @@ public:
         );
         donorCigaretteCheckBox->setText(QApplication::translate("DialogDonor", "Cigarette User", 0));
         donorStatusCheckBox->setText(QApplication::translate("DialogDonor", "Include in Match Run", 0));
-        donorNameLineEdit->setText(QApplication::translate("DialogDonor", "Donor Name", 0));
+        donorNameLineEdit->setText(QApplication::translate("DialogDonor", "Donor Identifier", 0));
         donorCWLabel->setText(QApplication::translate("DialogDonor", "Donor HLA CW", 0));
         donorALabel->setText(QApplication::translate("DialogDonor", "Donor HLA A", 0));
         donorBLabel->setText(QApplication::translate("DialogDonor", "Donor HLA B", 0));

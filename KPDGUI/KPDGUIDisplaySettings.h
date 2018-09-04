@@ -12,7 +12,7 @@ class KPDGUIDisplaySettings {
 	
 private:
 
-	KPDNodeDisplayMode nodeDisplayMode;
+	KPDDonorDisplayMode nodeDisplayMode;
 
 	bool showAllNodes;
 	bool showNodeSubset;
@@ -43,7 +43,7 @@ public:
 	bool changeDisplaySettings(KPDGUIDisplaySettings * d);
 
 	// Getters
-	KPDNodeDisplayMode getNodeDisplayMode() const;
+	KPDDonorDisplayMode getNodeDisplayMode() const;
 
 	bool getShowAllNodes() const;
 	bool getShowNodeSubset() const;
@@ -66,7 +66,7 @@ public:
 	bool getHighlightMatchesToAvoid() const;
 
 	// Setters
-	void setNodeDisplayMode(KPDNodeDisplayMode mode);	
+	void setNodeDisplayMode(KPDDonorDisplayMode mode);	
 
 	void setShowAllNodes(bool show);
 	void setShowNodeSubset(bool show);

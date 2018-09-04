@@ -50,7 +50,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="donorNameLabel">
        <property name="text">
-        <string>Name</string>
+        <string>Identifier</string>
        </property>
       </widget>
      </item>
@@ -282,7 +282,7 @@
      <item row="0" column="2" colspan="4">
       <widget class="QLineEdit" name="donorNameLineEdit">
        <property name="text">
-        <string>Donor Name</string>
+        <string>Donor Identifier</string>
        </property>
       </widget>
      </item>

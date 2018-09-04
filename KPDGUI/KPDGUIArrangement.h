@@ -70,6 +70,7 @@ public slots:
 	// Strings
 	QString arrangementLabel();
 	QString arrangementDashboardString();
+	QString arrangementSolutionString();
 
 
 private:

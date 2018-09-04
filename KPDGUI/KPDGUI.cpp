@@ -1137,7 +1137,34 @@ void KPDGUI::performMatchRun()
 		storedMatchRunResults.insert(matchRunID, matchRunArrangementSet);
 		
 
-		// Go through solutions			
+		// Go through solutions		
+		QString timestampCopy(timestamp);
+		QString folderName = kpdguiParameters->getSaveSolutionFolder() + "/" + "KPDGUI_" + timestampCopy.replace(":","_").replace(" ","_");
+
+		if (kpdguiParameters->getSaveSolution()) {
+			QDir().mkpath(folderName);
+
+			QString exchangeListFileName = folderName + "/ExchangeList.csv";
+
+			QFile exchangeListFile(exchangeListFileName);
+			if (exchangeListFile.open(QIODevice::WriteOnly)) {
+				QTextStream stream(&exchangeListFile);
+
+				stream << matchRun->getArrangementsCSV();
+			}
+
+
+			QString solutionFileName = folderName + "/SolutionList.csv";
+
+			QFile solutionFile(solutionFileName);
+			if (solutionFile.open(QIODevice::WriteOnly)) {
+				QTextStream solutionStream(&solutionFile);
+
+				solutionStream << matchRun->getSolutionsCSV();
+			}
+
+		}
+
 		progressBar->setLabelText("Preparing Match Run Solutions...");
 		progressBar->setRange(0, numberOfSelectedSolutions);
 		progressBar->setValue(0);
@@ -1170,12 +1197,28 @@ void KPDGUI::performMatchRun()
 
 			// Print to dashboard
 			matchRunSolutions << newSolution;
-
-			// Print to Dashboard
 			updateStatus(newSolution->toCondensedString());
+
+			if (kpdguiParameters->getSaveSolution()) {
+
+				QString solutionSpecificationsFileName = folderName + "/SolutionSpecifications_" + QString::number(p) + ".txt";
+
+				QFile solutionSpecificationsFile(solutionSpecificationsFileName);
+				if (solutionSpecificationsFile.open(QIODevice::WriteOnly)) {
+					QTextStream solutionSpecificationStream(&solutionSpecificationsFile);
+
+					solutionSpecificationStream << newSolution->toString();
+				}
+			}
 
 			progressBar->setValue(p);
 			QApplication::processEvents();
+
+			if (kpdguiParameters->getHighlightTopSolution() && i == 0) {
+				newSolution->cluster();
+				newSolution->isolate();
+				newSolution->highlight();
+			}
 
 			p++;
 		}		
@@ -1186,12 +1229,27 @@ void KPDGUI::performMatchRun()
 		kpdguiParameters->setParametersHaveBeenUpdatedFlag(false);
 
 		emit matchRunCompleted();
-
+		
 		// Close Progress Bar
 		progressBar->close();
 		delete progressBar;
 		QApplication::restoreOverrideCursor();
 		QApplication::processEvents();
+
+		ui->kpdListView->setCurrentIndex(6);		
+
+		QString message = "Match Run Successful!";
+
+		if (kpdguiParameters->getHighlightTopSolution()) {
+			message.append(" Top Solution is Highlighted.");
+		}
+
+		if (kpdguiParameters->getSaveSolution()) {
+			message.append("\n\nResults Saved to ");
+			message.append(kpdguiParameters->getSaveSolutionFolder());
+		}	
+
+		QMessageBox::information(this, "Run Successful!", message);
 
 		updateStatus("Run Successful");
 	}

@@ -33,8 +33,9 @@ KPDGUICandidate::KPDGUICandidate(){
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
 
-	setRect(QRectF(0, 0, 75, 65));	
+	setRect(QRectF(0, 0, 75, 65));
 
+	currentDisplayMode = DONOR_DISPLAY_MULTIPLE;
 	hue = 80;
 }
 
@@ -52,6 +53,7 @@ KPDGUICandidate::KPDGUICandidate(DialogCandidate * c){
 	setFlags(ItemIsMovable | ItemIsSelectable | ItemSendsGeometryChanges);
 	setAcceptHoverEvents(true);
 	
+	currentDisplayMode = DONOR_DISPLAY_MULTIPLE;
 	hue = 80;
 }
 
@@ -339,6 +341,11 @@ void KPDGUICandidate::setComment(QString comment){
 	candidateComment = comment;
 }
 
+void KPDGUICandidate::setDisplayMode(KPDDonorDisplayMode mode) {
+	currentDisplayMode = mode;
+}
+
+
 QPointF KPDGUICandidate::getCandidatePosition() {
 
 	QPointF point = scenePos();
@@ -365,8 +372,13 @@ void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 {
 	QColor myBackgroundColor;
 
-	if (candidateStatus) {		
-		myBackgroundColor = QColor(255, hue, hue);
+	if (candidateStatus) {
+		if(currentDisplayMode == DONOR_DISPLAY_NONE && parentNode->getNumberOfDonors() > 1) {
+			myBackgroundColor = QColor(255, 128, 0);
+		}
+		else {
+			myBackgroundColor = QColor(255, hue, hue);
+		}		
 	}
 	else {
 		myBackgroundColor = QColor(100, 100, 100);
@@ -392,8 +404,17 @@ void KPDGUICandidate::paint(QPainter *painter, const QStyleOptionGraphicsItem *o
 	}
 
 	painter->setPen(pen);
-	painter->setBrush(QBrush(myBackgroundColor, Qt::SolidPattern));
-
+	//if (!candidateStatus) {
+		painter->setBrush(QBrush(myBackgroundColor, Qt::SolidPattern));
+	//}
+	//else {
+	//	if (parentNode->getNumberOfDonors() > 1) {
+	//		painter->setBrush(QBrush(myBackgroundColor, Qt::Dense3Pattern));
+	//	}
+	//	else {
+	//		painter->setBrush(QBrush(myBackgroundColor, Qt::SolidPattern));
+	//	}
+	//}
 	QRectF donorRect = boundingRect();
 	painter->drawEllipse(donorRect);
 

@@ -316,7 +316,7 @@ bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 	if (displaySettings->getShowNodeSubset()){
 		if (!displaySettings->getShowExcludedNodes()){
 
-			if (displaySettings->getNodeDisplayMode() == SEPARATE_DONOR_CANDIDATE) {
+			if (displaySettings->getNodeDisplayMode() == DONOR_DISPLAY_ALL) {
 
 				if (!(myDonor->getStatus() && myCandidate->getParentNode()->getStatus())) {
 					return false;
@@ -328,7 +328,6 @@ bool KPDGUIMatch::checkVisibility(KPDGUIDisplaySettings * displaySettings){
 					return false;
 				}
 			}
-
 			
 		}
 
@@ -403,9 +402,9 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 
 		if (!filterOut) {
 			
-			KPDNodeDisplayMode nodeDisplayMode = displaySettings->getNodeDisplayMode();
+			KPDDonorDisplayMode nodeDisplayMode = displaySettings->getNodeDisplayMode();
 
-			if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+			if (nodeDisplayMode == DONOR_DISPLAY_ALL) {
 				if (myDonor->isSelected() && myCandidate->isSelected()) {
 					highlightMatch(1);
 				}
@@ -427,7 +426,7 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 				setVisible(checkVisibility(displaySettings));
 			}
 			else if (displaySettings->getMatchDisplayMode() == SELECTED_COMPATIBILITIES) {
-				if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+				if (nodeDisplayMode == DONOR_DISPLAY_ALL) {
 					if (myDonor->isSelected()) {
 						setVisible(checkVisibility(displaySettings));
 					}
@@ -435,7 +434,7 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 						setVisible(checkVisibility(displaySettings));
 					}
 				}
-				else {
+				else  {
 					if (myDonor->isAltruistic()) {
 						if (myDonor->isSelected()) {
 							setVisible(checkVisibility(displaySettings));
@@ -455,7 +454,7 @@ void KPDGUIMatch::updateVisibility(KPDGUIDisplaySettings * displaySettings){
 				}
 			}
 			else if (displaySettings->getMatchDisplayMode() == WITHIN_SELECTION) {
-				if (nodeDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+				if (nodeDisplayMode == DONOR_DISPLAY_ALL) {
 					if (myDonor->isSelected() && myCandidate->isSelected()) {
 						setVisible(checkVisibility(displaySettings));
 					}

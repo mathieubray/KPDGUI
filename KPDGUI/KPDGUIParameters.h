@@ -19,6 +19,15 @@ public:
 	QString toString();
 
 	//Getters
+
+	bool getSaveSolution() const;
+	QString getSaveSolutionFolder() const;
+
+	bool getCollectArrangements() const;
+	int getCollectArrangementsCutoff() const;
+
+	bool getHighlightTopSolution() const;
+
 	KPDOptimizationScheme getOptimizationScheme() const;
 	KPDUtilityScheme getUtilityScheme() const;
 
@@ -26,14 +35,11 @@ public:
 	int getMaxChainLength() const;
 	int getMaxLRSSize() const;
 
-	bool getCollectArrangements() const;
-	int getCollectArrangementsCutoff() const;
+	int getNumberOfSolutions() const;
 
 	bool addAdvantageToHighPRACandidates() const;
 	int getPRAAdvantageCutoff() const;
 	double getPRAAdvantageValue() const;
-
-	int getNumberOfSolutions() const;
 
 	bool estimateExpectedUtility() const;
 	int getNumberOfExpectedUtilityIterations() const;
@@ -45,6 +51,14 @@ public:
 	bool allowABBridgeDonors() const;
 
 	//Setters
+	void setSaveSolution(bool save);
+	void setSaveSolutionFolder(QString folder);
+
+	void setCollectArrangements(bool collect);
+	void setCollectArrangementsCutoff(int cutoff);
+
+	void setHighlightTopSolution(bool highlight);
+
 	void setOptimizationScheme(KPDOptimizationScheme scheme);
 	void setUtilityScheme(KPDUtilityScheme scheme);
 
@@ -52,14 +66,11 @@ public:
 	void setMaxChainLength(int length);
 	void setMaxLRSSize(int size);
 
-	void setCollectArrangements(bool collect);
-	void setCollectArrangementsCutoff(int cutoff);
+	void setNumberOfSolutions(int solutions);
 
 	void setAddAdvantagetoHighPRACandidatesFlag(bool flag);
 	void setPRAAdvantageCutoff(int cutoff);
 	void setPRAAdvantageValue(double value);
-
-	void setNumberOfSolutions(int solutions);
 
 	void setEstimateExpectedUtilityFlag(bool flag);
 	void setNumberOfExpectedUtilityIterations(int iterations);
@@ -74,6 +85,14 @@ private:
 
 	bool parametersUpdated;
 
+	bool saveSolution;
+	QString saveSolutionFolder;
+
+	bool collectArrangements;
+	int collectArrangementsCutoff;
+
+	bool highlightTopSolution;
+
 	//Simulation Settings
 	KPDOptimizationScheme optimizationScheme;
 	KPDUtilityScheme utilityScheme;
@@ -81,21 +100,17 @@ private:
 	int maxCycleSize;
 	int maxChainLength;
 	int maxLRSSize;
-
-	bool collectArrangements;
-	int collectArrangementsCutoff;
-
+	
+	int numberOfSolutions;
+	
 	//Numerical Parameters		
 	bool addAdvantage;
 	int advantageCutoff;
 	double advantageValue;
-
-	int numberOfSolutions;
-
+	
 	bool estimateEU;
 	int numberOfEUIterations;
 
-	//Additional Options
 	bool reserveOforO;	
 	bool checkHLA;
 	bool includeCompatible;

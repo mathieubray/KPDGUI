@@ -10,6 +10,7 @@
 #include "KPDGUINode.h"
 #include "KPDGUIArrangement.h"
 #include "KPDGUIArrangementSet.h"
+#include "KPDGUIRNG.h"
 
 class KPDGUIGraphicsScene : public QGraphicsScene 
 {

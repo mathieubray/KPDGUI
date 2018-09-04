@@ -54,8 +54,10 @@ KPDGUIMatchRun::KPDGUIMatchRun(QList<KPDGUINode *> nodes, KPDGUIParameters * par
 		// Select Optimal Arrangements
 		getOptimalSolutionForCurrentMatchRun(params->getOptimizationScheme(), params->getNumberOfSolutions());
 	}
-	
-	
+
+	arrangementsCSV = "Exchange,Nodes,NodeIDs,HasNDD,AssignedValue\n";
+	solutionsCSV = "Solution,ExchangeIDs,AssignedValue\n";
+		
 }
 
 KPDGUIMatchRun::~KPDGUIMatchRun(){
@@ -1997,16 +1999,44 @@ QVector<QVector<KPDGUINode *> > KPDGUIMatchRun::getMatchRunArrangementNodes() {
 
 	QVector<QVector<KPDGUINode *> > arrangements;
 
+	int j = 0;
+
 	for (std::vector<std::vector<int> >::iterator arrangementIt = matchRunArrangements.begin(); arrangementIt != matchRunArrangements.end(); arrangementIt++) {
+
+		QVector<int> nodeIDs;
+		QString hasNDD = "No";
 
 		QVector<KPDGUINode *> newArrangement;
 
 		for (std::vector<int>::iterator nodeIt = arrangementIt->begin(); nodeIt != arrangementIt->end(); nodeIt++) {
 
-			newArrangement << matchRunNodeVector[*nodeIt];
+			KPDGUINode * node = matchRunNodeVector[*nodeIt];
+
+			newArrangement << node;
+
+			nodeIDs << node->getID();
+			if (node->getType() == NDD) {
+				hasNDD = "Yes";
+			}
 		}
 
+		if (optScheme == LOCALLY_RELEVANT_SUBGRAPHS) {
+			std::sort(nodeIDs.begin(), nodeIDs.end());
+		}
+
+		QString nodeListString = "";
+
+		foreach(int id, nodeIDs) {
+			nodeListString.append(QString::number(id)).append(";");
+		}
+		nodeListString.chop(1);
+
+		QString newRow = QString::number(j + 1) + "," + QString::number(arrangementIt->size()) + "," + nodeListString + "," + hasNDD + "," + QString::number(assignedValueOfMatchRunArrangements[j]) + "\n";
+		arrangementsCSV.append(newRow);
+
 		arrangements << newArrangement;
+
+		j++;
 	}
 
 	return arrangements;
@@ -2112,15 +2142,28 @@ QVector<QVector<int> > KPDGUIMatchRun::getMatchRunSelectedSolutions() {
 
 	QVector<QVector<int> > solutions;
 
+	int j = 0;
+
 	for (std::vector<std::vector<int> >::iterator solutionIt = matchRunSelectedSolutions.begin(); solutionIt != matchRunSelectedSolutions.end(); solutionIt++) {
 
 		QVector<int> newSolution;
 
+		QString exchangeListString = "";
+		
 		for (std::vector<int>::iterator arrangementIt = solutionIt->begin(); arrangementIt != solutionIt->end(); arrangementIt++) {
 
 			newSolution << *arrangementIt;
 
+			exchangeListString.append(QString::number(*arrangementIt)).append(";");
+
 		}
+
+		exchangeListString.chop(1);
+
+		QString newRow = QString::number(j + 1) + "," + exchangeListString + "," + QString::number(assignedValueOfMatchRunSolutions[j]) + "\n";
+		solutionsCSV.append(newRow);
+
+		j++;
 
 		solutions << newSolution;
 	}
@@ -2139,6 +2182,14 @@ QVector<double> KPDGUIMatchRun::getAssignedValueOfMatchRunSolutions() {
 
 	return values;
 
+}
+
+QString KPDGUIMatchRun::getArrangementsCSV() {
+	return arrangementsCSV;
+}
+
+QString KPDGUIMatchRun::getSolutionsCSV() {
+	return solutionsCSV;
 }
 
 QString KPDGUIMatchRun::getNodeListString() {

@@ -330,14 +330,14 @@
      <item row="0" column="0">
       <widget class="QLabel" name="candidateNameLabel">
        <property name="text">
-        <string>Name</string>
+        <string>Identifier</string>
        </property>
       </widget>
      </item>
      <item row="0" column="2" colspan="3">
       <widget class="QLineEdit" name="candidateNameLineEdit">
        <property name="text">
-        <string>Candidate Name</string>
+        <string>Candidate Identifier</string>
        </property>
        <property name="placeholderText">
         <string/>

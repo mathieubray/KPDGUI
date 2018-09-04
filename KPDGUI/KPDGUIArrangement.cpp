@@ -361,3 +361,36 @@ QString KPDGUIArrangement::arrangementDashboardString(){
 	return arrangementString;
 }
 
+QString KPDGUIArrangement::arrangementSolutionString() {
+
+	QString arrangementString = QString::number(arrangementID) + ": <";
+
+	foreach(KPDGUINode * node, arrangementNodes) {
+		arrangementString += QString::number(node->getID());
+		arrangementString += ", ";
+	}
+
+	arrangementString.chop(2);
+	arrangementString += "> / ";
+	
+	if (floor(arrangementUtility) == arrangementUtility) {
+		arrangementString += "Value: " + QString::number(arrangementUtility);
+	}
+	else {
+		arrangementString += "Value: " + QString::number(floor(arrangementUtility * 1000 + 0.5) / 1000);
+	}
+
+	arrangementString += "\n\n";
+
+	foreach(KPDGUIMatch * arrow, arrangementMatches) {
+		QString arrowString = arrow->getDonor()->getName() + " -> " + arrow->getCandidate()->getName() + " (" + QString::number(arrow->getDonor()->getID()) + "-" + QString::number(arrow->getDonor()->getDonorNumber()) + " -> " + QString::number(arrow->getCandidate()->getID()) + ")";
+		arrangementString += arrowString;
+		arrangementString += "\n";
+	}
+	
+	arrangementString += "\n";
+
+	return arrangementString;
+}
+
+

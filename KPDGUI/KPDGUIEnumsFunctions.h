@@ -54,7 +54,7 @@ enum KPDCrossmatchResult { SUCCESSFUL_CROSSMATCH, O_DONOR_TO_NON_O_CANDIDATE, FA
 
 // GUI Display
 enum KPDDashboardMode { NODE, MATCH, DONOR, CANDIDATE};
-enum KPDNodeDisplayMode { SEPARATE_DONOR_CANDIDATE, COMBINE_DONOR_CANDIDATE };
+enum KPDDonorDisplayMode { DONOR_DISPLAY_MULTIPLE, DONOR_DISPLAY_ALL, DONOR_DISPLAY_NONE };
 enum KPDMatchDisplayMode { WITHIN_SELECTION, SELECTED_COMPATIBILITIES, ALL_COMPATIBILITIES, NO_COMPATIBILITIES };
 enum KPDNodeSortMode { NODESORT_ID, NODESORT_POPULARITY_SOLUTIONS, NODESORT_POPULARITY_ARRANGEMENTS, NODESORT_COMPATIBILITIES, NODESORT_COMPATIBLE_DONORS, NODESORT_COMPATIBLE_RECIPIENTS, NODESORT_PRA };
 enum KPDMatchSortMode { MATCHSORT_POPULARITY_SOLUTIONS, MATCHSORT_POPULARITY_ARRANGEMENTS, MATCHSORT_DONORID, MATCHSORT_RECIPID };
@@ -315,16 +315,16 @@ namespace KPDFunctions {
 
 
 	//Node Display Mode
-	inline KPDNodeDisplayMode intToNodeDisplayMode(int i) {
+	/*inline KPDDonorDisplayMode intToNodeDisplayMode(int i) {
 
-		KPDNodeDisplayMode mode = SEPARATE_DONOR_CANDIDATE;
+		KPDDonorDisplayMode mode = SEPARATE_DONOR_CANDIDATE;
 
 		if (i == 1) { mode = COMBINE_DONOR_CANDIDATE; }
 
 		return mode;
 	}
 
-	inline int nodeDisplayModeToInt(KPDNodeDisplayMode mode) {
+	inline int nodeDisplayModeToInt(KPDDonorDisplayMode mode) {
 
 		int i = 0;
 
@@ -333,11 +333,40 @@ namespace KPDFunctions {
 		return i;
 	}
 
-	inline QString toString(KPDNodeDisplayMode mode) {
+	inline QString toString(KPDDonorDisplayMode mode) {
 		if (mode == SEPARATE_DONOR_CANDIDATE) { return "Display Donors and Candidates Separately"; }
 		else if (mode == COMBINE_DONOR_CANDIDATE) { return "Display Donors and Candidates as a Single Node"; }
 		else { return ""; }
+	}*/
+
+	//Donor Display Mode
+	inline KPDDonorDisplayMode intToNodeDisplayMode(int i) {
+
+		KPDDonorDisplayMode mode = DONOR_DISPLAY_MULTIPLE;
+
+		if (i == 1) { mode = DONOR_DISPLAY_ALL; }
+		else if (i == 2) { mode = DONOR_DISPLAY_NONE; }
+
+		return mode;
 	}
+
+	inline int nodeDisplayModeToInt(KPDDonorDisplayMode mode) {
+
+		int i = 0;
+
+		if (mode == DONOR_DISPLAY_ALL) { i = 1; }
+		else if (mode == DONOR_DISPLAY_NONE) { i = 2; }
+
+		return i;
+	}
+
+	inline QString toString(KPDDonorDisplayMode mode) {
+		if (mode == DONOR_DISPLAY_MULTIPLE) { return "Display Paired Donors in Multiple Donor Pairs"; }
+		else if (mode == DONOR_DISPLAY_ALL) { return "Display All Paired Donors"; }
+		else if (mode == DONOR_DISPLAY_NONE) { return "Display No Paired Donors"; }
+		else { return ""; }
+	}
+
 
 	//Match Display Mode
 	inline KPDMatchDisplayMode intToMatchDisplayMode(int i) {

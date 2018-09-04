@@ -15,19 +15,25 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_DialogMessage
 {
 public:
-    QGridLayout *gridLayout;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QTextEdit *messageBox;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *saveButton;
+    QSpacerItem *horizontalSpacer;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *DialogMessage)
@@ -40,30 +46,44 @@ public:
         QIcon icon;
         icon.addFile(QStringLiteral("images/logo.png"), QSize(), QIcon::Normal, QIcon::Off);
         DialogMessage->setWindowIcon(icon);
-        gridLayout = new QGridLayout(DialogMessage);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        verticalLayout = new QVBoxLayout();
+        layoutWidget = new QWidget(DialogMessage);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(11, 13, 481, 491));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        messageBox = new QTextEdit(DialogMessage);
+        verticalLayout->setContentsMargins(0, 0, 0, 0);
+        messageBox = new QTextEdit(layoutWidget);
         messageBox->setObjectName(QStringLiteral("messageBox"));
 
         verticalLayout->addWidget(messageBox);
 
-        buttonBox = new QDialogButtonBox(DialogMessage);
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        saveButton = new QPushButton(layoutWidget);
+        saveButton->setObjectName(QStringLiteral("saveButton"));
+
+        horizontalLayout->addWidget(saveButton);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        buttonBox = new QDialogButtonBox(layoutWidget);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Ok);
-        buttonBox->setCenterButtons(true);
+        buttonBox->setCenterButtons(false);
 
-        verticalLayout->addWidget(buttonBox);
+        horizontalLayout->addWidget(buttonBox);
 
 
-        gridLayout->addLayout(verticalLayout, 0, 0, 1, 1);
+        verticalLayout->addLayout(horizontalLayout);
 
 
         retranslateUi(DialogMessage);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogMessage, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), DialogMessage, SLOT(reject()));
+        QObject::connect(saveButton, SIGNAL(clicked()), DialogMessage, SLOT(saveMessage()));
 
         QMetaObject::connectSlotsByName(DialogMessage);
     } // setupUi
@@ -71,6 +91,7 @@ public:
     void retranslateUi(QDialog *DialogMessage)
     {
         DialogMessage->setWindowTitle(QApplication::translate("DialogMessage", "Solution Information", 0));
+        saveButton->setText(QApplication::translate("DialogMessage", "Save...", 0));
     } // retranslateUi
 
 };

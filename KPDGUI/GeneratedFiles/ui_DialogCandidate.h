@@ -384,8 +384,8 @@ public:
         candidatePrevTransCheckBox->setText(QApplication::translate("DialogCandidate", "Previous Transplant ", 0));
         moreRecipInfo->setTabText(moreRecipInfo->indexOf(donorCharacteristicsTab), QApplication::translate("DialogCandidate", "Candidate Characteristics", 0));
         candidateGroupBox->setTitle(QApplication::translate("DialogCandidate", "Candidate Information", 0));
-        candidateNameLabel->setText(QApplication::translate("DialogCandidate", "Name", 0));
-        candidateNameLineEdit->setText(QApplication::translate("DialogCandidate", "Candidate Name", 0));
+        candidateNameLabel->setText(QApplication::translate("DialogCandidate", "Identifier", 0));
+        candidateNameLineEdit->setText(QApplication::translate("DialogCandidate", "Candidate Identifier", 0));
         candidateNameLineEdit->setPlaceholderText(QString());
         candidateAgeLabel->setText(QApplication::translate("DialogCandidate", "Age", 0));
         candidateBTLabel->setText(QApplication::translate("DialogCandidate", "Blood Type", 0));

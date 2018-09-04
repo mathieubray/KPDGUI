@@ -380,7 +380,8 @@ QString KPDGUIArrangementSet::toString(){
 	}
 
 	foreach(KPDGUIArrangement * arrangement, arrangements) {
-		receipt = receipt + arrangement->arrangementDashboardString() + "\n";
+		//receipt = receipt + arrangement->arrangementDashboardString() + "\n";
+		receipt = receipt + arrangement->arrangementSolutionString() + "\n";
 		if (arrangement->hasAnNDD()) {
 			chains++;
 		}

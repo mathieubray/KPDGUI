@@ -3,7 +3,7 @@
 
 KPDGUIDisplaySettings::KPDGUIDisplaySettings(){
 
-	nodeDisplayMode = SEPARATE_DONOR_CANDIDATE;
+	nodeDisplayMode = DONOR_DISPLAY_MULTIPLE;
 
 	showAllNodes = true;
 	showNodeSubset = false;
@@ -88,7 +88,7 @@ bool KPDGUIDisplaySettings::changeDisplaySettings(KPDGUIDisplaySettings * d) {
 	return true;
 }
 
-KPDNodeDisplayMode KPDGUIDisplaySettings::getNodeDisplayMode() const {
+KPDDonorDisplayMode KPDGUIDisplaySettings::getNodeDisplayMode() const {
 	return nodeDisplayMode;
 }
 
@@ -152,7 +152,7 @@ bool KPDGUIDisplaySettings::getHighlightMatchesToAvoid() const {
 	return highlightMatchesToAvoid;
 }
 
-void KPDGUIDisplaySettings::setNodeDisplayMode(KPDNodeDisplayMode mode) {
+void KPDGUIDisplaySettings::setNodeDisplayMode(KPDDonorDisplayMode mode) {
 	nodeDisplayMode = mode;
 }
 

@@ -249,33 +249,54 @@ void KPDGUINode::setNodePosition(QPointF center) {
 
 void KPDGUINode::updateVisibility(KPDGUIDisplaySettings * displaySettings) {
 
-	if (displaySettings->getNodeDisplayMode() == SEPARATE_DONOR_CANDIDATE) {
+	if (displaySettings->getNodeDisplayMode() == DONOR_DISPLAY_ALL) {
 		if (nodeType == NDD) {
 			nodeDonors.first()->setVisible(true);
-			nodeDonors.first()->setDisplayMode(SEPARATE_DONOR_CANDIDATE);
+			nodeDonors.first()->setDisplayMode(DONOR_DISPLAY_ALL);
 		}
 		else {
 			nodeCandidate->setVisible(true);
-
+			
 			foreach(KPDGUIDonor * donor, nodeDonors) {
 				donor->setVisible(true);
-				donor->setDisplayMode(SEPARATE_DONOR_CANDIDATE);
+				donor->setDisplayMode(DONOR_DISPLAY_ALL);
 			}
+
+			nodeCandidate->setDisplayMode(DONOR_DISPLAY_ALL);
 		}
 	}
 
-	if (displaySettings->getNodeDisplayMode() == COMBINE_DONOR_CANDIDATE) {
+	if (displaySettings->getNodeDisplayMode() == DONOR_DISPLAY_NONE) {
 		if (nodeType == NDD) {
 			nodeDonors.first()->setVisible(true);
-			nodeDonors.first()->setDisplayMode(COMBINE_DONOR_CANDIDATE);
+			nodeDonors.first()->setDisplayMode(DONOR_DISPLAY_NONE);
 		}
 		else {
 			nodeCandidate->setVisible(true);
 
 			foreach(KPDGUIDonor * donor, nodeDonors) {
 				donor->setVisible(false);
-				donor->setDisplayMode(COMBINE_DONOR_CANDIDATE);
+				donor->setDisplayMode(DONOR_DISPLAY_NONE);
 			}
+
+			nodeCandidate->setDisplayMode(DONOR_DISPLAY_NONE);
+		}
+	}
+
+	if (displaySettings->getNodeDisplayMode() == DONOR_DISPLAY_MULTIPLE) {
+		if (nodeType == NDD) {
+			nodeDonors.first()->setVisible(true);
+			nodeDonors.first()->setDisplayMode(DONOR_DISPLAY_MULTIPLE);
+		}
+		else {
+
+			nodeCandidate->setVisible(true);
+			foreach(KPDGUIDonor * donor, nodeDonors) {
+				donor->setVisible(nodeDonors.size() != 1);
+				donor->setDisplayMode(DONOR_DISPLAY_MULTIPLE);
+			}
+			nodeCandidate->setDisplayMode(DONOR_DISPLAY_MULTIPLE);
+			
 		}
 	}
 

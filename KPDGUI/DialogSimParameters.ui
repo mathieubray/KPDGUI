@@ -6,568 +6,608 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>388</width>
-    <height>471</height>
+    <width>523</width>
+    <height>356</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>388</width>
-    <height>471</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>388</width>
-    <height>471</height>
+    <width>16777215</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>Set Parameters</string>
   </property>
-  <widget class="QWidget" name="layoutWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>373</width>
-     <height>457</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="verticalLayout">
-    <item>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="2">
-       <widget class="QComboBox" name="optComboBox">
-        <property name="currentIndex">
-         <number>2</number>
-        </property>
-        <item>
-         <property name="text">
-          <string>Cycles and Chains</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Cycles and Chains With Fallbacks</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Locally Relevant Subgraphs</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="optLabel">
-        <property name="text">
-         <string>Optimization Scheme</string>
-        </property>
-        <property name="buddy">
-         <cstring>optComboBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" colspan="2">
-       <widget class="QLabel" name="componentSizeLabel">
-        <property name="text">
-         <string>Maximum Subgraph Size</string>
-        </property>
-        <property name="buddy">
-         <cstring>cycleSizeSpinBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="2">
-       <layout class="QHBoxLayout" name="cycleSizeLayout">
-        <item>
-         <widget class="QSpinBox" name="cycleSizeSpinBox">
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="cycleSizeSlider">
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-          <property name="pageStep">
-           <number>2</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBelow</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="2">
-       <layout class="QHBoxLayout" name="chainLengthLayout">
-        <item>
-         <widget class="QSpinBox" name="chainLengthSpinBox">
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="chainLengthSlider">
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-          <property name="pageStep">
-           <number>2</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBelow</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="4" column="2">
-       <layout class="QHBoxLayout" name="lrsSizeLayout">
-        <item>
-         <widget class="QSpinBox" name="lrsSizeSpinBox">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="lrsSizeSlider">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="minimum">
-           <number>2</number>
-          </property>
-          <property name="maximum">
-           <number>6</number>
-          </property>
-          <property name="pageStep">
-           <number>2</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="tickPosition">
-           <enum>QSlider::TicksBelow</enum>
-          </property>
-          <property name="tickInterval">
-           <number>1</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="chainLengthLabel">
-        <property name="text">
-         <string>Maximum Chain Length</string>
-        </property>
-        <property name="buddy">
-         <cstring>cycleSizeSpinBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="cycleSizeLabel">
-        <property name="text">
-         <string>Maximum Cycle Size</string>
-        </property>
-        <property name="buddy">
-         <cstring>cycleSizeSpinBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="utilLabel">
-        <property name="text">
-         <string>Utility Scheme</string>
-        </property>
-        <property name="buddy">
-         <cstring>utilComboBox</cstring>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QComboBox" name="utilComboBox">
-        <item>
-         <property name="text">
-          <string>Transplants</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>5 Year Survival</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>10 Year Survival</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Difficult-to-Transplant</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Assigned Score</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QCheckBox" name="collectArrangementsCheckBox">
-        <property name="text">
-         <string>Collect Found Exchanges</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QLabel" name="collectArrangementsLabel">
-        <property name="text">
-         <string>Cutoff</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSpinBox" name="collectArrangementsSpinBox">
-        <property name="minimum">
-         <number>1</number>
-        </property>
-        <property name="maximum">
-         <number>1000</number>
-        </property>
-        <property name="singleStep">
-         <number>25</number>
-        </property>
-        <property name="value">
-         <number>200</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <widget class="QTabWidget" name="additionalParametersTabWidget">
-      <property name="minimumSize">
-       <size>
-        <width>371</width>
-        <height>221</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>371</width>
-        <height>221</height>
-       </size>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <property name="usesScrollButtons">
-       <bool>false</bool>
-      </property>
-      <widget class="QWidget" name="numericalParametersTab">
-       <attribute name="title">
-        <string>Numerical Parameters</string>
-       </attribute>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>341</width>
-          <height>171</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="numericalParametersLayout">
-         <item>
-          <widget class="QCheckBox" name="praCheckBox">
-           <property name="text">
-            <string>Add Advantage to High PRA Candidates</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="praLayout">
-           <item>
-            <widget class="QSpinBox" name="praCutoffSpinBox">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <number>100</number>
-             </property>
-             <property name="singleStep">
-              <number>10</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="praCutoffLabel">
-             <property name="text">
-              <string>Cutoff</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="praAdvantageSpinBox">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="maximum">
-              <double>10.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="praAdvantageLabel">
-             <property name="text">
-              <string>Value</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="spacer1">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>18</width>
-             <height>18</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="solutionsLayout">
-           <item>
-            <widget class="QLabel" name="solutionsLabel">
-             <property name="text">
-              <string>Number of Solutions</string>
-             </property>
-             <property name="buddy">
-              <cstring>solutionsSpinBox</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="solutionsSpinBox">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>25</number>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSlider" name="solutionsSlider">
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>25</number>
-             </property>
-             <property name="pageStep">
-              <number>2</number>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <spacer name="spacer2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="estimateEUCheckBox">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Estimate Expected Utility</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <layout class="QHBoxLayout" name="estimateEULayout">
-           <item>
-            <widget class="QSpinBox" name="numberOfEUSimSpinBox">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <number>100</number>
-             </property>
-             <property name="maximum">
-              <number>100000</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="numberOfEUSimLabel">
-             <property name="text">
-              <string>Number of Expected Utility Simulations</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QCheckBox" name="saveSolutionCheckBox">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>Save Solution</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
       </widget>
-      <widget class="QWidget" name="additionalOptionsTab">
-       <attribute name="title">
-        <string>Additional Options</string>
-       </attribute>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>311</width>
-          <height>130</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="additionalOptionsLayout">
-         <item>
-          <widget class="QCheckBox" name="reserveOtoOBox">
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Folder</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="folderLineEdit"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="browseButton">
+       <property name="text">
+        <string>Browse...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QCheckBox" name="collectArrangementsCheckBox">
+       <property name="text">
+        <string>Collect All Exchanges</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="collectArrangementsLabel">
+       <property name="text">
+        <string>Maximum Number of Exchanges to Collect</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="collectArrangementsSpinBox">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>1000</number>
+       </property>
+       <property name="singleStep">
+        <number>25</number>
+       </property>
+       <property name="value">
+        <number>200</number>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QTabWidget" name="additionalParametersTabWidget">
+     <property name="minimumSize">
+      <size>
+       <width>371</width>
+       <height>221</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="usesScrollButtons">
+      <bool>false</bool>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Simulation Parameters</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>481</width>
+         <height>197</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="optLabel">
+          <property name="text">
+           <string>Optimization Scheme</string>
+          </property>
+          <property name="buddy">
+           <cstring>optComboBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QComboBox" name="optComboBox">
+          <property name="currentIndex">
+           <number>2</number>
+          </property>
+          <item>
            <property name="text">
-            <string>Reserve O Donors for O Recipients</string>
+            <string>Cycles and Chains</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="checkAdditionalHLABox">
+          </item>
+          <item>
            <property name="text">
-            <string>Check Additional HLA Information</string>
+            <string>Cycles and Chains With Fallbacks</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="compatibleBox">
+          </item>
+          <item>
            <property name="text">
-            <string>Include Compatible Pairs in Match Run</string>
+            <string>Locally Relevant Subgraphs</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="excludeABDonorsBox">
+          </item>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="utilLabel">
+          <property name="text">
+           <string>Utility Scheme</string>
+          </property>
+          <property name="buddy">
+           <cstring>utilComboBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="utilComboBox">
+          <item>
            <property name="text">
-            <string>Exclude AB Donors from Simulation</string>
+            <string>Transplants</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="allowABBridgeBox">
+          </item>
+          <item>
            <property name="text">
-            <string>Allow AB Bridge Donors</string>
+            <string>5 Year Survival</string>
            </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
+          </item>
+          <item>
+           <property name="text">
+            <string>10 Year Survival</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Difficult-to-Transplant</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Assigned Score</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="cycleSizeLabel">
+          <property name="text">
+           <string>Maximum Cycle Size</string>
+          </property>
+          <property name="buddy">
+           <cstring>cycleSizeSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <layout class="QHBoxLayout" name="cycleSizeLayout">
+          <item>
+           <widget class="QSpinBox" name="cycleSizeSpinBox">
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="cycleSizeSlider">
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+            <property name="pageStep">
+             <number>2</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="chainLengthLabel">
+          <property name="text">
+           <string>Maximum Chain Length</string>
+          </property>
+          <property name="buddy">
+           <cstring>cycleSizeSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <layout class="QHBoxLayout" name="chainLengthLayout">
+          <item>
+           <widget class="QSpinBox" name="chainLengthSpinBox">
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="chainLengthSlider">
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+            <property name="pageStep">
+             <number>2</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="componentSizeLabel">
+          <property name="text">
+           <string>Maximum Subgraph Size</string>
+          </property>
+          <property name="buddy">
+           <cstring>cycleSizeSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <layout class="QHBoxLayout" name="lrsSizeLayout">
+          <item>
+           <widget class="QSpinBox" name="lrsSizeSpinBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="lrsSizeSlider">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6</number>
+            </property>
+            <property name="pageStep">
+             <number>2</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+            <property name="tickInterval">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="solutionsLabel">
+          <property name="text">
+           <string>Number of Solutions</string>
+          </property>
+          <property name="buddy">
+           <cstring>solutionsSpinBox</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QSpinBox" name="solutionsSpinBox">
+            <property name="maximumSize">
+             <size>
+              <width>33</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>25</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="solutionsSlider">
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>25</number>
+            </property>
+            <property name="pageStep">
+             <number>2</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickPosition">
+             <enum>QSlider::TicksBelow</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
-    </item>
-    <item>
-     <widget class="QDialogButtonBox" name="buttonBox">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="standardButtons">
-       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-      </property>
+     <widget class="QWidget" name="additionalOptionsTab">
+      <attribute name="title">
+       <string>Additional Options</string>
+      </attribute>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>510</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QCheckBox" name="praCheckBox">
+            <property name="text">
+             <string>Add Advantage to High PRA Candidates</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QSpinBox" name="praCutoffSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximum">
+               <number>100</number>
+              </property>
+              <property name="singleStep">
+               <number>10</number>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="praCutoffLabel">
+              <property name="text">
+               <string>PRA Cutoff</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QDoubleSpinBox" name="praAdvantageSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="maximum">
+               <double>10.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="praAdvantageLabel">
+              <property name="text">
+               <string>Advantage</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="estimateEUCheckBox">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Estimate Expected Utility</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QSpinBox" name="numberOfEUSimSpinBox">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <number>100</number>
+              </property>
+              <property name="maximum">
+               <number>100000</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="numberOfEUSimLabel">
+              <property name="text">
+               <string>Estimation Iterations</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="additionalOptionsLayout">
+          <item>
+           <widget class="QCheckBox" name="reserveOtoOBox">
+            <property name="text">
+             <string>Reserve O Donors for O Recipients</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkAdditionalHLABox">
+            <property name="text">
+             <string>Check Additional HLA Information</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="compatibleBox">
+            <property name="text">
+             <string>Include Compatible Pairs in Match Run</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="excludeABDonorsBox">
+            <property name="text">
+             <string>Exclude AB Donors from Simulation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="allowABBridgeBox">
+            <property name="text">
+             <string>Allow AB Bridge Donors</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <widget class="QCheckBox" name="highlightTopSolutionCheckBox">
+       <property name="text">
+        <string>Cluster and Isolate Top Solution</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
  </widget>
  <tabstops>
   <tabstop>cycleSizeSpinBox</tabstop>
   <tabstop>cycleSizeSlider</tabstop>
   <tabstop>utilComboBox</tabstop>
   <tabstop>optComboBox</tabstop>
-  <tabstop>praCheckBox</tabstop>
   <tabstop>reserveOtoOBox</tabstop>
   <tabstop>checkAdditionalHLABox</tabstop>
   <tabstop>compatibleBox</tabstop>
@@ -582,8 +622,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>11</x>
-     <y>465</y>
+     <x>12</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -598,204 +638,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>11</x>
-     <y>465</y>
+     <x>12</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>256</x>
      <y>271</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cycleSizeSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>cycleSizeSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>186</x>
-     <y>93</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>237</x>
-     <y>84</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cycleSizeSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>cycleSizeSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>237</x>
-     <y>76</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>186</x>
-     <y>93</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>solutionsSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>solutionsSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>187</x>
-     <y>339</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>361</x>
-     <y>339</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>solutionsSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>solutionsSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>361</x>
-     <y>339</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>187</x>
-     <y>339</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>excludeABDonorsBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DialogSimParameters</receiver>
-   <slot>enableBridgeDonorOptions(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>112</x>
-     <y>346</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>38</x>
-     <y>358</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>praCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DialogSimParameters</receiver>
-   <slot>enablePRAOptions(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>40</x>
-     <y>265</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>71</x>
-     <y>363</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chainLengthSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>chainLengthSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>193</x>
-     <y>129</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>256</x>
-     <y>120</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>chainLengthSlider</sender>
-   <signal>sliderMoved(int)</signal>
-   <receiver>chainLengthSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>301</x>
-     <y>130</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>184</x>
-     <y>126</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lrsSizeSpinBox</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>lrsSizeSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>193</x>
-     <y>165</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>379</x>
-     <y>169</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>lrsSizeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>lrsSizeSpinBox</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>311</x>
-     <y>161</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>187</x>
-     <y>163</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>optComboBox</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>DialogSimParameters</receiver>
-   <slot>enableOptimizationOptions(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>286</x>
-     <y>20</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>384</x>
-     <y>202</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>estimateEUCheckBox</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>DialogSimParameters</receiver>
-   <slot>enableEstimateEUOptions(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>40</x>
-     <y>383</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>381</x>
-     <y>401</y>
     </hint>
    </hints>
   </connection>
@@ -806,12 +654,220 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>80</x>
-     <y>193</y>
+     <x>82</x>
+     <y>63</y>
     </hint>
     <hint type="destinationlabel">
-     <x>351</x>
-     <y>184</y>
+     <x>513</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cycleSizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>cycleSizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>191</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>194</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>solutionsSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>solutionsSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>299</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>302</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>solutionsSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>solutionsSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>501</x>
+     <y>302</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>excludeABDonorsBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>DialogSimParameters</receiver>
+   <slot>enableBridgeDonorOptions(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>122</x>
+     <y>137</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>38</x>
+     <y>358</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chainLengthSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>chainLengthSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>227</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>chainLengthSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>chainLengthSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>501</x>
+     <y>230</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>227</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lrsSizeSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lrsSizeSlider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>206</x>
+     <y>263</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>501</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cycleSizeSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>cycleSizeSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>501</x>
+     <y>194</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>191</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lrsSizeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>lrsSizeSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>501</x>
+     <y>266</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>206</x>
+     <y>263</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>optComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>DialogSimParameters</receiver>
+   <slot>enableOptimizationOptions(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>502</x>
+     <y>130</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>384</x>
+     <y>202</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveSolutionCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>folderLineEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>101</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>392</x>
+     <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>saveSolutionCheckBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>browseButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>32</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>513</x>
+     <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>browseButton</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogSimParameters</receiver>
+   <slot>browse()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>470</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>518</x>
+     <y>261</y>
     </hint>
    </hints>
   </connection>
@@ -821,5 +877,6 @@
   <slot>enableBridgeDonorOptions(bool)</slot>
   <slot>enableOptimizationOptions(int)</slot>
   <slot>enableEstimateEUOptions(bool)</slot>
+  <slot>browse()</slot>
  </slots>
 </ui>

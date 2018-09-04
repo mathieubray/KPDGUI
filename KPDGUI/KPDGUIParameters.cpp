@@ -6,6 +6,14 @@ KPDGUIParameters::KPDGUIParameters(){
 
 	parametersUpdated = false;
 
+	saveSolution = true;
+	saveSolutionFolder = QDir::currentPath();
+	
+	collectArrangements = true;
+	collectArrangementsCutoff = 200;
+
+	highlightTopSolution = true;
+
 	//Simulation Settings
 	optimizationScheme = LOCALLY_RELEVANT_SUBGRAPHS;
 	utilityScheme = TRANSPLANTS;	
@@ -13,21 +21,18 @@ KPDGUIParameters::KPDGUIParameters(){
 	maxCycleSize = 3;
 	maxChainLength = 3;
 	maxLRSSize = 4;
-
-	collectArrangements = true;
-	collectArrangementsCutoff = 200;
 	
-	//Numerical Parameters		
+	numberOfSolutions = 1;
+	
+
+	//Additional Options		
 	addAdvantage = false;
 	advantageCutoff = 100;
 	advantageValue = 0.0;
 
-	numberOfSolutions = 1;
-	
 	estimateEU = false;
 	numberOfEUIterations = 100;
 
-	//Additional Options
 	reserveOforO = false;	
 	checkHLA = false;
 	includeCompatible = false;
@@ -44,6 +49,14 @@ KPDGUIParameters::~KPDGUIParameters(){
 void KPDGUIParameters::changeParameters(DialogSimParameters * d){
 
 	parametersUpdated = true;
+	
+	saveSolution = d->saveSolutionCheckBox->isChecked();
+	saveSolutionFolder = d->folderLineEdit->text();
+
+	collectArrangements = d->collectArrangementsCheckBox->isChecked();
+	collectArrangementsCutoff = d->collectArrangementsSpinBox->value();
+
+	highlightTopSolution = d->highlightTopSolutionCheckBox->isChecked();
 
 	optimizationScheme = KPDFunctions::intToOptScheme(d->optComboBox->currentIndex());
 	utilityScheme = KPDFunctions::intToUtilScheme(d->utilComboBox->currentIndex());
@@ -52,15 +65,12 @@ void KPDGUIParameters::changeParameters(DialogSimParameters * d){
 	maxChainLength = d->chainLengthSpinBox->value();
 	maxLRSSize = d->lrsSizeSpinBox->value();
 
-	collectArrangements = d->collectArrangementsCheckBox->isChecked();
-	collectArrangementsCutoff = d->collectArrangementsSpinBox->value();
-
+	numberOfSolutions = d->solutionsSpinBox->value();
+	
 	addAdvantage = d->praCheckBox->isChecked();
 	advantageCutoff = d->praCutoffSpinBox->value();
 	advantageValue = d->praAdvantageSpinBox->value();
-
-	numberOfSolutions = d->solutionsSpinBox->value();
-	
+		
 	estimateEU = d->estimateEUCheckBox->isChecked();
 	numberOfEUIterations = d->numberOfEUSimSpinBox->value();
 
@@ -73,6 +83,14 @@ void KPDGUIParameters::changeParameters(DialogSimParameters * d){
 }
 
 void KPDGUIParameters::copyParameters(KPDGUIParameters * d){
+	
+	saveSolution = d->getSaveSolution();
+	saveSolutionFolder = d->getSaveSolutionFolder();
+
+	collectArrangements = d->getCollectArrangements();
+	collectArrangementsCutoff = d->getCollectArrangementsCutoff();
+
+	highlightTopSolution = d->getHighlightTopSolution();
 
 	optimizationScheme = d->getOptimizationScheme();
 	utilityScheme = d->getUtilityScheme();
@@ -81,14 +99,11 @@ void KPDGUIParameters::copyParameters(KPDGUIParameters * d){
 	maxChainLength = d->getMaxChainLength();
 	maxLRSSize = d->getMaxLRSSize();
 
-	collectArrangements = d->getCollectArrangements();
-	collectArrangementsCutoff = d->getCollectArrangementsCutoff();
+	numberOfSolutions = d->getNumberOfSolutions();
 	
 	addAdvantage = d->addAdvantageToHighPRACandidates();
 	advantageCutoff = d->getPRAAdvantageCutoff();
 	advantageValue = d->getPRAAdvantageValue();
-
-	numberOfSolutions = d->getNumberOfSolutions();
 
 	estimateEU = d->estimateExpectedUtility();
 	numberOfEUIterations = d->getNumberOfExpectedUtilityIterations();
@@ -113,6 +128,14 @@ void KPDGUIParameters::setParametersHaveBeenUpdatedFlag(bool flag){
 QString KPDGUIParameters::toString(){
 	QString parameterString = "";
 
+	if (saveSolution) {
+		parameterString.append("Solution Output Saved to " + saveSolutionFolder +"\n");
+	}
+
+	if (collectArrangements) {
+		parameterString.append("Collecting Arrangements for Display (If Less Than " + QString::number(collectArrangementsCutoff) + ")\n");
+	}
+	
 	parameterString.append("Optimization Based On " + KPDFunctions::toString(optimizationScheme) + "\n");
 
 	parameterString.append("Utility Based On " + KPDFunctions::toString(utilityScheme) + "\n");
@@ -126,14 +149,7 @@ QString KPDGUIParameters::toString(){
 		parameterString.append("Maximum Sub-Cycle Size: " + QString::number(maxCycleSize) + "\n");
 		parameterString.append("Maximum Sub-Chain Length: " + QString::number(maxChainLength) + "\n");
 	}
-
-	if (collectArrangements) {
-		parameterString.append("Collecting a Maximum of " + QString::number(collectArrangementsCutoff) + " Arrangements For Display\n");
-	}
-	else {
-		parameterString.append("Not Collecting Arrangemetns for Display");
-	}
-
+	
 	if (numberOfSolutions > 1){
 		parameterString.append(numberOfSolutions + " Alternate Solutions Produced\n");
 	}
@@ -185,6 +201,26 @@ QString KPDGUIParameters::toString(){
 	return parameterString;
 }
 
+bool KPDGUIParameters::getSaveSolution() const {
+	return saveSolution;
+}
+
+QString KPDGUIParameters::getSaveSolutionFolder() const {
+	return saveSolutionFolder;
+}
+
+bool KPDGUIParameters::getCollectArrangements() const {
+	return collectArrangements;
+}
+
+int KPDGUIParameters::getCollectArrangementsCutoff() const {
+	return collectArrangementsCutoff;
+}
+
+bool KPDGUIParameters::getHighlightTopSolution() const {
+	return highlightTopSolution;
+}
+
 KPDOptimizationScheme KPDGUIParameters::getOptimizationScheme() const {
 	return optimizationScheme;
 }
@@ -205,12 +241,8 @@ int KPDGUIParameters::getMaxLRSSize() const {
 	return maxLRSSize;
 }
 
-bool KPDGUIParameters::getCollectArrangements() const {
-	return collectArrangements;
-}
-
-int KPDGUIParameters::getCollectArrangementsCutoff() const {
-	return collectArrangementsCutoff;
+int KPDGUIParameters::getNumberOfSolutions() const {
+	return numberOfSolutions;
 }
 
 bool KPDGUIParameters::addAdvantageToHighPRACandidates() const {
@@ -223,10 +255,6 @@ int KPDGUIParameters::getPRAAdvantageCutoff() const {
 
 double KPDGUIParameters::getPRAAdvantageValue() const {
 	return advantageValue;
-}
-
-int KPDGUIParameters::getNumberOfSolutions() const {
-	return numberOfSolutions;
 }
 
 bool KPDGUIParameters::estimateExpectedUtility() const {
@@ -257,6 +285,26 @@ bool KPDGUIParameters::allowABBridgeDonors() const {
 	return allowABBridge;
 }
 
+void KPDGUIParameters::setSaveSolution(bool save) {
+	saveSolution = save;
+}
+
+void KPDGUIParameters::setSaveSolutionFolder(QString folder) {
+	saveSolutionFolder = folder;
+}
+
+void KPDGUIParameters::setCollectArrangements(bool collect) {
+	collectArrangements = collect;
+}
+
+void KPDGUIParameters::setCollectArrangementsCutoff(int cutoff) {
+	collectArrangementsCutoff = cutoff;
+}
+
+void KPDGUIParameters::setHighlightTopSolution(bool highlight) {
+	highlightTopSolution = highlight;
+}
+
 void KPDGUIParameters::setOptimizationScheme(KPDOptimizationScheme scheme){
 	optimizationScheme = scheme;
 }
@@ -277,12 +325,8 @@ void KPDGUIParameters::setMaxLRSSize(int size) {
 	maxLRSSize = size;
 }
 
-void KPDGUIParameters::setCollectArrangements(bool collect) {
-	collectArrangements = collect;
-}
-
-void KPDGUIParameters::setCollectArrangementsCutoff(int cutoff) {
-	collectArrangementsCutoff = cutoff;
+void KPDGUIParameters::setNumberOfSolutions(int solutions) {
+	numberOfSolutions = solutions;
 }
 
 void KPDGUIParameters::setAddAdvantagetoHighPRACandidatesFlag(bool flag){
@@ -295,10 +339,6 @@ void KPDGUIParameters::setPRAAdvantageCutoff(int cutoff){
 
 void KPDGUIParameters::setPRAAdvantageValue(double value){
 	advantageValue = value;
-}
-
-void KPDGUIParameters::setNumberOfSolutions(int solutions){
-	numberOfSolutions = solutions;
 }
 
 void KPDGUIParameters::setEstimateExpectedUtilityFlag(bool flag) {
@@ -329,6 +369,8 @@ void KPDGUIParameters::setAllowABBridgeDonorsFlag(bool flag){
 	allowABBridge = flag;
 }
 
+
+/* These currently don't load in the save folder. It's not that big a deal... */
 
 QDataStream &operator<<(QDataStream &out, const KPDGUIParameters & parameters)
 {

@@ -18,6 +18,9 @@ public:
 	DialogSimParameters(KPDGUIParameters *paramInfo, QWidget *parent = 0);
 
 public slots:
+
+	void browse();
+
 	void enableOptimizationOptions(int index);
 	void enablePRAOptions(bool enabled);
 	void enableBridgeDonorOptions(bool enabled);

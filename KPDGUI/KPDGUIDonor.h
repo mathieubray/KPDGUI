@@ -62,7 +62,7 @@ private:
 	QString donorComment;
 
 	// Display
-	KPDNodeDisplayMode currentDisplayMode;
+	KPDDonorDisplayMode currentDisplayMode;
 	double hue;
 
 signals:
@@ -219,7 +219,7 @@ public:
 
 	/// Visual Properties ///
 
-	void setDisplayMode(KPDNodeDisplayMode mode);
+	void setDisplayMode(KPDDonorDisplayMode mode);
 
 	QPointF getDonorPosition();
 	void setDonorPosition(QPointF point);

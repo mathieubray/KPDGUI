@@ -139,7 +139,7 @@
       <item>
        <widget class="QLabel" name="nodeDisplayModeLabel">
         <property name="text">
-         <string>Network Display Mode:</string>
+         <string>Donor Display Mode:</string>
         </property>
        </widget>
       </item>
@@ -147,12 +147,17 @@
        <widget class="QComboBox" name="nodeDisplayModeComboBox">
         <item>
          <property name="text">
-          <string>Display Donors and Candidate Separately</string>
+          <string>Display Multiple Paired Donors</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Display Donors and Candidate as a Single Node</string>
+          <string>Display All Paired Donors</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Display No Paired Donors</string>
          </property>
         </item>
        </widget>

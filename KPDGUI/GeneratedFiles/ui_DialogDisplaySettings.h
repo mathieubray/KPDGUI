@@ -187,11 +187,12 @@ public:
         showIncompatibleCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairings/NDDs with No Compatibilities", 0));
         praCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Display Pairings with Candidates in PRA Range", 0));
         showExcludedCheckBox->setText(QApplication::translate("DialogDisplaySettings", "Show Pairings/NDDs Excluded From Match Runs", 0));
-        nodeDisplayModeLabel->setText(QApplication::translate("DialogDisplaySettings", "Network Display Mode:", 0));
+        nodeDisplayModeLabel->setText(QApplication::translate("DialogDisplaySettings", "Donor Display Mode:", 0));
         nodeDisplayModeComboBox->clear();
         nodeDisplayModeComboBox->insertItems(0, QStringList()
-         << QApplication::translate("DialogDisplaySettings", "Display Donors and Candidate Separately", 0)
-         << QApplication::translate("DialogDisplaySettings", "Display Donors and Candidate as a Single Node", 0)
+         << QApplication::translate("DialogDisplaySettings", "Display Multiple Paired Donors", 0)
+         << QApplication::translate("DialogDisplaySettings", "Display All Paired Donors", 0)
+         << QApplication::translate("DialogDisplaySettings", "Display No Paired Donors", 0)
         );
         allNodesButton->setText(QApplication::translate("DialogDisplaySettings", "Display All Pairings/NDDs", 0));
         showArrangementsRadioButton->setText(QApplication::translate("DialogDisplaySettings", "Display Only Pairings/NDDs Involved in Transplant Arrangements", 0));

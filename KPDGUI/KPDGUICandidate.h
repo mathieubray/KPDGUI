@@ -54,6 +54,8 @@ private:
 	// Comment
 	QString candidateComment;
 
+	// Display
+	KPDDonorDisplayMode currentDisplayMode;
 	double hue;
 
 signals:
@@ -191,6 +193,8 @@ public:
 
 
 	/// Visual Properties ///
+
+	void setDisplayMode(KPDDonorDisplayMode mode);
 
 	QPointF getCandidatePosition();
 	void setCandidatePosition(QPointF point);

@@ -558,7 +558,7 @@ void KPDGUIDonor::setComment(QString comment){
 	donorComment = comment;
 }
 
-void KPDGUIDonor::setDisplayMode(KPDNodeDisplayMode mode) {
+void KPDGUIDonor::setDisplayMode(KPDDonorDisplayMode mode) {
 	currentDisplayMode = mode;
 }
 
@@ -586,11 +586,19 @@ void KPDGUIDonor::setDonorPosition(QPointF point) {
 
 QPointF KPDGUIDonor::getPosition() {
 
-	if (currentDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+	if (currentDisplayMode == DONOR_DISPLAY_ALL) {
 		return getDonorPosition();
 	}
-	else if (currentDisplayMode == COMBINE_DONOR_CANDIDATE) {
+	else if (currentDisplayMode == DONOR_DISPLAY_NONE) {
 		return parentNode->getNodePosition();
+	}
+	else if (currentDisplayMode == DONOR_DISPLAY_MULTIPLE) {
+		if (parentNode->getNumberOfDonors() > 1) {
+			return getDonorPosition();
+		}
+		else {
+			return parentNode->getNodePosition();
+		}
 	}
 	else {
 		return getDonorPosition();
@@ -599,11 +607,19 @@ QPointF KPDGUIDonor::getPosition() {
 
 QPolygonF KPDGUIDonor::getRect() {
 
-	if (currentDisplayMode == SEPARATE_DONOR_CANDIDATE) {
+	if (currentDisplayMode == DONOR_DISPLAY_ALL) {
 		return sceneBoundingRect();
 	}
-	else if (currentDisplayMode == COMBINE_DONOR_CANDIDATE) {
+	else if (currentDisplayMode == DONOR_DISPLAY_NONE) {
 		return parentNode->getRect();
+	}
+	else if (currentDisplayMode == DONOR_DISPLAY_MULTIPLE) {
+		if (parentNode->getNumberOfDonors() > 1) {
+			return sceneBoundingRect();
+		}
+		else {
+			return parentNode->getRect();
+		}
 	}
 	else {
 		return sceneBoundingRect();

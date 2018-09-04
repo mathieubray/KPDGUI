@@ -97,6 +97,9 @@ private:
 	double estimateExpectedUtility(std::vector<int> &arrangement);
 	double calculatePartialUtility(int nV, std::vector<std::vector<bool> > & incidence, std::vector<std::vector<std::vector<double> > > & utility, std::vector<KPDNodeType> & nodeTypes, std::vector<std::vector<KPDBloodType> > & donorBloodTypes);
 
+	QString arrangementsCSV;
+	QString solutionsCSV;
+
 	QString matchRunNodeList;
 	QString matchRunMatchList;
 
@@ -130,10 +133,12 @@ public:
 	
 
 	//Output
+	QString getArrangementsCSV();
+	QString getSolutionsCSV();
 
 	QString getNodeListString();
 	QString getMatchListString();
-
+	
 	QString printLog();	
 
 };
