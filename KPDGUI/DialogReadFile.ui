@@ -56,12 +56,12 @@
       <widget class="QComboBox" name="layoutComboBox">
        <item>
         <property name="text">
-         <string>Circle</string>
+         <string>Grid</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Grid</string>
+         <string>Circle</string>
         </property>
        </item>
       </widget>

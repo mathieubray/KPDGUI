@@ -849,11 +849,25 @@ void KPDGUIDonor::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 	edit();
 }
 
-void KPDGUIDonor::edit() {
+void KPDGUIDonor::edit() {	
 
-	DialogDonor * donorDialog = new DialogDonor(this, false);
-	if (donorDialog->exec()) {
-		editDonor(donorDialog);
+	int r = QMessageBox::Yes;
+
+	if (parentNode->getLoadedFromAPD()) {
+		r = QMessageBox::warning(0, "Warning: APD Donor", "This donor was loaded from APD data. As there is no HLA information, editing the donor may lead to undesirable changes elsewhere in the pool. Do you wish to proceed?", QMessageBox::Yes | QMessageBox::No);
+	}
+
+	if (r == QMessageBox::Yes) {
+		DialogDonor * donorDialog = new DialogDonor(this, false);
+
+		if (donorDialog->exec()) {
+
+			qDebug() << "This shouldn't display if hitting cancel";
+
+			editDonor(donorDialog);
+
+			parentNode->setLoadedFromAPD(false);
+		}
 	}
 
 }

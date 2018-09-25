@@ -26,6 +26,8 @@ private:
 
 	QVector<KPDGUIDonor *> nodeDonors;
 	KPDGUICandidate * nodeCandidate;
+
+	bool loadedFromAPD;
 	
 
 public slots:
@@ -57,6 +59,8 @@ public:
 	int getNumberOfDonors() const;
 	
 	KPDGUICandidate * getCandidate() const;
+
+	bool getLoadedFromAPD() const;
 	
 	bool getStatus();
 	int getNumberOfCompatibilities();
@@ -74,6 +78,7 @@ public:
 	
 	void setCandidate(KPDGUICandidate * candidate);		
 
+	void setLoadedFromAPD(bool loaded);
 
 	// Visual Properties
 

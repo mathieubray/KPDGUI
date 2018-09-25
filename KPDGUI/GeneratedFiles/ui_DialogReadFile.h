@@ -107,8 +107,8 @@ public:
         layoutLabel->setText(QApplication::translate("DialogReadFile", "Layout", 0));
         layoutComboBox->clear();
         layoutComboBox->insertItems(0, QStringList()
-         << QApplication::translate("DialogReadFile", "Circle", 0)
          << QApplication::translate("DialogReadFile", "Grid", 0)
+         << QApplication::translate("DialogReadFile", "Circle", 0)
         );
     } // retranslateUi
 

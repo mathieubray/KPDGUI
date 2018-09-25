@@ -16,6 +16,8 @@ KPDGUINode::KPDGUINode(KPDGUIDonor * donor)
 	
 	nodeDonors << donor;
 	donor->setAltruistic(true);
+
+	loadedFromAPD = false;
 }
 
 KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidate)
@@ -29,6 +31,8 @@ KPDGUINode::KPDGUINode(QVector<KPDGUIDonor *> donors, KPDGUICandidate * candidat
 		donor->setAltruistic(false);
 		nodeDonors << donor;
 	}
+
+	loadedFromAPD = false;
 }
 
 KPDGUINode::~KPDGUINode()
@@ -66,6 +70,10 @@ int KPDGUINode::getNumberOfDonors() const {
 
 KPDGUICandidate * KPDGUINode::getCandidate() const {
 	return nodeCandidate;
+}
+
+bool KPDGUINode::getLoadedFromAPD() const {
+	return loadedFromAPD;
 }
 
 bool KPDGUINode::getStatus() {
@@ -173,6 +181,10 @@ void KPDGUINode::removeDonor(KPDGUIDonor * donor) {
 
 void KPDGUINode::setCandidate(KPDGUICandidate * c) {
 	nodeCandidate = c;
+}
+
+void KPDGUINode::setLoadedFromAPD(bool loaded) {
+	loadedFromAPD = loaded;
 }
 
 /*void KPDGUINode::setCrossmatchResults(QVector<KPDCrossmatchResult> results) {

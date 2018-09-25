@@ -831,7 +831,7 @@ void KPDGUI::loadAPD()
 		
 		QVector<KPDGUINode *> nodesToAdd;
 
-		QStringList hlas = HLA_LIST_REDUCED.split(",");
+		//QStringList hlas = HLA_LIST_REDUCED.split(",");
 		int q = 0;
 
 		foreach(int matchingID, nodeIDs){
@@ -841,27 +841,29 @@ void KPDGUI::loadAPD()
 			if (nodeTypeMap[matchingID] == NDD) {
 
 				KPDGUIDonor * ndd = donorMap[matchingID].at(0);
-				ndd->addAdditionalDonorHLA(hlas.at(q));
+				//ndd->addAdditionalDonorHLA(hlas.at(q));
 
 
 				newNode = new KPDGUINode(ndd);
 
 				ndd->setParentNode(newNode);
+				newNode->setLoadedFromAPD(true);
 				
 				numberOfNDDs++;
 			}
 			else {
 				KPDGUICandidate * candidate = candidateMap[matchingID];
-				candidate->addHLA(hlas.at(q));
+				//candidate->addHLA(hlas.at(q));
 
 				QVector<KPDGUIDonor *> donors = donorMap[matchingID];
 
 				foreach(KPDGUIDonor * donor, donors) {
-					donor->addAdditionalDonorHLA(hlas.at(q));
+					//donor->addAdditionalDonorHLA(hlas.at(q));
 					donor->setCompatibilityWithPairedCandidate(FAILED_CROSSMATCH_HLA);
 				}
 
 				newNode = new KPDGUINode(donors, candidate);
+				newNode->setLoadedFromAPD(true);
 
 				foreach(KPDGUIDonor * donor, donors) {
 					donor->setParentNode(newNode);
@@ -878,6 +880,11 @@ void KPDGUI::loadAPD()
 			nodesToAdd << newNode;
 
 			q++;
+
+			//Going to need to figure out this HLA issue further...
+			//if (q == hlas.size()) {
+				//q = 0;
+			//}
 		}
 
 		foreach(KPDGUINode * node, nodesToAdd) {
@@ -976,9 +983,9 @@ void KPDGUI::loadAPD()
 
 						}
 
-						else {
-							candidate->addHLA(donor->getFullHLA().at(0));							
-						}
+						//else {
+							//candidate->addHLA(donor->getFullHLA().at(0));							
+						//}
 					}
 				}				
 			}

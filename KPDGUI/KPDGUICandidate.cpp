@@ -516,12 +516,25 @@ void KPDGUICandidate::mouseDoubleClickEvent(QGraphicsSceneMouseEvent * event) {
 
 void KPDGUICandidate::edit() {
 
-	DialogCandidate * candidateDialog = new DialogCandidate(this, false);
-	if (candidateDialog->exec()) {
-		editCandidate(candidateDialog);
+	int r = QMessageBox::Yes;
+
+	if (parentNode->getLoadedFromAPD()) {
+		r = QMessageBox::warning(0, "Warning: APD Candidate", "This candidate was loaded from APD data. As there is no HLA information, editing the candidate may lead to undesirable changes elsewhere in the pool. Do you wish to proceed?", QMessageBox::Yes | QMessageBox::No);
+	}
+
+	if (r == QMessageBox::Yes) {
+		DialogCandidate * candidateDialog = new DialogCandidate(this, false);
+		
+		if (candidateDialog->exec()) {
+
+			editCandidate(candidateDialog);
+
+			parentNode->setLoadedFromAPD(false);
+		}
 	}
 
 }
+
 
 void KPDGUICandidate::editCandidate(DialogCandidate * dialog) {
 
