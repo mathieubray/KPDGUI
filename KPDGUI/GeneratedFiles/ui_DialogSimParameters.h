@@ -100,9 +100,9 @@ public:
     {
         if (DialogSimParameters->objectName().isEmpty())
             DialogSimParameters->setObjectName(QStringLiteral("DialogSimParameters"));
-        DialogSimParameters->resize(523, 356);
-        DialogSimParameters->setMinimumSize(QSize(0, 0));
-        DialogSimParameters->setMaximumSize(QSize(16777215, 16777215));
+        DialogSimParameters->resize(561, 366);
+        DialogSimParameters->setMinimumSize(QSize(561, 366));
+        DialogSimParameters->setMaximumSize(QSize(561, 366));
         gridLayout_2 = new QGridLayout(DialogSimParameters);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         horizontalLayout_3 = new QHBoxLayout();
@@ -171,7 +171,7 @@ public:
         tab->setObjectName(QStringLiteral("tab"));
         layoutWidget = new QWidget(tab);
         layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(10, 10, 481, 197));
+        layoutWidget->setGeometry(QRect(10, 10, 511, 197));
         gridLayout = new QGridLayout(layoutWidget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);

@@ -1287,6 +1287,7 @@ void KPDGUI::clearArrangements() {
 		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 	if (r == QMessageBox::Yes) {
 
+		storedMatchRunResults.clear();
 		kpdguiArrangementList->clear();
 
 		updateStatus("Arrangements Cleared");
@@ -1301,6 +1302,7 @@ void KPDGUI::clearSolutions(){
 		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 	if (r == QMessageBox::Yes) {
 		
+		storedMatchRunSolutions.clear();
 		kpdguiSolutionList->clear();
 
 		updateStatus("Solutions Cleared");
